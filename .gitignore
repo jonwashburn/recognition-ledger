@@ -1,30 +1,69 @@
-# Lean 4
+# Lean build artifacts
 build/
-lake-manifest.json
+lake-packages/
 .lake/
+*.olean
+*.ilean
+*.c
+*.h
 
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 .Python
-venv/
 env/
+venv/
+.env
 
-# Data
-*.db
-*.sqlite
-validation/status.db
+# Logs
+*.log
+logs/
+solver_logs/
+*_output.log
+*_solver.log
 
-# OS
-.DS_Store
-Thumbs.db
+# API Keys and Secrets
+*api_key*
+*API_KEY*
+.env
+.env.local
+secrets/
+credentials/
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+*_BACKUP*
+
+# Large generated files
+solver_detailed_log.txt
+solver_report.html
+proof_progress.json
+
+# Temporary solver outputs
+*_TEMP*
+*_temp*
+temp/
+tmp/
+
+# Data
+*.db
+*.sqlite
+validation/status.db
 
 # Temporary
 *.tmp
@@ -33,6 +72,5 @@ Thumbs.db
 ~*
 
 # Secrets (never commit API keys)
-.env
 secrets.yaml
 config/production.yaml 
