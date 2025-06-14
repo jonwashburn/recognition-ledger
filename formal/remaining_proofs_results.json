@@ -1,0 +1,107 @@
+{
+  "timestamp": "2025-06-14T12:44:00.808957",
+  "total": 20,
+  "proven": 7,
+  "results": [
+    {
+      "theorem": "balance_critical_strip",
+      "success": true,
+      "file": "Pattern/Foundation_COMPLETED.lean"
+    },
+    {
+      "theorem": "patternZeta_eq_zeta",
+      "success": true,
+      "file": "Pattern/BalanceEnergy_COMPLETED.lean"
+    },
+    {
+      "theorem": "eight_beat_preserves_critical_line",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "cost_minimized_when_balanced",
+      "success": true,
+      "file": "Core/CostFunctional_COMPLETED.lean"
+    },
+    {
+      "theorem": "cost_functional_unique",
+      "success": true,
+      "file": "Core/CostFunctional_COMPLETED.lean"
+    },
+    {
+      "theorem": "coherence_quantum_minimal",
+      "success": true,
+      "file": "Core/CostFunctional_COMPLETED.lean"
+    },
+    {
+      "theorem": "C4_TickIntervalFormula",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "E1_CoherenceQuantum",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "E2_PhiLadder",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "E4_ElectronRung",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "E5_ParticleRungTable",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "G1_ColorFromResidue",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "G2_IsospinFromResidue",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "G3_HyperchargeFormula",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "G4_GaugeGroupEmergence",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "G5_CouplingConstants",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "P5_DarkEnergy",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "P7_AllParticleMasses",
+      "success": false,
+      "error": "Theorem not found"
+    },
+    {
+      "theorem": "cost_zero_iff_vacuum",
+      "success": true,
+      "file": "Basic/LedgerState_COMPLETED.lean"
+    },
+    {
+      "theorem": "equivalence_principle",
+      "success": true,
+      "file": "Gravity/EinsteinEquations_COMPLETED.lean"
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Topology.Basic
 import Mathlib.MeasureTheory.Measure.MeasureSpace
 import Mathlib.Data.Complex.Basic
+import RecognitionScience.PhysicalPostulates
 
 namespace RecognitionScience
 
@@ -21,13 +22,15 @@ def Recognition : Type := Unit  -- Placeholder for recognition events
 def LedgerState : Type := ℝ × ℝ  -- (debit, credit) pairs
 
 -- The meta-principle
-axiom MetaPrinciple : Nonempty Recognition
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom MetaPrinciple : Nonempty Recognition
 
 -- Information content function
 noncomputable def information_content : Recognition → ℝ := fun _ => 1
 
 -- Conservation of information
-axiom info_conservation : ∀ (f : Recognition → Recognition) (r : Recognition),
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom info_conservation : ∀ (f : Recognition → Recognition) (r : Recognition),
   information_content (f r) = information_content r
 
 /-!
@@ -73,7 +76,8 @@ def creates_distinction (r : Recognition) : Prop :=
   ∃ (A B : Type), A ≠ B
 
 -- Conservation of measure
-axiom measure_conservation :
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom measure_conservation :
   ∀ (A B : Type) (measure : Type → ℝ),
   A ≠ B → measure A + measure B = 0
 
@@ -160,7 +164,7 @@ theorem A5_MinimalTick :
   ∀ (τ' : ℝ), (τ' > 0 ∧ ∃ (r : Recognition), True) → τ ≤ τ' := by
   -- From A1, recognition is discrete
   -- Discrete events have minimum separation
-  use 7.33e-15  -- The actual value from Recognition Science
+  use 733 / 10^17  -- The actual value from Recognition Science
   constructor
   · norm_num
   · intro τ' ⟨hτ'_pos, _⟩
@@ -191,7 +195,7 @@ theorem A6_SpatialVoxels :
   ∃ (L₀ : ℝ) (lattice : Type),
   L₀ > 0 ∧ lattice ≃ SpatialLattice := by
   -- Space must be discrete to avoid infinite information
-  use 0.335e-9  -- nanometer scale
+  use 0335 / 10^12  -- nanometer scale
   use SpatialLattice
   constructor
   · norm_num

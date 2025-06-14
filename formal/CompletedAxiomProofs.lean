@@ -14,6 +14,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Nat.Basic
 import Mathlib.Topology.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import RecognitionScience.PhysicalPostulates
 
 namespace RecognitionScience
 
@@ -28,7 +29,8 @@ structure LedgerState where
   credits : List RecognitionEvent
 
 -- The Meta-Principle
-axiom MetaPrinciple : ∀ (nothing : Empty), ¬(∃ (r : RecognitionEvent), r.subject = nothing ∧ r.object = nothing)
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom MetaPrinciple : ∀ (nothing : Empty), ¬(∃ (r : RecognitionEvent), r.subject = nothing ∧ r.object = nothing)
 
 -- Helper definitions
 def isBalanced (L : LedgerState) : Prop :=
@@ -143,7 +145,7 @@ by
 -- THEOREM A5: Minimal Tick Interval
 -- ============================================================================
 
-def minimalTick : ℝ := 7.33e-15  -- femtoseconds
+def minimalTick : ℝ := 733 / 10^17  -- femtoseconds
 
 theorem MinimalTickExists :
   ∃ (τ : ℝ), τ > 0 ∧

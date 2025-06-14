@@ -5,6 +5,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Topology.Basic
 import Mathlib.MeasureTheory.Measure.MeasureSpace
+import RecognitionScience.PhysicalPostulates
 
 namespace RecognitionScience
 
@@ -18,10 +19,12 @@ This is equivalent to: "Recognition requires existence"
 -/
 
 /-- The fundamental type representing recognition events -/
-axiom Recognition : Type*
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom Recognition : Type*
 
 /-- The meta-principle: recognition cannot be empty -/
-axiom MetaPrinciple : Nonempty Recognition
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom MetaPrinciple : Nonempty Recognition
 
 /-- Recognition requires distinguishing self from other -/
 def requires_distinction (r : Recognition) : Prop :=
@@ -79,7 +82,8 @@ structure Distinction where
   distinct : recognized ≠ complement
 
 /-- Conservation of distinction -/
-axiom conservation_of_distinction :
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom conservation_of_distinction :
   ∀ (d : Distinction),
   ∃ (measure : Type* → ℝ),
   measure d.recognized + measure d.complement = 0
@@ -108,7 +112,9 @@ def equilibrium : Recognition :=   intro x
   use witness
   rfl
 
-axiom cost_at_equilibrium : cost equilibrium = 0
+-- FIXME: Move to PhysicalPostulates.lean or use import
+
+-- axiom cost_at_equilibrium : cost equilibrium = 0
 
 /-- Distance from equilibrium is non-negative -/
 theorem A3_Positivity :
@@ -124,7 +130,8 @@ theorem A3_Positivity :
 -/
 
 /-- Total information is conserved during recognition -/
-axiom information_conservation :
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom information_conservation :
   ∀ (L : Recognition → Recognition),
   ∀ (r₁ r₂ : Recognition),
   information_content (L r₁) + information_content (L r₂) =
@@ -206,7 +213,8 @@ theorem A7_EightBeat :
 -/
 
 /-- Scale invariance of pure information -/
-axiom no_preferred_scale :
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom no_preferred_scale :
   ∀ (λ : ℝ) (h : λ > 0),
   ∃ (f : Recognition → Recognition),
   ∀ r, cost (f r) = λ * cost r

@@ -13,6 +13,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Nat.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.Calculus.Deriv
+import RecognitionScience.PhysicalPostulates
 
 namespace RecognitionScience
 
@@ -30,7 +31,8 @@ structure Recognition where
 def Nothing := Empty
 
 /-- The meta-principle: Nothing cannot recognize itself -/
-axiom MetaPrinciple : ¬∃ (r : Recognition), r.recognizer = Nothing ∧ r.recognized = Nothing
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom MetaPrinciple : ¬∃ (r : Recognition), r.recognizer = Nothing ∧ r.recognized = Nothing
 
 -- ============================================================================
 -- LEMMA: Recognition Requires Existence
@@ -202,10 +204,10 @@ by
 -- ============================================================================
 
 /-- Planck time emerges from uncertainty principle -/
-noncomputable def planck_time : ℝ := 5.391e-44  -- seconds
+noncomputable def planck_time : ℝ := 5391 / 10^47  -- seconds
 
 /-- Recognition time is quantized -/
-noncomputable def recognition_tick : ℝ := 7.33e-15  -- seconds
+noncomputable def recognition_tick : ℝ := 733 / 10^17  -- seconds
 
 theorem A5_MinimalTick :
   ∃ (τ : ℝ), τ > 0 ∧ τ ≥ planck_time ∧
@@ -236,7 +238,7 @@ structure Voxel where
   z : ℤ
 
 /-- Voxel size emerges from information density limit -/
-noncomputable def voxel_size : ℝ := 3.35e-10  -- meters
+noncomputable def voxel_size : ℝ := 335 / 10^12  -- meters
 
 theorem A6_SpatialVoxels :
   ∃ (L : ℝ), L > 0 ∧

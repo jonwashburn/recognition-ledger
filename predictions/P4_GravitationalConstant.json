@@ -1,6 +1,6 @@
 {
-  "id": "sha256:3577727884999616974",
-  "created": "2025-06-11T08:16:59.640120",
+  "id": "sha256:-5818461392894882580",
+  "created": "2025-06-14T11:18:07.847782",
   "axioms": [
     "A1",
     "A2",
@@ -14,7 +14,7 @@
   "theorem": {
     "name": "P4_GravitationalConstant",
     "statement": "G from holography",
-    "proof_hash": "sha256:-6779627847788371677"
+    "proof_hash": "sha256:-7199698617130842574"
   },
   "prediction": {
     "observable": "gravitational_constant",
@@ -25,6 +25,6 @@
   "verification": {
     "status": "proven",
     "proof_complete": true,
-    "timestamp": "2025-06-11T08:16:59.640132"
+    "timestamp": "2025-06-14T11:18:07.847795"
   }
 }

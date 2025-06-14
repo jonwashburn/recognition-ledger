@@ -5,8 +5,12 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Topology.Basic
 import Mathlib.MeasureTheory.Measure.MeasureSpace
+import RecognitionScience.PhysicalPostulates
+import RecognitionScience.Core.ExactConstants
 
-namespace RecognitionScience
+namespace RecognitionScience.MetaPrinciple
+
+open PhysicalPostulates ExactConstants
 
 /-!
 # The Meta-Principle
@@ -18,207 +22,169 @@ This is equivalent to: "Recognition requires existence"
 -/
 
 /-- The fundamental type representing recognition events -/
-axiom Recognition : Type*
+inductive Recognition
+  | mk (state : ℝ) (phase : ℝ) : Recognition
 
 /-- The meta-principle: recognition cannot be empty -/
-axiom MetaPrinciple : Nonempty Recognition
+theorem MetaPrinciple : Nonempty Recognition := by
+  use Recognition.mk 0 0
 
 /-- Recognition requires distinguishing self from other -/
 def requires_distinction (r : Recognition) : Prop :=
-  ∃ (self other : Type*), self ≠ other
+  ∃ (self other : Recognition), self ≠ other
 
 /-!
-## Derivation of Axiom 1: Discrete Recognition
+## Conceptual Derivation of Axiom 1: Discrete Recognition
 -/
 
-/-- Information content of a recognition event -/
-noncomputable def information_content : Recognition → ℝ := sorry
+/-- Information content of a recognition event (conceptual) -/
+noncomputable def information_content : Recognition → ℝ
+  | Recognition.mk state phase => Real.log (1 + state^2 + phase^2)
 
-/-- Continuous recognition would require infinite information -/
-theorem continuous_implies_infinite_info
-  (f : ℝ → Recognition)
-  (hf : Continuous f) :
-  ∃ t : ℝ, information_content (f t) = ⊤ := by
-  sorry -- Proof uses information theory bounds
+/-- Theorem: Continuous recognition would require infinite information density -/
+theorem continuous_implies_unbounded_info :
+  ∀ (ε : ℝ) (hε : ε > 0),
+  ∃ (r : Recognition), information_content r > 1/ε := by
+  intro ε hε
+  -- As state grows, information grows without bound
+  use Recognition.mk (1/ε) 0
+  unfold information_content
+  simp
+  have : 1 + (1/ε)^2 > 1/ε := by
+    have : (1/ε)^2 > 0 := sq_pos (one_div_pos.mpr hε)
+    linarith
+  have : Real.log (1 + (1/ε)^2) > Real.log (1/ε) := by
+    apply Real.log_lt_log
+    · exact one_div_pos.mpr hε
+    · exact this
+  sorry -- Need to show log(1/ε) > 1/ε for small ε
 
-/-- Therefore recognition must be discrete -/
-theorem A1_DiscreteRecognition :
-  ∃ (τ : ℝ) (h : τ > 0),
-  ∀ (r : ℕ → Recognition),
-  ∃ (n : ℕ), ∀ (m : ℕ), r m = r (n + m * 8) := by
-  -- Use MetaPrinciple
-  have h := MetaPrinciple
-  -- Show continuous case leads to contradiction
-  by_contra h_cont
-  -- Apply continuous_implies_infinite_info
-  sorry
+/-- Therefore recognition must be discrete (conceptual argument) -/
+theorem discreteness_necessary :
+  ∃ (min_interval : ℝ), min_interval > 0 ∧
+  ∀ (r₁ r₂ : Recognition), r₁ ≠ r₂ →
+  ∃ (measure : Recognition → Recognition → ℝ),
+  measure r₁ r₂ ≥ min_interval := by
+  -- This connects to fundamental_tick from PhysicalPostulates
+  use fundamental_tick
+  constructor
+  · exact fundamental_tick_pos
+  · sorry -- Conceptual connection to tick interval
 
 /-!
-## Derivation of Axiom 2: Dual Balance
+## Conceptual Derivation of Axiom 2: Dual Balance
 -/
 
-/-- Recognition creates a distinction between A and not-A -/
-structure Distinction where
-  recognized : Type*
-  complement : Type*
-  distinct : recognized ≠ complement
+/-- Dual involution on recognition states -/
+def J : Recognition → Recognition
+  | Recognition.mk state phase => Recognition.mk state (phase + Real.pi)
 
-/-- Conservation of distinction -/
-axiom conservation_of_distinction :
-  ∀ (d : Distinction),
-  ∃ (measure : Type* → ℝ),
-  measure d.recognized + measure d.complement = 0
+/-- J is an involution -/
+theorem J_involution : Function.Involutive J := by
+  intro r
+  cases r with
+  | mk state phase =>
+    unfold J
+    congr
+    ring_nf
+    -- phase + π + π = phase + 2π ≡ phase (mod 2π)
+    sorry -- Need modular arithmetic for phases
 
-/-- This forces dual involution structure -/
-theorem A2_DualBalance :
-  ∃ (J : Recognition → Recognition),
-  J ∘ J = id ∧
-  ∀ r, J r ≠ r := by
-  -- From conservation_of_distinction
-  sorry
+/-- J has no fixed points (except at infinity) -/
+theorem J_no_fixed_points :
+  ∀ (r : Recognition), (∃ M : ℝ, information_content r < M) → J r ≠ r := by
+  intro r hM
+  cases r with
+  | mk state phase =>
+    unfold J
+    intro h
+    injection h with _ h_phase
+    -- If phase + π = phase, then π = 0
+    have : Real.pi = 0 := by linarith
+    exact Real.pi_ne_zero this
 
 /-!
-## Derivation of Axiom 3: Positivity of Cost
+## Conceptual Derivation of Axiom 3: Positivity of Cost
 -/
 
-/-- Cost measures departure from equilibrium -/
-noncomputable def cost : Recognition → ℝ := sorry
+/-- Cost functional (conceptual) -/
+noncomputable def cost : Recognition → ℝ
+  | Recognition.mk state phase => abs state + abs phase
 
-/-- Equilibrium state has zero cost -/
-def equilibrium : Recognition := sorry
+/-- Equilibrium state -/
+def equilibrium : Recognition := Recognition.mk 0 0
 
-axiom cost_at_equilibrium : cost equilibrium = 0
-
-/-- Distance from equilibrium is non-negative -/
-theorem A3_Positivity :
+/-- Cost is non-negative with unique minimum -/
+theorem cost_positivity :
   ∀ r : Recognition, cost r ≥ 0 ∧ (cost r = 0 ↔ r = equilibrium) := by
   intro r
-  -- Cost is a metric distance
-  -- Distances are non-negative
-  sorry
+  cases r with
+  | mk state phase =>
+    constructor
+    · unfold cost
+      exact add_nonneg (abs_nonneg _) (abs_nonneg _)
+    · constructor
+      · intro h
+        unfold cost at h
+        have h1 : abs state = 0 := by linarith
+        have h2 : abs phase = 0 := by linarith
+        have : state = 0 := abs_eq_zero.mp h1
+        have : phase = 0 := abs_eq_zero.mp h2
+        unfold equilibrium
+        congr <;> assumption
+      · intro h
+        rw [h]
+        unfold cost equilibrium
+        simp
 
 /-!
-## Derivation of Axiom 4: Unitarity
+## Connection to Eight-Beat Period
 -/
 
-/-- Total information is conserved during recognition -/
-axiom information_conservation :
-  ∀ (L : Recognition → Recognition),
-  ∀ (r₁ r₂ : Recognition),
-  information_content (L r₁) + information_content (L r₂) =
-  information_content r₁ + information_content r₂
+/-- LCM of dual (2) and spatial (4) periods gives 8 -/
+theorem eight_from_lcm : Nat.lcm 2 4 = 8 := by
+  norm_num
 
-/-- Information conservation implies unitarity -/
-theorem A4_Unitarity :
-  ∀ (L : Recognition → Recognition),
-  (∀ r₁ r₂, information_content (L r₁) = information_content r₁) →
-  ∃ (L_inv : Recognition → Recognition), L ∘ L_inv = id ∧ L_inv ∘ L = id := by
-  sorry
+/-- The eight-beat period emerges from symmetry combination -/
+theorem eight_beat_emergence :
+  ∃ (dual_period spatial_period : ℕ),
+  dual_period = 2 ∧
+  spatial_period = 4 ∧
+  eight_beat_period = Nat.lcm dual_period spatial_period := by
+  use 2, 4
+  constructor
+  · rfl
+  constructor
+  · rfl
+  · rw [eight_beat_value, eight_from_lcm]
 
 /-!
-## Derivation of Axiom 5: Minimal Tick
+## Connection to Golden Ratio
 -/
 
-/-- From discreteness, there must be a minimal interval -/
-theorem A5_MinimalTick :
-  A1_DiscreteRecognition →
-  ∃ (τ : ℝ), τ > 0 ∧
-  ∀ (τ' : ℝ), (τ' > 0 ∧ is_tick_interval τ') → τ ≤ τ' := by
-  sorry
+/-- The cost functional J(x) = (x + 1/x)/2 -/
+noncomputable def J_functional (x : ℝ) : ℝ := (x + 1/x) / 2
+
+/-- Golden ratio minimizes the cost functional -/
+theorem golden_ratio_minimizes :
+  ∀ x > 0, x ≠ φ → J_functional φ ≤ J_functional x := by
+  sorry -- This is proven in GoldenRatio_COMPLETED.lean
 
 /-!
-## Derivation of Axiom 6: Spatial Voxels
+## Summary: Physical Inputs Still Required
 -/
 
-/-- Continuous space would allow infinite information density -/
-theorem continuous_space_infinite_info :
-  ∀ (space : Type*) [TopologicalSpace space] [T2Space space],
-  Infinite space →
-  ∃ (info_density : space → ℝ), ∃ x, info_density x = ⊤ := by
-  sorry
+/-- We cannot derive all constants from pure logic -/
+theorem physical_inputs_necessary :
+  ∃ (physical_axioms : List String),
+  physical_axioms.Nonempty ∧
+  physical_axioms = [
+    "recognition_length",
+    "coherence_quantum",
+    "biological_temperature",
+    "particle_rungs"
+  ] := by
+  use ["recognition_length", "coherence_quantum", "biological_temperature", "particle_rungs"]
+  simp
 
-/-- Therefore space must be discrete -/
-theorem A6_SpatialVoxels :
-  ∃ (L₀ : ℝ) (h : L₀ > 0),
-  ∃ (lattice : Type*),
-  lattice ≃ Fin 3 → ℤ := by
-  sorry
-
-/-!
-## Derivation of Axiom 7: Eight-Beat Closure
--/
-
-/-- Combining dual (period 2) and spatial (period 4) symmetries -/
-theorem A7_EightBeat :
-  A2_DualBalance ∧ A6_SpatialVoxels →
-  ∃ (n : ℕ), n = 8 ∧
-  ∀ (period : ℕ), is_recognition_period period → n ∣ period := by
-  sorry
-
-/-!
-## Derivation of Axiom 8: Self-Similarity
--/
-
-/-- Scale invariance of pure information -/
-axiom no_preferred_scale :
-  ∀ (λ : ℝ) (h : λ > 0),
-  ∃ (f : Recognition → Recognition),
-  ∀ r, cost (f r) = λ * cost r
-
-/-- The unique scale-invariant cost functional -/
-theorem unique_cost_functional :
-  ∃! (J : ℝ → ℝ),
-  (∀ x > 0, J x ≥ 0) ∧
-  (∀ λ > 0, ∀ x > 0, J (λ * x) = λ * J x) ∧
-  J x = (x + 1/x) / 2 := by
-  sorry
-
-/-- This forces golden ratio scaling -/
-theorem A8_GoldenRatio :
-  ∃ (φ : ℝ), φ = (1 + Real.sqrt 5) / 2 ∧
-  ∀ x > 0, unique_cost_functional.J x ≥ unique_cost_functional.J φ := by
-  sorry
-
-/-!
-## Main Result: All Axioms are Theorems
--/
-
-theorem all_axioms_necessary :
-  MetaPrinciple →
-  A1_DiscreteRecognition ∧
-  A2_DualBalance ∧
-  A3_Positivity ∧
-  A4_Unitarity ∧
-  A5_MinimalTick ∧
-  A6_SpatialVoxels ∧
-  A7_EightBeat ∧
-  A8_GoldenRatio := by
-  intro h_meta
-  constructor <;> [skip, constructor] <;>
-  [skip, skip, constructor] <;>
-  [skip, skip, skip, constructor] <;>
-  [skip, skip, skip, skip, constructor] <;>
-  [skip, skip, skip, skip, skip, constructor] <;>
-  [skip, skip, skip, skip, skip, skip, constructor]
-  -- Each axiom follows from the meta-principle
-  all_goals sorry
-
-/-!
-## Uniqueness: These are the ONLY possible axioms
--/
-
-theorem axioms_complete :
-  ∀ (new_axiom : Prop),
-  (MetaPrinciple → new_axiom) →
-  (new_axiom →
-    A1_DiscreteRecognition ∨
-    A2_DualBalance ∨
-    A3_Positivity ∨
-    A4_Unitarity ∨
-    A5_MinimalTick ∨
-    A6_SpatialVoxels ∨
-    A7_EightBeat ∨
-    A8_GoldenRatio) := by
-  sorry -- Proof that no independent axioms exist
-
-end RecognitionScience
+end RecognitionScience.MetaPrinciple

@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-06-14T12:46:37.953723",
+  "attempted": 13,
+  "proven": 7,
+  "total_progress": "55/61",
+  "results": [
+    {
+      "theorem": "eight_beat_preserves_critical_line",
+      "success": true,
+      "file": "Pattern/RiemannHypothesis_FINAL_COMPLETE.lean"
+    },
+    {
+      "theorem": "C4_TickIntervalFormula",
+      "success": true,
+      "file": "TheoremScaffolding_FINAL_COMPLETE.lean"
+    },
+    {
+      "theorem": "E1_CoherenceQuantum",
+      "success": false,
+      "error": "Contains sorry"
+    },
+    {
+      "theorem": "E2_PhiLadder",
+      "success": false,
+      "error": "Contains sorry"
+    },
+    {
+      "theorem": "E4_ElectronRung",
+      "success": false,
+      "error": "Contains sorry"
+    },
+    {
+      "theorem": "E5_ParticleRungTable",
+      "success": true,
+      "file": "TheoremScaffolding_FINAL_COMPLETE.lean"
+    },
+    {
+      "theorem": "G1_ColorFromResidue",
+      "success": false,
+      "error": "Contains sorry"
+    },
+    {
+      "theorem": "G2_IsospinFromResidue",
+      "success": true,
+      "file": "TheoremScaffolding_FINAL_COMPLETE.lean"
+    },
+    {
+      "theorem": "G3_HyperchargeFormula",
+      "success": false,
+      "error": "Contains sorry"
+    },
+    {
+      "theorem": "G4_GaugeGroupEmergence",
+      "success": true,
+      "file": "TheoremScaffolding_FINAL_COMPLETE.lean"
+    },
+    {
+      "theorem": "G5_CouplingConstants",
+      "success": true,
+      "file": "TheoremScaffolding_FINAL_COMPLETE.lean"
+    },
+    {
+      "theorem": "P5_DarkEnergy",
+      "success": true,
+      "file": "TheoremScaffolding_FINAL_COMPLETE.lean"
+    },
+    {
+      "theorem": "P7_AllParticleMasses",
+      "success": false,
+      "error": "Contains sorry"
+    }
+  ]
+}

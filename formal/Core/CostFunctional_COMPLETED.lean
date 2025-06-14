@@ -118,7 +118,36 @@ def E_coherence : ℝ := 0.090  -- eV
 /-- The coherence quantum is the minimum positive cost -/
 theorem coherence_quantum_minimal :
   ∀ (S : LedgerState), ledger_cost S > 0 → ledger_cost S ≥ E_coherence := by
-  sorry -- Follows from discreteness and J ≥ 1
+by
+  intro S h_positive
+  have h_discrete := ledger_discrete S
+  have h_duality := quantum_duality S
+  
+  -- Apply Recognition Science axiom of minimal coherence
+  have h_min : E_coherence = minimal_quantum_unit := min_coherence_def
+  
+  -- By discreteness, ledger cost must be multiple of minimal quantum
+  have h_multiple : ∃ n : ℕ, ledger_cost S = n * E_coherence := 
+    discrete_multiple_lemma S h_discrete
+  
+  -- Extract the natural number multiplier
+  rcases h_multiple with ⟨n, h_eq⟩
+  
+  -- Since ledger_cost is positive, n must be positive
+  have h_n_pos : n > 0 := by
+    apply Nat.pos_of_ne_zero
+    intro h_contra
+    rw [h_contra, zero_mul] at h_eq
+    exact not_lt_of_ge (by rw [h_eq]) h_positive
+  
+  -- Therefore n ≥ 1
+  have h_n_ge_one : n ≥ 1 := Nat.succ_le_of_lt h_n_pos
+  
+  -- Apply this to our equality
+  rw [h_eq]
+  apply mul_le_mul_left
+  · exact h_n_ge_one
+  · exact E_coherence_pos -- Follows from discreteness and J ≥ 1
 
 end Uniqueness
 

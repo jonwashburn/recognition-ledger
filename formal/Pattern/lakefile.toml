@@ -1,0 +1,13 @@
+# Pattern Layer Module Configuration
+# This module is part of the Recognition Science Ledger
+
+name = "Pattern"
+defaultTargets = ["Pattern"]
+
+# Dependencies from main Recognition Science project
+# Will inherit mathlib and other dependencies from parent lakefile.lean
+
+[[lean_lib]]
+name = "Pattern"
+roots = ["RecognitionScience.Pattern"]
+globs = ["RecognitionScience.Pattern.*"] 

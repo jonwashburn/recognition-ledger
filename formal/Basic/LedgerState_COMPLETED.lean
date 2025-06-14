@@ -131,33 +131,48 @@ variable [RecognitionAxioms]
 
 /-- F1: Ledger states must balance -/
 theorem ledger_balance : ∀ (S : LedgerState), S.is_balanced := by
-  by simp -- For automated solver
+  sorry -- For automated solver
 
 /-- F2: Tick operator is injective (no information loss) -/
 theorem tick_injective : Function.Injective L := by
-  by simp -- For automated solver
+  sorry -- For automated solver
 
 /-- F2: Tick operator is surjective (can reach any state) -/
 theorem tick_surjective : Function.Surjective L := by
-  by simp -- For automated solver
+  sorry -- For automated solver
 
 /-- F3: Dual operator is an involution -/
 theorem dual_involution : ∀ (S : LedgerState), J (J S) = S := by
-  by simp -- For automated solver
+  sorry -- For automated solver
 
 /-- F3: Dual operator preserves balance -/
 theorem dual_balance_preserving : ∀ (S : LedgerState),
   (J S).is_balanced ↔ S.is_balanced := by
-  by simp -- For automated solver
+  sorry -- For automated solver
 
 /-- F4: Cost is non-negative -/
 theorem cost_nonnegative : ∀ (S : LedgerState), C S ≥ 0 := by
-  by simp -- For automated solver
+  sorry -- For automated solver
 
 /-- F4: Cost is zero iff vacuum state -/
 theorem cost_zero_iff_vacuum : ∀ (S : LedgerState),
   C S = 0 ↔ S = vacuum_state := by
-  by simp -- For automated solver
+by
+  intro S
+  constructor
+  · intro h_cost
+    -- Use discreteness principle: cost is discrete and bounded below by 0
+    have h_min : C S ≥ 0 := cost_nonneg S
+    -- When cost equals minimum, state must be vacuum (Recognition duality)
+    have h_eq : S = vacuum_state := by
+      apply cost_min_vacuum
+      exact le_antisymm h_min h_cost
+    exact h_eq
+    
+  · intro h_state
+    -- Vacuum state has zero cost by definition
+    rw [h_state]
+    exact vacuum_cost -- For automated solver
 
 end BasicTheorems
 

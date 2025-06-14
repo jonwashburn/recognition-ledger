@@ -1,10 +1,12 @@
 
 import Mathlib.Data.Real.Basic
+import RecognitionScience.PhysicalPostulates
 
 namespace RecognitionScience
 
 -- Meta-principle
-axiom MetaPrinciple : NothingCannotRecognizeItself
+-- FIXME: Move to PhysicalPostulates.lean or use import
+-- axiom MetaPrinciple : NothingCannotRecognizeItself
 
 -- All axioms hold
 def AllAxiomsHold : Prop := 
