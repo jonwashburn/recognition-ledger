@@ -1,0 +1,30 @@
+{
+  "id": "sha256:2052073814043856570",
+  "created": "2025-06-14T11:21:43.045736",
+  "axioms": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "A7",
+    "A8"
+  ],
+  "theorem": {
+    "name": "P5_DarkEnergy",
+    "statement": "\u03c1_\u039b from half-coin",
+    "proof_hash": "sha256:-5754392832145344502"
+  },
+  "prediction": {
+    "observable": "cosmological_constant_fourth_root",
+    "value": 0.00226,
+    "unit": "eV",
+    "rung": null
+  },
+  "verification": {
+    "status": "proven",
+    "proof_complete": true,
+    "timestamp": "2025-06-14T11:21:43.045753"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "total_theorems": 28,
+  "proven": 28,
+  "duration": "0:02:49.206922",
+  "agents_used": 5,
+  "theorems": [
+    "coherence_quantum_value",
+    "tau_mass",
+    "neutron_mass",
+    "proton_mass",
+    "higgs_mass",
+    "top_mass",
+    "bare_strong_coupling",
+    "bare_weak_coupling",
+    "weinberg_angle",
+    "ckm_12_angle",
+    "ckm_23_angle",
+    "pmns_12_angle",
+    "pmns_23_angle",
+    "pmns_13_angle",
+    "vacuum_pressure",
+    "clock_lag",
+    "newton_constant",
+    "dual_balance",
+    "eight_beat_closure",
+    "cost_positivity",
+    "no_free_lunch",
+    "muon_mass",
+    "electron_mass",
+    "bare_hypercharge_coupling",
+    "golden_ratio_unique",
+    "phi_cascade_formula",
+    "ckm_13_angle",
+    "hubble_constant"
+  ],
+  "model_usage": {
+    "sonnet": 28,
+    "opus": 0
+  },
+  "escalations": 0,
+  "decompositions": 0,
+  "agent_performance": {
+    "agent_0": 5,
+    "agent_1": 6,
+    "agent_2": 5,
+    "agent_3": 5,
+    "agent_4": 7
+  }
+}

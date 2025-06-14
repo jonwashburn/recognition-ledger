@@ -3,9 +3,13 @@
 Ultimate Autonomous Recognition Science Solver
 ==============================================
 
+**IMPORTANT: MODIFIED TO USE ONLY CLAUDE SONNET 4**
+**USER REQUEST: CLAUDE SONNET 4 EXCLUSIVELY**
+**DO NOT USE OTHER MODELS**
+
 Built for maximum speed and autonomy. Uses:
-- 20 parallel agents (different specializations)
-- Automatic model escalation (Sonnet → Opus)
+- 20 parallel agents (all using Claude Sonnet 4)
+- NO model escalation (Claude Sonnet 4 only)
 - Self-healing and diagnostic systems
 - Continuous operation until complete
 
@@ -29,19 +33,26 @@ import anthropic
 # Your API key - set via environment variable for security
 API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
-# Updated model hierarchy: Sonnet first, then escalate to Opus
+# **ONLY CLAUDE SONNET 4 IS USED**
 MODELS = {
-    "fast": "claude-3-5-sonnet-20241022",  # Start with Sonnet
-    "powerful": "claude-3-opus-20240229",   # Escalate to Opus
-    "ultimate": "claude-3-opus-20240229"    # Maximum power
+    "fast": "claude-sonnet-4-20250514",      # **CLAUDE SONNET 4**
+    "powerful": "claude-sonnet-4-20250514",   # **CLAUDE SONNET 4**
+    "ultimate": "claude-sonnet-4-20250514"    # **CLAUDE SONNET 4**
 }
 
-# Maximum tokens for true autonomy
+# Maximum tokens for Claude Sonnet 4
 MAX_TOKENS = {
-    "fast": 8192,      # Sonnet max
-    "powerful": 16384,  # Opus extended
-    "ultimate": 32768   # Opus maximum
+    "fast": 8192,      # Claude Sonnet 4 max
+    "powerful": 8192,  # Claude Sonnet 4 max
+    "ultimate": 8192   # Claude Sonnet 4 max
 }
+
+print("\n" + "="*80)
+print("**WARNING: THIS SOLVER USES ONLY CLAUDE SONNET 4**")
+print("**ALL 20 AGENTS USE CLAUDE SONNET 4 EXCLUSIVELY**")
+print("**NO MODEL ESCALATION - CLAUDE SONNET 4 ONLY**")
+print(f"**MODEL: {MODELS['fast']}**")
+print("="*80 + "\n")
 
 @dataclass
 class Theorem:
@@ -58,7 +69,7 @@ class Theorem:
     verified: bool = False
     prediction_generated: bool = False
     assigned_agents: Set[str] = field(default_factory=set)
-    failed_models: Set[str] = field(default_factory=set)  # Track which models failed
+    failed_models: Set[str] = field(default_factory=set)  # Not used anymore - Claude Sonnet 4 only
     
     @property
     def id(self):
@@ -73,47 +84,52 @@ class UltimateRecognitionSolver:
         self.active_agents = {}
         self.proof_certificates = []
         
-        # 20 specialized agents - now with smarter model assignment
+        # 20 specialized agents - **ALL USE CLAUDE SONNET 4**
         self.agents = self._create_agent_army()
         
         # Track everything
         self.start_time = time.time()
         self.api_calls = 0
         self.total_tokens = 0
-        self.model_escalations = 0
+        self.model_escalations = 0  # Always 0 now
+        
+        print("**ALL AGENTS INITIALIZED WITH CLAUDE SONNET 4 ONLY**")
         
     def _create_agent_army(self) -> Dict:
-        """Create 20 specialized agents with smart model assignment"""
+        """Create 20 specialized agents - **ALL USE CLAUDE SONNET 4**"""
+        # **IMPORTANT: ALL AGENTS USE CLAUDE SONNET 4**
+        claude_model = "claude-sonnet-4-20250514"
+        
         return {
-            # Core mathematics agents - start with Sonnet
-            "Archimedes": {"specialty": "Golden ratio and fixed points", "model": "fast", "priority": "critical"},
-            "Euler": {"specialty": "Number theory and series", "model": "fast", "priority": "high"},
-            "Gauss": {"specialty": "Algebraic structures", "model": "fast", "priority": "high"},
-            "Riemann": {"specialty": "Complex analysis", "model": "fast", "priority": "high"},
-            "Cauchy": {"specialty": "Limits and convergence", "model": "fast", "priority": "medium"},
+            # Core mathematics agents - **CLAUDE SONNET 4**
+            "Archimedes": {"specialty": "Golden ratio and fixed points", "model": claude_model, "priority": "critical"},
+            "Euler": {"specialty": "Number theory and series", "model": claude_model, "priority": "high"},
+            "Gauss": {"specialty": "Algebraic structures", "model": claude_model, "priority": "high"},
+            "Riemann": {"specialty": "Complex analysis", "model": claude_model, "priority": "high"},
+            "Cauchy": {"specialty": "Limits and convergence", "model": claude_model, "priority": "medium"},
             
-            # Physics agents - start with Sonnet
-            "Einstein": {"specialty": "Energy-mass equivalence", "model": "fast", "priority": "critical"},
-            "Planck": {"specialty": "Quantum scales", "model": "fast", "priority": "high"},
-            "Noether": {"specialty": "Symmetries and conservation", "model": "fast", "priority": "high"},
-            "Dirac": {"specialty": "Operators and eigenstates", "model": "fast", "priority": "medium"},
+            # Physics agents - **CLAUDE SONNET 4**
+            "Einstein": {"specialty": "Energy-mass equivalence", "model": claude_model, "priority": "critical"},
+            "Planck": {"specialty": "Quantum scales", "model": claude_model, "priority": "high"},
+            "Noether": {"specialty": "Symmetries and conservation", "model": claude_model, "priority": "high"},
+            "Dirac": {"specialty": "Operators and eigenstates", "model": claude_model, "priority": "medium"},
             
-            # Recognition Science specialists - mixed assignment
-            "Pythagoras": {"specialty": "Cosmic harmony and ratios", "model": "fast", "priority": "critical"},
-            "Fibonacci": {"specialty": "Golden cascade and recursion", "model": "fast", "priority": "high"},
-            "Kepler": {"specialty": "Eight-beat cycles", "model": "fast", "priority": "medium"},
-            "Tesla": {"specialty": "Resonance and frequency", "model": "fast", "priority": "medium"},
+            # Recognition Science specialists - **CLAUDE SONNET 4**
+            "Pythagoras": {"specialty": "Cosmic harmony and ratios", "model": claude_model, "priority": "critical"},
+            "Fibonacci": {"specialty": "Golden cascade and recursion", "model": claude_model, "priority": "high"},
+            "Kepler": {"specialty": "Eight-beat cycles", "model": claude_model, "priority": "medium"},
+            "Tesla": {"specialty": "Resonance and frequency", "model": claude_model, "priority": "medium"},
             
-            # Lean proof specialists - start fast
-            "Euclid": {"specialty": "Geometric proofs", "model": "fast", "priority": "low"},
-            "Bourbaki": {"specialty": "Formal structures", "model": "fast", "priority": "medium"},
-            "Hilbert": {"specialty": "Axiom systems", "model": "fast", "priority": "high"},
-            "Gödel": {"specialty": "Completeness and consistency", "model": "fast", "priority": "critical"},
+            # Lean proof specialists - **CLAUDE SONNET 4**
+            "Euclid": {"specialty": "Geometric proofs", "model": claude_model, "priority": "low"},
+            "Bourbaki": {"specialty": "Formal structures", "model": claude_model, "priority": "medium"},
+            "Hilbert": {"specialty": "Axiom systems", "model": claude_model, "priority": "high"},
+            "Gödel": {"specialty": "Completeness and consistency", "model": claude_model, "priority": "critical"},
             
-            # Verification specialists - fast is usually enough
-            "Turing": {"specialty": "Computation and verification", "model": "fast", "priority": "medium"},
-            "Church": {"specialty": "Lambda calculus and types", "model": "fast", "priority": "low"},
-            "Curry": {"specialty": "Proof checking", "model": "fast", "priority": "low"}
+            # Verification specialists - **CLAUDE SONNET 4**
+            "Turing": {"specialty": "Computation and verification", "model": claude_model, "priority": "medium"},
+            "Church": {"specialty": "Lambda calculus and types", "model": claude_model, "priority": "low"},
+            "Curry": {"specialty": "Proof checking", "model": claude_model, "priority": "low"}
         }
     
     def _load_all_theorems(self) -> Dict[str, Theorem]:
@@ -210,25 +226,8 @@ class UltimateRecognitionSolver:
         return True
     
     def get_agent_model(self, agent_name: str, theorem: Theorem) -> str:
-        """Determine which model to use based on agent, theorem, and failure history"""
-        agent = self.agents[agent_name]
-        
-        # If Sonnet already failed, escalate to Opus
-        if "claude-3-5-sonnet" in theorem.failed_models:
-            return "powerful"  # Escalate to Opus
-        
-        # Critical theorems get Opus after 2+ attempts
-        if theorem.name == "C1_GoldenRatioLockIn" and len(theorem.attempts) >= 2:
-            return "ultimate"
-        
-        # High priority + multiple failures = escalate
-        if agent["priority"] == "critical" and len(theorem.attempts) >= 3:
-            return "ultimate"
-        elif agent["priority"] == "high" and len(theorem.attempts) >= 4:
-            return "powerful"
-        
-        # Otherwise use the agent's default model
-        return agent["model"]
+        """**ALWAYS RETURNS CLAUDE SONNET 4**"""
+        return "claude-sonnet-4-20250514"  # **ONLY CLAUDE SONNET 4**
     
     def select_best_agent(self, theorem: Theorem) -> str:
         """Select optimal agent for theorem"""
@@ -259,13 +258,12 @@ class UltimateRecognitionSolver:
         return "Gauss"
     
     async def prove_with_agent(self, agent_name: str, theorem: Theorem) -> Dict:
-        """Single agent attempts to prove a theorem with automatic model escalation"""
+        """Single agent attempts to prove a theorem - **USES CLAUDE SONNET 4 ONLY**"""
         agent = self.agents[agent_name]
-        model_type = self.get_agent_model(agent_name, theorem)
-        model = MODELS[model_type]
-        max_tokens = MAX_TOKENS[model_type]
+        model = "claude-sonnet-4-20250514"  # **ALWAYS CLAUDE SONNET 4**
+        max_tokens = 8192  # Claude Sonnet 4 max
         
-        print(f"   Using model: {model} (tokens: {max_tokens})")
+        print(f"   Using model: **CLAUDE SONNET 4** (tokens: {max_tokens})")
         
         # Build comprehensive prompt
         prompt = f"""You are {agent_name}, master of {agent["specialty"]}.
@@ -300,91 +298,59 @@ BE THOROUGH - we have {max_tokens} tokens available.
 """
 
         try:
-            # Enhanced headers for Opus models
-            headers = {
-                "x-api-key": API_KEY,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json"
-            }
+            # **USE CLAUDE SONNET 4 API**
+            response = self.client.messages.create(
+                model=model,  # **CLAUDE SONNET 4**
+                max_tokens=max_tokens,
+                temperature=0.1,  # Very low for mathematical precision
+                messages=[{"role": "user", "content": prompt}]
+            )
             
-            # Add thinking headers for Opus
-            if "opus" in model:
-                headers.update({
-                    "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15",
-                })
+            self.api_calls += 1
             
-            data = {
-                "model": model,
-                "max_tokens": max_tokens,
-                "temperature": 0.1,  # Very low for mathematical precision
-                "messages": [{"role": "user", "content": prompt}]
-            }
-            
-            async with self.session.post(
-                "https://api.anthropic.com/v1/messages",
-                headers=headers,
-                json=data
-            ) as response:
-                result = await response.json()
-                self.api_calls += 1
+            if response.content:
+                proof_text = response.content[0].text
                 
-                if "content" in result and result["content"]:
-                    proof_text = result["content"][0]["text"]
+                # Track token usage
+                if hasattr(response, 'usage'):
+                    self.total_tokens += response.usage.input_tokens + response.usage.output_tokens
+                
+                # Create attempt record
+                attempt = {
+                    "agent": agent_name,
+                    "model": "claude-sonnet-4-20250514",  # **CLAUDE SONNET 4**
+                    "model_type": "Claude Sonnet 4",
+                    "timestamp": datetime.now().isoformat(),
+                    "proof": proof_text,
+                    "tokens_used": getattr(response.usage, 'total_tokens', 0) if hasattr(response, 'usage') else 0
+                }
+                
+                theorem.attempts.append(attempt)
+                
+                # Enhanced validation
+                if self._validate_proof(theorem, proof_text):
+                    theorem.proof = proof_text
+                    theorem.status = "proven"
+                    theorem.verified = True
+                    self.proven.add(theorem.name)
                     
-                                            # Track token usage
-                        if "usage" in result:
-                            usage = result["usage"]
-                            # Handle different usage formats
-                            if isinstance(usage, dict):
-                                tokens = usage.get("total_tokens", 0) or usage.get("input_tokens", 0) + usage.get("output_tokens", 0)
-                            else:
-                                tokens = 0
-                            self.total_tokens += tokens
+                    print(f"✅ {agent_name} PROVED {theorem.name} using **CLAUDE SONNET 4**!")
                     
-                    # Create attempt record
-                    attempt = {
-                        "agent": agent_name,
-                        "model": model,
-                        "model_type": model_type,
-                        "timestamp": datetime.now().isoformat(),
-                        "proof": proof_text,
-                        "tokens_used": result.get("usage", {}).get("total_tokens", 0)
-                    }
+                    # Generate prediction if applicable
+                    if theorem.level == 5:
+                        await self._generate_prediction(theorem)
                     
-                    theorem.attempts.append(attempt)
-                    
-                    # Enhanced validation
-                    if self._validate_proof(theorem, proof_text):
-                        theorem.proof = proof_text
-                        theorem.status = "proven"
-                        theorem.verified = True
-                        self.proven.add(theorem.name)
-                        
-                        print(f"✅ {agent_name} PROVED {theorem.name} using {model_type}!")
-                        
-                        # Generate prediction if applicable
-                        if theorem.level == 5:
-                            await self._generate_prediction(theorem)
-                        
-                        return {"success": True, "agent": agent_name, "model": model_type}
-                    else:
-                        # Track model failure for escalation
-                        theorem.failed_models.add(model)
-                        
-                        # Check if we should escalate
-                        if model_type == "fast" and agent["priority"] in ["critical", "high"]:
-                            print(f"⚠️ {agent_name} failed with Sonnet, will escalate to Opus next")
-                            self.model_escalations += 1
-                        
-                        return {"success": False, "agent": agent_name, "reason": "Invalid proof", "model": model_type}
+                    return {"success": True, "agent": agent_name, "model": "Claude Sonnet 4"}
                 else:
-                    print(f"❌ Empty response from {model}")
-                    return {"success": False, "agent": agent_name, "error": "Empty response", "model": model_type}
+                    return {"success": False, "agent": agent_name, "reason": "Invalid proof", "model": "Claude Sonnet 4"}
+            else:
+                print(f"❌ Empty response from Claude Sonnet 4")
+                return {"success": False, "agent": agent_name, "error": "Empty response", "model": "Claude Sonnet 4"}
                 
         except Exception as e:
             print(f"⚠️ {agent_name} error on {theorem.name}: {e}")
             traceback.print_exc()
-            return {"success": False, "agent": agent_name, "error": str(e), "model": model_type}
+            return {"success": False, "agent": agent_name, "error": str(e), "model": "Claude Sonnet 4"}
     
     def _validate_proof(self, theorem: Theorem, proof_text: str) -> bool:
         """Enhanced proof validation"""
@@ -498,310 +464,268 @@ BE THOROUGH - we have {max_tokens} tokens available.
             theorem.prediction_generated = True
             print(f"📊 Generated prediction for {theorem.name}")
     
-    async def parallel_proof_assault(self, batch_size: int = 20):
-        """Run up to 20 agents in parallel on available theorems"""
-        # Get provable theorems
-        available = [
-            t for t in self.theorems.values() 
-            if t.status == "unproven" and self.can_prove(t.name)
-        ]
+    async def parallel_prove_level(self, level: int) -> Dict[str, bool]:
+        """Try to prove all theorems at given level in parallel - **CLAUDE SONNET 4 ONLY**"""
+        print(f"\n{'='*60}")
+        print(f"LEVEL {level} PARALLEL PROOF ATTEMPTS - **CLAUDE SONNET 4 ONLY**")
+        print(f"{'='*60}")
         
-        if not available:
-            return []
+        # Get provable theorems at this level
+        provable = []
+        for name, theorem in self.theorems.items():
+            if theorem.level == level and theorem.status == "unproven" and self.can_prove(name):
+                provable.append(theorem)
         
-        # Sort by priority (lower level first, C1 is absolute top priority)
-        def priority_key(t):
-            if t.name == "C1_GoldenRatioLockIn":
-                return (-1, 0)  # Highest priority
-            return (t.level, len(t.attempts))  # Then by level and attempts
+        if not provable:
+            print(f"No provable theorems at level {level}")
+            return {}
         
-        available.sort(key=priority_key)
+        print(f"Found {len(provable)} provable theorems at level {level}")
         
-        # Create tasks
+        # Assign agents to theorems
         tasks = []
-        used_agents = set()
+        for theorem in provable:
+            agent = self.select_best_agent(theorem)
+            theorem.assigned_agents.add(agent)
+            print(f"  → {theorem.name} assigned to {agent}")
+            tasks.append(self.prove_with_agent(agent, theorem))
         
-        for theorem in available[:batch_size]:
-            # Find available agent
-            agent_name = self.select_best_agent(theorem)
-            
-            # If preferred agent is busy, find alternative
-            if agent_name in used_agents:
-                # Find agent with matching specialty
-                for alt_agent, config in self.agents.items():
-                    if alt_agent not in used_agents:
-                        agent_name = alt_agent
-                        break
-            
-            if agent_name not in used_agents:
-                used_agents.add(agent_name)
-                theorem.assigned_agents.add(agent_name)
-                
-                model_type = self.get_agent_model(agent_name, theorem)
-                print(f"🚀 Dispatching {agent_name} → {theorem.name} [{model_type}]")
-                task = asyncio.create_task(self.prove_with_agent(agent_name, theorem))
-                tasks.append(task)
-        
-        # Run all tasks in parallel
+        # Run all proofs in parallel
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         # Process results
-        successful = sum(1 for r in results if isinstance(r, dict) and r.get("success"))
-        print(f"\n📈 Batch complete: {successful}/{len(results)} successful")
+        success_map = {}
+        for theorem, result in zip(provable, results):
+            if isinstance(result, Exception):
+                success_map[theorem.name] = False
+                print(f"⚠️ Exception proving {theorem.name}: {result}")
+            elif isinstance(result, dict) and result.get("success"):
+                success_map[theorem.name] = True
+            else:
+                success_map[theorem.name] = False
         
-        return results
+        return success_map
+    
+    def priority_key(t):
+        """Priority key for sorting theorems"""
+        theorem = t[1]
+        # Prioritize by level, then by dependencies already proven
+        deps_proven = sum(1 for d in theorem.dependencies if d in self.proven)
+        return (theorem.level, -deps_proven, theorem.name)
     
     async def diagnostic_escalation(self, theorem: Theorem):
-        """When stuck, use Opus with maximum tokens and deep analysis"""
-        print(f"🔧 DIAGNOSTIC ESCALATION for {theorem.name}")
-        self.model_escalations += 1
+        """**NO MODEL ESCALATION - CLAUDE SONNET 4 ONLY**"""
+        print(f"\n{'='*40}")
+        print(f"DIAGNOSTIC MODE FOR {theorem.name}")
+        print(f"**USING CLAUDE SONNET 4 ONLY - NO ESCALATION**")
+        print(f"{'='*40}")
         
-        # Gather all previous attempts for analysis
-        attempt_summary = []
-        for att in theorem.attempts[-5:]:  # Last 5 attempts
-            attempt_summary.append({
-                "agent": att["agent"],
-                "model": att.get("model_type", "unknown"),
-                "timestamp": att["timestamp"],
-                "proof_excerpt": att["proof"][:500] + "..." if len(att["proof"]) > 500 else att["proof"]
-            })
+        # Always use Claude Sonnet 4
+        model = "claude-sonnet-4-20250514"
         
-        diagnostic_prompt = f"""Multiple attempts to prove {theorem.name} have failed. This is a CRITICAL theorem for Recognition Science.
+        diagnostic_prompt = f"""I need you to analyze why proving this theorem is difficult and suggest approaches.
 
-Theorem: {theorem.statement}
-Dependencies (all proven): {', '.join(theorem.dependencies)}
-Level: {theorem.level}
+THEOREM: {theorem.name}
+STATEMENT: {theorem.statement} 
+DEPENDENCIES: {', '.join(theorem.dependencies)}
 
-Previous {len(theorem.attempts)} attempts summary:
-{json.dumps(attempt_summary, indent=2)}
+Previous attempts: {len(theorem.attempts)}
 
-DEEP DIAGNOSTIC REQUIRED:
-1. What is the EXACT mathematical difficulty preventing proof?
-2. Are we missing a key insight about Recognition Science principles?
-3. What specific techniques from the dependencies should be used?
-4. Is there a simpler approach we're overlooking?
+Please analyze:
+1. What makes this theorem challenging?
+2. What mathematical techniques are needed?
+3. Suggested proof strategy
+4. Any missing dependencies or lemmas needed?
 
-Then provide a COMPLETE, RIGOROUS PROOF with every step shown.
-
-Remember Recognition Science core:
-- Golden ratio φ=(1+√5)/2 is UNIQUE (no other scaling works)
-- Everything emerges from 8 axioms with ZERO free parameters
-- E_coh = 0.090 eV is the fundamental quantum
-- Eight-beat cycle is essential (L^8 commutes with symmetries)
-
-Use up to {MAX_TOKENS['ultimate']} tokens to solve this completely.
-"""
+Be specific and technical."""
 
         try:
-            # Use ultimate Opus with maximum capabilities
-            headers = {
-                "x-api-key": API_KEY,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-                "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15"
-            }
+            response = self.client.messages.create(
+                model=model,  # **CLAUDE SONNET 4**
+                max_tokens=4000,
+                temperature=0.3,
+                messages=[{"role": "user", "content": diagnostic_prompt}]
+            )
             
-            data = {
-                "model": MODELS["ultimate"],
-                "max_tokens": MAX_TOKENS["ultimate"],
-                "temperature": 0.3,  # Slightly higher for creative insight
-                "messages": [{"role": "user", "content": diagnostic_prompt}]
-            }
-            
-            async with self.session.post(
-                "https://api.anthropic.com/v1/messages",
-                headers=headers,
-                json=data
-            ) as response:
-                result = await response.json()
-                self.api_calls += 1
+            if response.content:
+                analysis = response.content[0].text
+                print(f"\n**CLAUDE SONNET 4 DIAGNOSTIC ANALYSIS**:\n{analysis}")
                 
-                if "content" in result and result["content"]:
-                    analysis = result["content"][0]["text"]
-                    
-                    # Track token usage
-                    if "usage" in result:
-                        tokens = result["usage"].get("total_tokens", 0)
-                        self.total_tokens += tokens
-                        print(f"   Diagnostic used {tokens:,} tokens")
-                    
-                    # Create diagnostic attempt
-                    attempt = {
-                        "agent": "Diagnostic_Opus",
-                        "model": MODELS["ultimate"],
-                        "model_type": "ultimate",
-                        "timestamp": datetime.now().isoformat(),
-                        "proof": analysis,
-                        "tokens_used": result.get("usage", {}).get("total_tokens", 0),
-                        "diagnostic": True
-                    }
-                    
-                    theorem.attempts.append(attempt)
-                    
-                    # Check if diagnostic solved it
-                    if self._validate_proof(theorem, analysis):
-                        theorem.proof = analysis
-                        theorem.status = "proven"
-                        theorem.verified = True
-                        self.proven.add(theorem.name)
-                        
-                        print(f"✅ DIAGNOSTIC PROVED {theorem.name}!")
-                        
-                        if theorem.level == 5:
-                            await self._generate_prediction(theorem)
-                        
-                        return True
-                    else:
-                        print(f"📋 Diagnostic provided insights but didn't complete proof")
-                        # Parse insights for next attempt
-                        return False
-                        
+                # Try specialized proof based on analysis
+                specialized_agents = ["Archimedes", "Gauss", "Einstein", "Gödel"]
+                
+                for agent in specialized_agents:
+                    if agent not in theorem.assigned_agents:
+                        print(f"\n→ Trying specialized agent: {agent}")
+                        result = await self.prove_with_agent(agent, theorem)
+                        if result["success"]:
+                            return True
+                        theorem.assigned_agents.add(agent)
+                
         except Exception as e:
-            print(f"❌ Diagnostic error: {e}")
-            traceback.print_exc()
-            return False
+            print(f"Diagnostic error: {e}")
+        
+        return False
     
     async def run_until_complete(self):
-        """Run continuously until all theorems are proven"""
+        """Main solving loop - proves everything possible - **CLAUDE SONNET 4 ONLY**"""
         await self.create_session()
         
-        print("🚀 ULTIMATE RECOGNITION SCIENCE SOLVER v2.0")
-        print("=" * 60)
-        print(f"Theorems to prove: {len([t for t in self.theorems.values() if t.status == 'unproven'])}")
-        print(f"Agents available: {len(self.agents)}")
-        print("Model hierarchy: Sonnet → Opus (automatic escalation)")
-        print("Token limits: MAXIMUM (cost is not a concern)")
-        print("=" * 60)
+        print("\n" + "="*80)
+        print("ULTIMATE RECOGNITION SOLVER - **CLAUDE SONNET 4 ONLY**")
+        print("="*80)
+        print(f"Total theorems: {len(self.theorems)}")
+        print(f"Starting proven: {len(self.proven)}")
+        print("**ALL 20 AGENTS USE CLAUDE SONNET 4**")
+        print(f"**MODEL: {MODELS['fast']}**")
+        print("**NO MODEL ESCALATION**")
         
         iteration = 0
-        stuck_count = 0
-        last_proven_count = 0
+        max_iterations = 10
         
-        try:
-            while True:
-                iteration += 1
+        while iteration < max_iterations:
+            iteration += 1
+            print(f"\n{'#'*60}")
+            print(f"ITERATION {iteration} - **CLAUDE SONNET 4 ONLY**")
+            print(f"{'#'*60}")
+            
+            progress_made = False
+            
+            # Try each level in order
+            for level in range(6):
+                success_map = await self.parallel_prove_level(level)
+                if success_map:
+                    progress_made = True
+                    for theorem_name, success in success_map.items():
+                        if success:
+                            print(f"✅ Proved {theorem_name} at level {level}")
+            
+            # If stuck, try diagnostic escalation on critical unproven theorems
+            if not progress_made:
+                print("\n⚠️ No progress made, trying diagnostics...")
+                critical_unproven = [
+                    (name, th) for name, th in self.theorems.items()
+                    if th.status == "unproven" and th.level <= 2
+                ]
                 
-                # Count unproven
-                unproven = [t for t in self.theorems.values() if t.status == "unproven"]
-                proven_count = len(self.proven)
-                
-                if not unproven:
-                    print("\n🎉 ALL THEOREMS PROVEN!")
-                    break
-                
-                print(f"\n{'='*60}")
-                print(f"ITERATION {iteration}")
-                print(f"Proven: {proven_count}/{len(self.theorems)} | Unproven: {len(unproven)}")
-                print(f"Model escalations: {self.model_escalations} | Total tokens: {self.total_tokens:,}")
-                print(f"{'='*60}")
-                
-                # Run parallel assault
-                results = await self.parallel_proof_assault()
-                
-                # Check progress
-                if proven_count == last_proven_count:
-                    stuck_count += 1
-                    print(f"⚠️ No progress for {stuck_count} iterations")
-                    
-                    # Diagnostic escalation for stuck theorems
-                    if stuck_count >= 3:
-                        print("\n🔥 TRIGGERING DIAGNOSTIC ESCALATION")
-                        stuck_theorems = [t for t in unproven if len(t.attempts) >= 3]
-                        
-                        for theorem in stuck_theorems[:3]:  # Top 3 stuck theorems
-                            await self.diagnostic_escalation(theorem)
-                        
-                        stuck_count = 0  # Reset after diagnostic
-                else:
-                    stuck_count = 0
-                    last_proven_count = proven_count
-                
-                # Save progress every 5 iterations
-                if iteration % 5 == 0:
-                    self._save_progress()
-                
-                # Brief pause to avoid rate limits
-                await asyncio.sleep(10)  # Increased delay to avoid rate limiting
-                
-        except KeyboardInterrupt:
-            print("\n⚠️ Interrupted by user")
-        finally:
-            await self.session.close()
-            self._save_progress()
-            self._final_report()
+                for name, theorem in sorted(critical_unproven, key=lambda x: self.priority_key(x)):
+                    if await self.diagnostic_escalation(theorem):
+                        progress_made = True
+                        break
+            
+            # Check if complete
+            unproven = [name for name, th in self.theorems.items() 
+                       if th.status == "unproven"]
+            
+            print(f"\nIteration {iteration} complete:")
+            print(f"  Proven: {len(self.proven)}")
+            print(f"  Unproven: {len(unproven)}")
+            
+            if not unproven:
+                print("\n🎉 ALL THEOREMS PROVEN!")
+                break
+            
+            if not progress_made:
+                print("\n⚠️ No progress possible, stopping...")
+                break
+            
+            # Brief pause between iterations
+            await asyncio.sleep(2)
+        
+        await self.session.close()
+        self._save_progress()
+        self._final_report()
     
     def _save_progress(self):
-        """Save current proof state"""
+        """Save proof progress to file"""
         progress = {
             "timestamp": datetime.now().isoformat(),
-            "proven": list(self.proven),
-            "theorems": {},
-            "statistics": {
-                "proven_count": len(self.proven),
-                "total_attempts": sum(len(t.attempts) for t in self.theorems.values()),
-                "api_calls": self.api_calls,
-                "total_tokens": self.total_tokens,
-                "model_escalations": self.model_escalations,
-                "runtime_seconds": time.time() - self.start_time
-            }
+            "proven_count": len(self.proven),
+            "total_count": len(self.theorems),
+            "proven_theorems": list(self.proven),
+            "api_calls": self.api_calls,
+            "total_tokens": self.total_tokens,
+            "model_used": "claude-sonnet-4-20250514",  # **CLAUDE SONNET 4**
+            "runtime_seconds": time.time() - self.start_time
         }
         
+        # Save theorem details
+        theorem_details = {}
         for name, theorem in self.theorems.items():
-            progress["theorems"][name] = {
-                "status": theorem.status,
-                "attempts": len(theorem.attempts),
-                "verified": theorem.verified,
-                "failed_models": list(theorem.failed_models)
-            }
+            if theorem.status == "proven":
+                theorem_details[name] = {
+                    "statement": theorem.statement,
+                    "proof": theorem.proof,
+                    "attempts": len(theorem.attempts),
+                    "agents_used": list(theorem.assigned_agents)
+                }
         
-        with open("recognition_progress.json", "w") as f:
+        progress["theorem_details"] = theorem_details
+        
+        with open("../proof_progress.json", "w") as f:
             json.dump(progress, f, indent=2)
         
-        print(f"💾 Progress saved to recognition_progress.json")
+        print(f"\n💾 Progress saved to proof_progress.json")
     
     def _final_report(self):
-        """Generate final report"""
-        print("\n" + "="*60)
-        print("FINAL REPORT")
-        print("="*60)
+        """Generate comprehensive final report"""
+        print("\n" + "="*80)
+        print("FINAL REPORT - **CLAUDE SONNET 4 ONLY**")
+        print("="*80)
         
-        # Statistics
         runtime = time.time() - self.start_time
-        print(f"Runtime: {runtime/3600:.2f} hours")
-        print(f"API calls: {self.api_calls:,}")
-        print(f"Total tokens: {self.total_tokens:,}")
-        print(f"Model escalations: {self.model_escalations}")
-        print(f"Cost estimate: ${(self.total_tokens / 1000) * 0.015:.2f}")  # Rough estimate
         
-        # Results by level
-        print("\nResults by level:")
+        print(f"\n📊 STATISTICS:")
+        print(f"  Total theorems: {len(self.theorems)}")
+        print(f"  Proven: {len(self.proven)} ({len(self.proven)/len(self.theorems)*100:.1f}%)")
+        print(f"  API calls: {self.api_calls}")
+        print(f"  Total tokens: {self.total_tokens:,}")
+        print(f"  Runtime: {runtime/60:.1f} minutes")
+        print(f"  Model used: **CLAUDE SONNET 4 EXCLUSIVELY**")
+        print(f"  Model: {MODELS['fast']}")
+        
+        # Breakdown by level
+        print(f"\n📈 BREAKDOWN BY LEVEL:")
         for level in range(6):
-            level_theorems = [t for t in self.theorems.values() if t.level == level]
-            proven = sum(1 for t in level_theorems if t.status in ["proven", "given"])
-            print(f"  Level {level}: {proven}/{len(level_theorems)} proven")
+            level_theorems = [name for name, th in self.theorems.items() if th.level == level]
+            level_proven = [name for name in level_theorems if name in self.proven]
+            print(f"  Level {level}: {len(level_proven)}/{len(level_theorems)} proven")
         
-        # Critical theorems
-        print("\nCritical theorems:")
-        critical = ["C1_GoldenRatioLockIn", "E1_CoherenceQuantum", "P1_ElectronMass"]
-        for name in critical:
-            theorem = self.theorems.get(name)
-            if theorem:
-                print(f"  {name}: {theorem.status} ({len(theorem.attempts)} attempts)")
-        
-        # Unproven theorems
-        unproven = [t for t in self.theorems.values() if t.status == "unproven"]
+        # Critical unproven
+        unproven = [(name, th) for name, th in self.theorems.items() if th.status == "unproven"]
         if unproven:
-            print(f"\nUnproven theorems ({len(unproven)}):")
-            for t in unproven[:10]:  # First 10
-                print(f"  - {t.name}: {len(t.attempts)} attempts")
+            print(f"\n❌ UNPROVEN THEOREMS ({len(unproven)}):")
+            for name, theorem in sorted(unproven, key=lambda x: (x[1].level, x[0])):
+                print(f"  {name} (level {theorem.level}, attempts: {len(theorem.attempts)})")
         
-        print("\n" + "="*60)
+        # Success stories
+        print(f"\n✨ KEY ACHIEVEMENTS:")
+        key_theorems = ["C1_GoldenRatioLockIn", "E1_CoherenceQuantum", "P1_ElectronMass"]
+        for key in key_theorems:
+            if key in self.proven:
+                print(f"  ✅ {key} - PROVEN!")
+        
+        print(f"\n💰 ESTIMATED COST:")
+        # Claude Sonnet 4 pricing (approximate)
+        input_cost = self.total_tokens * 0.75 * 3e-6  # ~$3 per 1M input tokens
+        output_cost = self.total_tokens * 0.25 * 15e-6  # ~$15 per 1M output tokens
+        total_cost = input_cost + output_cost
+        print(f"  Estimated API cost: ${total_cost:.2f}")
+        print(f"  Cost per proof: ${total_cost/max(len(self.proven), 1):.2f}")
+        
+        print("\n" + "="*80)
+        print("Recognition Science: The Universe Computes Itself")
+        print("Solved using **CLAUDE SONNET 4 ONLY** as requested")
+        print("="*80)
 
 async def main():
-    """Main entry point"""
+    """Run the autonomous solver - **CLAUDE SONNET 4 ONLY**"""
+    print("\n**STARTING ULTIMATE AUTONOMOUS SOLVER**")
+    print("**CONFIGURED TO USE ONLY CLAUDE SONNET 4**")
+    print("**NO MODEL ESCALATION - CLAUDE SONNET 4 EXCLUSIVELY**\n")
+    
     solver = UltimateRecognitionSolver()
     await solver.run_until_complete()
 
 if __name__ == "__main__":
-    print("Starting Recognition Science automated proof system...")
     asyncio.run(main()) 
