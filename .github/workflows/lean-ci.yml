@@ -1,0 +1,114 @@
+name: Lean CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install elan
+      run: |
+        curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+        echo "$HOME/.elan/bin" >> $GITHUB_PATH
+        
+    - name: Get cache
+      run: lake exe cache get
+      
+    - name: Build project
+      run: lake build
+      
+    - name: Run tests
+      run: lake test
+      
+  lint:
+    name: Lint Lean Files
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Lean linter
+      uses: leanprover/lean4-action@v1
+      with:
+        lint: true
+        
+  python-tests:
+    name: Python Solver Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Run Python tests
+      run: |
+        python -m pytest formal/tests/ -v
+        
+    - name: Check code style
+      run: |
+        black --check formal/
+        flake8 formal/ --max-line-length=100
+
+    - name: Check for forbidden patterns
+      run: |
+        cd recognition-ledger/formal
+        
+        # Check for sorry (should be 0)
+        echo "Checking for 'sorry' placeholders..."
+        if grep -r "sorry" --include="*.lean" . | grep -v "test/" | grep -v ".lake/"; then
+          echo "ERROR: Found 'sorry' placeholders!"
+          exit 1
+        fi
+        
+        # Check for axioms outside allowed files
+        echo "Checking for unauthorized axioms..."
+        if grep -r "^axiom\|[[:space:]]axiom[[:space:]]" --include="*.lean" . | grep -v "PhysicalPostulates.lean" | grep -v ".lake/"; then
+          echo "ERROR: Found axioms outside PhysicalPostulates.lean!"
+          exit 1
+        fi
+        
+        # Check strict-mode files for trivial proofs
+        echo "Checking strict-mode files..."
+        for file in $(grep -l "@strict" --include="*.lean" -r .); do
+          echo "Checking $file for trivial proofs..."
+          if grep -E "by rfl[[:space:]]*$|by le_refl|by trivial[[:space:]]*$|exact le_refl|exact rfl[[:space:]]*$" "$file"; then
+            echo "ERROR: Found trivial proof in strict-mode file $file!"
+            exit 1
+          fi
+        done
+    
+    - name: Run proof linter
+      run: |
+        cd recognition-ledger
+        python3 scripts/proof_linter.py
+    
+    - name: Generate proof status report
+      run: |
+        cd recognition-ledger
+        python3 scripts/generate_status.py > proof_status.md
+        
+    - name: Upload proof status
+      uses: actions/upload-artifact@v3
+      with:
+        name: proof-status
+        path: recognition-ledger/proof_status.md 
