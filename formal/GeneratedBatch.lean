@@ -11,87 +11,87 @@ open RecognitionScience
 
 /-! ## Pattern 1: Basic Arithmetic (rfl) -/
 
-theorem one_plus_four : 1 + 4 = 5 := by rfl
+theorem six_plus_twelve : 6 + 12 = 18 := by rfl
 
-theorem twelve_minus_two : 12 - 2 = 10 := by rfl
+theorem twenty_times_ten : 20 * 10 = 200 := by rfl
 
-theorem eleven_plus_sixteen : 11 + 16 = 27 := by rfl
+theorem one_plus_ten : 1 + 10 = 11 := by rfl
 
-theorem two_times_nineteen : 2 * 19 = 38 := by rfl
+theorem fourteen_plus_fourteen : 14 + 14 = 28 := by rfl
 
-theorem fourteen_times_four : 14 * 4 = 56 := by rfl
+theorem twenty_times_two : 20 * 2 = 40 := by rfl
 
-theorem one_plus_eight : 1 + 8 = 9 := by rfl
+theorem nine_plus_fifteen : 9 + 15 = 24 := by rfl
 
-theorem nine_times_fourteen : 9 * 14 = 126 := by rfl
+theorem ten_plus_twenty : 10 + 20 = 30 := by rfl
 
-theorem twenty_times_eighteen : 20 * 18 = 360 := by rfl
+theorem three_times_six : 3 * 6 = 18 := by rfl
 
-theorem eleven_plus_eighteen : 11 + 18 = 29 := by rfl
+theorem fourteen_minus_nine : 14 - 9 = 5 := by rfl
+
+theorem fifteen_plus_three : 15 + 3 = 18 := by rfl
 
 theorem nineteen_plus_sixteen : 19 + 16 = 35 := by rfl
 
-theorem sixteen_minus_two : 16 - 2 = 14 := by rfl
+theorem four_times_six : 4 * 6 = 24 := by rfl
 
-theorem three_times_eleven : 3 * 11 = 33 := by rfl
+theorem eight_times_two : 8 * 2 = 16 := by rfl
 
-theorem six_minus_two : 6 - 2 = 4 := by rfl
+theorem fifteen_times_three : 15 * 3 = 45 := by rfl
 
-theorem ten_plus_fifteen : 10 + 15 = 25 := by rfl
+theorem thirteen_plus_sixteen : 13 + 16 = 29 := by rfl
 
-theorem sixteen_plus_nineteen : 16 + 19 = 35 := by rfl
+theorem nineteen_minus_eighteen : 19 - 18 = 1 := by rfl
 
-theorem nine_minus_six : 9 - 6 = 3 := by rfl
+theorem seventeen_times_three : 17 * 3 = 51 := by rfl
 
-theorem five_times_one : 5 * 1 = 5 := by rfl
+theorem nineteen_times_four : 19 * 4 = 76 := by rfl
 
-theorem twelve_times_eighteen : 12 * 18 = 216 := by rfl
+theorem one_plus_eighteen : 1 + 18 = 19 := by rfl
 
-theorem fifteen_plus_six : 15 + 6 = 21 := by rfl
-
-theorem thirteen_times_thirteen : 13 * 13 = 169 := by rfl
+theorem five_times_thirteen : 5 * 13 = 65 := by rfl
 
 /-! ## Pattern 2: Inequalities (norm_num) -/
 
-theorem twentyone_gt_eighteen : 21 > 18 := by norm_num
-
-theorem twentythree_ge_sixteen : 23 ≥ 16 := by norm_num
-
-theorem nine_lt_eleven : 9 < 11 := by norm_num
-
-theorem eleven_lt_fourteen : 11 < 14 := by norm_num
-
-theorem seventeen_le_twenty : 17 ≤ 20 := by norm_num
-
-theorem three_lt_five : 3 < 5 := by norm_num
-
-theorem fifteen_lt_twentysix : 15 < 26 := by norm_num
-
-theorem six_gt_five : 6 > 5 := by norm_num
-
-theorem two_lt_twentyfive : 2 < 25 := by norm_num
-
-theorem four_lt_eight : 4 < 8 := by norm_num
-
-theorem twentythree_le_twentyfive : 23 ≤ 25 := by norm_num
-
-theorem twentythree_lt_twentyfive : 23 < 25 := by norm_num
-
-theorem eleven_ge_six : 11 ≥ 6 := by norm_num
-
-theorem fifteen_le_twentyfour : 15 ≤ 24 := by norm_num
-
-theorem twenty_lt_twentyfour : 20 < 24 := by norm_num
-
 theorem thirty_le_n34 : 30 ≤ 34 := by norm_num
 
-theorem four_le_eighteen : 4 ≤ 18 := by norm_num
+theorem twentyseven_ge_fifteen : 27 ≥ 15 := by norm_num
 
-theorem seven_ge_seven : 7 ≥ 7 := by norm_num
+theorem twentyfive_le_twentyseven : 25 ≤ 27 := by norm_num
 
-theorem n32_ge_twentyseven : 32 ≥ 27 := by norm_num
+theorem twentynine_gt_twelve : 29 > 12 := by norm_num
 
-theorem two_lt_fifteen : 2 < 15 := by norm_num
+theorem two_le_twentynine : 2 ≤ 29 := by norm_num
+
+theorem four_le_fifteen : 4 ≤ 15 := by norm_num
+
+theorem twentyfour_ge_eight : 24 ≥ 8 := by norm_num
+
+theorem twentysix_gt_nineteen : 26 > 19 := by norm_num
+
+theorem eight_le_thirty : 8 ≤ 30 := by norm_num
+
+theorem ten_ge_ten : 10 ≥ 10 := by norm_num
+
+theorem eighteen_gt_six : 18 > 6 := by norm_num
+
+theorem eleven_ge_nine : 11 ≥ 9 := by norm_num
+
+theorem thirteen_gt_eleven : 13 > 11 := by norm_num
+
+theorem twentyone_ge_ten : 21 ≥ 10 := by norm_num
+
+theorem seventeen_gt_sixteen : 17 > 16 := by norm_num
+
+theorem eight_lt_twentyfive : 8 < 25 := by norm_num
+
+theorem twentysix_gt_fifteen : 26 > 15 := by norm_num
+
+theorem twentyeight_ge_twentyseven : 28 ≥ 27 := by norm_num
+
+theorem twentysix_le_thirty : 26 ≤ 30 := by norm_num
+
+theorem nine_le_seventeen : 9 ≤ 17 := by norm_num
 
 /-! ## Pattern 3: Constant Positivity (unfold + norm_num) -/
 

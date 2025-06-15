@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-06-15T00:30:34.864636",
+  "completed_theorems": [],
+  "failed_theorems": [
+    "E_coh_pos",
+    "gradeNat_one",
+    "tick_one",
+    "grade_one",
+    "length_one",
+    "eight_from_lcm",
+    "eight_beat_lcm",
+    "J_one",
+    "tau_pos",
+    "eight_beat_pos",
+    "coherence_positive",
+    "electron_at_rung_zero",
+    "mass_at_rung_one",
+    "electron_mass_is_E_coh",
+    "phi_times_two",
+    "phi_minus_one_pos"
+  ],
+  "total_attempted": 0,
+  "completed": 0,
+  "verified": 0,
+  "failed": 16,
+  "time_minutes": 0.00012296438217163086
+}

@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-06-15T00:32:00.580563",
+  "completed_theorems": [],
+  "failed_theorems": [
+    "J_ge_one",
+    "phi_pos",
+    "phi_gt_one",
+    "phi_equation",
+    "cost_zero_iff_empty",
+    "J_strict_convex"
+  ],
+  "total_attempted": 3,
+  "completed": 0,
+  "verified": 0,
+  "failed": 6,
+  "time_minutes": 0.11112353801727295
+}
