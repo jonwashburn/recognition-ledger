@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-06-14T23:28:43.122688",
+  "completed": 2,
+  "total": 3,
+  "results": [
+    {
+      "theorem": "two_plus_two",
+      "proof": "rfl",
+      "status": "success"
+    },
+    {
+      "theorem": "five_gt_three",
+      "proof": "norm_num",
+      "status": "success"
+    },
+    {
+      "theorem": "E_coh_pos",
+      "proof": "unfold E_coh\nnorm_num",
+      "status": "failed",
+      "error": "formal/TestSolver.lean:20:33: error: unsolved goals\n\u22a2 90e-3 > 0\nformal/TestSolver.lean:22:0: error: unexpected identifier; expected command\n"
+    }
+  ]
+}

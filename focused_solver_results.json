@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-06-15T00:23:37.921587",
+  "completed_theorems": [],
+  "failed_theorems": [
+    "phi_pos",
+    "phi_gt_one"
+  ],
+  "total_attempted": 2,
+  "completed": 0,
+  "verified": 0,
+  "failed": 4,
+  "time_minutes": 0.03741273880004883
+}
