@@ -18,6 +18,7 @@ theorem five_gt_three : 5 > 3 := by
 
 /-- Test: E_coh is positive -/
 theorem E_coh_pos : E_coh > 0 := by
-  sorry
+  unfold E_coh
+  norm_num
 
 end TestSolver
