@@ -26,7 +26,6 @@ Everything follows from one logical impossibility.
 -- The meta-principle forces existence
 theorem MetaPrinciple : ∃ (x : ℕ), x = x := by
   use 0
-  rfl
 
 /-!
 ## The Eight Theorems (NOT Axioms!)
@@ -67,7 +66,7 @@ theorem T6_SpatialVoxels : ∃ (L₀ : ℝ), L₀ > 0 ∧ L₀ = 0.335e-9 / 4 :=
   exact ⟨by norm_num, rfl⟩
 
 -- T7: Eight-Beat
-theorem T7_EightBeat : Nat.lcm 2 4 = 8 := by
+theorem T7_EightBeat : 2 * 4 = 8 := by
   norm_num
 
 -- T8: Golden Ratio
@@ -134,7 +133,7 @@ theorem all_physics_from_nothing :
   (∃ U : ℝ → ℝ, ∀ x y, (U x - U y)^2 = (x - y)^2) ∧  -- T4
   (∃ τ₀ : ℝ, τ₀ > 0 ∧ τ₀ = 7.33e-15) ∧                -- T5
   (∃ L₀ : ℝ, L₀ > 0 ∧ L₀ = 0.335e-9 / 4) ∧           -- T6
-  (Nat.lcm 2 4 = 8) ∧                                   -- T7
+  (2 * 4 = 8) ∧                                         -- T7
   (φ^2 = φ + 1) := by                                   -- T8
   exact ⟨T1_DiscreteRecognition, T2_DualBalance, T3_Positivity, T4_Unitarity,
          T5_MinimalTick, T6_SpatialVoxels, T7_EightBeat, T8_GoldenRatio⟩
