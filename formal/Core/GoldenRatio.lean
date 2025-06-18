@@ -33,7 +33,17 @@ lemma J_pos_domain (x : ℝ) (hx : x > 0) : J x = (x + 1/x) / 2 := by
 
 /-- J(x) ≥ 1 for all positive x, with equality iff x = 1 -/
 theorem J_ge_one (x : ℝ) (hx : x > 0) : J x ≥ 1 := by
-  sorry -- For automated solver
+  -- J(x) = (x + 1/x) / 2
+  -- By AM-GM inequality: (x + 1/x) / 2 ≥ √(x · 1/x) = √1 = 1
+  rw [J]
+  have h : x + 1/x ≥ 2 := by
+    -- AM-GM: (a + b) / 2 ≥ √(ab)
+    -- So a + b ≥ 2√(ab)
+    -- With a = x, b = 1/x, we get x + 1/x ≥ 2√(x · 1/x) = 2
+    rw [ge_iff_le, ← mul_le_iff_le_one_left (two_pos)]
+    rw [mul_comm 2]
+    apply two_mul_le_add_sq
+  linarith
 
 /-- J is convex on (0, ∞) -/
 theorem J_convex : ConvexOn ℝ (Set.Ioi 0) J := by
@@ -52,28 +62,76 @@ section GoldenRatio
 
 /-- φ satisfies the golden ratio equation -/
 theorem phi_equation : φ^2 = φ + 1 := by
-  sorry -- For automated solver
+  rw [φ]
+  field_simp
+  ring_nf
+  rw [sq_sqrt]
+  · ring
+  · norm_num
 
 /-- φ is positive -/
 theorem phi_pos : φ > 0 := by
-  sorry -- For automated solver
+  rw [φ]
+  -- (1 + √5) / 2 > 0 since 1 + √5 > 0 and 2 > 0
+  apply div_pos
+  · linarith [sqrt_nonneg (5 : ℝ)]
+  · norm_num
 
 /-- φ > 1 -/
 theorem phi_gt_one : φ > 1 := by
-  sorry -- For automated solver
+  rw [φ]
+  -- (1 + √5) / 2 > 1 iff 1 + √5 > 2 iff √5 > 1
+  rw [div_gt_iff (two_pos), one_mul]
+  linarith [one_lt_sqrt_iff_sq_lt.mpr (by norm_num : 1 < 5)]
 
 /-- The reciprocal relation: 1/φ = φ - 1 -/
 theorem phi_reciprocal : 1 / φ = φ - 1 := by
-  sorry -- For automated solver
+  -- From φ² = φ + 1, divide by φ
+  -- φ = 1 + 1/φ, so 1/φ = φ - 1
+  have h1 : φ ≠ 0 := ne_of_gt phi_pos
+  have h2 := phi_equation
+  -- φ² = φ + 1
+  -- Divide both sides by φ
+  rw [← div_eq_iff h1] at h2
+  rw [pow_two, mul_div_assoc, div_self h1, mul_one] at h2
+  linarith
 
 /-- C1: Golden Ratio Lock-in - φ is the unique fixed point of J greater than 1 -/
 theorem golden_ratio_lockIn :
   J φ = φ ∧ ∀ x > 1, J x = x → x = φ := by
-  sorry -- For automated solver
+  constructor
+  · -- Show J(φ) = φ
+    rw [J]
+    -- J(φ) = (φ + 1/φ) / 2
+    -- Using 1/φ = φ - 1:
+    -- J(φ) = (φ + φ - 1) / 2 = (2φ - 1) / 2 = φ - 1/2
+    -- Actually, let me be more careful...
+    -- From 1/φ = φ - 1 and φ² = φ + 1:
+    -- J(φ) = (φ + 1/φ) / 2 = (φ + (φ-1)) / 2 = (2φ - 1) / 2 = φ - 1/2
+    -- This doesn't equal φ directly. Let me recalculate.
+    -- Actually φ² = φ + 1 means φ² - φ - 1 = 0
+    -- So φ = (1 + √5)/2
+    -- And 1/φ = 2/(1 + √5) = 2(1 - √5)/((1 + √5)(1 - √5)) = 2(1 - √5)/(1 - 5) = (√5 - 1)/2
+    -- So φ + 1/φ = (1 + √5)/2 + (√5 - 1)/2 = √5
+    -- Therefore J(φ) = √5/2 ≠ φ
+    sorry -- Need to verify the correct fixed point relation
+  · -- Show uniqueness for x > 1
+    intro x hx hJx
+    -- J(x) = x means (x + 1/x) / 2 = x
+    -- So x + 1/x = 2x
+    -- Therefore 1/x = x
+    -- This gives x² = 1, so x = ±1
+    -- But we need x > 1, contradiction!
+    -- Actually, let me redo: x + 1/x = 2x means 1/x = x, so x² = 1
+    sorry -- The fixed point equation needs clarification
 
 /-- Numerical value of φ -/
 theorem phi_value : abs (φ - 1.6180339887) < 1e-10 := by
-  sorry -- For automated solver
+  rw [φ]
+  -- φ = (1 + √5) / 2
+  -- √5 ≈ 2.2360679775
+  -- So φ ≈ (1 + 2.2360679775) / 2 = 3.2360679775 / 2 = 1.6180339887
+  norm_num
 
 end GoldenRatio
 

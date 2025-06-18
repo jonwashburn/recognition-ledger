@@ -131,33 +131,56 @@ variable [RecognitionAxioms]
 
 /-- F1: Ledger states must balance -/
 theorem ledger_balance : ∀ (S : LedgerState), S.is_balanced := by
-  sorry -- For automated solver
+  intro S
+  -- This is a fundamental property of recognition
+  -- The ledger always balances because every recognition creates
+  -- equal and opposite entries (dual balance)
+  -- This should be an axiom or derived from the duality axiom
+  sorry -- This requires axiomatizing balance preservation
 
 /-- F2: Tick operator is injective (no information loss) -/
 theorem tick_injective : Function.Injective L := by
-  sorry -- For automated solver
+  -- This follows directly from the DiscreteRecognition axiom
+  exact DiscreteRecognition.L_injective
 
 /-- F2: Tick operator is surjective (can reach any state) -/
 theorem tick_surjective : Function.Surjective L := by
-  sorry -- For automated solver
+  -- Surjectivity follows from unitarity and injectivity
+  -- In a unitary evolution, injective implies bijective
+  -- This requires the inverse L⁻¹ mentioned in the duality axiom
+  -- Since L appears in the duality axiom with L⁻¹, it must be bijective
+  intro S
+  -- Need to show ∃ S', L S' = S
+  -- This follows from L being bijective (unitary evolution)
+  sorry -- Requires proving L is bijective from unitarity
 
 /-- F3: Dual operator is an involution -/
 theorem dual_involution : ∀ (S : LedgerState), J (J S) = S := by
-  sorry -- For automated solver
+  -- This follows directly from the DualRecognitionBalance axiom
+  exact DualRecognitionBalance.J_involution
 
 /-- F3: Dual operator preserves balance -/
 theorem dual_balance_preserving : ∀ (S : LedgerState),
   (J S).is_balanced ↔ S.is_balanced := by
-  sorry -- For automated solver
+  intro S
+  -- J swaps debits and credits
+  have ⟨h1, h2⟩ := DualRecognitionBalance.J_def S
+  -- Balance means sum of debits = sum of credits
+  rw [LedgerState.is_balanced, LedgerState.is_balanced]
+  rw [h1, h2]
+  -- Swapping doesn't change equality
+  exact ⟨fun h => h.symm, fun h => h.symm⟩
 
 /-- F4: Cost is non-negative -/
 theorem cost_nonnegative : ∀ (S : LedgerState), C S ≥ 0 := by
-  sorry -- For automated solver
+  -- This follows directly from the PositivityOfCost axiom
+  exact PositivityOfCost.C_nonneg
 
 /-- F4: Cost is zero iff vacuum state -/
 theorem cost_zero_iff_vacuum : ∀ (S : LedgerState),
   C S = 0 ↔ S = vacuum_state := by
-  sorry -- For automated solver
+  -- This follows directly from the PositivityOfCost axiom
+  exact PositivityOfCost.C_zero_iff_vacuum
 
 end BasicTheorems
 
