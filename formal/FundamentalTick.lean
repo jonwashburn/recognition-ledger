@@ -80,7 +80,11 @@ theorem tick_value_check :
   use t_Planck * exp (2 * π / α)
   constructor
   · -- Numerical: 5.39e-44 * exp(2π * 137.036) ≈ 7.33e-15
-    sorry -- Would need numerical computation
+    -- exp(2π * 137.036) ≈ exp(861.06) ≈ 1.36e374
+    -- But this is way too large! There must be an error in the formula.
+    -- Actually, should be exp(2π/α) = exp(2π * 137.036) ≈ exp(861.06)
+    -- This still seems wrong. Let me check the dimensional analysis...
+    sorry -- Formula needs verification
   · rfl
 
 /-!
@@ -102,8 +106,14 @@ noncomputable def lambda_thermal : ℝ := ℏ / sqrt (2 * π * m_e * k_B * T_roo
 theorem recognition_condition :
   ∃ (τ : ℝ), abs (τ * c - lambda_thermal) < 1e-10 := by
   use 7.33e-15
-  -- 7.33e-15 * 3e8 ≈ 2.2e-6 m (thermal wavelength scale)
-  sorry -- Numerical verification
+  -- τ * c = 7.33e-15 * 299792458 ≈ 2.2e-6 m
+  -- λ_thermal = ℏ / sqrt(2π * m_e * k_B * T_room)
+  rw [lambda_thermal, ℏ, m_e, k_B, T_room, c]
+  -- Need to compute thermal de Broglie wavelength
+  -- λ_thermal ≈ 7.3e-10 m at room temperature
+  -- But τ * c ≈ 2.2e-6 m
+  -- These don't match! The scales are different by 10^4
+  sorry -- Scale mismatch needs resolution
 
 /-!
 ## Master Derivation
@@ -122,14 +132,21 @@ theorem tau_unique :
   (abs (τ - t_Planck * exp (2 * π / α)) < 1e-16) := by
   constructor
   · -- t_Planck < τ
-    sorry -- Numerical
+    rw [t_Planck, τ]
+    norm_num
   constructor
   · -- τ < 1e-12
-    sorry -- Numerical fact: 7.33e-15 < 1e-12
+    rw [τ]
+    norm_num
   constructor
   · -- 8 * τ = 5.864e-14
-    sorry -- Numerical fact: 8 * 7.33e-15 = 5.864e-14
-  · sorry -- Numerical verification
+    rw [τ]
+    norm_num
+  · -- abs (τ - t_Planck * exp (2 * π / α)) < 1e-16
+    rw [τ, t_Planck, α]
+    -- This requires computing exp(2π * 137.036) which is very large
+    -- τ should equal t_Planck * exp(2π/α) by construction
+    sorry -- Complex exponential calculation
 
 -- τ is NOT a free parameter
 theorem tau_not_free_parameter :
@@ -141,9 +158,17 @@ noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 -- The tick relates to φ through dimensional analysis
 theorem tau_golden_relation :
   ∃ (n : ℤ), abs (τ / t_Planck - φ^n) < 1 := by
-  -- log(τ/t_Planck) / log(φ) ≈ 60.3, so n ≈ 60
-  use 60
-  sorry -- Numerical calculation
+  -- τ/t_Planck = 7.33e-15 / 5.391247e-44 ≈ 1.36e29
+  -- log(1.36e29) / log(φ) = log(1.36e29) / log(1.618) ≈ 67.0 / 0.481 ≈ 139
+  -- But the comment says n ≈ 60, let's check:
+  -- φ^60 ≈ 5.8e28, φ^61 ≈ 9.3e28
+  -- So τ/t_Planck ≈ 1.36e29 is closer to φ^61
+  use 61
+  rw [τ, t_Planck]
+  -- 7.33e-15 / 5.391247e-44 ≈ 1.36e29
+  -- φ^61 ≈ 9.3e28, so |1.36e29 - 9.3e28| ≈ 4.3e28 > 1
+  -- Need to check the calculation more carefully
+  sorry -- Numerical verification needed
 
 #check tick_scale_constraint
 #check eight_beat_constraint
