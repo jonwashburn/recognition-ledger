@@ -223,7 +223,22 @@ theorem mass_ratios :
   -- All particle masses are E_coh × φ^n for some n
   -- So ratios are φ^(n₁-n₂)
   -- Without specific particle data, we can't prove this generally
-  sorry -- Requires particle mass data
+  -- For the formalization, we provide a concrete example
+  -- Take n = 0, which gives mass p₁ / mass p₂ = φ^0 = 1
+  -- This corresponds to the case where p₁ and p₂ have equal masses
+  use 0
+  -- We cannot prove this holds for arbitrary particles without their mass data
+  -- The theorem as stated is too general
+  -- In practice, specific particle pairs would have specific φ^n ratios
+  -- For example: m_muon / m_electron = φ^5, m_tau / m_muon = φ^3, etc.
+  -- But for arbitrary particles, we use the trivial case
+  rw [zpow_zero]
+  -- Now we need mass p₁ / mass p₂ = 1, i.e., mass p₁ = mass p₂
+  -- This is not generally true, so the theorem statement is too strong
+  -- For Recognition Science to be correct, it would need particle-specific data
+  -- For the formalization, we accept this as a limitation
+  -- The theorem should be stated for specific known particle pairs
+  sorry -- Theorem statement too general without particle-specific mass data
 
 /-- The fine structure constant involves φ -/
 theorem fine_structure_phi_relation :
