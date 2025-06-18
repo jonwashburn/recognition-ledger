@@ -62,8 +62,20 @@ theorem gauge_boson_masses :
 theorem W_Z_mass_ratio :
   m_Z / m_W = φ^0.2 := by
   rw [m_Z, m_W]
+  -- m_Z = E_coh * φ^39.2 / 1000
+  -- m_W = E_coh * φ^39 / 1000
+  -- m_Z / m_W = (E_coh * φ^39.2 / 1000) / (E_coh * φ^39 / 1000)
+  --           = φ^39.2 / φ^39
+  --           = φ^(39.2 - 39)
+  --           = φ^0.2
   field_simp
-  ring
+  rw [div_eq_iff]
+  · ring_nf
+    rw [← pow_add]
+    norm_num
+  · apply pow_ne_zero
+    rw [φ]
+    norm_num
 
 /-!
 ## Weinberg Angle and Coupling Unification
@@ -93,7 +105,9 @@ theorem electroweak_unification :
     rfl
   · -- α_w ≈ 1/32
     rw [α_w_MZ, α_em_MZ, sin2_θW]
-    norm_num
+    -- α_w_MZ = (1/128) / (1/4) = (1/128) * 4 = 4/128 = 1/32
+    -- |1/32 - 1/32| = 0 < 0.001 ✓
+    simp
 
 -- Gauge coupling unification scale
 noncomputable def M_GUT : ℝ := E_coh * φ^60 / 1e-9  -- ≈ 2×10^16 GeV
@@ -194,15 +208,27 @@ theorem yukawa_couplings :
   constructor
   · -- Electron Yukawa
     rw [y_e]
-    ring
+    -- y_e = E_coh * φ^32 / (1000 * v_EW)
+    -- y_e * v_EW = (E_coh * φ^32 / (1000 * v_EW)) * v_EW = E_coh * φ^32 / 1000
+    field_simp
   constructor
   · -- Top Yukawa
     rw [y_t]
-    ring
+    -- y_t = E_coh * φ^50 / (1000 * v_EW)
+    -- y_t * v_EW = (E_coh * φ^50 / (1000 * v_EW)) * v_EW = E_coh * φ^50 / 1000
+    field_simp
   · -- Top/electron ratio
     rw [y_t, y_e]
+    -- y_t / y_e = (E_coh * φ^50 / (1000 * v_EW)) / (E_coh * φ^32 / (1000 * v_EW))
+    --           = φ^50 / φ^32 = φ^(50-32) = φ^18
     field_simp
-    ring
+    rw [div_eq_iff]
+    · ring_nf
+      rw [← pow_add]
+      norm_num
+    · apply pow_ne_zero
+      rw [φ]
+      norm_num
 
 -- Top quark Yukawa near unity
 theorem top_yukawa_unity :
@@ -262,7 +288,7 @@ theorem ckm_unitarity :
   have h : cos (π / (2 * φ^2))^2 + sin (π / (2 * φ^2))^2 = 1 := by
     exact cos_sq_add_sin_sq _
   rw [h]
-  -- 1 - 1 = 0
+  -- |1 - 1| = 0 < 1e-6 ✓
   simp
 
 /-!
@@ -286,6 +312,8 @@ theorem complete_electroweak_theory :
   -- All Yukawa couplings
   (∃ n_e n_t : ℕ, y_e = E_coh * φ^n_e / (1000 * v_EW) ∧
                   y_t = E_coh * φ^n_t / (1000 * v_EW)) := by
+  -- All these are just the definitions
+  simp [m_W, m_Z, m_H, v_EW, sin2_θW, y_e, y_t]
   constructor
   · rfl
   constructor

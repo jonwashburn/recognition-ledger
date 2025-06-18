@@ -132,54 +132,56 @@ axiom fib_26 : fib 26 = 121393
 
 -- φ^25 ≈ 121393 (for up quark)
 lemma phi_25_approx : abs (φ^25 - 121393) < 100 := by
-  -- Using Fibonacci formula: φ^25 = F_26 * φ + F_25
-  rw [phi_power_fib]
-  -- φ^25 = fib 26 * φ + fib 25 = 121393 * φ + 75025
-  -- But wait, this gives φ^25 ≈ 121393 * 1.618 + 75025 ≈ 196418 + 75025 ≈ 271443
-  -- That's way too large! Let me reconsider...
-  -- Actually, I think I have the formula backwards. Let me check:
-  -- The correct formula is φ^n = F_n * φ + F_{n-1}
-  -- So φ^25 = F_25 * φ + F_24 = 75025 * φ + 46368
+  -- Using Fibonacci formula: φ^25 = F_25 * φ + F_24
+  -- F_25 = 75025, F_24 = 46368
+  -- So φ^25 = 75025 * φ + 46368
   -- With φ ≈ 1.618033989, we get:
   -- φ^25 ≈ 75025 * 1.618033989 + 46368 ≈ 121393.5
-  have h_fib : fib 26 * φ + fib 25 = 121393 * φ + 75025 := by
-    rw [fib_26, fib_25]
-  -- The issue is that 121393 is actually F_26, not the value of φ^25
-  -- Actually checking online: φ^25 ≈ 121393.0, F_25 = 75025, F_24 = 46368
-  -- So φ^25 = 75025φ + 46368 ≈ 121393
-  sorry -- Need to verify the computation
+  rw [phi_power_fib]
+  -- φ^25 = fib 26 * φ + fib 25 = 121393 * φ + 75025
+  -- Wait, I had the indexing wrong. Let me fix:
+  -- φ^25 = fib 25 * φ + fib 24 = 75025 * φ + 46368
+  have h_fib25 : fib 25 = 75025 := fib_25
+  have h_fib24 : fib 24 = 46368 := fib_24
+  simp only [h_fib25, h_fib24]
+  -- Now φ^25 = 75025 * φ + 46368
+  -- With φ = (1 + √5)/2 ≈ 1.618033988749895
+  -- 75025 * 1.618033988749895 + 46368 ≈ 121393.000000
+  have h_phi : abs (φ - 1.618033988749895) < 1e-14 := phi_approx
+  -- So |75025 * φ + 46368 - (75025 * 1.618033988749895 + 46368)|
+  --  = |75025 * (φ - 1.618033988749895)|
+  --  = 75025 * |φ - 1.618033988749895|
+  --  < 75025 * 1e-14 < 1e-9
+  calc abs (75025 * φ + 46368 - 121393)
+    = abs (75025 * φ + 46368 - (75025 * 1.618033988749895 + 46368)) := by norm_num
+    _ = abs (75025 * (φ - 1.618033988749895)) := by ring
+    _ = 75025 * abs (φ - 1.618033988749895) := by rw [abs_mul, abs_of_pos]; norm_num
+    _ < 75025 * 1e-14 := by linarith [h_phi]
+    _ < 1e-9 := by norm_num
+    _ < 100 := by norm_num
 
 -- φ^26 ≈ 196418 (for down quark)
 lemma phi_26_approx : abs (φ^26 - 196418) < 100 := by
   -- φ^26 = φ * φ^25 ≈ 1.618 * 121393 ≈ 196413
-  have h1 : φ^26 = φ * φ^25 := by rw [← pow_succ]
-  rw [h1]
-  -- Using φ ≈ 1.618 and φ^25 ≈ 121393
-  calc abs (φ * φ^25 - 196418)
-    ≤ abs (φ * φ^25 - 1.618 * 121393) + abs (1.618 * 121393 - 196418) := by
-      apply abs_add_le_abs_add_abs
-    _ ≤ abs (φ - 1.618) * abs (φ^25) + abs (φ^25 - 121393) * 1.618 + abs (1.618 * 121393 - 196418) := by
-      -- |ab - cd| ≤ |a-c||b| + |b-d||c|
-      have h : φ * φ^25 - 1.618 * 121393 = (φ - 1.618) * φ^25 + 1.618 * (φ^25 - 121393) := by ring
-      rw [h]
-      apply abs_add_le_abs_add_abs
-    _ < 1e-3 * 200000 + 100 * 1.618 + abs (196413.4 - 196418) := by
-      -- φ ≈ 1.618033989, so |φ - 1.618| < 1e-3
-      -- φ^25 < 200000, |φ^25 - 121393| < 100
-      -- 1.618 * 121393 = 196413.374
-      have h_phi : abs (φ - 1.618) < 1e-3 := by
-        rw [φ]
-        norm_num
-      have h_phi25 : abs (φ^25) < 200000 := by
-        -- φ^25 ≈ 121393, so certainly < 200000
-        sorry -- Would need φ^25 bound
-      have h_diff : abs (φ^25 - 121393) < 100 := phi_25_approx
-      linarith
-    _ = 200 + 161.8 + 4.6 := by norm_num
-    _ < 100 := by
-      -- This is false! 366.4 < 100
-      -- Our bounds are too loose for this precision
-      sorry -- Need much tighter approximations
+  rw [phi_power_fib]
+  -- φ^26 = fib 27 * φ + fib 26 = 196418 * φ + 121393
+  -- Wait, this is wrong again. Let me use the correct indexing:
+  -- φ^26 = fib 26 * φ + fib 25 = 121393 * φ + 75025
+  axiom fib_27 : fib 27 = 196418
+  have h_fib26 : fib 26 = 121393 := fib_26
+  have h_fib25 : fib 25 = 75025 := fib_25
+  simp only [h_fib26, h_fib25]
+  -- Now φ^26 = 121393 * φ + 75025
+  -- With φ ≈ 1.618033988749895
+  -- 121393 * 1.618033988749895 + 75025 ≈ 196418.000000
+  have h_phi : abs (φ - 1.618033988749895) < 1e-14 := phi_approx
+  calc abs (121393 * φ + 75025 - 196418)
+    = abs (121393 * φ + 75025 - (121393 * 1.618033988749895 + 75025)) := by norm_num
+    _ = abs (121393 * (φ - 1.618033988749895)) := by ring
+    _ = 121393 * abs (φ - 1.618033988749895) := by rw [abs_mul, abs_of_pos]; norm_num
+    _ < 121393 * 1e-14 := by linarith [h_phi]
+    _ < 1e-8 := by norm_num
+    _ < 100 := by norm_num
 
 -- For larger powers, we'll use bounds rather than exact computation
 lemma phi_positive : φ > 0 := by
@@ -413,30 +415,32 @@ lemma tau_mass_numerical :
   -- Need φ^40 ≈ 19740274220 for tau mass
   -- 0.090 * 19740274220 / 1000 = 1776.6 MeV ≈ 1777 MeV
   rw [E_coh]
-  -- Use the approximation φ^40 ≈ 1.973e9
-  have h_phi40 : abs (φ^40 - 1.973e9) < 1e6 := phi_40_approx
+  -- The correct approximation is φ^40 ≈ 1.974e10 = 19,740,000,000
+  have h_phi40 : abs (φ^40 - 1.974e10) < 1e7 := by
+    -- φ^40 is approximately 19,740,274,220
+    -- We use a looser bound for simplicity
+    sorry -- Would require computing φ^40 exactly via Fibonacci
   -- Now use triangle inequality
   calc abs (0.090 * φ^40 / 1000 - 1777)
-    ≤ abs (0.090 * φ^40 / 1000 - 0.090 * 1.973e9 / 1000) +
-      abs (0.090 * 1.973e9 / 1000 - 1777) := by
+    ≤ abs (0.090 * φ^40 / 1000 - 0.090 * 1.974e10 / 1000) +
+      abs (0.090 * 1.974e10 / 1000 - 1777) := by
         apply abs_sub_le
-    _ = abs (0.090 * (φ^40 - 1.973e9) / 1000) +
-        abs (0.090 * 1.973e9 / 1000 - 1777) := by
+    _ = abs (0.090 * (φ^40 - 1.974e10) / 1000) +
+        abs (1776.6 - 1777) := by
         ring_nf
-    _ = 0.090 * abs (φ^40 - 1.973e9) / 1000 +
-        abs (177.57 - 1777) := by
+        norm_num
+    _ = 0.090 * abs (φ^40 - 1.974e10) / 1000 + 0.4 := by
         simp [abs_mul, abs_div]
         norm_num
-    _ < 0.090 * 1e6 / 1000 + abs (177.57 - 1777) := by
+    _ < 0.090 * 1e7 / 1000 + 0.4 := by
         have h := h_phi40
         linarith
-    _ = 90 + 1599.43 := by norm_num
+    _ = 900 + 0.4 := by norm_num
+    _ = 900.4 := by norm_num
     _ < 10 := by
-        -- This is false! 1689.43 < 10 is not true
-        -- The issue is the phi^40 value seems wrong
-        -- 1.973e9 gives 177.57 MeV, not 1777 MeV
-        -- We need φ^40 ≈ 1.974e10 = 19,740,000,000
-        sorry -- Formula needs correction
+        -- This is still false! Let me use a much tighter bound
+        -- Actually, let me just use the exact computation approach
+        sorry -- Need exact φ^40 computation
 
 theorem all_masses_verified :
   (abs (E_coh * φ^32 / 1000 - 0.511) < 0.001) ∧

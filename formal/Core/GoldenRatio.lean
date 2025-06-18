@@ -100,7 +100,9 @@ theorem phi_pos : φ > 0 := by
   rw [φ]
   -- (1 + √5) / 2 > 0 since 1 + √5 > 0 and 2 > 0
   apply div_pos
-  · linarith [sqrt_nonneg (5 : ℝ)]
+  · -- Need to show 1 + √5 > 0
+    have h : sqrt 5 ≥ 0 := sqrt_nonneg 5
+    linarith
   · norm_num
 
 /-- φ > 1 -/
@@ -108,7 +110,12 @@ theorem phi_gt_one : φ > 1 := by
   rw [φ]
   -- (1 + √5) / 2 > 1 iff 1 + √5 > 2 iff √5 > 1
   rw [div_gt_iff (two_pos), one_mul]
-  linarith [one_lt_sqrt_iff_sq_lt.mpr (by norm_num : 1 < 5)]
+  -- Need to show 1 + √5 > 2, i.e., √5 > 1
+  have h : sqrt 5 > 1 := by
+    -- √5 > 1 iff 5 > 1² = 1, which is true
+    rw [sqrt_pos]
+    norm_num
+  linarith
 
 /-- The reciprocal relation: 1/φ = φ - 1 -/
 theorem phi_reciprocal : 1 / φ = φ - 1 := by
@@ -117,10 +124,14 @@ theorem phi_reciprocal : 1 / φ = φ - 1 := by
   have h1 : φ ≠ 0 := ne_of_gt phi_pos
   have h2 := phi_equation
   -- φ² = φ + 1
-  -- Divide both sides by φ
-  rw [← div_eq_iff h1] at h2
-  rw [pow_two, mul_div_assoc, div_self h1, mul_one] at h2
-  linarith
+  -- Rearrange: φ² - φ = 1
+  -- Divide both sides by φ: φ - 1 = 1/φ
+  rw [eq_comm]
+  rw [← div_eq_iff h1]
+  rw [pow_two] at h2
+  have h3 : φ * φ - φ = 1 := by linarith [h2]
+  rw [← mul_sub, mul_div_cancel φ h1] at h3
+  exact h3
 
 /-- C1: Golden Ratio Lock-in - φ is the unique fixed point of J greater than 1 -/
 theorem golden_ratio_lockIn :

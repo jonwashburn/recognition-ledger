@@ -57,11 +57,37 @@ theorem quark_mass_ratios :
   (m_b / m_c = φ^7) ∧
   (m_t / m_b = φ^8) := by
   simp only [m_u, m_d, m_s, m_c, m_b, m_t]
-  simp only [div_eq_iff]
-  constructor <;> [ring, constructor] <;>
-  [ring, constructor] <;>
-  [ring, constructor] <;>
-  [ring, ring]
+  -- m_d / m_u = (E_coh * φ^26 / 1000) / (E_coh * φ^25 / 1000) = φ^26 / φ^25 = φ
+  -- Similarly for the others
+  constructor
+  · -- m_d / m_u = φ
+    field_simp
+    ring_nf
+    rw [← pow_add]
+    norm_num
+  constructor
+  · -- m_s / m_d = φ^3
+    field_simp
+    ring_nf
+    rw [← pow_add]
+    norm_num
+  constructor
+  · -- m_c / m_s = φ^6
+    field_simp
+    ring_nf
+    rw [← pow_add]
+    norm_num
+  constructor
+  · -- m_b / m_c = φ^7
+    field_simp
+    ring_nf
+    rw [← pow_add]
+    norm_num
+  · -- m_t / m_b = φ^8
+    field_simp
+    ring_nf
+    rw [← pow_add]
+    norm_num
 
 /-!
 ## Hadron Masses from Confinement
@@ -155,7 +181,9 @@ theorem alpha_s_running :
 
 -- Confinement scale
 theorem confinement_scale :
-  Λ_QCD = E_coh * φ^28 / 1000 := rfl
+  Λ_QCD = E_coh * φ^28 / 1000 := by
+  -- This is just the definition of Λ_QCD
+  rfl
 
 -- Chiral symmetry breaking scale
 theorem chiral_breaking_scale :
@@ -207,7 +235,8 @@ theorem nuclear_parameters :
     sorry -- Requires φ^18 computation
   · -- Nuclear radius parameter ≈ 1.2 fm
     rw [r_0]
-    norm_num
+    -- |1.2e-15 - 1.2e-15| = 0 < 0.1e-15 ✓
+    simp
 
 -- Alpha decay lifetimes from φ scaling
 theorem alpha_decay_scaling :
@@ -240,6 +269,8 @@ theorem all_hadron_physics :
   (Λ_QCD = E_coh * φ^28 / 1000) ∧
   -- Strong coupling from φ
   (α_s_MZ = 1 / φ^3) := by
+  -- All these are just the definitions
+  simp only [m_u, m_d, m_s, m_p, Λ_QCD, α_s_MZ]
   constructor
   · use 25, 26, 29
     exact ⟨rfl, rfl, rfl⟩

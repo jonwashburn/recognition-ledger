@@ -164,6 +164,8 @@ theorem all_particle_masses :
   (∃ n₂ : ℕ, m_muon = E_coh * φ^n₂ / 1000) ∧
   (∃ n₃ : ℕ, m_tau = E_coh * φ^n₃ / 1000) ∧
   (∃ n₄ : ℕ, m_top = E_coh * φ^n₄ / 1000) := by
+  -- The masses are defined as exactly these formulas
+  simp [m_electron, m_muon, m_tau, m_top]
   exact ⟨⟨32, rfl⟩, ⟨37, rfl⟩, ⟨40, rfl⟩, ⟨50, rfl⟩⟩
 
 /-!
@@ -187,6 +189,8 @@ theorem force_unification :
   (∃ n₁ : ℕ, α_s = 1 / φ^n₁) ∧
   (∃ n₂ : ℕ, α_w = 1 / φ^n₂) ∧
   (∃ n₃ : ℕ, α_G = 1 / φ^n₃) := by
+  -- The couplings are defined as exactly these formulas
+  simp [α_s, α_w, α_G]
   exact ⟨⟨3, rfl⟩, ⟨37, rfl⟩, ⟨120, rfl⟩⟩
 
 -- Hierarchy problem solved
@@ -196,7 +200,8 @@ theorem hierarchy_solution : α_G / α_s = φ^(-117) := by
   field_simp
   -- We have φ^3 / φ^120 = φ^(3-120) = φ^(-117)
   rw [div_eq_iff_eq_mul_right]
-  · rw [mul_comm, ← pow_add]
+  · rw [← pow_add]
+    -- φ^3 = φ^(-117) * φ^120 = φ^(-117 + 120) = φ^3
     norm_num
   · -- φ^120 ≠ 0 because φ > 0
     apply pow_ne_zero
@@ -224,6 +229,8 @@ theorem cosmological_parameters :
   (Λ = E_coh / φ^120) ∧
   (∃ n : ℕ, H₀ = 1 / (8 * τ * φ^n) * 3.086e22 / 1000) ∧
   (∃ m : ℕ, t_universe = 2/3 * 8 * τ * φ^m / (365.25 * 24 * 3600)) := by
+  -- The parameters are defined exactly as these formulas
+  simp [Λ, H₀, t_universe]
   constructor
   · rfl
   constructor
@@ -315,7 +322,7 @@ theorem experimental_agreement :
     rw [α_em]
     -- α_em = 1/137.036
     -- |1/137.036 - 1/137.036| = 0 < 1e-6 ✓
-    norm_num
+    simp
   constructor
   · -- Hubble constant
     rw [H₀, τ]
