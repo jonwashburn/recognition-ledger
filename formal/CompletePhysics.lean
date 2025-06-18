@@ -176,8 +176,10 @@ theorem force_unification :
 -- Hierarchy problem solved
 theorem hierarchy_solution : α_G / α_s = φ^(-117) := by
   rw [α_G, α_s]
+  -- (1/φ^120) / (1/φ^3) = φ^3 / φ^120 = φ^(3-120) = φ^(-117)
   field_simp
-  ring
+  rw [div_pow]
+  norm_num
 
 /-!
 ## ALL COSMOLOGICAL PARAMETERS (Complete Universe)

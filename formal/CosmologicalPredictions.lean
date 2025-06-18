@@ -158,7 +158,13 @@ theorem cosmology_from_recognition :
     ring
 
 -- ZERO cosmological free parameters
-theorem zero_cosmological_parameters : True := trivial
+theorem zero_cosmological_parameters :
+  (∃ n₁ n₂ n₃ : ℕ,
+    Λ_predicted = 8 * π * G * E_coh * eV / (φ^n₁ * c^4) ∧
+    H_0_predicted = Mpc / (1000 * 8 * τ * φ^n₂) ∧
+    age_years = 2 / 3 * 8 * τ * φ^n₃ / year) := by
+  use 120, 96, 96
+  exact cosmology_from_recognition
 
 #check dark_energy_prediction
 #check hubble_constant_prediction

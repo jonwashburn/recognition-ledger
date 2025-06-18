@@ -36,10 +36,11 @@ theorem tick_scale_constraint :
   ∃ (τ : ℝ), t_Planck < τ ∧ τ < 1e-12 := by
   use 7.33e-15
   constructor
-  · -- 5.39e-44 < 7.33e-15
-    sorry -- Numerical fact
+  · -- 5.39e-44 < 7.33e-15 is clearly true since 44 > 15 in exponent
+    rw [t_Planck]
+    norm_num
   · norm_num
-    -- 7.33e-15 < 1e-12
+    -- 7.33e-15 < 1e-12 is true since 15 > 12 in exponent
 
 /-!
 ## Eight-Beat Constraint
@@ -55,6 +56,7 @@ theorem eight_beat_constraint :
   ∃ (τ : ℝ), eight_beat_period τ = 5.864e-14 := by
   use 7.33e-15
   rw [eight_beat_period]
+  -- 8 * 7.33e-15 = 58.64e-15 = 5.864e-14
   norm_num
 
 /-!

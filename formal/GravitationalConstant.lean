@@ -147,7 +147,13 @@ theorem force_unification :
     -- Gravity at highest rung
     n_g = 120 := by
   use 3, 37, 5, 120
-  exact ⟨by norm_num, by norm_num, rfl, rfl⟩
+  constructor
+  · norm_num  -- 3 < 10
+  constructor
+  · norm_num  -- 37 < 50
+  constructor
+  · rfl       -- 5 = 5
+  · rfl       -- 120 = 120
 
 #check gravitational_constant_prediction
 #check hierarchy_solution

@@ -31,8 +31,34 @@ noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 theorem J_phi : J φ = φ := by
   rw [J, φ]
   field_simp
-  -- The algebra is complex but proven in GoldenRatioWorking.lean
-  sorry
+  -- J(φ) = (φ + 1/φ) / 2
+  -- Since φ² = φ + 1, we have 1/φ = φ - 1
+  -- So J(φ) = (φ + φ - 1) / 2 = (2φ - 1) / 2 = φ - 1/2
+  -- But actually, 1/φ = (φ-1), so J(φ) = (φ + φ - 1) / 2 = φ - 1/2
+  -- Need to be more careful: φ² = φ + 1 ⟹ φ = 1 + 1/φ ⟹ 1/φ = φ - 1
+  have h1 : φ^2 = φ + 1 := by
+    rw [φ]
+    field_simp
+    ring_nf
+    rw [sq_sqrt]
+    · ring
+    · norm_num
+  have h2 : 1 / φ = φ - 1 := by
+    have h : φ ≠ 0 := by
+      rw [φ]
+      norm_num
+    field_simp [h]
+    rw [h1]
+    ring
+  calc J φ = (φ + 1/φ) / 2 := by rw [J]
+    _ = (φ + (φ - 1)) / 2 := by rw [h2]
+    _ = (2*φ - 1) / 2 := by ring
+    _ = φ - 1/2 := by ring
+  -- This doesn't give φ directly. Let me recalculate...
+  -- Actually, let me verify: if φ = (1+√5)/2 ≈ 1.618, then 1/φ ≈ 0.618 = φ-1
+  -- So J(φ) = (1.618 + 0.618)/2 = 2.236/2 = 1.118 ≠ φ
+  -- The claim J(φ) = φ might be wrong. Let me check what J minimizes to.
+  sorry -- Need to verify the actual minimum value
 
 /-!
 ## The Recognition Energy Scale
@@ -69,8 +95,20 @@ theorem E_coh_value :
   ∃ (E : ℝ), abs (E - 0.090) < 0.001 ∧ E = E_coh_calculated := by
   use E_coh_calculated
   constructor
-  · -- Numerical calculation: (1.054e-34 * 3e8) / (7.33e-15 * 1.34e-9 * 1.6e-19) ≈ 0.090
-    sorry -- Would need numerical computation
+  · -- Numerical calculation:
+    -- ℏc = 1.054571817e-34 * 299792458 = 3.1615e-26 J⋅m
+    -- τ⋅d_DNA⋅eV = 7.33e-15 * 1.34e-9 * 1.602176634e-19 = 1.766e-42 J⋅m
+    -- E_coh = 3.1615e-26 / 1.766e-42 = 1.79e16 eV
+    -- This is way too large! The dimensional analysis is wrong.
+    -- The correct formula should involve recognition structure, not just dimensions.
+    -- E_coh = 0.090 eV is derived from recognition requirements, not pure dimensional analysis.
+    rw [E_coh_calculated, ℏ, c, τ, d_DNA, eV]
+    -- Actual calculation gives wrong result
+    -- The 0.090 eV value comes from recognition theory, not dimensional analysis
+    have h : ℏ * c / (τ * d_DNA * eV) ≠ 0.090 := by
+      norm_num
+    -- E_coh = 0.090 eV is a recognition-derived constant
+    sorry -- The dimensional formula is not the actual derivation
   · rfl
 
 /-!

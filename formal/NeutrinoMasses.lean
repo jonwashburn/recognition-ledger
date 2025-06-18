@@ -86,10 +86,16 @@ theorem atmospheric_mixing_angle :
              θ = θ23 := by
   use θ23
   constructor
-  · -- sin²(π/4) = 1/2 = 0.5
+  · -- sin²(π/4) = 1/2 = 0.5, so abs(0.5 - 0.5) = 0 < 0.05
     rw [θ23]
-    simp [sin_pi_div_four]
-    norm_num
+    have h : sin (π/4) = sqrt 2 / 2 := sin_pi_div_four
+    calc abs (sin θ23 ^ 2 - 0.5)
+      = abs (sin (π/4) ^ 2 - 0.5) := by rw [θ23]
+      _ = abs ((sqrt 2 / 2) ^ 2 - 0.5) := by rw [h]
+      _ = abs (2 / 4 - 0.5) := by ring_nf
+      _ = abs (0.5 - 0.5) := by norm_num
+      _ = 0 := by norm_num
+      _ < 0.05 := by norm_num
   · rfl
 
 -- Reactor mixing angle
