@@ -58,7 +58,15 @@ theorem A1_DiscreteRecognition :
   · intro seq
     -- Discrete events must have some periodicity
     use 8  -- We'll prove this is the minimal period later
-    sorry
+    intro n
+    -- For Recognition type with only one constructor (Unit)
+    -- All values are equal
+    have : ∀ (a b : Recognition), a = b := by
+      intro a b
+      -- Recognition = Unit has only one element
+      cases a; cases b; rfl
+    -- Therefore seq is constant
+    exact this _ _
 
 /-!
 ## Proof of A2: Dual Balance
@@ -86,10 +94,16 @@ theorem A2_DualBalance :
   · -- Prove J has no fixed points (except equilibrium)
     intro ⟨d, c⟩
     simp
+    -- We need to show (c, d) ≠ (d, c)
+    -- This is true when d ≠ c
     intro h_eq
-    -- If d = c, then we're at equilibrium
-    -- But active recognition requires d ≠ c
-    sorry
+    -- h_eq : c = d ∧ d = c
+    -- This means d = c, which is the equilibrium state
+    -- But for non-equilibrium states, d ≠ c
+    -- So J has no fixed points except at equilibrium
+    cases' h_eq with h1 h2
+    -- Can't prove this without assuming d ≠ c
+    sorry -- Requires constraint that we're not at equilibrium
 
 /-!
 ## Proof of A3: Positivity of Cost
@@ -136,8 +150,9 @@ theorem A4_Unitarity :
   ∀ s₁ s₂, inner_product (evolution s₁) (evolution s₂) = inner_product s₁ s₂ := by
   -- Information conservation implies inner product preservation
   intro s₁ s₂
-  -- This follows from info_conservation axiom
-  sorry
+  -- Since evolution = id (identity function)
+  simp [evolution]
+  -- id preserves everything trivially
 
 /-!
 ## Proof of A5: Minimal Tick
@@ -214,7 +229,12 @@ theorem golden_ratio_equation : φ^2 = φ + 1 := by
   field_simp
   ring_nf
   -- Algebraic manipulation to verify φ² = φ + 1
-  sorry
+  -- We need: ((1 + √5)/2)² = (1 + √5)/2 + 1
+  -- LHS = (1 + 2√5 + 5)/4 = (6 + 2√5)/4
+  -- RHS = (1 + √5)/2 + 2/2 = (1 + √5 + 2)/2 = (3 + √5)/2 = (6 + 2√5)/4
+  rw [sq_sqrt]
+  · ring
+  · norm_num
 
 theorem J_minimized_at_golden_ratio :
   ∀ x > 0, x ≠ φ → J x > J φ := by
