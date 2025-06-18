@@ -268,23 +268,12 @@ theorem GoldenRatioSelfSimilar :
   φ^2 = φ + 1 :=
 by
   -- This is the defining property of the golden ratio
-  simp [φ]
+  rw [φ]
   field_simp
-  ring
-  -- Need to show: ((1 + √5)/2)² = (1 + √5)/2 + 1
-  -- Expanding: (1 + 2√5 + 5)/4 = (1 + √5)/2 + 1
-  --           = (6 + 2√5)/4 = (3 + √5)/2
-    -- Second derivative of J
-  have h_second : ∀ x > 0, (deriv (deriv J)) x = 2/x^3 := by
-    intro x hx
-    sorry -- Calculus computation
-  -- Second derivative positive implies strict convexity
-  apply StrictConvexOn.of_deriv2_pos
-  · exact convex_Ioi 0
-  · exact differentiable_J
-  · intro x hx
-    rw [h_second x hx]
-    exact div_pos two_pos (pow_pos hx 3)
+  ring_nf
+  rw [sq_sqrt]
+  · ring
+  · norm_num
 
 -- ============================================================================
 -- MASTER THEOREM: All Axioms from Meta-Principle

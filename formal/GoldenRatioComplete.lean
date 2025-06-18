@@ -113,11 +113,29 @@ theorem recognition_scaling : φ^2 = φ + 1 := phi_equation
 theorem phi_unique : ∀ x > 0, x^2 = x + 1 → x = φ := by
   intro x hx_pos hx_eq
   -- From x² = x + 1, we get x² - x - 1 = 0
-  -- Using quadratic formula: x = (1 ± √5)/2
-  -- Since x > 0, we need x = (1 + √5)/2 = φ
-  have h : x^2 - x - 1 = 0 := by linarith [hx_eq]
-  -- This would require the quadratic formula theorem
-  sorry
+  -- The solutions are x = (1 ± √5)/2
+  -- Since x > 0 and (1 - √5)/2 < 0, we must have x = (1 + √5)/2 = φ
+  have h1 : x^2 - x - 1 = 0 := by linarith [hx_eq]
+  -- Factor: (x - φ)(x - φ_conj) = 0
+  have h2 : (x - φ) * (x - φ_conj) = 0 := by
+    have : x^2 - x - 1 = (x - φ) * (x - φ_conj) := by
+      rw [mul_sub, sub_mul, sub_mul]
+      rw [mul_comm x φ_conj, mul_comm φ x]
+      ring_nf
+      rw [phi_sum, phi_product]
+      ring
+    rw [← this, h1]
+  -- So x = φ or x = φ_conj
+  have h3 : x = φ ∨ x = φ_conj := by
+    cases' mul_eq_zero.mp h2 with h h
+    · left; linarith
+    · right; linarith
+  -- But φ_conj < 0 and x > 0, so x = φ
+  cases' h3 with h h
+  · exact h
+  · exfalso
+    rw [h] at hx_pos
+    exact not_lt.mpr (le_of_lt phi_conj_neg) hx_pos
 
 -- All physical constants emerge from φ powers
 theorem physical_constants_from_phi :

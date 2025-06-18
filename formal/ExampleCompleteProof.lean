@@ -182,15 +182,26 @@ theorem why_golden_ratio :
   obtain ⟨x, hx_pos, hx_fixed, hx_unique⟩ := h_unique
   use x, hx_pos
   -- From cost(x) = x and cost(x) = (x + 1/x)/2
-  have : x = (x + 1/x) / 2 := by
+  have h1 : x = (x + 1/x) / 2 := by
     rw [← hx_fixed, h_cost x hx_pos]
   -- Multiply both sides by 2
-  have : 2*x = x + 1/x := by linarith
-  -- So x = 1/x, which gives x² = 1... wait that's wrong
-  -- Actually: 2x = x + 1/x means x = 1/x, so x² = 1
-  -- But we want x² = x + 1...
-  field_simp at this
-  linarith
+  have h2 : 2*x = x + 1/x := by linarith
+  -- Rearrange: 2x - x = 1/x, so x = 1/x
+  have h3 : x = 1/x := by linarith
+  -- Therefore x² = 1
+  have h4 : x^2 = 1 := by
+    field_simp at h3
+    exact h3
+  -- But x > 0, so x = 1
+  have h5 : x = 1 := by
+    have : x^2 = 1^2 := by rw [h4]; norm_num
+    exact sq_eq_sq (le_of_lt hx_pos) (by norm_num : (0 : ℝ) ≤ 1) |>.mp this
+  -- Actually, this shows the fixed point is at x = 1, not φ
+  -- The problem is asking for the wrong property
+  -- The correct statement is that J has minimum at x = 1, not fixed point
+  exfalso
+  -- The theorem statement is incorrect
+  sorry
 
 end RecognitionScience
 

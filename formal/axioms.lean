@@ -119,7 +119,11 @@ def φ : ℝ := (1 + Real.sqrt 5) / 2
 /-- First major theorem: the scaling factor must be φ -/
 theorem scaling_is_golden_ratio (RA : RecognitionAxioms) :
   RA.SS.λ = φ := by
-  sorry  -- Proof in theorems.lean
+  -- The scaling factor λ must minimize the cost functional J
+  -- J(x) = (x + 1/x)/2 has minimum at x = 1, not φ
+  -- But scale invariance requires λ > 1
+  -- The unique value > 1 satisfying self-similarity is φ
+  sorry  -- Proof requires self-similarity analysis
 
 /-- The coherence quantum emerges as 0.090 eV -/
 def E_coherence : ℝ := 0.090  -- eV

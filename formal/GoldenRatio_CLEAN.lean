@@ -99,16 +99,16 @@ theorem phi_fixed_point : J φ = φ := by
 
 /-- For x > 0, x ≠ φ, we have J(x) > J(φ) -/
 theorem J_minimized_at_phi (x : ℝ) (hx : x > 0) (hne : x ≠ φ) : J x > J φ := by
-  rw [phi_fixed_point]
-  rw [J]
-  -- We need to show (x + 1/x)/2 > φ
-  -- This follows from AM-GM inequality and properties of φ
-  have h_am_gm : x + 1/x ≥ 2 := by
-    rw [add_div_two_le_iff]
-    exact two_mul_le (div_pos one_pos hx)
-  -- Equality in AM-GM iff x = 1/x iff x = 1
-  -- But we need to show strict inequality when x ≠ φ
-  sorry -- This requires more detailed calculus
+  -- Actually J has minimum at x = 1, not φ
+  -- J(1) = 1 and J(φ) = φ > 1
+  -- So this theorem is false as stated
+  -- The correct statement is about fixed points, not minima
+  exfalso
+  have h1 : J 1 = 1 := J_one
+  have h2 : J φ = φ := phi_fixed_point
+  have h3 : φ > 1 := phi_gt_one
+  -- So J(φ) > J(1), meaning φ is not the minimum
+  sorry -- This theorem statement is incorrect
 
 /-- φ is the unique global minimum of J on (0,∞) -/
 theorem phi_unique_minimum :
