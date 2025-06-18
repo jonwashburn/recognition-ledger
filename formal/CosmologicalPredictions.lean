@@ -56,7 +56,18 @@ theorem dark_energy_prediction :
   use Λ_predicted
   constructor
   · -- Numerical: 8πG × (0.090 × φ^(-120) × eV) / c^4 ≈ 1.1056e-52
-    sorry -- Numerical verification
+    rw [Λ_predicted, ρ_floor, E_floor, G, E_coh, eV, c, π]
+    -- Λ = 8π × G × ρ_floor / c²
+    -- ρ_floor = E_floor × eV / c²
+    -- E_floor = E_coh / φ^120 = 0.090 / φ^120
+    -- So ρ_floor = 0.090 × eV / (φ^120 × c²)
+    -- Λ = 8π × G × 0.090 × eV / (φ^120 × c^4)
+    -- = 8π × 6.67430e-11 × 0.090 × 1.602176634e-19 / (φ^120 × (299792458)^4)
+    -- φ^120 ≈ 8.3e36, c^4 ≈ 8.08e33
+    -- Λ ≈ 8π × 6.67430e-11 × 1.442e-20 / (8.3e36 × 8.08e33)
+    -- ≈ 2.41e-29 / 6.7e70 ≈ 3.6e-100 m^-2
+    -- This is much smaller than observed 1.1056e-52 m^-2
+    sorry -- Formula gives wrong magnitude
   · rfl
 
 -- Dark energy is NOT a free parameter
@@ -97,7 +108,15 @@ theorem hubble_constant_prediction :
   use H_0_predicted
   constructor
   · -- Numerical: (8 × 7.33e-15 × φ^96)^(-1) × Mpc/1000 ≈ 67.66
-    sorry -- Numerical verification
+    rw [H_0_predicted, H_0_SI, t_Hubble, t_eight, τ, Mpc]
+    -- H_0 = Mpc / (1000 × t_Hubble)
+    -- t_Hubble = 8 × τ × φ^96 = 8 × 7.33e-15 × φ^96
+    -- φ^96 ≈ 2.88e29
+    -- t_Hubble ≈ 8 × 7.33e-15 × 2.88e29 ≈ 1.69e16 s
+    -- H_0 = 3.0857e22 / (1000 × 1.69e16) = 3.0857e22 / 1.69e19
+    -- ≈ 1.83e3 ≈ 1830
+    -- But observed is 67.66 km/s/Mpc, so formula is off by factor of ~27
+    sorry -- Numerical calculation needs checking
   · rfl
 
 -- Hubble constant is NOT a free parameter
@@ -128,7 +147,15 @@ theorem universe_age :
   use age_years
   constructor
   · -- Numerical: 2/3 × (8 × 7.33e-15 × φ^96) / year ≈ 13.8 Gyr
-    sorry -- Numerical verification
+    rw [age_years, t_universe, t_Hubble, t_eight, τ, year]
+    -- age = 2/3 × t_Hubble / year
+    -- t_Hubble = 8 × 7.33e-15 × φ^96 ≈ 1.69e16 s (from above)
+    -- age = 2/3 × 1.69e16 / (365.25 × 24 × 3600)
+    -- = 2/3 × 1.69e16 / 3.15576e7
+    -- = 1.127e16 / 3.15576e7
+    -- ≈ 3.57e8 years = 357 million years
+    -- But we want 13.8 billion years, so off by factor of ~38
+    sorry -- Formula gives wrong age
   · rfl
 
 /-!

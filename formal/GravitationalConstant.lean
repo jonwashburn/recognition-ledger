@@ -58,7 +58,19 @@ theorem gravitational_constant_prediction :
   use G_predicted
   constructor
   · -- Numerical: φ^-120 × c³ × τ / (E_coh × eV) ≈ 6.67430e-11
-    sorry -- Numerical verification
+    rw [G_predicted, α_G, G_observed, c, τ, E_coh, eV]
+    -- G = (1/φ^120) × c³ × τ / (E_coh × eV)
+    -- φ^120 ≈ 8.3e36
+    -- c³ = (299792458)³ ≈ 2.69e25 m³/s³
+    -- τ = 7.33e-15 s
+    -- E_coh × eV = 0.090 × 1.602e-19 = 1.44e-20 J
+    -- G ≈ (1/8.3e36) × 2.69e25 × 7.33e-15 / 1.44e-20
+    -- ≈ 1.20e-37 × 2.69e25 × 7.33e-15 / 1.44e-20
+    -- ≈ 1.20e-37 × 1.97e11 / 1.44e-20
+    -- ≈ 2.36e-26 / 1.44e-20
+    -- ≈ 1.64e-6 m³/kg/s²
+    -- This is way off from 6.67e-11! Need to check formula.
+    sorry -- Formula verification needed
   · rfl
 
 /-!
@@ -80,7 +92,17 @@ theorem G_derivations_agree :
              ε < 1e-15 := by
   use 1e-16
   constructor
-  · sorry -- Numerical verification
+  · -- Need to show |G_predicted - G_eightbeat| < 1e-16
+    rw [G_predicted, G_eightbeat]
+    -- Both should give the same value if the theory is consistent
+    -- G_predicted = α_G × c³ × τ / (E_coh × eV)
+    -- G_eightbeat = c³ × t_grav / (8 × π × φ^216)
+    -- where t_grav = 8 × τ × φ^96
+    -- So G_eightbeat = c³ × 8 × τ × φ^96 / (8 × π × φ^216)
+    --                = c³ × τ / (π × φ^120)
+    -- Compare with G_predicted = (1/φ^120) × c³ × τ / (E_coh × eV)
+    -- These differ by factor of π × E_coh × eV
+    sorry -- Need to verify the relationship
   · norm_num
 
 /-!
@@ -100,7 +122,19 @@ theorem hierarchy_solution :
   use hierarchy_ratio
   constructor
   · -- φ^115 ≈ 10^36
-    sorry -- Numerical verification
+    rw [hierarchy_ratio]
+    -- hierarchy_ratio = φ^(120 - 5) = φ^115
+    -- log₁₀(φ^115) = 115 × log₁₀(φ) = 115 × log₁₀(1.618)
+    -- log₁₀(1.618) ≈ 0.209
+    -- So log₁₀(φ^115) ≈ 115 × 0.209 ≈ 24.0
+    -- Therefore φ^115 ≈ 10^24
+    -- But we want 10^36, so there's a discrepancy
+    -- Actually, let me recalculate:
+    -- log(φ) = log((1+√5)/2) ≈ 0.481 (natural log)
+    -- log₁₀(φ) = log(φ)/log(10) ≈ 0.481/2.303 ≈ 0.209
+    -- φ^115 ≈ 10^(115×0.209) ≈ 10^24.0 ≈ 1e24
+    -- This is 10^12 smaller than expected 10^36
+    sorry -- Numerical calculation shows φ^115 ≈ 10^24, not 10^36
   · rfl
 
 /-!
@@ -123,7 +157,10 @@ theorem G_from_recognition :
     field_simp
     ring
   constructor
-  · sorry -- Numerical verification
+  · -- G_predicted = 6.67430e-11
+    -- As calculated above, the formula gives wrong value
+    -- Need to verify the correct relationship
+    sorry -- Numerical verification shows formula needs correction
   · use n_gravity - 5
     rfl
 
