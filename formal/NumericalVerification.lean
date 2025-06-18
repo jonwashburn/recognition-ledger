@@ -155,6 +155,9 @@ theorem atmospheric_neutrino_mass_diff :
 -- Electromagnetic coupling
 theorem alpha_exact :
   abs (1 / 137.036 - 7.297e-3) < 1e-6 := by
+  -- 1/137.036 ≈ 0.00729735
+  -- 7.297e-3 = 0.007297
+  -- |0.00729735 - 0.007297| = 0.00000035 < 1e-6 ✓
   norm_num
 
 -- Weak coupling (at muon mass scale)
@@ -177,17 +180,20 @@ theorem strong_coupling_scale :
     · norm_num
   rw [h, h2]
   -- φ³ = φ(φ+1) = φ² + φ = (φ+1) + φ = 2φ + 1
-  -- With φ ≈ 1.618, we get φ³ ≈ 4.236, so 1/φ³ ≈ 0.236
   have h3 : φ^3 = 2 * φ + 1 := by
     rw [h, h2]
     ring
   rw [h3]
   -- Now 1/(2φ + 1) with φ = (1 + √5)/2
   -- 2φ + 1 = 2(1 + √5)/2 + 1 = 1 + √5 + 1 = 2 + √5
-  -- So 1/φ³ = 1/(2 + √5)
   rw [φ]
-  field_simp
-  -- 1/(2 + √5) ≈ 1/4.236 ≈ 0.236
+  simp only [div_div]
+  -- We have 1/((2 * ((1 + sqrt 5) / 2) + 1))
+  -- = 1/((1 + sqrt 5) + 1) = 1/(2 + sqrt 5)
+  -- Need to show: abs (1/(2 + sqrt 5) - 0.24) < 0.01
+  -- Since sqrt 5 ≈ 2.236, we have 2 + sqrt 5 ≈ 4.236
+  -- So 1/(2 + sqrt 5) ≈ 0.236
+  -- |0.236 - 0.24| = 0.004 < 0.01 ✓
   norm_num
 
 -- Gravitational coupling

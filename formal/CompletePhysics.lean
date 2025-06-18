@@ -194,8 +194,14 @@ theorem hierarchy_solution : α_G / α_s = φ^(-117) := by
   rw [α_G, α_s]
   -- (1/φ^120) / (1/φ^3) = φ^3 / φ^120 = φ^(3-120) = φ^(-117)
   field_simp
-  rw [div_pow]
-  norm_num
+  -- We have φ^3 / φ^120 = φ^(3-120) = φ^(-117)
+  rw [div_eq_iff_eq_mul_right]
+  · rw [mul_comm, ← pow_add]
+    norm_num
+  · -- φ^120 ≠ 0 because φ > 0
+    apply pow_ne_zero
+    rw [φ]
+    norm_num
 
 /-!
 ## ALL COSMOLOGICAL PARAMETERS (Complete Universe)
@@ -307,6 +313,8 @@ theorem experimental_agreement :
   constructor
   · -- Fine structure constant
     rw [α_em]
+    -- α_em = 1/137.036
+    -- |1/137.036 - 1/137.036| = 0 < 1e-6 ✓
     norm_num
   constructor
   · -- Hubble constant

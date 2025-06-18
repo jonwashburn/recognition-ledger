@@ -261,8 +261,9 @@ theorem ckm_unitarity :
   -- For θ = π/(2φ²), we have cos²θ + sin²θ = 1 exactly
   have h : cos (π / (2 * φ^2))^2 + sin (π / (2 * φ^2))^2 = 1 := by
     exact cos_sq_add_sin_sq _
-  rw [← h]
-  norm_num
+  rw [h]
+  -- 1 - 1 = 0
+  simp
 
 /-!
 ## Master Theorem: Complete Electroweak Sector
