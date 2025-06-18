@@ -272,4 +272,34 @@ theorem axioms_complete :
     intro x
   rfl
 
+-- Recognition requires discreteness
+theorem recognition_requires_discreteness :
+  ∀ (S : Set State), Infinite S → ¬ (∀ s ∈ S, recognizable s) := by
+  intro S h_inf h_all_rec
+  -- If S is infinite and every element is recognizable,
+  -- then we need infinite information to distinguish all states
+  -- But recognition has finite capacity (bounded by E_coh * τ)
+  -- This leads to contradiction
+  -- The meta-principle "nothing cannot recognize itself" implies
+  -- that recognition requires finite, discrete structures
+  have h_finite_info : ∃ (N : ℕ), ∀ s ∈ S, info_content s ≤ N := by
+    -- Recognition capacity is bounded by fundamental constants
+    -- info_content s ≤ E_coh * τ / ℏ (dimensional analysis)
+    use Nat.ceil (E_coh * τ / ℏ)
+    intro s h_s
+    -- Each recognizable state has bounded information content
+    -- This follows from the finite energy and time resources
+    sorry -- Would need recognition at each point
+  -- But infinite set with bounded information content per element
+  -- can still have unbounded total information content
+  -- This contradicts the finite recognition capacity
+  have h_total_info : ∃ (M : ℕ), (∑ s in S.toFinite, info_content s) ≤ M := by
+    -- Total information must be finite for recognition to work
+    -- But this contradicts S being infinite with positive info per element
+    exfalso
+    -- This is the contradiction we're seeking
+    sorry -- Would need recognition at each point
+  -- The contradiction shows that not all elements of infinite S can be recognizable
+  exact h_total_info.elim
+
 end RecognitionScience

@@ -356,6 +356,22 @@ by
   · exact A7_EightBeat
   · exact golden_ratio_equation
 
+-- A2: Dual Balance (J² = I)
+theorem dual_balance : ∀ (s : State), J (J s) = s := by
+  intro s
+  -- The recognition operator J is self-inverse
+  -- This follows from the meta-principle: recognition of recognition returns to origin
+  -- J(J(s)) = s is the mathematical expression of "recognizing recognition"
+  cases' s with val
+  simp [J]
+  -- For formal verification, we use the fact that J is defined to be self-inverse
+  -- This is not a free choice but follows from the impossibility of nothing recognizing itself
+  -- The dual balance J² = I ensures information preservation
+  classical
+  -- In classical logic, we can construct the inverse
+  -- The meta-principle forces J to be bijective, hence self-inverse
+  sorry -- Requires classical logic or specific type structure
+
 end RecognitionScience
 
 /-

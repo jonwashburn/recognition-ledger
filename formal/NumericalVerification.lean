@@ -32,22 +32,45 @@ def fib : ℕ → ℕ
 
 -- Exact φ^n representation using Fibonacci
 theorem phi_power_fib (n : ℕ) : φ^n = fib n * φ + fib (n-1) := by
-  sorry -- Standard Fibonacci identity
+  induction n with
+  | zero =>
+    simp [fib, φ]
+    ring
+  | succ n ih =>
+    rw [pow_succ, ih]
+    cases' n with n
+    · simp [fib, φ]
+      rw [φ]
+      field_simp
+      ring_nf
+      rw [sq_sqrt]
+      · ring
+      · norm_num
+    · simp only [fib]
+      have h_phi_sq : φ^2 = φ + 1 := by
+        rw [φ]
+        field_simp
+        ring_nf
+        rw [sq_sqrt]
+        · ring
+        · norm_num
+      rw [h_phi_sq]
+      ring
 
 -- Key φ powers for particle physics
 theorem phi_32_exact : φ^32 = 5702887 * φ + 3524578 := by
-  have : fib 32 = 5702887 := by sorry -- Computational
-  have : fib 31 = 3524578 := by sorry -- Computational
+  have : fib 32 = 5702887 := by norm_num -- Computational
+  have : fib 31 = 3524578 := by norm_num -- Computational
   exact phi_power_fib 32
 
 theorem phi_37_exact : φ^37 = 53316291 * φ + 32951280 := by
-  have : fib 37 = 53316291 := by sorry -- Computational
-  have : fib 36 = 32951280 := by sorry -- Computational
+  have : fib 37 = 53316291 := by norm_num -- Computational
+  have : fib 36 = 32951280 := by norm_num -- Computational
   exact phi_power_fib 37
 
 theorem phi_40_exact : φ^40 = 165580141 * φ + 102334155 := by
-  have : fib 40 = 165580141 := by sorry -- Computational
-  have : fib 39 = 102334155 := by sorry -- Computational
+  have : fib 40 = 165580141 := by norm_num -- Computational
+  have : fib 39 = 102334155 := by norm_num -- Computational
   exact phi_power_fib 40
 
 /-!
@@ -67,8 +90,22 @@ theorem muon_mass_ratio :
   abs (m_muon_EW / m_electron_EW - φ^5) < 0.01 := by
   -- m_μ/m_e = y_μ/y_e = φ^5
   unfold m_muon_EW m_electron_EW y_μ y_e yukawa_coupling
-  -- Simplifies to φ^5 exactly
-  sorry -- Algebraic simplification
+  -- Simplifies to φ^5 exactly by construction
+  -- m_muon_EW = y_μ * v_EW / √2 = (y_e * φ^5) * v_EW / √2
+  -- m_electron_EW = y_e * v_EW / √2
+  -- So m_muon_EW / m_electron_EW = (y_e * φ^5 * v_EW / √2) / (y_e * v_EW / √2) = φ^5
+  have h_ratio : m_muon_EW / m_electron_EW = φ^5 := by
+    rw [m_muon_EW, m_electron_EW]
+    -- Both have the same v_EW / √2 factor, so it cancels
+    -- Left with y_μ / y_e = φ^5 by definition
+    simp [y_μ, y_e]
+    -- y_μ = y_e * φ^5, so y_μ / y_e = φ^5
+    field_simp
+    ring
+  rw [h_ratio]
+  -- |φ^5 - φ^5| = 0 < 0.01
+  simp
+  norm_num
 
 -- Muon mass discrepancy documentation
 theorem muon_mass_discrepancy :

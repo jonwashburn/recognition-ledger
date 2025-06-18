@@ -187,6 +187,115 @@ theorem why_golden_ratio :
   field_simp at this
   linarith
 
+-- Advanced calculus computation for recognition cost function
+theorem advanced_calculus_computation :
+  let f := fun x : ℝ => (x - φ)^2 + φ
+  (HasDerivAt f 0 φ) ∧
+  (∀ x : ℝ, HasDerivAt f (2 * (x - φ)) x) ∧
+  (∀ x : ℝ, HasDerivAt (fun y => 2 * (y - φ)) 2 x) := by
+  constructor
+  · -- First derivative equals zero at φ
+    simp only [HasDerivAt]
+    -- f'(φ) = 2(φ - φ) = 0
+    have h_deriv : HasDerivAt (fun x => (x - φ)^2 + φ) (2 * (φ - φ)) φ := by
+      -- Use chain rule and linearity
+      have h1 : HasDerivAt (fun x => (x - φ)^2) (2 * (φ - φ)) φ := by
+        -- d/dx[(x - φ)²] = 2(x - φ), evaluated at x = φ
+        convert hasDerivAt_pow 2 φ using 1
+        · ext x
+          simp [pow_two]
+          ring
+        · simp [pow_one]
+          ring
+      have h2 : HasDerivAt (fun x => φ) 0 φ := hasDerivAt_const φ φ
+      convert HasDerivAt.add h1 h2 using 1
+      ring
+    simp at h_deriv
+    exact h_deriv
+  constructor
+  · -- First derivative formula
+    intro x
+    have h_deriv : HasDerivAt (fun y => (y - φ)^2 + φ) (2 * (x - φ)) x := by
+      have h1 : HasDerivAt (fun y => (y - φ)^2) (2 * (x - φ)) x := by
+        -- Standard derivative of (x - a)²
+        convert hasDerivAt_pow 2 x using 1
+        · ext y
+          simp [pow_two]
+          ring
+        · simp [pow_one]
+          ring
+      have h2 : HasDerivAt (fun y => φ) 0 x := hasDerivAt_const φ x
+      convert HasDerivAt.add h1 h2 using 1
+      ring
+    exact h_deriv
+  · -- Second derivative is constant
+    intro x
+    -- d/dx[2(x - φ)] = 2
+    have h_deriv : HasDerivAt (fun y => 2 * (y - φ)) 2 x := by
+      convert hasDerivAt_const 2 x using 1
+      ext y
+      ring
+    exact h_deriv
+
+-- Convexity proof using second derivative test
+theorem convexity_proof :
+  let f := fun x : ℝ => (x - φ)^2 + φ
+  ConvexOn univ f := by
+  -- A function is convex if its second derivative is non-negative
+  -- f''(x) = 2 > 0 for all x, so f is strictly convex
+  apply ConvexOn.of_deriv2_nonneg convex_univ
+  · -- f is continuous
+    continuity
+  · -- f is differentiable on interior
+    intro x hx
+    simp at hx
+    -- f'(x) = 2(x - φ)
+    use 2 * (x - φ)
+    exact (advanced_calculus_computation.2.1 x)
+  · -- f'' ≥ 0 everywhere
+    intro x hx
+    simp at hx
+    -- f''(x) = 2 > 0
+    have h_second_deriv : HasDerivAt (fun y => 2 * (y - φ)) 2 x :=
+      advanced_calculus_computation.2.2 x
+    use 2
+    constructor
+    · exact h_second_deriv
+    · norm_num
+
+-- Global minimum theorem
+theorem global_minimum_theorem :
+  let f := fun x : ℝ => (x - φ)^2 + φ
+  (∀ x : ℝ, f x ≥ f φ) ∧ (f φ = φ) := by
+  constructor
+  · intro x
+    -- f(x) = (x - φ)² + φ ≥ 0 + φ = f(φ)
+    simp
+    exact sq_nonneg (x - φ)
+  · -- f(φ) = (φ - φ)² + φ = φ
+    simp
+
+-- Uniqueness of minimum
+theorem uniqueness_of_minimum :
+  let f := fun x : ℝ => (x - φ)^2 + φ
+  ∀ x : ℝ, f x = f φ → x = φ := by
+  intro x h_eq
+  simp at h_eq
+  -- (x - φ)² + φ = φ → (x - φ)² = 0 → x = φ
+  have h_sq_zero : (x - φ)^2 = 0 := by linarith [h_eq]
+  exact eq_of_sub_eq_zero (sq_eq_zero_iff.mp h_sq_zero)
+
+-- The calculus computation that was causing issues
+theorem calculus_computation_resolved :
+  ∃ (f : ℝ → ℝ),
+    (∀ x : ℝ, f x ≥ f φ) ∧
+    (f φ = φ) ∧
+    (HasDerivAt f 0 φ) ∧
+    (∀ x : ℝ, HasDerivAt f (2 * (x - φ)) x) := by
+  use fun x => (x - φ)^2 + φ
+  exact ⟨global_minimum_theorem.1, global_minimum_theorem.2,
+         advanced_calculus_computation.1, advanced_calculus_computation.2.1⟩
+
 end RecognitionScience
 
 /-

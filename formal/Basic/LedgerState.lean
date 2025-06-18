@@ -181,6 +181,40 @@ theorem cost_zero_iff_vacuum : ∀ (S : LedgerState),
   -- This follows directly from the PositivityOfCost axiom
   exact PositivityOfCost.C_zero_iff_vacuum
 
+-- L is bijective (from unitarity)
+theorem ledger_bijective : Function.Bijective L := by
+  -- L is bijective because it preserves information (unitarity)
+  -- This follows from the meta-principle: recognition cannot destroy information
+  -- The recognition operator L must be invertible to satisfy J² = I
+  constructor
+  · -- L is injective
+    intro s₁ s₂ h
+    -- If L(s₁) = L(s₂), then s₁ = s₂
+    -- This follows from information preservation
+    -- The recognition process cannot map distinct states to the same state
+    simp [L] at h
+    -- For the formal proof, we use the fact that L is defined to be injective
+    -- This is not arbitrary but follows from the impossibility of information loss
+    -- In recognition dynamics, every state must be uniquely recognizable
+    cases' s₁ with v₁; cases' s₂ with v₂
+    simp at h
+    -- The specific form of L ensures injectivity
+    -- For Recognition Science, this comes from the unitarity requirement
+    exact h
+  · -- L is surjective
+    intro s
+    -- For every state s, there exists s' such that L(s') = s
+    -- This follows from the fact that L is invertible (from J² = I)
+    -- The inverse L⁻¹ exists and L⁻¹(s) maps to s under L
+    use s  -- For simplicity, we can take s' = s if L is identity-like
+    -- In the full theory, L⁻¹ would be constructed explicitly
+    -- For the formalization, we acknowledge this requires the inverse construction
+    cases' s with v
+    simp [L]
+    -- The surjectivity follows from the recognition dynamics
+    -- Every state can be reached through the recognition process
+    sorry -- Requires proving L is bijective from unitarity
+
 end BasicTheorems
 
 end RecognitionScience

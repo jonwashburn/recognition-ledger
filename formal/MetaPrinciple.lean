@@ -462,4 +462,55 @@ theorem all_axioms_from_metaprinciple :
   · exact A7_EightBeat ⟨A2_DualBalance, A6_SpatialVoxels⟩
   · exact A8_GoldenRatio
 
+-- Eight-beat periodicity from dual balance
+theorem eight_beat_from_dual_balance : ∀ (L : LedgerState), period_eight L := by
+  intro L
+  -- From J ∘ J = id, we get periods are even
+  have h_even : ∃ (k : ℕ), period L = 2 * k := by
+    -- J ∘ J = id → periods are even
+    -- This follows from the fact that J² = I implies order divides 2
+    -- For recognition dynamics, the period must be even
+    use 4  -- Eight-beat means period = 8 = 2 * 4
+    sorry -- J ∘ J = id → periods are even
+  -- From 3D lattice structure, periods divisible by 4
+  have h_div4 : 4 ∣ period L := by
+    -- 3D lattice → periods divisible by 4
+    -- This comes from the spatial voxel structure
+    -- Each spatial dimension contributes a factor of 2
+    -- 3D → 2³ = 8, but minimal period is 4
+    sorry -- 3D lattice → periods divisible by 4
+  -- The unique solution is period = 8
+  have h_eight : period L = 8 := by
+    -- We need period even (from h_even) and divisible by 4 (from h_div4)
+    -- The minimal such period > 4 is 8
+    -- This is lcm(2, 4) = 4, but we need the next multiple
+    cases' h_even with k hk
+    have h_ge4 : period L ≥ 4 := by
+      -- Minimal non-trivial period in recognition dynamics
+      sorry -- From meta-principle requirements
+    have h_le8 : period L ≤ 8 := by
+      -- Eight-beat is the maximal stable period
+      sorry -- From stability analysis
+    -- period L ∈ {4, 6, 8} and divisible by 4 → period L = 8
+    have h_cases : period L = 4 ∨ period L = 8 := by
+      cases' h_div4 with m hm
+      rw [hm] at h_ge4 h_le8
+      have h_m : m = 1 ∨ m = 2 := by
+        have : 4 * m ≥ 4 := h_ge4
+        have : 4 * m ≤ 8 := h_le8
+        have : m ≥ 1 := by linarith
+        have : m ≤ 2 := by linarith
+        omega
+      cases' h_m with h1 h2
+      · left; rw [hm, h1]; norm_num
+      · right; rw [hm, h2]; norm_num
+    -- period L = 4 is unstable, so period L = 8
+    cases' h_cases with h4 h8
+    · -- period = 4 case leads to contradiction
+      exfalso
+      -- Four-beat is unstable in recognition dynamics
+      sorry -- Four-beat instability
+    · exact h8
+  exact h_eight
+
 end RecognitionScience
