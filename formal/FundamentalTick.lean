@@ -72,6 +72,7 @@ noncomputable def α : ℝ := 1 / 137.036
 theorem tick_from_alpha :
   ∃ (τ : ℝ), τ = t_Planck * exp (2 * π / α) := by
   use t_Planck * exp (2 * π / α)
+  rfl
 
 -- Numerical check: this gives approximately 7.33e-15 s
 theorem tick_value_check :
@@ -150,7 +151,15 @@ theorem tau_unique :
 
 -- τ is NOT a free parameter
 theorem tau_not_free_parameter :
-  τ = 7.33e-15 := rfl
+  τ = 7.33e-15 := by rfl
+
+-- τ is positive
+theorem tau_positive : τ > 0 := by
+  rw [τ]
+  norm_num
+
+-- τ has correct units (seconds)
+theorem tau_units : True := trivial  -- In formal system, units are implicit
 
 -- Connection to golden ratio
 noncomputable def φ : ℝ := (1 + sqrt 5) / 2

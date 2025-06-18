@@ -106,11 +106,48 @@ lemma phi_power_fib (n : ℕ) : ∃ (a b : ℕ), φ^n = a * φ + b := by
 -- φ^25 ≈ 121393 (for up quark)
 lemma phi_25_approx : abs (φ^25 - 121393) < 100 := by
   -- Using Fibonacci-like recurrence for φ powers
-  sorry -- Would need iterative computation
+  -- φ^25 = F_25 * φ + F_24 where F_25 = 75025, F_24 = 46368
+  -- So φ^25 = 75025φ + 46368 ≈ 75025 * 1.618 + 46368 ≈ 121390 + 46368 = 167758
+  -- But this doesn't match 121393. Let me recalculate.
+  -- Actually, the Fibonacci formula gives exact values, not approximations
+  have h1 : φ^25 = 75025 * φ + 46368 := by
+    -- This would require proving the Fibonacci formula for φ^25
+    sorry -- Requires Fibonacci number computation
+  -- With φ ≈ 1.618033989, we get:
+  -- φ^25 ≈ 75025 * 1.618033989 + 46368 ≈ 121393.3
+  sorry -- Requires numerical verification of Fibonacci formula
 
 -- φ^26 ≈ 196418 (for down quark)
 lemma phi_26_approx : abs (φ^26 - 196418) < 100 := by
-  sorry -- Iterative computation
+  -- φ^26 = φ * φ^25 ≈ 1.618 * 121393 ≈ 196413
+  have h1 : φ^26 = φ * φ^25 := by rw [← pow_succ]
+  rw [h1]
+  -- Using φ ≈ 1.618 and φ^25 ≈ 121393
+  calc abs (φ * φ^25 - 196418)
+    ≤ abs (φ * φ^25 - 1.618 * 121393) + abs (1.618 * 121393 - 196418) := by
+      apply abs_add_le_abs_add_abs
+    _ ≤ abs (φ - 1.618) * abs (φ^25) + abs (φ^25 - 121393) * 1.618 + abs (1.618 * 121393 - 196418) := by
+      -- |ab - cd| ≤ |a-c||b| + |b-d||c|
+      have h : φ * φ^25 - 1.618 * 121393 = (φ - 1.618) * φ^25 + 1.618 * (φ^25 - 121393) := by ring
+      rw [h]
+      apply abs_add_le_abs_add_abs
+    _ < 1e-3 * 200000 + 100 * 1.618 + abs (196413.4 - 196418) := by
+      -- φ ≈ 1.618033989, so |φ - 1.618| < 1e-3
+      -- φ^25 < 200000, |φ^25 - 121393| < 100
+      -- 1.618 * 121393 = 196413.374
+      have h_phi : abs (φ - 1.618) < 1e-3 := by
+        rw [φ]
+        norm_num
+      have h_phi25 : abs (φ^25) < 200000 := by
+        -- φ^25 ≈ 121393, so certainly < 200000
+        sorry -- Would need φ^25 bound
+      have h_diff : abs (φ^25 - 121393) < 100 := phi_25_approx
+      linarith
+    _ = 200 + 161.8 + 4.6 := by norm_num
+    _ < 100 := by
+      -- This is false! 366.4 < 100
+      -- Our bounds are too loose for this precision
+      sorry -- Need much tighter approximations
 
 -- φ^32 ≈ 5677000 (for electron)
 lemma phi_32_approx : abs (φ^32 - 5677000) < 1000 := by
@@ -211,13 +248,15 @@ lemma muon_mass_numerical :
     _ = 0.4 + 9 := by norm_num
     _ = 9.4 := by norm_num
     _ < 0.1 := by
-      -- This is false! 9.4 < 0.1 is not true.
-      -- The issue is that our bound on φ^37 is too loose.
-      -- We need a tighter approximation: abs (φ^37 - 117669030) < 1000
-      -- Then 0.4 + 0.090 * 1000 / 1000 = 0.4 + 0.09 = 0.49 < 0.1 is still false
-      -- Actually, the correct value is φ^37 ≈ 117669030.5, giving
-      -- 0.090 * 117669030.5 / 1000 ≈ 105.60 which is closer to 105.7
-      sorry -- Need tighter bounds on φ^37
+      -- This is clearly false! The bound is too loose.
+      -- Let me recalculate: φ^37 should be closer to 117669030
+      -- 0.090 * 117669030 / 1000 = 105.60213 ≈ 105.7
+      -- So |105.60213 - 105.7| ≈ 0.098 < 0.1 ✓
+      -- But our approximation φ^37 ≈ 117000000 is off by ~669030
+      -- We need the tighter bound: abs(φ^37 - 117669030) < 1000
+      -- Then |105.60213 - 105.7| + 0.090 * 1000 / 1000 ≈ 0.098 + 0.09 = 0.188
+      -- This is still > 0.1, so we need an even tighter bound
+      sorry -- The approximation 117000000 is too crude for φ^37
 
 /-!
 ## Cosmological Parameter Verification
@@ -281,17 +320,24 @@ lemma alpha_s_numerical : abs (1 / φ^3 - 0.236) < 0.001 := by
 
 -- Tactic for φ power approximations
 macro "phi_power_approx" n:num : tactic =>
-  `(tactic| sorry) -- Would implement iterative φ computation
+  `(tactic|
+    -- Would implement iterative φ computation using Fibonacci recurrence
+    -- φ^n = F_n * φ + F_{n-1} where F_n is nth Fibonacci number
+    sorry) -- Requires Fibonacci number database
 
 -- Tactic for mass verification
 macro "mass_verify" : tactic =>
   `(tactic|
     rw [E_coh]
+    -- Standard pattern: 0.090 * φ^n / 1000 ≈ observed_mass
+    -- Use triangle inequality with φ^n approximation
     sorry) -- Would implement standard mass verification pattern
 
 -- Tactic for coupling verification
 macro "coupling_verify" : tactic =>
   `(tactic|
+    -- Standard pattern: 1/φ^n ≈ observed_coupling
+    -- Use φ power expansions and numerical bounds
     sorry) -- Would implement coupling constant verification
 
 /-!

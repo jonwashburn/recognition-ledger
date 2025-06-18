@@ -237,6 +237,51 @@ theorem all_neutrino_parameters :
 -- Neutrino parameters are NOT free
 theorem neutrino_parameters_not_free : True := trivial
 
+-- All masses are positive
+theorem neutrino_masses_positive :
+  m_nu1 > 0 ∧ m_nu2 > 0 ∧ m_nu3 > 0 := by
+  constructor
+  · rw [m_nu1, E_coh]
+    apply div_pos
+    · norm_num
+    · apply pow_pos
+      rw [φ]
+      norm_num
+  constructor
+  · rw [m_nu2, E_coh]
+    apply div_pos
+    · norm_num
+    · apply pow_pos
+      rw [φ]
+      norm_num
+  · rw [m_nu3, E_coh]
+    apply div_pos
+    · norm_num
+    · apply pow_pos
+      rw [φ]
+      norm_num
+
+-- Mass hierarchy: m_nu1 < m_nu2 < m_nu3
+theorem neutrino_mass_hierarchy :
+  m_nu1 < m_nu2 ∧ m_nu2 < m_nu3 := by
+  constructor
+  · -- m_nu1 < m_nu2 ⟺ E_coh/φ^48 < E_coh/φ^47 ⟺ φ^47 < φ^48 ⟺ 1 < φ
+    rw [m_nu1, m_nu2]
+    apply div_lt_div_of_lt_left
+    · rw [E_coh]; norm_num
+    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_lt_pow_of_lt_right
+      · rw [φ]; norm_num
+      · norm_num
+  · -- m_nu2 < m_nu3 ⟺ E_coh/φ^47 < E_coh/φ^45 ⟺ φ^45 < φ^47 ⟺ 1 < φ²
+    rw [m_nu2, m_nu3]
+    apply div_lt_div_of_lt_left
+    · rw [E_coh]; norm_num
+    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_lt_pow_of_lt_right
+      · rw [φ]; norm_num
+      · norm_num
+
 #check solar_mass_difference
 #check atmospheric_mixing_angle
 #check cp_phase_prediction
