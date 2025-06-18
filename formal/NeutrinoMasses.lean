@@ -46,7 +46,16 @@ theorem solar_mass_difference :
   use Δm21_squared
   constructor
   · -- Numerical: (0.090φ^-47)² - (0.090φ^-48)² ≈ 7.5e-5 eV²
-    sorry -- Numerical verification
+    rw [Δm21_squared, m_nu2, m_nu1, E_coh]
+    -- Δm²₂₁ = (E_coh/φ^47)² - (E_coh/φ^48)²
+    -- = E_coh² * (φ^-94 - φ^-96)
+    -- = E_coh² * φ^-96 * (φ² - 1)
+    -- = E_coh² * φ^-96 * φ    (since φ² - 1 = φ)
+    -- = E_coh² * φ^-95
+    -- = 0.090² / φ^95
+    -- φ^95 ≈ 1.17e29, so 0.0081 / 1.17e29 ≈ 6.9e-32 eV²
+    -- This is way too small! The formula needs checking.
+    sorry -- Formula gives wrong scale
   · rfl
 
 -- Atmospheric mass squared difference
@@ -77,7 +86,21 @@ theorem solar_mixing_angle :
   use θ12
   constructor
   · -- sin²(θ12) = 1/3 ≈ 0.333
-    sorry -- Numerical verification
+    rw [θ12]
+    -- θ12 = arcsin(√(1/3))
+    -- So sin(θ12) = √(1/3) and sin²(θ12) = 1/3
+    have h : sin (arcsin (sqrt (1/3))) = sqrt (1/3) := by
+      apply sin_arcsin
+      constructor
+      · apply sqrt_nonneg
+      · rw [sqrt_le_one]
+        norm_num
+    calc abs (sin θ12 ^ 2 - 0.32)
+      = abs (sin (arcsin (sqrt (1/3))) ^ 2 - 0.32) := by rw [θ12]
+      _ = abs ((sqrt (1/3)) ^ 2 - 0.32) := by rw [h]
+      _ = abs (1/3 - 0.32) := by rw [sq_sqrt]; norm_num
+      _ = abs (0.333333 - 0.32) := by norm_num
+      _ < 0.02 := by norm_num
   · rfl
 
 -- Atmospheric mixing angle
@@ -105,7 +128,20 @@ theorem reactor_mixing_angle :
   use θ13
   constructor
   · -- sin²(θ13) = 2/100 = 0.02
-    sorry -- Numerical verification
+    rw [θ13]
+    -- θ13 = arcsin(√(2/100)) = arcsin(√0.02)
+    have h : sin (arcsin (sqrt (2/100))) = sqrt (2/100) := by
+      apply sin_arcsin
+      constructor
+      · apply sqrt_nonneg
+      · rw [sqrt_le_one]
+        norm_num
+    calc abs (sin θ13 ^ 2 - 0.022)
+      = abs (sin (arcsin (sqrt (2/100))) ^ 2 - 0.022) := by rw [θ13]
+      _ = abs ((sqrt (2/100)) ^ 2 - 0.022) := by rw [h]
+      _ = abs (2/100 - 0.022) := by rw [sq_sqrt]; norm_num
+      _ = abs (0.02 - 0.022) := by norm_num
+      _ = 0.002 := by norm_num
   · rfl
 
 /-!
@@ -124,7 +160,16 @@ theorem cp_phase_prediction :
   use δ_CP
   constructor
   · -- -π(3 - φ) ≈ -π × 1.382 ≈ -1.35 radians
-    sorry -- Numerical calculation
+    rw [δ_CP, φ]
+    -- δ_CP = -π * (3 - (1 + √5)/2) = -π * (3 - 1 - √5/2) = -π * (2 - √5/2)
+    -- = -π * (4/2 - √5/2) = -π * (4 - √5)/2
+    -- √5 ≈ 2.236, so (4 - √5)/2 ≈ (4 - 2.236)/2 ≈ 1.764/2 ≈ 0.882
+    -- Wait, that's not right. Let me recalculate:
+    -- 3 - φ = 3 - (1 + √5)/2 = (6 - 1 - √5)/2 = (5 - √5)/2
+    -- √5 ≈ 2.236, so (5 - √5)/2 ≈ (5 - 2.236)/2 ≈ 2.764/2 ≈ 1.382
+    -- So -π * 1.382 ≈ -4.34
+    -- But we want ≈ -1.35, so there's an issue with the formula
+    sorry -- Numerical calculation needs verification
   · rfl
 
 /-!
@@ -166,11 +211,27 @@ theorem all_neutrino_parameters :
   · use 48, 47, 45
     exact ⟨rfl, rfl, rfl⟩
   constructor
-  · rw [θ12]
-    sorry -- sin(arcsin(1/√3))² = 1/3
+  · -- sin²(θ12) = 1/3
+    rw [θ12]
+    have h : sin (arcsin (sqrt (1/3))) = sqrt (1/3) := by
+      apply sin_arcsin
+      constructor
+      · apply sqrt_nonneg
+      · rw [sqrt_le_one]
+        norm_num
+    calc sin θ12 ^ 2
+      = sin (arcsin (sqrt (1/3))) ^ 2 := by rw [θ12]
+      _ = (sqrt (1/3)) ^ 2 := by rw [h]
+      _ = 1/3 := by rw [sq_sqrt]; norm_num
   constructor
-  · rw [θ23]
-    sorry -- sin(π/4)² = 1/2
+  · -- sin²(θ23) = 1/2
+    rw [θ23]
+    have h : sin (π/4) = sqrt 2 / 2 := sin_pi_div_four
+    calc sin θ23 ^ 2
+      = sin (π/4) ^ 2 := by rw [θ23]
+      _ = (sqrt 2 / 2) ^ 2 := by rw [h]
+      _ = 2 / 4 := by ring_nf
+      _ = 1/2 := by norm_num
   · rfl
 
 -- Neutrino parameters are NOT free
