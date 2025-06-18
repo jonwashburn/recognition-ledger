@@ -67,7 +67,16 @@ theorem dark_energy_prediction :
     -- Λ ≈ 8π × 6.67430e-11 × 1.442e-20 / (8.3e36 × 8.08e33)
     -- ≈ 2.41e-29 / 6.7e70 ≈ 3.6e-100 m^-2
     -- This is much smaller than observed 1.1056e-52 m^-2
-    sorry -- Formula gives wrong magnitude
+    -- Factor of ~3e47 too small
+    have h_calc : Λ_predicted < 1e-99 := by
+      rw [Λ_predicted, ρ_floor, E_floor]
+      -- The calculation shows Λ ≈ 3.6e-100 m^-2
+      sorry -- Detailed calculation shows Λ ≈ 3.6e-100 vs observed 1.1e-52; factor 3e47 error
+    have h_obs : Λ_observed > 1e-53 := by
+      rw [Λ_observed]
+      norm_num
+    -- |Λ_predicted - Λ_observed| ≈ Λ_observed ≈ 1.1e-52 >> 1e-54
+    sorry -- Formula gives Λ ≈ 3.6e-100 m^-2 vs observed 1.1e-52 m^-2; magnitude error ~3e47
   · rfl
 
 -- Dark energy is NOT a free parameter
@@ -116,7 +125,15 @@ theorem hubble_constant_prediction :
     -- H_0 = 3.0857e22 / (1000 × 1.69e16) = 3.0857e22 / 1.69e19
     -- ≈ 1.83e3 ≈ 1830
     -- But observed is 67.66 km/s/Mpc, so formula is off by factor of ~27
-    sorry -- Numerical calculation needs checking
+    have h_calc : H_0_predicted > 1000 := by
+      rw [H_0_predicted, H_0_SI, t_Hubble, t_eight]
+      -- The calculation shows H_0 ≈ 1830 km/s/Mpc
+      sorry -- Detailed calculation shows H_0 ≈ 1830 vs observed 67.66; factor ~27 error
+    have h_obs : H_0_observed < 100 := by
+      rw [H_0_observed]
+      norm_num
+    -- |H_0_predicted - H_0_observed| ≈ 1830 - 67.66 ≈ 1762 >> 0.1
+    sorry -- Formula gives H_0 ≈ 1830 km/s/Mpc vs observed 67.66; factor ~27 error
   · rfl
 
 -- Hubble constant is NOT a free parameter
@@ -155,7 +172,13 @@ theorem universe_age :
     -- = 1.127e16 / 3.15576e7
     -- ≈ 3.57e8 years = 357 million years
     -- But we want 13.8 billion years, so off by factor of ~38
-    sorry -- Formula gives wrong age
+    have h_calc : age_years < 5e8 := by
+      rw [age_years, t_universe, t_Hubble, t_eight]
+      -- The calculation shows age ≈ 3.57e8 years
+      sorry -- Detailed calculation shows age ≈ 357 Myr vs observed 13.8 Gyr; factor ~39 error
+    have h_target : (13.8e9 : ℝ) > 1e10 := by norm_num
+    -- |age_years - 13.8e9| ≈ 13.8e9 - 3.57e8 ≈ 1.34e10 >> 0.1e9
+    sorry -- Formula gives age ≈ 357 Myr vs observed 13.8 Gyr; factor ~39 error
   · rfl
 
 /-!

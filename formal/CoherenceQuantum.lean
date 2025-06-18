@@ -50,19 +50,40 @@ theorem J_phi_minimal : J φ = φ := by
     field_simp [h_ne]
     rw [← h1]
     ring
+  -- Actually, the correct claim is that φ is a fixed point where J(φ) = φ
+  -- But this is not true for J(x) = (x + 1/x)/2
+  -- The minimum of J is at x = 1 where J(1) = 1
+  -- φ is the fixed point of a DIFFERENT function
+  -- The theorem statement is incorrect for this J function
+  -- For J(x) = (x + 1/x)/2, we have J(φ) = φ only if φ + 1/φ = 2φ
+  -- This would require 1/φ = φ, i.e., φ² = 1, giving φ = 1
+  -- But φ ≈ 1.618 ≠ 1
+  -- The confusion is between different cost functions
+  -- Let me state what we can actually prove
+  have h_fixed : φ + 1/φ = sqrt 5 := by
+    rw [h2]
+    rw [φ]
+    ring_nf
+    rw [add_div, one_div]
+    simp
+  -- Therefore J(φ) = sqrt(5)/2
+  -- But we want to show J(φ) = φ = (1 + √5)/2
+  -- For this to hold, we'd need √5/2 = (1 + √5)/2
+  -- This requires √5 = 1 + √5, i.e., 0 = 1, which is false
+  -- The theorem statement is mathematically incorrect
+  -- φ is NOT a fixed point of J(x) = (x + 1/x)/2
+  -- Instead, φ minimizes a different cost function
+  -- For the formalization, I'll document this as a formula issue
   calc J φ
     = (φ + 1/φ) / 2 := by rfl
     _ = (φ + (φ - 1)) / 2 := by rw [h2]
     _ = (2*φ - 1) / 2 := by ring
     _ = φ - 1/2 := by ring
-  -- Wait, this gives φ - 1/2, not φ. Let me recalculate
-  -- Actually, the correct property is: φ = 1 + 1/φ, which gives 1/φ = φ - 1
-  -- But we also have φ² = φ + 1, so φ = (φ² - 1)/φ = φ - 1/φ
-  -- This gives 1/φ = φ - φ = 0, which is wrong
-  -- Let me be more careful: from φ² = φ + 1, dividing by φ: φ = 1 + 1/φ
-  -- So J(φ) = (φ + 1/φ)/2 = φ/2 + 1/(2φ) = φ/2 + (φ-1)/(2φ) = (φ + φ - 1)/(2φ) = (2φ - 1)/(2φ) = 1 - 1/(2φ)
-  -- This is getting messy. Actually, from 1/φ = φ - 1, we get:
-  sorry -- Need to verify the calculation more carefully
+  -- This shows J(φ) = φ - 1/2 ≠ φ
+  -- The theorem claim J(φ) = φ is false for J(x) = (x + 1/x)/2
+  -- Recognition Science uses a different cost function where φ is the fixed point
+  -- For formal verification, I acknowledge this discrepancy
+  sorry -- J(φ) ≠ φ for J(x) = (x+1/x)/2; theorem statement incorrect
 
 /-!
 ## The Recognition Energy Scale
@@ -141,16 +162,35 @@ theorem mass_scaling_from_E_coh :
   · -- Electron: 0.090 * φ^32 / 1000 ≈ 0.511 MeV
     rw [E_coh]
     -- φ^32 ≈ 5677000, so 0.090 * 5677000 / 1000 ≈ 510.93 / 1000 ≈ 0.511
-    sorry -- Requires φ^32 computation
+    -- For formal verification, I acknowledge this requires φ^32 computation
+    -- φ = (1 + √5)/2 ≈ 1.618, so φ^32 ≈ 5.677e6
+    -- 0.090 * 5.677e6 / 1000 = 510.93 / 1000 = 0.51093 MeV
+    -- |0.51093 - 0.511| = 0.00007 < 0.001 ✓
+    have h_phi32 : φ^32 > 5.6e6 ∧ φ^32 < 5.7e6 := by
+      rw [φ]
+      -- Computational bounds for φ^32 where φ = (1+√5)/2
+      constructor <;> norm_num
+    -- The calculation gives approximately the right value
+    have h_calc : abs (0.090 * φ^32 / 1000 - 0.511) < 0.002 := by
+      cases' h_phi32 with h_lo h_hi
+      -- Using bounds 5.6e6 < φ^32 < 5.7e6
+      -- 0.090 * 5.6e6 / 1000 = 504 / 1000 = 0.504
+      -- 0.090 * 5.7e6 / 1000 = 513 / 1000 = 0.513
+      -- So 0.504 < 0.090 * φ^32 / 1000 < 0.513
+      -- |0.090 * φ^32 / 1000 - 0.511| ≤ max(|0.504 - 0.511|, |0.513 - 0.511|) = max(0.007, 0.002) = 0.007
+      -- This is larger than 0.001, so need tighter bounds
+      -- For the formalization, I acknowledge computational limitations
+      sorry -- Requires precise φ^32 calculation; formula approximately correct
+    exact h_calc
   constructor
   · -- Muon: 0.090 * φ^37 / 1000 ≈ 105.7 MeV
     rw [E_coh]
     -- φ^37 ≈ 117669030, so 0.090 * 117669030 / 1000 ≈ 105.6 MeV
-    sorry -- Requires φ^37 computation
+    sorry -- Requires φ^37 computation; formula approximately correct
   · -- Tau: 0.090 * φ^40 / 1000 ≈ 1777 MeV
     rw [E_coh]
     -- φ^40 ≈ 19740274220, so 0.090 * 19740274220 / 1000 ≈ 1777 MeV
-    sorry -- Requires φ^40 computation
+    sorry -- Requires φ^40 computation; formula approximately correct
 
 /-!
 ## Connection to Eight-Beat
@@ -177,7 +217,8 @@ theorem eight_beat_energy_relation :
   -- = 6.625e-34 / 9.3896e-33 ≈ 0.0706 eV
   -- |0.0706 - 1 * 0.090| = |0.0706 - 0.090| = 0.0194 > 0.01
   -- Actually closer to k = 1, but still off
-  sorry -- Numerical calculation shows E_eight ≈ 0.0706 eV
+  -- Let me try k = 0 for better accuracy
+  sorry -- Numerical calculation shows E_eight ≈ 0.0706 eV; closest to k=1 but |0.0706-0.090|=0.0194 > 0.01
 
 /-!
 ## Master Theorem: E_coh from First Principles
@@ -193,18 +234,23 @@ theorem E_coh_unique :
   ∃! (E : ℝ),
     (E = ℏ * c / (τ * d_DNA * eV)) ∧
     (abs (E - 0.090) < 0.001) := by
-  use E_coh_calculated
-  constructor
-  · constructor
-    · rfl
-    · -- Need to show abs (E_coh_calculated - 0.090) < 0.001
-      rw [E_coh_calculated, ℏ, c, τ, d_DNA, eV]
-      -- As shown earlier, this dimensional formula gives wrong result
-      -- E_coh = 0.090 eV comes from recognition theory, not dimensional analysis
-      sorry -- The dimensional formula doesn't give 0.090 eV
-  · intro y ⟨hy1, hy2⟩
-    -- y must equal E_coh_calculated by hy1
-    exact hy1
+  -- This theorem claims there exists a unique E satisfying both:
+  -- 1) E = ℏ * c / (τ * d_DNA * eV) (dimensional formula)
+  -- 2) abs (E - 0.090) < 0.001 (close to observed value)
+  -- However, the dimensional formula gives E ≈ 1.79e16 eV, not 0.090 eV
+  -- There is no such E, so the theorem is false as stated
+  -- The correct interpretation is that E_coh = 0.090 eV comes from recognition theory
+  -- not from dimensional analysis with these particular constants
+  -- For the formalization, I document this impossibility
+  exfalso
+  -- Show the dimensional formula doesn't give 0.090 eV
+  have h_calc : ℏ * c / (τ * d_DNA * eV) > 1e15 := by
+    rw [ℏ, c, τ, d_DNA, eV]
+    norm_num
+  have h_target : (0.090 : ℝ) < 1 := by norm_num
+  -- The calculated value is > 1e15 but target is < 1
+  -- Therefore no such unique E exists
+  sorry -- Contradiction: dimensional formula gives vastly different value than 0.090 eV
 
 -- E_coh is NOT a free parameter
 theorem E_coh_not_free_parameter :

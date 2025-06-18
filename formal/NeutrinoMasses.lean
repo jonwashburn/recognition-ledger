@@ -54,8 +54,21 @@ theorem solar_mass_difference :
     -- = E_coh² * φ^-95
     -- = 0.090² / φ^95
     -- φ^95 ≈ 1.17e29, so 0.0081 / 1.17e29 ≈ 6.9e-32 eV²
-    -- This is way too small! The formula needs checking.
-    sorry -- Formula gives wrong scale
+    -- This is way too small! The formula gives wrong scale.
+    -- Observed: 7.5e-5 eV², calculated: ~6.9e-32 eV²
+    -- Off by factor of ~2.2e27
+    -- The φ-ladder model for neutrino masses needs revision
+    have h_small : E_coh^2 / φ^95 < 1e-30 := by
+      rw [E_coh, φ]
+      -- 0.09^2 = 0.0081
+      -- φ^95 = ((1+√5)/2)^95 is enormous
+      -- For φ ≈ 1.618, φ^95 ≈ 10^29
+      -- So 0.0081 / 10^29 = 8.1e-32 < 1e-30
+      norm_num [pow_pos]
+    have h_target : (7.5e-5 : ℝ) > 1e-6 := by norm_num
+    -- The calculated value is < 1e-30 but target is > 1e-6
+    -- Therefore the formula gives vastly wrong scale
+    sorry -- Formula gives ~6.9e-32 eV² vs observed 7.5e-5 eV²; scale factor ~2e27 error
   · rfl
 
 -- Atmospheric mass squared difference
@@ -65,7 +78,25 @@ theorem atmospheric_mass_difference :
   use abs Δm32_squared
   constructor
   · -- Numerical: |(0.090φ^-45)² - (0.090φ^-47)²| ≈ 2.5e-3 eV²
-    sorry -- Numerical verification
+    rw [Δm32_squared, m_nu3, m_nu2, E_coh]
+    -- Δm²₃₂ = (E_coh/φ^45)² - (E_coh/φ^47)²
+    -- = E_coh² * (φ^-90 - φ^-94)
+    -- = E_coh² * φ^-94 * (φ⁴ - 1)
+    -- For φ ≈ 1.618, φ⁴ ≈ 6.854, so φ⁴ - 1 ≈ 5.854
+    -- Δm²₃₂ = 0.090² * φ^-94 * 5.854 ≈ 0.0081 * 5.854 / φ^94
+    -- φ^94 ≈ 7.2e28, so Δm²₃₂ ≈ 0.047 / 7.2e28 ≈ 6.5e-30 eV²
+    -- Observed: 2.5e-3 eV², calculated: ~6.5e-30 eV²
+    -- Off by factor of ~3.8e26
+    have h_small : E_coh^2 * (φ^4 - 1) / φ^94 < 1e-28 := by
+      rw [E_coh, φ]
+      -- Similar calculation to above
+      -- 0.09^2 * (φ^4 - 1) / φ^94 where φ^4 ≈ 6.854
+      -- 0.0081 * 6.854 / φ^94 ≈ 0.055 / φ^94
+      -- φ^94 ≈ 10^28, so result ≈ 5.5e-30 < 1e-28
+      norm_num [pow_pos]
+    have h_target : (2.5e-3 : ℝ) > 1e-4 := by norm_num
+    -- The calculated value is vastly smaller than the target
+    sorry -- Formula gives ~6.5e-30 eV² vs observed 2.5e-3 eV²; scale factor ~4e26 error
   · rfl
 
 /-!
@@ -169,7 +200,16 @@ theorem cp_phase_prediction :
     -- √5 ≈ 2.236, so (5 - √5)/2 ≈ (5 - 2.236)/2 ≈ 2.764/2 ≈ 1.382
     -- So -π * 1.382 ≈ -4.34
     -- But we want ≈ -1.35, so there's an issue with the formula
-    sorry -- Numerical calculation needs verification
+    -- The calculation gives -π * (5 - √5)/2 ≈ -π * 1.382 ≈ -4.34
+    -- But target is -1.35, so off by factor of ~3.2
+    -- The formula needs adjustment for the claimed value
+    have h_calc : 3 - (1 + sqrt 5) / 2 = (5 - sqrt 5) / 2 := by ring
+    have h_val : (5 - sqrt 5) / 2 > 1.3 ∧ (5 - sqrt 5) / 2 < 1.4 := by
+      constructor <;> norm_num
+    -- So δ_CP = -π * (5 - √5)/2 ≈ -π * 1.38 ≈ -4.34
+    -- |(-4.34) - (-1.35)| = |-4.34 + 1.35| = 2.99 > 0.1
+    -- The formula doesn't give the claimed value
+    sorry -- Calculation gives δ_CP ≈ -4.34 vs target -1.35; factor ~3.2 error
   · rfl
 
 /-!
@@ -187,7 +227,27 @@ theorem neutrino_mass_sum :
   use Sigma_m_nu
   constructor
   · -- 0.090(φ^-48 + φ^-47 + φ^-45) < 0.12 eV
-    sorry -- Numerical bound
+    rw [Sigma_m_nu, m_nu1, m_nu2, m_nu3, E_coh]
+    -- Σm_ν = E_coh * (φ^-48 + φ^-47 + φ^-45)
+    -- = 0.090 * (φ^-48 + φ^-47 + φ^-45)
+    -- The largest term is φ^-45, others are suppressed by φ and φ²
+    -- φ^-45 ≈ 1/4.6e13 ≈ 2.2e-14
+    -- So Σm_ν ≈ 0.090 * 2.2e-14 ≈ 2e-15 eV
+    -- This is vastly smaller than the cosmological bound of 0.12 eV
+    -- Factor of ~6e13 difference
+    have h_small : E_coh / φ^45 < 1e-12 := by
+      rw [E_coh, φ]
+      -- 0.090 / φ^45 where φ ≈ 1.618
+      -- φ^45 ≈ 4.6e13, so 0.090 / 4.6e13 ≈ 2e-15 < 1e-12
+      norm_num [pow_pos]
+    -- Since all three masses are dominated by m_nu3 = E_coh/φ^45
+    -- and this is < 1e-12 eV, the sum is much less than 0.12 eV
+    have h_sum_small : Sigma_m_nu < 1e-11 := by
+      rw [Sigma_m_nu, m_nu1, m_nu2, m_nu3]
+      -- Each term is ≤ E_coh/φ^45, so sum ≤ 3 * E_coh/φ^45 < 3e-12 < 1e-11
+      sorry -- Calculation shows sum ≈ 2e-15 eV << 0.12 eV bound
+    have h_bound : (1e-11 : ℝ) < 0.12 := by norm_num
+    exact lt_trans h_sum_small h_bound
   · rfl
 
 /-!
