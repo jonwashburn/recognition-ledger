@@ -139,7 +139,13 @@ theorem A4_Unitarity :
   ∀ (L : Recognition → Recognition),
   (∀ r₁ r₂, information_content (L r₁) = information_content r₁) →
   ∃ (L_inv : Recognition → Recognition), L ∘ L_inv = id ∧ L_inv ∘ L = id := by
-  sorry
+  intro L h_preserves
+  -- If L preserves information content (which is constant = 1 in our model),
+  -- then L must be injective (different inputs give different outputs)
+  -- For finite Recognition, injective implies bijective
+  -- But we don't know if Recognition is finite
+  -- For now, we assume an inverse exists
+  sorry -- Requires finiteness or additional structure on Recognition
 
 /-!
 ## Derivation of Axiom 5: Minimal Tick
@@ -171,14 +177,28 @@ theorem continuous_space_infinite_info :
   ∀ (space : Type*) [TopologicalSpace space] [T2Space space],
   Infinite space →
   ∃ (info_density : space → ℝ), ∃ x, info_density x = ⊤ := by
-  sorry
+  intro space _ _ h_infinite
+  -- In an infinite T2 space, we can pack arbitrarily many
+  -- recognition events into any neighborhood
+  -- For simplicity, define info_density as always finite
+  use fun x => 1  -- Constant finite density
+  -- We can't actually have ∞ in ℝ, so this theorem is malformed
+  -- The correct statement would use extended reals ENNReal
+  sorry -- Type mismatch: ℝ doesn't have ⊤
 
 /-- Therefore space must be discrete -/
 theorem A6_SpatialVoxels :
   ∃ (L₀ : ℝ) (h : L₀ > 0),
   ∃ (lattice : Type*),
   lattice ≃ Fin 3 → ℤ := by
-  sorry
+  -- Choose voxel size L₀ = 0.335e-9 m (from DNA recognition scale)
+  use 0.335e-9
+  constructor
+  · norm_num  -- L₀ > 0
+  · -- Define the spatial lattice as 3D integer coordinates
+    use (Fin 3 → ℤ)
+    -- The equivalence is just the identity
+    exact Equiv.refl _
 
 /-!
 ## Derivation of Axiom 7: Eight-Beat Closure
@@ -252,7 +272,16 @@ theorem unique_cost_functional :
 theorem A8_GoldenRatio :
   ∃ (φ : ℝ), φ = (1 + Real.sqrt 5) / 2 ∧
   ∀ x > 0, unique_cost_functional.J x ≥ unique_cost_functional.J φ := by
-  sorry
+  use (1 + Real.sqrt 5) / 2
+  constructor
+  · rfl  -- φ = (1 + √5)/2 by definition
+  · intro x hx
+    -- The minimum of J(x) = (x + 1/x)/2 occurs at x = 1, not φ
+    -- Actually J'(x) = (1 - 1/x²)/2 = 0 when x = 1
+    -- But J(1) = 1 and J(φ) = φ > 1
+    -- So the claim is false as stated
+    -- The correct statement is that φ is the fixed point: J(φ) = φ
+    sorry -- The minimization claim needs to be reformulated
 
 /-!
 ## Main Result: All Axioms are Theorems
@@ -269,14 +298,10 @@ theorem all_axioms_necessary :
   A7_EightBeat ∧
   A8_GoldenRatio := by
   intro h_meta
-  constructor <;> [skip, constructor] <;>
-  [skip, skip, constructor] <;>
-  [skip, skip, skip, constructor] <;>
-  [skip, skip, skip, skip, constructor] <;>
-  [skip, skip, skip, skip, skip, constructor] <;>
-  [skip, skip, skip, skip, skip, skip, constructor]
-  -- Each axiom follows from the meta-principle
-  all_goals sorry
+  -- We've proven most of these individually
+  -- But they don't all follow directly from MetaPrinciple
+  -- They require additional axioms and assumptions
+  sorry -- The logical derivation is incomplete without additional axioms
 
 /-!
 ## Uniqueness: These are the ONLY possible axioms
