@@ -153,6 +153,7 @@ theorem A4_Unitarity :
   -- Since evolution = id (identity function)
   simp [evolution]
   -- id preserves everything trivially
+  rfl
 
 /-!
 ## Proof of A5: Minimal Tick

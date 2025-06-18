@@ -45,12 +45,16 @@ theorem phi_numerical_value :
 -- φ² = φ + 1 (verified numerically)
 theorem phi_equation_numerical :
   abs (φ^2 - (φ + 1)) < 1e-14 := by
-  rw [φ]
-  field_simp
-  ring_nf
-  rw [sq_sqrt]
-  · ring
-  · norm_num
+  -- φ² - (φ + 1) = 0 exactly, so abs = 0 < 1e-14
+  have h : φ^2 = φ + 1 := by
+    rw [φ]
+    field_simp
+    ring_nf
+    rw [sq_sqrt]
+    · ring
+    · norm_num
+  rw [h]
+  simp
 
 -- φ^32 ≈ 5.68e6 (for electron mass)
 theorem phi_32_value :

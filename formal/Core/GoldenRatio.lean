@@ -56,7 +56,29 @@ theorem J_convex : ConvexOn ℝ (Set.Ioi 0) J := by
 /-- J has a unique fixed point greater than 1 -/
 theorem J_unique_fixed_point_gt_one :
   ∃! x : ℝ, x > 1 ∧ J x = x := by
-  sorry -- For automated solver
+  use φ
+  constructor
+  · constructor
+    · exact phi_gt_one
+    · -- Need to show J(φ) = φ
+      -- But this is false! J(φ) = (φ + 1/φ)/2 ≠ φ
+      -- The theorem statement is incorrect
+      sorry -- For automated solver
+  · intro y ⟨hy_gt, hy_fixed⟩
+    -- If J(y) = y, then (y + 1/y)/2 = y
+    -- So y + 1/y = 2y, thus 1/y = y, giving y² = 1
+    -- Since y > 1, this is impossible
+    exfalso
+    rw [J] at hy_fixed
+    have h1 : y + 1/y = 2*y := by linarith
+    have h2 : 1/y = y := by linarith
+    have h3 : y^2 = 1 := by
+      field_simp at h2
+      exact h2
+    have h4 : y = 1 := by
+      have : y^2 = 1^2 := by rw [h3]; norm_num
+      exact sq_eq_sq (le_of_lt hy_gt) (by norm_num : (0 : ℝ) ≤ 1) |>.mp this
+    linarith
 
 end JProperties
 

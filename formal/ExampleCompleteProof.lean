@@ -87,17 +87,24 @@ lemma J_critical_point_iff (x : ℝ) (hx : x > 0) :
 -- ============================================================================
 
 lemma J_strictly_convex : StrictConvexOn ℝ (Set.Ioi 0) J := by
-  -- Second derivative J''(x) = 1/x³ > 0 for x > 0
-  -- J(x) = (x + 1/x)/2, so J'(x) = (1 - 1/x²)/2, so J''(x) = 1/x³
-  -- Since J''(x) > 0 for all x > 0, J is strictly convex
-  -- However, proving this rigorously requires HasDerivAt lemmas
-  apply StrictConvexOn.of_deriv2_pos
-  · -- J is differentiable on (0, ∞)
-    sorry -- Requires differentiability proof
-  · -- J'' > 0 on (0, ∞)
-    intro x hx
-    -- J''(x) = 1/x³ > 0 since x > 0
+  -- We'll use convexity of x and 1/x separately
+  -- J(x) = (x + 1/x)/2 is convex as sum of convex functions
+  -- First show x ↦ x is convex
+  have h1 : ConvexOn ℝ (Set.Ioi 0) (fun x => x) := by
+    apply ConvexOn.of_slope_mono_adjacent
+    intro x y z hx hy hz hxy hyz
+    simp
+    exact le_refl _
+  -- Next show x ↦ 1/x is strictly convex on (0,∞)
+  have h2 : StrictConvexOn ℝ (Set.Ioi 0) (fun x => 1/x) := by
+    -- For positive x, f(x) = 1/x has f''(x) = 2/x³ > 0
+    -- So it's strictly convex
     sorry -- Requires second derivative computation
+  -- Sum of convex and strictly convex is strictly convex
+  convert StrictConvexOn.add_const h2 _
+  ext x
+  simp [J]
+  ring
 
 -- ============================================================================
 -- MAIN THEOREM: Golden ratio minimizes J on (0, ∞)

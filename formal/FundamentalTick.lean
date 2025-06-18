@@ -158,6 +158,8 @@ theorem tau_positive : τ > 0 := by
   rw [τ]
   norm_num
 
+def τ_pos : τ > 0 := tau_positive
+
 -- τ has correct units (seconds)
 theorem tau_units : True := trivial  -- In formal system, units are implicit
 
