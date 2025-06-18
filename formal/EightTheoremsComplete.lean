@@ -27,8 +27,20 @@ theorem MetaPrinciple : ¬(∀ x, ¬∃ y, y ≠ x) := by
   -- If nothing could recognize itself, then no distinction could exist
   -- But this very statement requires distinction, creating contradiction
   push_neg
-  -- Therefore, something must exist
-  sorry -- This is pure logic, not an axiom
+  -- We need to show: ∃ x, ∃ y, y ≠ x
+  -- This is logically necessary - if everything were identical,
+  -- we couldn't even formulate this statement
+  -- Proof by contradiction: assume ¬(∃ x, ∃ y, y ≠ x)
+  by_contra h
+  push_neg at h
+  -- h : ∀ x y, y = x
+  -- This means everything is identical to everything else
+  -- But we can construct distinct objects in type theory
+  have : (0 : ℝ) ≠ (1 : ℝ) := by norm_num
+  -- Apply h to get 0 = 1
+  have : (0 : ℝ) = (1 : ℝ) := h 0 1
+  -- Contradiction
+  exact absurd this (by norm_num : (0 : ℝ) ≠ 1)
 
 /-!
 ## The Eight Theorems
