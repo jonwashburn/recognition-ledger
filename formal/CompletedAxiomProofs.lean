@@ -122,13 +122,17 @@ by
   have h_cost : ∀ r, recognitionCost r = 1 := by
     intro r
     simp [recognitionCost]
-  -- Sum of costs = length when each cost is 1
+  -- When each element maps to 1, the sum equals the length
   have h1 : (L1.debits.map recognitionCost).sum = L1.debits.length := by
-    rw [List.sum_map_count_eq_length_filter]
-    simp [h_cost]
+    induction L1.debits with
+    | nil => simp
+    | cons head tail ih =>
+      simp [List.sum_cons, h_cost, ih]
   have h2 : (L2.debits.map recognitionCost).sum = L2.debits.length := by
-    rw [List.sum_map_count_eq_length_filter]
-    simp [h_cost]
+    induction L2.debits with
+    | nil => simp
+    | cons head tail ih =>
+      simp [List.sum_cons, h_cost, ih]
   rw [h1, h2]
   exact Nat.cast_lt.mpr h_debits
 
