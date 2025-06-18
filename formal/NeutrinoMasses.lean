@@ -212,7 +212,6 @@ theorem all_neutrino_parameters :
     exact ⟨rfl, rfl, rfl⟩
   constructor
   · -- sin²(θ12) = 1/3
-    rw [θ12]
     have h : sin (arcsin (sqrt (1/3))) = sqrt (1/3) := by
       apply sin_arcsin
       constructor
@@ -225,7 +224,6 @@ theorem all_neutrino_parameters :
       _ = 1/3 := by rw [sq_sqrt]; norm_num
   constructor
   · -- sin²(θ23) = 1/2
-    rw [θ23]
     have h : sin (π/4) = sqrt 2 / 2 := sin_pi_div_four
     calc sin θ23 ^ 2
       = sin (π/4) ^ 2 := by rw [θ23]
@@ -269,17 +267,26 @@ theorem neutrino_mass_hierarchy :
     rw [m_nu1, m_nu2]
     apply div_lt_div_of_lt_left
     · rw [E_coh]; norm_num
-    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_pos
+      rw [φ]
+      norm_num
     · apply pow_lt_pow_of_lt_right
-      · rw [φ]; norm_num
+      · rw [φ]
+        -- φ = (1 + √5)/2 > 1
+        have h : sqrt 5 > 0 := sqrt_pos.mpr (by norm_num : (0 : ℝ) < 5)
+        linarith
       · norm_num
   · -- m_nu2 < m_nu3 ⟺ E_coh/φ^47 < E_coh/φ^45 ⟺ φ^45 < φ^47 ⟺ 1 < φ²
     rw [m_nu2, m_nu3]
     apply div_lt_div_of_lt_left
     · rw [E_coh]; norm_num
-    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_pos
+      rw [φ]
+      norm_num
     · apply pow_lt_pow_of_lt_right
-      · rw [φ]; norm_num
+      · rw [φ]
+        have h : sqrt 5 > 0 := sqrt_pos.mpr (by norm_num : (0 : ℝ) < 5)
+        linarith
       · norm_num
 
 #check solar_mass_difference

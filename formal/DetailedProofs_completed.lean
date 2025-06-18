@@ -73,7 +73,7 @@ by
   -- Suppose time_model is uncountable
   by_contra h_not_countable
   -- Then information_content is infinite
-    have h_infinite : information_content time_model = ⊤ := by
+  have h_infinite : information_content time_model = ⊤ := by
     simp [information_content]
     -- time_model is not finite since it's uncountable
     -- This follows from uncountable → not finite
@@ -131,7 +131,7 @@ theorem A2_DualBalance :
   ∀ (L : Ledger), dual_operator (dual_operator L) = L :=
 by
   intro L
-    simp [dual_operator]
+  simp [dual_operator]
   -- Mapping swap twice returns to original
   ext
   simp [List.map_map]
@@ -170,11 +170,24 @@ by
       simp at h_ne
     · -- Non-empty list has positive sum
       simp
-      apply List.sum_pos
-      · intro x hx
-        exact recognition_cost_pos x
-      · use e
-        simp
+      -- The sum of positive numbers is positive
+      -- Since recognition_cost is always 1 > 0
+      have h_pos : ∀ dr ∈ (e :: es), recognition_cost dr.forward > 0 := by
+        intro dr _
+        simp [recognition_cost]
+        norm_num
+      -- Sum of list with at least one positive element is positive
+      have h_nonempty : (e :: es).length > 0 := by simp
+      -- Therefore sum > 0
+      -- Since every element is 1, the sum is the length
+      have : (e :: es).map (fun dr => recognition_cost dr.forward) = List.replicate (e :: es).length 1 := by
+        apply List.ext_get
+        · simp
+        · intro i h1 h2
+          simp [recognition_cost]
+      rw [this]
+      simp [List.sum_replicate]
+      exact h_nonempty
 
 -- ============================================================================
 -- THEOREM A4: Unitarity (Detailed Proof)
@@ -198,11 +211,7 @@ by
   intro f h_preserves
   -- Information-preserving maps are invertible
   -- This is because they're bijections on finite sets
-
-  intro r -- Consider arbitrary recognition event
-  have h_depart -- Recognition departs from equilibrium
-  have h_energy -- Departure requires energy
-  linarith -- Energy is positive  -- Would need to construct inverse explicitly
+  sorry  -- Would need to construct inverse explicitly
 
 -- ============================================================================
 -- THEOREM A5: Minimal Tick (Detailed Proof)
@@ -225,7 +234,7 @@ by
   constructor
   · -- Greater than Planck time
     norm_num [recognition_tick, planck_time]
-    · -- Minimum separation
+  · -- Minimum separation
     intro t1 t2 h_ne
     -- Time is discrete, so different times differ by at least τ
     -- This requires a discrete time model
@@ -254,7 +263,7 @@ by
   use voxel_size
   constructor
   · norm_num [voxel_size]
-    · intro space
+  · intro space
     -- Continuous space would require infinite information
     -- So we must discretize to voxels
     -- We can construct voxel_map by mapping each voxel to space at center

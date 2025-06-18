@@ -188,24 +188,37 @@ theorem gravity_weakest :
   · -- 1/φ^120 < 1/φ^3
     apply div_lt_div_of_lt_left
     · norm_num
-    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_pos
+      rw [φ]
+      norm_num
     · apply pow_lt_pow_of_lt_right
-      · rw [φ]; norm_num
+      · rw [φ]
+        -- φ = (1 + √5)/2 > 1
+        have h : sqrt 5 > 0 := sqrt_pos.mpr (by norm_num : (0 : ℝ) < 5)
+        linarith
       · norm_num
   constructor
   · -- 1/φ^120 < 1/φ^5
     apply div_lt_div_of_lt_left
     · norm_num
-    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_pos
+      rw [φ]
+      norm_num
     · apply pow_lt_pow_of_lt_right
-      · rw [φ]; norm_num
+      · rw [φ]
+        have h : sqrt 5 > 0 := sqrt_pos.mpr (by norm_num : (0 : ℝ) < 5)
+        linarith
       · norm_num
   · -- 1/φ^120 < 1/φ^37
     apply div_lt_div_of_lt_left
     · norm_num
-    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_pos
+      rw [φ]
+      norm_num
     · apply pow_lt_pow_of_lt_right
-      · rw [φ]; norm_num
+      · rw [φ]
+        have h : sqrt 5 > 0 := sqrt_pos.mpr (by norm_num : (0 : ℝ) < 5)
+        linarith
       · norm_num
 
 -- All four forces unified by φ-ladder
@@ -220,13 +233,7 @@ theorem force_unification :
     -- Gravity at highest rung
     n_g = 120 := by
   use 3, 37, 5, 120
-  constructor
-  · norm_num  -- 3 < 10
-  constructor
-  · norm_num  -- 37 < 50
-  constructor
-  · rfl       -- 5 = 5
-  · rfl       -- 120 = 120
+  exact ⟨by norm_num, by norm_num, rfl, rfl⟩
 
 #check gravitational_constant_prediction
 #check hierarchy_solution

@@ -36,11 +36,11 @@ theorem tick_scale_constraint :
   ∃ (τ : ℝ), t_Planck < τ ∧ τ < 1e-12 := by
   use 7.33e-15
   constructor
-  · -- 5.39e-44 < 7.33e-15 is clearly true since 44 > 15 in exponent
+  · -- 5.39e-44 < 7.33e-15 is clearly true
     rw [t_Planck]
     norm_num
-  · norm_num
-    -- 7.33e-15 < 1e-12 is true since 15 > 12 in exponent
+  · -- 7.33e-15 < 1e-12 is true since -15 < -12
+    norm_num
 
 /-!
 ## Eight-Beat Constraint
