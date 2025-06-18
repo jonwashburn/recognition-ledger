@@ -61,7 +61,7 @@ theorem eight_beat_cycle : ∃ (n : ℕ), n = 8 ∧
     -- The eight-beat emerges from 2³ = 8 fundamental symmetries
     -- This is a modeling choice, not a provable theorem
     -- In the actual formalization, this would be an axiom or definition
-    sorry -- This requires axiomatizing the eight-beat structure
+    sorry -- Axiomatization: eight-beat structure from symmetry requirements
 
 -- T2: Golden ratio emergence
 theorem golden_ratio_emergence : φ = (1 + sqrt 5) / 2 := rfl
@@ -92,7 +92,7 @@ theorem recognition_hierarchy : ∀ (force_strength : ℝ),
   -- For now, we use n = 1 as placeholder
   use 1
   -- This doesn't actually prove the claim for arbitrary force_strength
-  sorry -- Requires density argument
+  sorry -- Theoretical: requires density argument for {1/φ^n} in coupling space
 
 -- T7: Cosmological scaling
 theorem cosmological_scaling : ∀ (cosmic_parameter : ℝ),
@@ -103,7 +103,7 @@ theorem cosmological_scaling : ∀ (cosmic_parameter : ℝ),
   use 0
   -- τ × φ^0 = τ
   -- This doesn't prove it for arbitrary cosmic_parameter
-  sorry -- Requires density argument
+  sorry -- Theoretical: requires density argument for {τ×φ^n} in scale space
 
 -- T8: Unification principle
 theorem unification_principle :
@@ -114,13 +114,13 @@ theorem unification_principle :
     use 5  -- φ^5 ≈ 11.09, so 1/φ^5 ≈ 0.090 ≠ 1/137
     -- Actually 137 ≈ φ^5 × 12.34, not pure φ power
     -- The exact relation involves residue structure
-    sorry -- Formula needs residue corrections
+    sorry -- Theoretical: α = 1/137 requires residue corrections beyond pure φ^n
   · -- Gravitational constant
     use 120  -- G = E_coh / φ^120 × additional factors
     -- With E_coh = 0.090 and φ^120 ≈ 8.3e36
     -- E_coh / φ^120 ≈ 1.1e-38, far from 6.67e-11
     -- The formula needs dimensional factors
-    sorry -- Formula needs correction
+    sorry -- Formula error: E_coh/φ^120 ≈ 1.1e-38 vs G = 6.67e-11; needs dimensional correction
 
 /-!
 ## ALL PARTICLE MASSES (Complete Spectrum)
@@ -254,22 +254,22 @@ theorem physics_is_mathematics :
     -- All particle masses fall on the φ-ladder
     -- We've shown specific examples (electron, muon, tau, etc.)
     -- The general proof would require showing the φ-ladder is dense enough
-    sorry -- Requires density argument for φ-ladder
+    sorry -- Theoretical: requires proving φ-ladder density covers all physical masses
   constructor
   · -- Every coupling is approximately 1/φ^m
     intro coupling hcoupling
     -- All force couplings are on the φ-ladder
     -- We've shown: strong (m=3), EM (m≈5), weak (m=37), gravity (m=120)
-    sorry -- Requires showing φ-ladder covers all couplings
+    sorry -- Theoretical: requires proving {1/φ^m} density covers all coupling constants
   constructor
   · -- Every time scale is approximately τ × φ^k
     intro time_scale htime
     -- All physical time scales relate to fundamental tick
-    sorry -- Requires showing τ × φ^k covers all time scales
+    sorry -- Theoretical: requires proving {τ×φ^k} density covers all time scales
   · -- Every energy scale is approximately E_coh × φ^j
     intro energy_scale henergy
     -- All energy scales relate to coherence quantum
-    sorry -- Requires showing E_coh × φ^j covers all energy scales
+    sorry -- Theoretical: requires proving {E_coh×φ^j} density covers all energy scales
 
 /-!
 ## THE ULTIMATE THEOREM: No Free Parameters
@@ -294,7 +294,7 @@ theorem no_free_parameters :
   · -- Every physical constant is φ^a × E_coh^b × τ^c
     intro physical_constant
     -- This is the ultimate claim: ALL of physics from three quantities
-    sorry
+    sorry -- Ultimate theoretical claim: all physics expressible as φ^a × E_coh^b × τ^c
 
 /-!
 ## VERIFICATION: Experimental Agreement
@@ -311,12 +311,12 @@ theorem experimental_agreement :
   · -- Electron mass
     rw [m_electron, E_coh]
     -- 0.090 × φ^32 / 1000 ≈ 0.090 × 5677000 / 1000 ≈ 0.511
-    sorry -- Requires φ^32 computation
+    sorry -- Computational: φ^32 ≈ 5.677e6 gives m_e ≈ 0.511 MeV
   constructor
   · -- Muon mass
     rw [m_muon, E_coh]
     -- 0.090 × φ^37 / 1000 ≈ 0.090 × 117000000 / 1000 ≈ 105.3
-    sorry -- Requires φ^37 computation
+    sorry -- Computational: φ^37 ≈ 1.17e8 gives m_μ ≈ 105.3 MeV
   constructor
   · -- Fine structure constant
     rw [α_em]
@@ -329,13 +329,13 @@ theorem experimental_agreement :
     -- 1/(8 × 7.33e-15 × φ^96) × 3.086e22/1000
     -- φ^96 ≈ 2.88e29, so denominator ≈ 1.69e16
     -- Result ≈ 1.83e3 which is off from 67.66
-    sorry -- Formula needs verification
+    sorry -- Formula error: calculation gives H₀ ≈ 1830 vs observed 67.66; factor ~27 error
   · -- Universe age
     rw [t_universe, τ]
     -- 2/3 × 8 × 7.33e-15 × φ^96 / (year in seconds)
     -- ≈ 2/3 × 1.69e16 / 3.16e7 ≈ 3.57e8 years
     -- This is off from 13.8e9 years
-    sorry -- Formula needs correction
+    sorry -- Formula error: calculation gives age ≈ 357 Myr vs observed 13.8 Gyr; factor ~39 error
 
 /-!
 ## CONCLUSION: The Recognition Ledger is Complete
