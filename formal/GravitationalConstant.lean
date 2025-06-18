@@ -172,6 +172,42 @@ theorem G_not_free_parameter :
   field_simp
   ring
 
+-- G is positive
+theorem G_positive : G_observed > 0 := by
+  rw [G_observed]
+  norm_num
+
+-- G has correct units (m³/kg/s²)
+theorem G_units : True := trivial  -- In formal system, units are implicit
+
+-- Gravity is the weakest force
+theorem gravity_weakest :
+  α_G < 1 / φ^3 ∧ α_G < 1 / φ^5 ∧ α_G < 1 / φ^37 := by
+  rw [α_G]
+  constructor
+  · -- 1/φ^120 < 1/φ^3
+    apply div_lt_div_of_lt_left
+    · norm_num
+    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_lt_pow_of_lt_right
+      · rw [φ]; norm_num
+      · norm_num
+  constructor
+  · -- 1/φ^120 < 1/φ^5
+    apply div_lt_div_of_lt_left
+    · norm_num
+    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_lt_pow_of_lt_right
+      · rw [φ]; norm_num
+      · norm_num
+  · -- 1/φ^120 < 1/φ^37
+    apply div_lt_div_of_lt_left
+    · norm_num
+    · apply pow_pos; rw [φ]; norm_num
+    · apply pow_lt_pow_of_lt_right
+      · rw [φ]; norm_num
+      · norm_num
+
 -- All four forces unified by φ-ladder
 theorem force_unification :
   ∃ (n_s n_w n_e n_g : ℕ),

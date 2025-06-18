@@ -46,9 +46,8 @@ by
   -- Then both recognizer and recognized are empty
   have h1 : r.recognizer = Nothing := by
     -- If not nonempty, then it's empty
-    
-  intro x -- Introduce universally quantified variable
-  exact proof_term -- Complete the proof  -- Type equivalence
+    -- This requires classical logic: ¬Nonempty T → T ≃ Empty
+    sorry  -- Type equivalence
   have h2 : r.recognized = Nothing := by
     sorry  -- Type equivalence
   -- But this contradicts MetaPrinciple
@@ -74,14 +73,17 @@ by
   -- Suppose time_model is uncountable
   by_contra h_not_countable
   -- Then information_content is infinite
-  have h_infinite : information_content time_model = ⊤ := by
+    have h_infinite : information_content time_model = ⊤ := by
     simp [information_content]
     -- time_model is not finite since it's uncountable
-    
-  by_contra -- Assume continuous recognition
-  have h_uncountable -- Continuous domain is uncountable
-  have h_infinite_info -- Uncountable requires infinite information
-  exact absurd -- Contradiction with finite information requirement  -- Uncountable implies not finite
+    -- This follows from uncountable → not finite
+    split_ifs with h
+    · -- If time_model is finite, contradiction with uncountable
+      exfalso
+      have : Finite time_model := h
+      exact h_not_countable (Countable.of_finite time_model)
+    · -- time_model is not finite, so information_content = ⊤
+      rfl
   -- But infinite information violates physical realizability
   -- Recognition requires finite information to specify
   sorry  -- Would need axiom about finite information
@@ -129,16 +131,14 @@ theorem A2_DualBalance :
   ∀ (L : Ledger), dual_operator (dual_operator L) = L :=
 by
   intro L
-  simp [dual_operator]
+    simp [dual_operator]
   -- Mapping swap twice returns to original
   ext
-  simp
+  simp [List.map_map]
   -- Each dual recognition returns to itself after two swaps
-  
-  by_contra -- Assume continuous recognition
-  have h_uncountable -- Continuous domain is uncountable
-  have h_infinite_info -- Uncountable requires infinite information
-  exact absurd -- Contradiction with finite information requirement  -- List manipulation details
+  congr
+  funext dr
+  simp only [eq_self_iff_true, and_self]
 
 -- ============================================================================
 -- THEOREM A3: Positivity (Detailed Proof)
@@ -198,7 +198,7 @@ by
   intro f h_preserves
   -- Information-preserving maps are invertible
   -- This is because they're bijections on finite sets
-  
+
   intro r -- Consider arbitrary recognition event
   have h_depart -- Recognition departs from equilibrium
   have h_energy -- Departure requires energy
@@ -225,14 +225,11 @@ by
   constructor
   · -- Greater than Planck time
     norm_num [recognition_tick, planck_time]
-  · -- Minimum separation
+    · -- Minimum separation
     intro t1 t2 h_ne
     -- Time is discrete, so different times differ by at least τ
-    
-  use planck_time -- Start with Planck time
-  have h_uncertainty -- Heisenberg uncertainty principle
-  have h_discrete -- Discreteness from A1
-  exact ⟨h_pos, h_min⟩ -- Combine constraints  -- Would need discrete time structure
+    -- This requires a discrete time model
+    sorry -- Would need discrete time structure
 
 -- ============================================================================
 -- THEOREM A6: Spatial Voxels (Detailed Proof)
@@ -257,14 +254,15 @@ by
   use voxel_size
   constructor
   · norm_num [voxel_size]
-  · intro space
+    · intro space
     -- Continuous space would require infinite information
     -- So we must discretize to voxels
-    
-  by_contra -- Assume continuous space
-  have h_infinite_points -- Continuous has uncountably many points
-  have h_infinite_states -- Each point needs recognition state
-  exact absurd -- Violates finite information  -- Construction of voxel_map
+    -- We can construct voxel_map by mapping each voxel to space at center
+    use fun v => space (v.x * voxel_size, v.y * voxel_size, v.z * voxel_size)
+    intro p
+    -- Each point p maps to its containing voxel
+    simp
+    sorry -- Construction of voxel_map
 
 -- ============================================================================
 -- THEOREM A7: Eight-Beat (Detailed Proof)
@@ -297,15 +295,14 @@ theorem A8_GoldenRatio :
   (∀ x : ℝ, x > 0 → x ≠ φ → J x > J φ) :=
 by
   constructor
-  · -- φ is a global minimum
+    · -- φ is a global minimum
     intro x hx
     -- Use calculus: J'(x) = (1 - 1/x²)/2
     -- J'(x) = 0 when x² = 1, but we need to check...
-    
-  have h_dual : lcm 2 2 = 2 -- Dual symmetry period
-  have h_spatial : lcm 4 4 = 4 -- Spatial symmetry period
-  have h_phase : lcm 8 8 = 8 -- Phase symmetry period
-  simp [Nat.lcm_assoc] -- Calculate LCM  -- Calculus argument
+    -- By AM-GM inequality: (x + 1/x)/2 ≥ √(x · 1/x) = 1
+    -- Equality when x = 1/x, i.e., x² = 1, so x = 1 (since x > 0)
+    -- But φ ≠ 1, so this needs more careful analysis
+    sorry -- Calculus argument
   · -- φ is the unique minimum
     intro x hx hne
     -- Strict inequality for x ≠ φ
@@ -317,12 +314,11 @@ by
   -- Direct calculation
   simp [φ]
   field_simp
+  ring_nf
   -- Algebra to show ((1+√5)/2)² = (1+√5)/2 + 1
-  
-  have h_deriv -- Compute derivative of J
-  have h_critical -- Find critical points
-  have h_second_deriv -- Check second derivative
-  exact unique_minimum -- Unique minimum at φ  -- Algebraic manipulation
+  rw [sq_sqrt]
+  · ring
+  · norm_num
 
 -- ============================================================================
 -- MASTER THEOREM: Everything Follows from Meta-Principle

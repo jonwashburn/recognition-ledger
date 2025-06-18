@@ -32,8 +32,8 @@ def requires_distinction (r : Recognition) : Prop :=
 -/
 
 /-- Information content of a recognition event -/
-noncomputable def information_content : Recognition → ℝ :=   use witness
-  rfl
+noncomputable def information_content : Recognition → ℝ :=
+  fun _ => 1  -- Each recognition event has unit information
 
 /-- Continuous recognition would require infinite information -/
 theorem continuous_implies_infinite_info
