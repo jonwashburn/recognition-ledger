@@ -269,7 +269,12 @@ theorem A7_EightBeat :
   Nat.lcm dual_period (Nat.lcm spatial_period phase_period) = 8 :=
 by
   -- Calculate LCM(2, LCM(4, 8)) = LCM(2, 8) = 8
-  simp [dual_period, spatial_period, phase_period]
+  rw [dual_period, spatial_period, phase_period]
+  -- LCM(2, LCM(4, 8))
+  -- First compute LCM(4, 8) = 8
+  have h1 : Nat.lcm 4 8 = 8 := by norm_num
+  rw [h1]
+  -- Now compute LCM(2, 8) = 8
   norm_num
 
 -- ============================================================================
@@ -301,17 +306,12 @@ by
 theorem golden_ratio_equation : φ^2 = φ + 1 :=
 by
   -- Direct calculation
-  simp [φ]
+  rw [φ]
   field_simp
-  -- Algebra to show ((1+√5)/2)² = (1+√5)/2 + 1
+  -- Need to show: (1 + √5)² = 2 * (1 + √5) + 4
+  -- Expand: (1 + √5)² = 1 + 2√5 + 5 = 6 + 2√5
+  -- And: 2(1 + √5) + 4 = 2 + 2√5 + 4 = 6 + 2√5
   ring_nf
-  -- Now we need to show: 6 + 2√5 = 4 + 4√5 after clearing denominators
-  -- Actually: (1+√5)²/4 = (1+√5)/2 + 1
-  -- (1 + 2√5 + 5)/4 = (1+√5)/2 + 1
-  -- (6 + 2√5)/4 = (1+√5)/2 + 1
-  -- (6 + 2√5)/4 = (1+√5)/2 + 2/2
-  -- (6 + 2√5)/4 = (3+√5)/2
-  -- (6 + 2√5)/4 = (6+2√5)/4 ✓
   rw [sq_sqrt]
   · ring
   · norm_num

@@ -56,30 +56,12 @@ theorem quark_mass_ratios :
   (m_c / m_s = φ^6) ∧
   (m_b / m_c = φ^7) ∧
   (m_t / m_b = φ^8) := by
-  constructor
-  · -- m_d/m_u = φ^26/φ^25 = φ
-    rw [m_d, m_u]
-    field_simp
-    ring
-  constructor
-  · -- m_s/m_d = φ^29/φ^26 = φ^3
-    rw [m_s, m_d]
-    field_simp
-    ring
-  constructor
-  · -- m_c/m_s = φ^35/φ^29 = φ^6
-    rw [m_c, m_s]
-    field_simp
-    ring
-  constructor
-  · -- m_b/m_c = φ^42/φ^35 = φ^7
-    rw [m_b, m_c]
-    field_simp
-    ring
-  · -- m_t/m_b = φ^50/φ^42 = φ^8
-    rw [m_t, m_b]
-    field_simp
-    ring
+  simp only [m_u, m_d, m_s, m_c, m_b, m_t]
+  simp only [div_eq_iff]
+  constructor <;> [ring, constructor] <;>
+  [ring, constructor] <;>
+  [ring, constructor] <;>
+  [ring, ring]
 
 /-!
 ## Hadron Masses from Confinement
@@ -224,7 +206,8 @@ theorem nuclear_parameters :
     -- φ^18 ≈ 2.438e4, so 0.090 × 2.438e4 / 1000 ≈ 2.19 MeV ≈ 2.2 MeV ✓
     sorry -- Requires φ^18 computation
   · -- Nuclear radius parameter ≈ 1.2 fm
-    rfl
+    rw [r_0]
+    norm_num
 
 -- Alpha decay lifetimes from φ scaling
 theorem alpha_decay_scaling :
