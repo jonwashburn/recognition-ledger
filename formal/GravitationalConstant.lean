@@ -70,7 +70,20 @@ theorem gravitational_constant_prediction :
     -- ≈ 2.36e-26 / 1.44e-20
     -- ≈ 1.64e-6 m³/kg/s²
     -- This is way off from 6.67e-11! Need to check formula.
-    sorry -- Formula verification needed
+    -- Calculated: ~1.64e-6 m³/kg/s² vs observed: 6.67e-11 m³/kg/s²
+    -- Off by factor of ~2.5e4 - formula has scale error
+    -- The dimensional formula may be missing factors or have wrong structure
+    -- Recognition Science derivation of G needs theoretical revision
+    have h_calc : G_predicted > 1e-7 := by
+      rw [G_predicted, α_G, c, τ, E_coh, eV, φ]
+      -- Based on calculation above, result ≈ 1.64e-6 > 1e-7
+      norm_num [pow_pos]
+    have h_obs : G_observed < 1e-10 := by
+      rw [G_observed]
+      norm_num
+    -- |G_predicted - G_observed| ≈ G_predicted ≈ 1.64e-6 >> 1e-13
+    -- The bound cannot be satisfied due to magnitude error
+    sorry -- Formula gives G ≈ 1.64e-6 vs observed 6.67e-11; magnitude error ~2.5e4
   · rfl
 
 /-!
@@ -102,7 +115,19 @@ theorem G_derivations_agree :
     --                = c³ × τ / (π × φ^120)
     -- Compare with G_predicted = (1/φ^120) × c³ × τ / (E_coh × eV)
     -- These differ by factor of π × E_coh × eV
-    sorry -- Need to verify the relationship
+    -- G_predicted / G_eightbeat = 1 / (π × E_coh × eV)
+    -- = 1 / (π × 0.090 × 1.602e-19) ≈ 1 / (4.52e-20) ≈ 2.2e19
+    -- So the two derivations differ by factor ~2e19 - they don't agree!
+    -- This indicates inconsistency in the theoretical framework
+    -- For Recognition Science to be viable, all derivations should agree
+    -- The discrepancy suggests need for theoretical refinement
+    have h_ratio : abs (G_predicted / G_eightbeat - 2.2e19) < 1e18 := by
+      -- Based on the calculation above
+      sorry -- Detailed ratio calculation: G_predicted/G_eightbeat ≈ 2.2e19
+    -- From the ratio, |G_predicted - G_eightbeat| ≈ 2.2e19 × G_eightbeat >> 1e-16
+    -- Since G_eightbeat ~ G_predicted / 2.2e19, we have G_eightbeat very small
+    -- Therefore |G_predicted - G_eightbeat| ≈ G_predicted ~ 1e-6 >> 1e-16
+    sorry -- Derivations differ by factor ~2e19; |G_predicted - G_eightbeat| ≈ 1e-6 >> 1e-16
   · norm_num
 
 /-!
@@ -174,7 +199,22 @@ theorem G_from_recognition :
   · -- G_predicted = 6.67430e-11
     -- As calculated above, the formula gives wrong value
     -- Need to verify the correct relationship
-    sorry -- Numerical verification shows formula needs correction
+    -- The formula gives G_predicted ≈ 1.64e-6 m³/kg/s²
+    -- But observed G = 6.67430e-11 m³/kg/s²
+    -- These differ by factor ~2.5e4
+    -- The Recognition Science formula needs correction to match observation
+    -- Either the fundamental constants need revision
+    -- or the dimensional relationship is incomplete
+    -- For the formalization, we acknowledge this as a theoretical challenge
+    exfalso
+    -- The claim G_predicted = 6.67430e-11 is false based on calculation
+    -- We computed G_predicted ≈ 1.64e-6, not 6.67e-11
+    -- This contradicts the statement
+    have h_calc : G_predicted ≠ 6.67430e-11 := by
+      -- From previous calculation: G_predicted ≈ 1.64e-6
+      -- But 1.64e-6 ≠ 6.67430e-11 (differ by factor ~2.5e4)
+      sorry -- Calculation shows G_predicted ≈ 1.64e-6 ≠ 6.67430e-11
+    exact h_calc rfl
   · use n_gravity - 5
     rfl
 
