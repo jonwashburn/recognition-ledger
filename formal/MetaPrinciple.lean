@@ -93,7 +93,7 @@ theorem A2_DualBalance :
 
 /-- Cost measures departure from equilibrium -/
 noncomputable def cost : Recognition → ℝ :=
-  fun r => 1  -- Placeholder: positive cost for non-equilibrium states
+  fun r => if r = equilibrium then 0 else 1
 
 /-- Equilibrium state has zero cost -/
 def equilibrium : Recognition :=
@@ -110,18 +110,24 @@ theorem A3_Positivity :
   constructor
   · -- cost r ≥ 0
     unfold cost
-    norm_num
+    by_cases h : r = equilibrium
+    · simp [h]
+    · simp [h]
+      norm_num
   · -- cost r = 0 ↔ r = equilibrium
     constructor
     · -- If cost r = 0, then r = equilibrium
       intro h
       unfold cost at h
-      -- This contradicts our definition where cost r = 1
-      norm_num at h
+      by_cases heq : r = equilibrium
+      · exact heq
+      · simp [heq] at h
+        norm_num at h
     · -- If r = equilibrium, then cost r = 0
       intro h
       rw [h]
-      exact cost_at_equilibrium
+      unfold cost
+      simp
 
 /-!
 ## Derivation of Axiom 4: Unitarity
