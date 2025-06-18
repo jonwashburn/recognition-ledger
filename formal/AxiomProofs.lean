@@ -64,7 +64,7 @@ theorem A1_DiscreteRecognition :
     have : ∀ (a b : Recognition), a = b := by
       intro a b
       -- Recognition = Unit has only one element
-      cases a; cases b; rfl
+      exact Subsingleton.elim a b
     -- Therefore seq is constant
     exact this _ _
 
@@ -81,29 +81,47 @@ axiom measure_conservation :
   ∀ (A B : Type) (measure : Type → ℝ),
   A ≠ B → measure A + measure B = 0
 
+-- Equilibrium state
+def equilibrium : LedgerState := (0, 0)
+
 theorem A2_DualBalance :
   ∃ (J : LedgerState → LedgerState),
   (∀ s, J (J s) = s) ∧  -- J² = identity
-  (∀ s, J s ≠ s) := by    -- J has no fixed points
+  (∀ s, s ≠ equilibrium → J s ≠ s) := by    -- J has no fixed points except equilibrium
   -- Define the dual involution
   use fun (d, c) => (c, d)  -- Swap debits and credits
   constructor
   · -- Prove J² = identity
     intro ⟨d, c⟩
     simp
-  · -- Prove J has no fixed points (except equilibrium)
-    intro ⟨d, c⟩
+  · -- Prove J has no fixed points except at equilibrium
+    intro ⟨d, c⟩ h_ne_eq
     simp
-    -- We need to show (c, d) ≠ (d, c)
-    -- This is true when d ≠ c
+    -- We need to show (c, d) ≠ (d, c) when (d, c) ≠ (0, 0)
     intro h_eq
-    -- h_eq : c = d ∧ d = c
-    -- This means d = c, which is the equilibrium state
-    -- But for non-equilibrium states, d ≠ c
-    -- So J has no fixed points except at equilibrium
     cases' h_eq with h1 h2
-    -- Can't prove this without assuming d ≠ c
-    sorry -- Requires constraint that we're not at equilibrium
+    -- h1 : c = d, h2 : d = c, so d = c
+    -- This means (d, c) = (d, d) for some d
+    -- But if (d, c) ≠ equilibrium = (0, 0), then either d ≠ 0 or c ≠ 0
+    -- If d = c and (d, c) ≠ (0, 0), then d = c ≠ 0
+    -- So we have (d, d) where d ≠ 0
+    -- But the constraint is that this shouldn't equal equilibrium (0, 0)
+    -- Actually, let's be more careful about what the constraint means
+    have h_d_eq_c : d = c := h2
+    -- If s ≠ equilibrium, then either d ≠ 0 or c ≠ 0
+    simp [equilibrium] at h_ne_eq
+    -- h_ne_eq : ¬(d = 0 ∧ c = 0), so d ≠ 0 ∨ c ≠ 0
+    cases' h_ne_eq with h_d h_c
+    · -- Case: d ≠ 0
+      -- But d = c, so c ≠ 0 as well
+      -- This means (d, c) = (d, d) where d ≠ 0
+      -- Such states are indeed fixed points of J
+      -- The statement might be too strong - some non-equilibrium states can be fixed points
+      -- Let me adjust: the constraint should be about generic states
+      sorry -- The constraint may be too restrictive
+    · -- Case: c ≠ 0
+      -- Similar analysis
+      sorry -- The constraint may be too restrictive
 
 /-!
 ## Proof of A3: Positivity of Cost
@@ -112,9 +130,6 @@ theorem A2_DualBalance :
 -- Cost functional
 noncomputable def cost : LedgerState → ℝ :=
   fun (d, c) => |d - c|  -- Simple distance from balance
-
--- Equilibrium state
-def equilibrium : LedgerState := (0, 0)
 
 theorem A3_PositiveCost :
   (∀ s, cost s ≥ 0) ∧
@@ -130,8 +145,7 @@ theorem A3_PositiveCost :
     constructor
     · intro h
       have : d - c = 0 := abs_eq_zero.mp h
-      simp at this
-      exact ⟨this, by simp⟩
+      exact ⟨by linarith, by linarith⟩
     · intro ⟨hd, hc⟩
       simp [hd, hc]
 
@@ -233,7 +247,7 @@ theorem golden_ratio_equation : φ^2 = φ + 1 := by
   -- We need: ((1 + √5)/2)² = (1 + √5)/2 + 1
   -- LHS = (1 + 2√5 + 5)/4 = (6 + 2√5)/4
   -- RHS = (1 + √5)/2 + 2/2 = (1 + √5 + 2)/2 = (3 + √5)/2 = (6 + 2√5)/4
-  rw [sq_sqrt]
+  rw [Real.sq_sqrt]
   · ring
   · norm_num
 
@@ -277,9 +291,21 @@ theorem all_axioms_necessary : MetaPrinciple →
   A7_EightBeat ∧
   A8_GoldenRatio := by
   intro h_meta
-  exact ⟨A1_DiscreteRecognition, A2_DualBalance, A3_PositiveCost,
-         A4_Unitarity, A5_MinimalTick, A6_SpatialVoxels,
-         A7_EightBeat, A8_GoldenRatio⟩
+  constructor
+  · exact A1_DiscreteRecognition
+  constructor
+  · exact A2_DualBalance
+  constructor
+  · exact A3_PositiveCost
+  constructor
+  · exact A4_Unitarity
+  constructor
+  · exact A5_MinimalTick
+  constructor
+  · exact A6_SpatialVoxels
+  constructor
+  · exact A7_EightBeat
+  · exact A8_GoldenRatio
 
 /-!
 ## Uniqueness: No Other Axioms Possible
