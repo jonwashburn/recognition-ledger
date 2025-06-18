@@ -111,9 +111,8 @@ theorem phi_gt_one : φ > 1 := by
   -- (1 + √5) / 2 > 1 iff 1 + √5 > 2 iff √5 > 1
   rw [div_gt_iff (two_pos), one_mul]
   -- Need to show 1 + √5 > 2, i.e., √5 > 1
+  -- Since 5 > 1, we have √5 > √1 = 1
   have h : sqrt 5 > 1 := by
-    -- √5 > 1 iff 5 > 1² = 1, which is true
-    rw [sqrt_pos]
     norm_num
   linarith
 

@@ -270,12 +270,12 @@ theorem A7_EightBeat :
 by
   -- Calculate LCM(2, LCM(4, 8)) = LCM(2, 8) = 8
   rw [dual_period, spatial_period, phase_period]
-  -- LCM(2, LCM(4, 8))
   -- First compute LCM(4, 8) = 8
   have h1 : Nat.lcm 4 8 = 8 := by norm_num
   rw [h1]
   -- Now compute LCM(2, 8) = 8
-  norm_num
+  have h2 : Nat.lcm 2 8 = 8 := by norm_num
+  exact h2
 
 -- ============================================================================
 -- THEOREM A8: Golden Ratio (Detailed Proof)

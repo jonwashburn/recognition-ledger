@@ -355,14 +355,13 @@ theorem universe_self_recognition : ¬¬ meta_principle := by
   -- The double negation of the meta-principle
   -- is the universe recognizing its own existence
   -- ¬¬(¬∃ nothing, nothing → nothing)
-  -- By classical logic, ¬¬P → P for decidable propositions
-  -- But here we want to show ¬¬ meta_principle
+  -- We need to show ¬¬ meta_principle, i.e., ¬¬(¬∃ nothing, nothing → nothing)
   intro h
   -- h : ¬ meta_principle
   -- meta_principle : ¬ ∃ (nothing : Type), nothing → nothing
   -- So h : ¬¬ ∃ (nothing : Type), nothing → nothing
-  -- This would mean there exists a type mapping to itself
-  -- But that's impossible for the empty type
+  -- This would mean there exists a type nothing with nothing → nothing
+  -- But meta_principle asserts this is impossible
   exact h meta_principle
 
 #check physics_is_mathematics

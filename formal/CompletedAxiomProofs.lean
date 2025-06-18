@@ -123,15 +123,14 @@ by
     intro r
     simp [recognitionCost]
   -- Sum of costs = length when each cost is 1
-  simp [List.sum_eq_length_iff_all_eq_one]
-  constructor
-  · intro r hr
-    exact h_cost r
-  · constructor
-    · intro r hr
-      exact h_cost r
-    · simp at h_debits
-      exact h_debits
+  have h1 : (L1.debits.map recognitionCost).sum = L1.debits.length := by
+    rw [List.sum_map_count_eq_length_filter]
+    simp [h_cost]
+  have h2 : (L2.debits.map recognitionCost).sum = L2.debits.length := by
+    rw [List.sum_map_count_eq_length_filter]
+    simp [h_cost]
+  rw [h1, h2]
+  exact Nat.cast_lt.mpr h_debits
 
 -- ============================================================================
 -- THEOREM A4: Unitarity (Information Conservation)
@@ -194,8 +193,7 @@ theorem DiscreteSpace :
 by
   intro v
   use v.x, v.y, v.z
-  cases v
-  simp
+  rfl
 
 theorem ContinuousSpaceImpossible :
   ¬(∃ (space : ℝ × ℝ × ℝ → RecognitionEvent),
@@ -231,9 +229,8 @@ by
   -- n = (n / 8) * 8 + n % 8
   -- So n % 8 = n - (n / 8) * 8
   have h := Nat.div_add_mod n eightBeat
-  rw [← h]
-  simp [eightBeat]
-  ring
+  simp [eightBeat] at h
+  linarith
 
 -- ============================================================================
 -- THEOREM A8: Golden Ratio Self-Similarity
@@ -265,7 +262,7 @@ by
   -- Need to show: ((1 + √5)/2)² = (1 + √5)/2 + 1
   -- Expanding: (1 + 2√5 + 5)/4 = (1 + √5)/2 + 1
   -- = (6 + 2√5)/4 = (1 + √5 + 2)/2 = (3 + √5)/2 = (6 + 2√5)/4 ✓
-  rw [sq_sqrt]
+  rw [Real.sq_sqrt]
   · ring
   · norm_num
 
@@ -302,6 +299,7 @@ by
   · exact DiscreteSpace
   constructor
   · use 8
+    rfl
   · exact GoldenRatioSelfSimilar
 
 end RecognitionScience
