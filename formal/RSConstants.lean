@@ -168,17 +168,47 @@ theorem c_pos : 0 < c := by norm_num [c]
 
 -- τ₀ is positive (will be proven once we have the full derivation)
 theorem τ₀_pos : 0 < τ₀ := by
-  sorry -- Requires showing λ_rec > 0 and log φ > 0
+  unfold τ₀ λ_rec
+  -- τ₀ = λ_rec / (8 * c * log φ)
+  -- We need to show λ_rec > 0 and 8 * c * log φ > 0
+  apply div_pos
+  · -- λ_rec > 0
+    apply sqrt_pos
+    apply div_pos
+    · apply mul_pos
+      · exact mul_pos (by norm_num : 0 < ℏ_obs) (by norm_num : 0 < G_obs)
+      · norm_num
+    · apply mul_pos
+      · norm_num
+      · apply pow_pos c_pos
+  · -- 8 * c * log φ > 0
+    apply mul_pos
+    · apply mul_pos
+      · norm_num
+      · exact c_pos
+    · -- log φ > 0 since φ > 1
+      apply log_pos
+      exact φ_gt_one
 
 -- Approximate values for verification
 theorem τ₀_approx : abs (τ₀ - 7.33e-15) < 1e-16 := by
-  sorry -- Numerical verification
+  -- This requires numerical computation of τ₀
+  -- τ₀ = λ_rec / (8 * c * log φ)
+  -- λ_rec = √(ℏG/(πc³))
+  -- With the values given, this should be approximately 7.33e-15 s
+  sorry -- Numerical verification requires computing λ_rec and log φ
 
 theorem ℏ_RS_approx : abs (ℏ_RS - ℏ_obs) < 1e-36 := by
-  sorry -- Should match observed value when properly derived
+  -- ℏ_RS = E_coh_SI * τ₀ / (2 * π)
+  -- For consistency, this should match ℏ_obs
+  -- But this requires the correct value of τ₀
+  sorry -- Requires numerical verification
 
 theorem G_RS_approx : abs (G_RS - G_obs) < 1e-13 := by
-  sorry -- Should match observed value when properly derived
+  -- G_RS = (8 * log φ)² / (E_coh_SI * τ₀²)
+  -- As noted in GravitationalConstant.lean, this formula gives wrong magnitude
+  -- The formula gives G ~ 10^50 instead of 10^-11
+  sorry -- Formula gives wrong order of magnitude
 
 -- Remove invalid φ_bounds theorem
 
