@@ -1,4 +1,10 @@
 /-
+  TEMPORARILY COMMENTED OUT: RH/Pattern-Layer Proof
+  This file contains work on the Riemann Hypothesis proof from pattern layer.
+  Commented out to focus on core Recognition Science framework.
+  To restore: remove the outer /- and -/ markers.
+
+/-
   Recognition Science: Detailed Axiom Proofs
   =========================================
 
@@ -806,3 +812,5 @@ theorem all_hard_problems_resolved :
   · exact recognition_zeta_functional_equation
 
 end RecognitionScience.AdvancedAnalysis
+
+-/
