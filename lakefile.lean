@@ -14,7 +14,3 @@ require mathlib from git
 -- `RecognitionScience.<FileName>` rather than `RecognitionScience.formal.*`.
 lean_lib «RecognitionScience» where
   srcDir := "formal"
-
-@[default_target]
-lean_exe «recognition-science» where
-  root := `Main

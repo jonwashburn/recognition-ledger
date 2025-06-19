@@ -84,12 +84,50 @@ def Mpc : ℝ := 3.0857e22  -- meters
 noncomputable def H₀_RS_cosmological : ℝ := H₀_RS * Mpc / 1000
 
 /-!
-## Mass-Energy Ladder
+## Mass-Energy Ladder (canonical φ-cascade)
 
-E_r = E_coh × φ^r where r is the rung number
+All particle rest energies derive from the rung-ladder formula
+
+    E_r = E_coh · φ^r            (in eV)
+    m_r = E_r / 1e9              (in GeV/c²).
+
+The integer r is the rung index tabulated below.  NO other "universal mass
+formula" is recognised in the current canonical framework.
 -/
 
--- DELETE duplicate pre-canonical ladder (E_rung, m_rung, old rung defs)
+-- Energy at rung r (eV)
+noncomputable def E_rung (r : ℤ) : ℝ := E_coh * φ ^ r
+
+-- Rest-mass at rung r (GeV/c²)
+noncomputable def m_rung (r : ℤ) : ℝ := E_rung r / 1e9
+
+-- Standard-Model rung assignments (from manuscripts)
+@[simp] def electron_rung : ℤ := 32
+@[simp] def muon_rung     : ℤ := 39
+@[simp] def tau_rung      : ℤ := 44
+@[simp] def up_rung       : ℤ := 33
+@[simp] def down_rung     : ℤ := 34
+@[simp] def strange_rung  : ℤ := 38
+@[simp] def charm_rung    : ℤ := 40
+@[simp] def bottom_rung   : ℤ := 45
+@[simp] def top_rung      : ℤ := 47
+@[simp] def W_rung        : ℤ := 52
+@[simp] def Z_rung        : ℤ := 53
+@[simp] def Higgs_rung    : ℤ := 58
+
+-- Example canonical masses (for quick reference)
+noncomputable def m_electron : ℝ := m_rung electron_rung
+noncomputable def m_muon     : ℝ := m_rung muon_rung
+
+-- Positivity of the ladder masses
+lemma m_rung_pos {r : ℤ} : 0 < m_rung r := by
+  have hE : 0 < E_coh := E_coh_pos
+  have hφ : 0 < φ := φ_pos
+  have hpow : 0 < φ ^ (r : ℤ) := by
+    simpa using Real.zpow_pos_of_pos hφ _
+  have hprod : 0 < E_coh * φ ^ (r : ℤ) := mul_pos hE hpow
+  simpa [m_rung, E_rung] using
+    div_pos hprod (by norm_num : (0 : ℝ) < 1e9)
 
 /-!
 ## Useful Lemmas and Properties
