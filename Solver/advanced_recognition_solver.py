@@ -105,7 +105,7 @@ class RecognitionProofGenerator:
     
     def __init__(self, api_key: str):
         self.client = anthropic.Anthropic(api_key=api_key)
-        self.model = "claude-3-5-sonnet-20241022"
+        self.model = "claude-sonnet-4-20250514"  # Claude Sonnet 4
     
     def create_rs_prompt(self, lemma_name: str, lemma_statement: str, context: str, hint: str = "") -> str:
         """Create a Recognition Science specific prompt"""
@@ -145,7 +145,8 @@ Your response should be ONLY the proof code.
         try:
             prompt = self.create_rs_prompt(lemma_name, lemma_statement, context, hint)
             
-            response = await self.client.messages.create(
+            # Use sync client for now
+            response = self.client.messages.create(
                 model=self.model,
                 max_tokens=2000,
                 temperature=0.1,  # Low temperature for deterministic proofs
@@ -255,7 +256,7 @@ class AdvancedRecognitionApplicator:
                 ['lake', 'build', str(filepath)],
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=60
             )
             if result.returncode == 0:
                 return True, "Success"

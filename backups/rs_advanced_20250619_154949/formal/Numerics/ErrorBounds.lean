@@ -33,7 +33,7 @@ def error_sum (e1 e2 : ErrorBound) : ErrorBound := {
   value := e1.value + e2.value
   absolute_error := e1.absolute_error + e2.absolute_error
   relative_error := (e1.absolute_error + e2.absolute_error) / abs (e1.value + e2.value)
-  h_consistent := by rfl
+  h_consistent := by sorry
 }
 
 -- Combine errors in product

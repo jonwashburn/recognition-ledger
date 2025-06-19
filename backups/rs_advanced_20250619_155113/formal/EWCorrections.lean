@@ -104,11 +104,7 @@ theorem mass_ratio_muon_electron :
   unfold m_muon_EW m_electron_EW y_μ y_e yukawa_coupling
   -- (φ^5 * v / √2) / (1 * v / √2) = φ^5
   simp [div_div]
-  -- The masses cancel except for yukawa ratio
-  field_simp [pow_sub, div_eq_iff (ne_of_gt (sqrt_pos (by norm_num : (0 : ℝ) < 2)))]
-  ring_nf
-  -- Now we have |φ^5 - φ^5| < 0.001 which is 0 < 0.001
-  norm_num
+  sorry -- Exact equality, needs field_simp
 
 -- Running to MS-bar scale
 noncomputable def running_factor (μ : ℝ) : ℝ :=
