@@ -352,44 +352,40 @@ theorem J_minimized_at_golden_ratio :
   -- The confusion in Recognition Science comes from mixing different optimization problems
   -- The correct statement is that φ minimizes some OTHER function, not J(x) = (x + 1/x)/2
   -- For the formal proof, I acknowledge this mathematical error
-  exfalso
-  -- The theorem statement is false because J has minimum at x = 1, not x = φ
-  -- Proof by contradiction: assume the theorem is true
-  -- Then J(φ) < J(1) since φ ≠ 1
-  -- But by calculus, J(1) = 1 is the global minimum of J
-  -- So J(φ) ≥ J(1) = 1
-  -- Computing J(φ): since φ² = φ + 1, we have 1/φ = φ - 1
-  -- Therefore J(φ) = (φ + φ - 1)/2 = φ - 1/2
-  -- With φ = (1 + √5)/2 ≈ 1.618, we get J(φ) ≈ 1.118
-  -- So J(φ) ≈ 1.118 > 1 = J(1)
-  -- This contradicts the claim that φ minimizes J
-  have h_J_min_at_one : ∀ y > 0, J y ≥ J 1 := by
+
+  -- Actually correct theorem: J has minimum at x = 1
+  have h_J_min : ∀ y > 0, J y ≥ J 1 := by
     intro y hy
-    -- By AM-GM inequality: (y + 1/y)/2 ≥ √(y · 1/y) = 1
-    -- with equality iff y = 1/y iff y = 1
     rw [J]
     have h_amgm : (y + 1/y) / 2 ≥ 1 := by
       have h_sum : y + 1/y ≥ 2 := by
-        -- AM-GM: (a + b)/2 ≥ √(ab), so a + b ≥ 2√(ab)
-        -- With a = y, b = 1/y: y + 1/y ≥ 2√(y · 1/y) = 2
-        have h_pos : y > 0 := hy
-        have h_pos_inv : 1/y > 0 := by positivity
-        exact add_div_two_le_iff.mp (geom_mean_le_arith_mean2_weighted h_pos h_pos_inv)
+        -- AM-GM: y + 1/y ≥ 2√(y · 1/y) = 2
+        have h_prod : sqrt (y * (1/y)) = 1 := by
+          rw [mul_div_cancel' (ne_of_gt hy)]
+          exact sqrt_one
+        have h_amgm_basic : y + 1/y ≥ 2 * sqrt (y * (1/y)) := by
+          exact two_mul_le_add_sq y (1/y)
+        rw [h_prod] at h_amgm_basic
+        ring_nf at h_amgm_basic
+        exact h_amgm_basic
       linarith
+    rw [J] at h_J_min
+    simp at h_J_min
     exact h_amgm
+
+  -- J(1) = 1
+  have h_J_one : J 1 = 1 := by simp [J]
+
+  -- Since φ ≠ 1 and J has unique minimum at x = 1
   have h_phi_ne_one : φ ≠ 1 := by
     rw [φ]
     norm_num
-  have h_J_phi_ge_J_one : J φ ≥ J 1 := h_J_min_at_one φ (by rw [φ]; norm_num)
-  have h_J_one : J 1 = 1 := by simp [J]
-  -- The theorem claims J φ < J x for all x ≠ φ
-  -- In particular, taking x = 1 ≠ φ, we should have J φ < J 1
-  -- But we just proved J φ ≥ J 1, contradiction
-  have h_claim : J φ < J 1 := by
-    -- This follows from the theorem statement with x = 1
-    exact this 1 (by norm_num) h_phi_ne_one.symm
-  -- Contradiction: J φ ≥ J 1 and J φ < J 1
-  exact not_lt.mpr h_J_phi_ge_J_one h_claim
+
+  -- The theorem asks us to prove J x > J φ for all x ≠ φ
+  -- This is false since J 1 < J φ
+  -- We accept this as a known error in Recognition Science
+  -- The actual minimum of J is at x = 1, not at x = φ
+  sorry -- Acknowledged: J has minimum at x=1, not φ; the theorem statement is false
 
 theorem A8_GoldenRatio_Corrected :
   ∃! (x : ℝ), x > 0 ∧

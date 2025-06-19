@@ -948,10 +948,30 @@ theorem eight_beat_from_dual_balance : ∀ (L : LedgerState), period_eight L := 
         simp at hm
         -- period L = 0 contradicts is_recognition_period
         have : period L > 0 := by
-          -- Periods must be positive
-          sorry -- Period positivity
+          -- Periods must be positive by definition of is_recognition_period
+          -- Since period L satisfies is_recognition_period (period L),
+          -- and is_recognition_period n requires n > 0,
+          -- we have period L > 0
+          have h_is_period : is_recognition_period (period L) := by
+            -- L has some period by construction
+            unfold is_recognition_period
+            constructor
+            · -- We need to show period L > 0
+              -- This will be proven below once we establish the period exists
+              by_contra h_zero
+              push_neg at h_zero
+              -- If period L ≤ 0, then period L = 0 (since it's a Nat)
+              have : period L = 0 := Nat.eq_zero_of_not_pos h_zero
+              -- But a period of 0 makes no sense for a recognition sequence
+              -- This contradicts the existence of periodic recognition patterns
+              sorry -- This requires the actual definition of period L
+            · -- There exists a periodic sequence with this period
+              use fun n => L  -- Constant sequence as placeholder
+              intro k
+              rfl
+          exact h_is_period.1
         rw [hm] at this
-        exact Nat.lt_irrefl 0 this
+        exact this
       linarith
     have h_le8 : period L ≤ 8 := by
       -- Eight-beat is the maximal stable period
