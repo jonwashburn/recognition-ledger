@@ -33,7 +33,14 @@ noncomputable def f_occupancy : ℝ := 3.3e-122
 -- Verify relationship: λ_eff = λ_rec × f^(-1/4)
 lemma effective_length_relation :
   abs (λ_eff.value - λ_rec.value * f_occupancy^(-1/4 : ℝ)) / λ_eff.value < 0.1 := by
-  sorry -- Computational verification
+  -- λ_eff = 60e-6, λ_rec = 7.23e-36, f = 3.3e-122
+  -- f^(-1/4) = (3.3e-122)^(-0.25) = (3.3)^(-0.25) * (10^(-122))^(-0.25)
+  --         = 0.785 * 10^30.5 ≈ 2.48e30
+  -- λ_rec * f^(-1/4) = 7.23e-36 * 2.48e30 = 1.79e-5
+  -- But λ_eff = 60e-6 = 6e-5, so ratio = 1.79e-5 / 6e-5 ≈ 0.3
+  -- Error = |1 - 0.3| = 0.7, which is > 0.1
+  -- The formula has a large discrepancy
+  sorry -- The given values don't satisfy the relation within 10%
 
 /-!
 ## Derived Fundamental Constants
@@ -46,7 +53,14 @@ noncomputable def τ₀ : Quantity :=
 
 -- Verify dimension
 lemma tau_dimension : τ₀.dim = Dimension.time := by
-  sorry -- Dimensional analysis
+  -- τ₀ = (1/(8 log φ)) * λ_rec / c
+  -- dim(τ₀) = dim(1/(8 log φ)) * dim(λ_rec) / dim(c)
+  --         = dimensionless * length / velocity
+  --         = dimensionless * length / (length/time)
+  --         = time
+  unfold τ₀
+  simp [Quantity.mul, Quantity.div, Dimension.mul, Dimension.div]
+  rfl
 
 -- Lock-in coefficient
 noncomputable def χ : ℝ := φ / π
@@ -102,7 +116,16 @@ noncomputable def dark_energy_corrected : Quantity :=
 -- Verify correct dimension (length^-2)
 lemma dark_energy_dimension_check :
   dark_energy_corrected.dim = Dimension.pow Dimension.length (-2) := by
-  sorry -- Dimensional verification
+  -- dark_energy = 8π * G/c^4 * (E_coh/φ^120)^4
+  -- dim(G) = M^(-1) L^3 T^(-2)
+  -- dim(c^4) = (LT^(-1))^4 = L^4 T^(-4)
+  -- dim(G/c^4) = M^(-1) L^3 T^(-2) / (L^4 T^(-4)) = M^(-1) L^(-1) T^2
+  -- dim(E_coh^4) = (ML^2T^(-2))^4 = M^4 L^8 T^(-8)
+  -- dim(φ^120) = dimensionless
+  -- dim(total) = M^(-1) L^(-1) T^2 * M^4 L^8 T^(-8) / 1
+  --            = M^3 L^7 T^(-6)
+  -- This doesn't equal L^(-2)! The formula has dimensional issues
+  sorry -- The dark energy formula has dimensional inconsistency
 
 -- Hubble parameter with correct factors
 noncomputable def hubble_corrected : Quantity :=
@@ -133,7 +156,18 @@ noncomputable def α_s (Q : Quantity) : ℝ :=
 -- Verify α_s approaches Recognition Science prediction at high energy
 theorem strong_coupling_asymptotic :
   ∃ Q_high : Quantity, α_s Q_high < 1 / φ^3 + 0.01 := by
-  sorry -- Requires RG analysis
+  -- 1/φ^3 ≈ 1/4.236 ≈ 0.236
+  -- At high energy, α_s → 0 due to asymptotic freedom
+  -- Choose Q = 1000 GeV
+  use ⟨1000e9 * eV.value, Dimension.energy⟩
+  unfold α_s
+  simp
+  -- α_s(1000 GeV) = 4π / (β₀ * log(1000/0.217))
+  -- β₀ = 11 - 2/3 * 6 = 11 - 4 = 7
+  -- log(1000/0.217) = log(4608) ≈ 8.44
+  -- α_s = 4π / (7 * 8.44) ≈ 12.57 / 59.08 ≈ 0.213
+  -- 0.213 < 0.236 + 0.01 = 0.246 ✓
+  sorry -- Requires numerical computation of logarithm
 
 /-!
 ## Scale Hierarchy Summary
@@ -261,6 +295,9 @@ theorem muon_dimensional_consistency :
     _ > 40 := by norm_num
   -- The theorem as stated is false for dimensional analysis
   -- Need proper EW corrections to get within factor of 2
-  sorry -- Dimensional analysis
+  -- The correct statement would require corrections:
+  -- abs ((m_μ_dimensional * ew_correction - m_μ_exp) / m_μ_exp) < 0.02
+  -- where ew_correction ≈ 0.022 accounts for the scale difference
+  sorry -- Pure dimensional formula gives wrong scale for muon
 
 end RecognitionScience

@@ -254,7 +254,19 @@ def hubble_parameter (τ : Quantity) : Quantity :=
 theorem electron_mass_ratio_correct :
   abs (mass_ratio_predicted 32 - 1) < 0.001 := by
   -- The electron is our calibration point, so ratio = 1 by definition
-  sorry -- Will implement after establishing scale anchor
+  -- mass_ratio_predicted 32 = φ^32 * qcd_correction 32 * rg_correction 32 1
+  -- For the electron (lepton), qcd_correction = 1
+  -- rg_correction = 1 at the calibration scale
+  -- So we need to show φ^32 ≈ 1, which is clearly false
+  -- The issue is that we're using the wrong normalization
+  -- The electron mass defines the scale, so by construction its ratio is 1
+  -- This means we need to normalize the φ-ladder at the electron rung
+  unfold mass_ratio_predicted mass_ratio_theory qcd_correction rg_correction
+  simp
+  -- The electron is at rung 32, but the formula gives φ^32 ≈ 5.7e6
+  -- This shows the formula needs a normalization factor
+  -- For the formal proof, we acknowledge this calibration requirement
+  sorry -- The formula needs proper normalization at electron scale
 
 /-!
 ## Example: Muon Mass with Dimensional Check
@@ -272,7 +284,19 @@ def muon_electron_ratio : ℝ := mass_ratio m_muon
 -- This is what we should compare to φ^39
 theorem muon_mass_ratio :
   abs (muon_electron_ratio - φ^39) < 0.01 := by
-  sorry -- Requires RG corrections
+  -- muon_electron_ratio = m_muon / m_e ≈ 206.8
+  -- φ^39 = φ^7 * φ^32 ≈ 29.03 * 5.7e6 ≈ 1.65e8
+  -- These don't match! The raw φ^39 is way too large
+  -- The issue is that we need φ^(39-32) = φ^7 ≈ 29.03
+  -- This is closer but still off by a factor of ~7
+  -- The discrepancy comes from QCD corrections and proper normalization
+  unfold muon_electron_ratio mass_ratio
+  rw [m_muon, m_e]
+  simp [Quantity.div]
+  -- muon/electron mass ratio ≈ 206.8
+  -- φ^7 ≈ 29.03, so we're off by factor ~7
+  -- This requires radiative corrections
+  sorry -- Requires QCD/QED corrections for accurate match
 
 /-!
 ## Dimensional Consistency Lemmas
@@ -333,13 +357,23 @@ theorem implement_scale_anchor :
       -- This follows from the φ-ladder structure of Recognition Science
       -- The exact n depends on the specific energy scale
       -- For the formal proof, we use the density of φ^n values
-      have h_exists : ∃ (n : ℤ), abs (E - E_coh * φ^n) < E / 100 := by
+      have h_exists : ∃ (n : ℤ), abs (E - E_coh.value * φ^n) < E / 100 := by
         -- The φ-ladder is dense enough to approximate any positive energy
         -- This is a consequence of φ > 1 and the irrationality of log φ
-        sorry -- Requires proving density of φ^n sequence
+        -- Specifically, the sequence {n log φ mod log(E/E_coh)} is equidistributed
+        -- by Weyl's equidistribution theorem, since log φ is irrational
+        -- Therefore, for any ε > 0, there exists n such that
+        -- |log(E/E_coh) - n log φ| < ε
+        -- Which gives |E - E_coh * φ^n| < E * (e^ε - 1) ≈ E * ε for small ε
+        -- Choosing ε = 1/100 gives the desired bound
+        sorry -- Requires Weyl equidistribution theorem
       cases' h_exists with n h_approx
       use n
-      exact h_approx
+      -- Need to show scale_consistent E (E_coh.value)
+      unfold scale_consistent
+      -- This should follow from h_approx, but scale_consistent is not defined
+      -- The theorem needs the definition of scale_consistent to proceed
+      sorry
 
 -- RG corrections implementation
 theorem implement_rg_corrections :
@@ -362,7 +396,14 @@ theorem implement_rg_corrections :
     -- This follows from the RG equation solution
     -- The coefficient 1/3 is schematic; actual value depends on the theory
     -- For Recognition Science, RG evolution preserves the φ-ladder structure
-    sorry -- Requires RG corrections
+    -- The RG equation is dg/d(log μ) = β(g)
+    -- For small changes in scale: g(μ₂) ≈ g(μ₁) + β(g(μ₁)) * log(μ₂/μ₁)
+    -- This is a Taylor expansion of the RG solution
+    -- The exact form depends on the specific β-function
+    unfold running_coupling
+    -- running_coupling is not defined in this file
+    -- The theorem statement is incomplete without this definition
+    sorry -- Requires definition of running_coupling
   exact h_rg
 
 end RecognitionScience
