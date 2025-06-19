@@ -51,12 +51,41 @@ noncomputable def muon_electron_ratio : ℝ := φ^(37 - 32)
 theorem muon_ratio_test :
   abs (muon_electron_ratio - φ^5) < 0.001 := by
   simp [muon_electron_ratio]
+  -- φ^(37-32) = φ^5, so muon_electron_ratio = φ^5
+  -- |φ^5 - φ^5| = 0 < 0.001
+  norm_num
 
 -- But observed ratio is 206.8, not φ^5 ≈ 11.09
 theorem muon_ratio_failure :
   abs (muon_electron_ratio - 206.8) > 190 := by
   -- φ^5 ≈ 11.09, so |11.09 - 206.8| ≈ 195.7 > 190
-  sorry -- Shows formula fails
+  simp [muon_electron_ratio]
+  -- Need to show |φ^5 - 206.8| > 190
+  -- φ^5 = 5φ + 3 from Fibonacci formula
+  have h_phi5 : φ^5 = 5 * φ + 3 := by
+    -- Using Fibonacci recurrence for φ^n
+    rw [pow_succ, pow_succ, pow_succ, pow_succ, pow_succ]
+    rw [φ]
+    field_simp
+    ring_nf
+    rw [sq_sqrt]; ring; norm_num
+  rw [h_phi5]
+  -- 5φ + 3 ≈ 5 × 1.618 + 3 = 8.09 + 3 = 11.09
+  -- |11.09 - 206.8| = 195.71 > 190
+  have h_phi_bound : φ > 1.6 ∧ φ < 1.62 := by
+    constructor
+    · rw [φ]; norm_num
+    · rw [φ]; norm_num
+  have h_lower : 5 * φ + 3 > 5 * 1.6 + 3 := by linarith [h_phi_bound.1]
+  have h_upper : 5 * φ + 3 < 5 * 1.62 + 3 := by linarith [h_phi_bound.2]
+  -- So 11 < 5φ + 3 < 11.1
+  have : 11 < 5 * φ + 3 ∧ 5 * φ + 3 < 11.1 := by linarith [h_lower, h_upper]
+  -- Therefore |5φ + 3 - 206.8| > 206.8 - 11.1 = 195.7 > 190
+  calc abs (5 * φ + 3 - 206.8)
+    = 206.8 - (5 * φ + 3) := by rw [abs_of_neg]; linarith [this.2]
+    _ > 206.8 - 11.1 := by linarith [this.2]
+    _ = 195.7 := by norm_num
+    _ > 190 := by norm_num
 
 /-!
 ## Test 2: Fine Structure Constant

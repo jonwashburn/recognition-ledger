@@ -111,7 +111,10 @@ theorem K_fixed_point_phi :
     -- This doesn't equal φ unless 2φ - 2 = φ, i.e., φ = 2
     -- Let me reconsider. K should be defined differently.
     -- Actually for the fixed point property, we need K(x) = 1 + 1/x
-    sorry -- K as defined doesn't have φ as fixed point
+    -- The theorem statement is wrong; K as defined doesn't have φ as fixed point
+    -- K(x) = x should give x - 1 + 1/x = x, which means 1/x = 1, so x = 1
+    -- This contradicts x > 1. The definition of K is incorrect.
+    sorry -- K as defined doesn't have φ as fixed point; need K(x) = 1 + 1/x
   · -- Show uniqueness
     intro x hx hKx
     -- K(x) = x means x - 1 + 1/x = x, so 1/x = 1, giving x = 1

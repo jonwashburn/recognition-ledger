@@ -94,7 +94,12 @@ theorem phi_critical_point_J_rec :
   -- naturally selects φ as the optimal balance point
   -- The exact form of the cost function emerges from the theory
   simp [J_rec]
-  sorry -- Recognition cost function has φ as critical point
+  -- J_rec is not the right function; φ is not a critical point of J_rec
+  -- The theorem statement is incorrect for this function
+  -- J_rec(x) = x + 1/x - 2 has minimum at x = 1, not x = φ
+  -- Let's verify: J_rec'(x) = 1 - 1/x² = 0 when x² = 1, so x = 1
+  -- Therefore, this theorem is false as stated
+  sorry -- J_rec has minimum at x=1, not x=φ; theorem statement is incorrect
 
 -- The correct statement: φ minimizes recognition cost
 theorem phi_minimizes_recognition_cost :

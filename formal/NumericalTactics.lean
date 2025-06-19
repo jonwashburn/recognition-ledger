@@ -369,7 +369,27 @@ lemma muon_mass_numerical :
   have h : abs (E_coh * φ^37 / 1000 - 105.7) > 100 := muon_mass_discrepancy
   -- Since |x| > 100, we know |x| < 200 is true for this specific case
   -- as φ^37 gives ~4.8 MeV, so |4.8 - 105.7| ≈ 101 < 200
-  sorry -- True but documents major theoretical issue
+  -- We can prove this directly:
+  rw [E_coh, phi_37_exact]
+  have h_phi : abs (φ - 1.618033988749895) < 1e-14 := phi_approx
+  have h_calc : 0.090 * (24157817 * 1.618033988749895 + 14930352) / 1000 < 5 := by norm_num
+  have h_val : 0.090 * (24157817 * φ + 14930352) / 1000 < 5 := by
+    calc 0.090 * (24157817 * φ + 14930352) / 1000
+      ≤ 0.090 * (24157817 * (1.618033988749895 + 1e-14) + 14930352) / 1000 := by
+        apply div_le_div_of_le_left; norm_num; norm_num
+        apply mul_le_mul_of_nonneg_left; norm_num
+        apply add_le_add_right
+        apply mul_le_mul_of_nonneg_left
+        linarith [phi_approx]
+        norm_num
+      _ < 5 := by norm_num
+  calc abs (0.090 * (24157817 * φ + 14930352) / 1000 - 105.7)
+    = 105.7 - 0.090 * (24157817 * φ + 14930352) / 1000 := by
+      rw [abs_sub_comm, abs_of_neg]
+      linarith [h_val]
+    _ < 105.7 - 0 := by linarith [h_val]
+    _ = 105.7 := by norm_num
+    _ < 200 := by norm_num
 
 /-!
 ## Force Coupling Verification
@@ -431,10 +451,6 @@ lemma alpha_s_numerical : abs (1 / φ^3 - 0.236) < 0.001 := by
     _ < (1/16) * 1e-13 + 0.000068 := by linarith [h_close]
     _ < 0.001 := by norm_num
 
-/-!
-## Master Verification Theorems
--/
-
 -- Tau mass with correct φ^40
 lemma tau_mass_discrepancy :
   abs (E_coh * φ^40 / 1000 - 1777) > 1000 := by
@@ -442,13 +458,59 @@ lemma tau_mass_discrepancy :
   -- 0.090 * (102334155 * φ + 63245986) / 1000
   -- ≈ 0.090 * 228826127 / 1000 ≈ 20.59 MeV
   -- |20.59 - 1777| = 1756.41 > 1000
-  sorry -- Computational verification of large discrepancy
+  have h_phi : abs (φ - 1.618033988749895) < 1e-14 := phi_approx
+  have h_calc : abs (0.090 * (102334155 * 1.618033988749895 + 63245986) / 1000 - 20.594) < 0.001 := by
+    norm_num
+  have h_val : abs (0.090 * (102334155 * φ + 63245986) / 1000 - 20.594) < 0.1 := by
+    calc abs (0.090 * (102334155 * φ + 63245986) / 1000 - 20.594)
+      ≤ abs (0.090 * (102334155 * φ + 63245986) / 1000 -
+             0.090 * (102334155 * 1.618033988749895 + 63245986) / 1000) +
+        abs (0.090 * (102334155 * 1.618033988749895 + 63245986) / 1000 - 20.594) := abs_sub_le _ _
+      _ = abs (0.090 * 102334155 * (φ - 1.618033988749895) / 1000) +
+          abs (0.090 * (102334155 * 1.618033988749895 + 63245986) / 1000 - 20.594) := by ring
+      _ < 0.090 * 102334155 * 1e-14 / 1000 + 0.001 := by
+        rw [abs_mul, abs_mul, abs_div]
+        simp only [abs_of_pos]
+        linarith [h_phi, h_calc]
+        all_goals norm_num
+      _ < 0.1 := by norm_num
+  -- Now show |20.594 - 1777| > 1000
+  calc abs (0.090 * (102334155 * φ + 63245986) / 1000 - 1777)
+    ≥ abs (20.594 - 1777) - abs (0.090 * (102334155 * φ + 63245986) / 1000 - 20.594) := by
+      rw [← abs_sub_abs_le_abs_sub]
+    _ > abs (20.594 - 1777) - 0.1 := by linarith [h_val]
+    _ = 1756.406 - 0.1 := by norm_num
+    _ > 1000 := by norm_num
 
 -- For compatibility with looser bound
 lemma tau_mass_numerical :
   abs (E_coh * φ^40 / 1000 - 1777) < 2000 := by
   -- True but documents massive error
-  sorry -- φ^40 gives ~20 MeV vs observed 1777 MeV
+  -- φ^40 gives ~20 MeV vs observed 1777 MeV
+  have h : abs (E_coh * φ^40 / 1000 - 1777) > 1000 := tau_mass_discrepancy
+  -- Since we know it's > 1000, we need to show it's < 2000
+  -- From above, |20.594 - 1777| = 1756.406 < 2000
+  rw [E_coh, phi_40_exact]
+  have h_phi : abs (φ - 1.618033988749895) < 1e-14 := phi_approx
+  have h_calc : abs (0.090 * (102334155 * 1.618033988749895 + 63245986) / 1000 - 20.594) < 0.001 := by
+    norm_num
+  have h_val : abs (0.090 * (102334155 * φ + 63245986) / 1000 - 20.594) < 0.1 := by
+    calc abs (0.090 * (102334155 * φ + 63245986) / 1000 - 20.594)
+      ≤ abs (0.090 * (102334155 * φ + 63245986) / 1000 -
+             0.090 * (102334155 * 1.618033988749895 + 63245986) / 1000) +
+        abs (0.090 * (102334155 * 1.618033988749895 + 63245986) / 1000 - 20.594) := abs_sub_le _ _
+      _ = abs (0.090 * 102334155 * (φ - 1.618033988749895) / 1000) +
+          abs (0.090 * (102334155 * 1.618033988749895 + 63245986) / 1000 - 20.594) := by ring
+      _ < 0.090 * 102334155 * 1e-14 / 1000 + 0.001 := by
+        rw [abs_mul, abs_mul, abs_div]
+        simp only [abs_of_pos]
+        linarith [h_phi, h_calc]
+        all_goals norm_num
+      _ < 0.1 := by norm_num
+  calc abs (0.090 * (102334155 * φ + 63245986) / 1000 - 1777)
+    ≤ abs (0.090 * (102334155 * φ + 63245986) / 1000 - 20.594) + abs (20.594 - 1777) := abs_sub_le _ _
+    _ < 0.1 + 1756.406 := by linarith [h_val]; norm_num
+    _ < 2000 := by norm_num
 
 theorem all_masses_verified :
   (abs (E_coh * φ^32 / 1000 - 0.511) < 0.001) ∧
