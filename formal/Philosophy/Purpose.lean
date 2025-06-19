@@ -109,7 +109,13 @@ def consciousness_level (r : ℝ) : ℝ :=
 theorem consciousness_alignment :
   ∀ (c : ℝ), c > 0 →
     contribution_to_universal (consciousness_level c) > contribution_to_universal c := by
-  sorry
+  intro c hc
+  unfold contribution_to_universal consciousness_level
+  apply div_pos
+  · apply mul_pos
+    · exact phi_gt_one
+    · assumption
+  · norm_num
 
 /-!
 ## Human Purpose

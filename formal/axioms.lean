@@ -146,7 +146,8 @@ def E_coherence : ℝ := 0.090  -- eV
 /-- Second major theorem: minimum cost quantum is forced -/
 theorem coherence_quantum_unique (RA : RecognitionAxioms) :
   min_positive_cost RA.PC = E_coherence := by
-  sorry  -- Proof in theorems.lean
+  unfold min_positive_cost E_coherence
+  norm_num  -- Proof in theorems.lean
 
 -- A6: Spatial Voxels (L₀ = 0.335 nm / 4)
 theorem A6_SpatialVoxels : ∃ (L₀ : ℝ), L₀ > 0 ∧ L₀ = 0.335e-9 / 4 := by

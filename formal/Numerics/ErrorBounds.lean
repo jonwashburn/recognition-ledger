@@ -125,7 +125,14 @@ theorem all_lepton_masses_correct :
   agrees_with_experiment electron_mass_bound 0.51099895 0.00000031 ∧
   agrees_with_experiment muon_mass_bound 105.6583755 0.0000023 ∧
   agrees_with_experiment tau_mass_bound 1776.86 0.12 := by
-  sorry
+  constructor
+  · unfold agrees_with_experiment electron_mass_bound
+    norm_num
+  constructor
+  · unfold agrees_with_experiment muon_mass_bound
+    norm_num
+  · unfold agrees_with_experiment tau_mass_bound
+    norm_num
 
 /-!
 ## Cosmological Parameter Bounds
@@ -198,7 +205,13 @@ theorem phi_ladder_convergence :
     let mass_n := E_coh * φ^n
     let mass_n1 := E_coh * φ^(n+1)
     mass_n1 / mass_n = φ := by
-  sorry
+  intro n hn
+  simp only
+  rw [mul_comm (E_coh * φ^n) φ, ← mul_assoc]
+  rw [pow_succ]
+  rw [mul_comm φ (φ^n), mul_assoc E_coh]
+  rw [mul_div_assoc]
+  simp
 
 -- Stability of predictions
 theorem prediction_stability :
