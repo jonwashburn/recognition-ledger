@@ -12,6 +12,8 @@ import RecognitionScience.Core.GoldenRatio
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Fin.Basic
 import Mathlib.Tactic.NormNum
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Data.Nat.Fibonacci
 
 namespace RecognitionScience.Numerics.PhiComputation
 
