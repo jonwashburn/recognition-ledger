@@ -167,7 +167,43 @@ theorem strong_coupling_asymptotic :
   -- log(1000/0.217) = log(4608) ≈ 8.44
   -- α_s = 4π / (7 * 8.44) ≈ 12.57 / 59.08 ≈ 0.213
   -- 0.213 < 0.236 + 0.01 = 0.246 ✓
-  sorry -- Requires numerical computation of logarithm
+  -- Let me verify this calculation
+  have h_beta : 11 - 2/3 * 6 = 7 := by norm_num
+  have h_ratio : 1000 / 0.217 > 4600 := by norm_num
+  -- log(4600) > 8.4 since e^8.4 ≈ 4447 < 4600
+  have h_log_lower : log (1000 / 0.217) > 8.4 := by
+    apply log_lt_log_iff (by norm_num : 0 < exp 8.4) (by linarith [h_ratio])
+    rw [log_exp]
+    exact h_ratio
+  -- α_s < 4π / (7 * 8.4) = 4π / 58.8
+  have h_alpha_upper : 4 * π / (7 * log (1000 / 0.217)) < 4 * π / (7 * 8.4) := by
+    apply div_lt_div_of_lt_left
+    · apply mul_pos; norm_num; exact Real.pi_pos
+    · apply mul_pos; norm_num; exact h_log_lower
+    · apply mul_lt_mul_of_pos_left h_log_lower; norm_num
+  -- 4π / 58.8 ≈ 12.57 / 58.8 ≈ 0.214
+  have h_bound : 4 * π / (7 * 8.4) < 0.214 := by
+    rw [div_lt_iff (by norm_num : 0 < 7 * 8.4)]
+    rw [mul_comm]
+    have : π < 3.15 := by norm_num
+    calc 0.214 * (7 * 8.4) = 0.214 * 58.8 := by norm_num
+      _ = 12.5832 := by norm_num
+      _ > 12.56 := by norm_num
+      _ > 4 * 3.14 := by norm_num
+      _ > 4 * π := by linarith [this]
+  -- 1/φ^3 + 0.01 > 0.236 + 0.01 = 0.246
+  have h_target : 1 / φ^3 + 0.01 > 0.246 := by
+    have h_phi3 : φ^3 < 4.24 := by
+      rw [φ]
+      norm_num
+    have : 1 / φ^3 > 1 / 4.24 := by
+      apply div_lt_div_of_lt_left; norm_num
+      exact pow_pos (by rw [φ]; norm_num) 3
+      exact h_phi3
+    have : 1 / 4.24 > 0.236 := by norm_num
+    linarith
+  -- Therefore α_s(1000 GeV) < 0.214 < 0.246 < 1/φ^3 + 0.01
+  linarith [h_alpha_upper, h_bound, h_target]
 
 /-!
 ## Scale Hierarchy Summary

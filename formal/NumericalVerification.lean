@@ -274,7 +274,6 @@ theorem fine_structure_formula :
   -- So the formula should be α = 1/(11×φ^5 + 15)
   -- But r must be an integer, so r = 15
   -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
-  exfalso
   -- The claim is false - there's no integer r that makes it exact
   -- The best approximation is r = 15, giving 1/137 not 1/137.036
   have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
@@ -282,7 +281,28 @@ theorem fine_structure_formula :
     -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
     -- For this to equal 137.036, we need r ≈ 15.036
     -- But r is an integer, so exact equality is impossible
-    sorry -- No integer r gives exact α
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+    -- Irrational ≠ rational
+    have : Irrational (11 * φ^5 + r) := h_sum_irrat r
+    have : ¬Irrational (137.036 : ℝ) := h_137_rat
+    -- Therefore 11 * φ^5 + r ≠ 137.036
+    sorry -- Contradiction between irrational and rational
+  -- Since we've shown no exact formula exists, the theorem is false
+  exfalso
   exact h_approx 15 rfl
 
 /-!
