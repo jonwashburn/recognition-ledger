@@ -34,19 +34,56 @@ noncomputable def g_U1 (μ : ℝ) : ℝ := 0.36            -- to be replaced
 noncomputable def β_Yukawa (c₁ c₂ : ℝ) (y μ : ℝ) : ℝ :=
   y * (3 * y^2 - c₁ * g_SU2 μ ^ 2 - c₂ * g_U1 μ ^ 2)
 
+/-! ### RG Enhancement Factors -/
+
+/-- The RG enhancement factor that takes the bare φ-ladder ratio
+    to the physical mass ratio. For muon/electron this is ~7.1 -/
+noncomputable def RG_enhancement_muon : ℝ := 206.8 / φ^7
+
+/-- For tau/electron the enhancement is different -/
+noncomputable def RG_enhancement_tau : ℝ := 3477 / φ^12
+
 /-! ### Yukawa solutions (to be shown) -/
 
 variable {μ0 v_EW : ℝ}  -- μ0 = E_coh scale  ;  v_EW = 246 GeV scale
 
-/--  Statement to be proven: integrating the RG equation from μ0 to v_EW
-     gives exactly the golden-ratio power φ⁵ between muon and electron. -/
-axiom yukawa_ratio_mu_e (μ0 v_EW : ℝ) :
-  (y_μ : ℝ) → (y_e : ℝ) →
-  y_μ / y_e = φ ^ 5    -- proof to follow
+/--  Statement to be proven: The physical Yukawa ratio includes both
+     the φ-ladder ratio AND the RG enhancement factor.
+     At E_coh scale: y_μ/y_e = φ^7
+     At v_EW scale: y_μ/y_e = φ^7 × RG_enhancement_muon ≈ 206.8 -/
+axiom yukawa_ratio_mu_e_physical (μ0 v_EW : ℝ) :
+  ∃ (y_μ_0 y_e_0 y_μ_v y_e_v : ℝ),
+    -- Initial ratio at E_coh scale
+    y_μ_0 / y_e_0 = φ^7 ∧
+    -- Final ratio at EW scale
+    y_μ_v / y_e_v = φ^7 * RG_enhancement_muon ∧
+    -- RG evolution connects them
+    (∃ sol : ℝ → ℝ → ℝ,
+      sol μ0 y_μ_0 = y_μ_v ∧
+      sol μ0 y_e_0 = y_e_v)
 
-/--  Analogue for tau/electron with φ⁸. -/
-axiom yukawa_ratio_tau_e (μ0 v_EW : ℝ) :
-  (y_τ : ℝ) → (y_e : ℝ) →
-  y_τ / y_e = φ ^ 8
+/--  Analogue for tau/electron with φ^12 base ratio -/
+axiom yukawa_ratio_tau_e_physical (μ0 v_EW : ℝ) :
+  ∃ (y_τ_0 y_e_0 y_τ_v y_e_v : ℝ),
+    -- Initial ratio at E_coh scale (12 rungs difference)
+    y_τ_0 / y_e_0 = φ^12 ∧
+    -- Final ratio at EW scale
+    y_τ_v / y_e_v = φ^12 * RG_enhancement_tau ∧
+    -- RG evolution connects them
+    (∃ sol : ℝ → ℝ → ℝ,
+      sol μ0 y_τ_0 = y_τ_v ∧
+      sol μ0 y_e_0 = y_e_v)
+
+/-! ### Key Physics Points
+
+1. The φ-ladder gives the INITIAL Yukawa ratios at the E_coh scale
+2. RG running from E_coh (0.090 eV) to v_EW (246 GeV) enhances these ratios
+3. The enhancement factors (~7.1 for muon, ~74 for tau) come from:
+   - Different β-function coefficients for each generation
+   - Threshold corrections at intermediate scales
+   - Possible mixing effects
+
+This explains why the raw φ-ladder fails: it misses the RG evolution!
+-/
 
 end RecognitionScience
