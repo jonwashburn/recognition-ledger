@@ -42,7 +42,16 @@ structure IndividualPurpose where
 theorem fundamental_purpose :
   ∀ (ip : IndividualPurpose),
     meaningful ip ↔ ip.contribution_to_universal > 0 := by
-  sorry
+  intro ip
+  constructor
+  · intro h_meaningful
+    -- Meaningful implies positive contribution
+    simp [meaningful] at h_meaningful
+    exact h_meaningful.2
+  · intro h_positive_contrib
+    -- Positive contribution implies meaningful
+    simp [meaningful]
+    exact ⟨ip.h_positive, h_positive_contrib⟩
 
 /-!
 ## Emergence of Meaning
@@ -56,7 +65,13 @@ noncomputable def meaning_measure (recognition : ℝ) : ℝ :=
 theorem meaning_increases :
   ∀ (r₁ r₂ : ℝ), 0 < r₁ → r₁ < r₂ →
     meaning_measure r₁ < meaning_measure r₂ := by
-  sorry
+  intro r₁ r₂ h₁_pos h₁_lt_r₂
+  simp [meaning_measure]
+  apply mul_lt_mul_of_pos_right
+  · apply log_lt_log
+    · linarith
+    · linarith
+  · simp [φ]; norm_num
 
 -- Shared recognition creates more meaning
 def shared_meaning (r₁ r₂ : ℝ) : ℝ :=

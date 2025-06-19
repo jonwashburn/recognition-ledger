@@ -141,7 +141,25 @@ theorem A1_DiscreteRecognition :
             -- r(k) = r(k + 1*(j-i)) = r(k + (j-i))
             -- This follows from the global periodicity of the sequence
             -- in a finite codomain
-            sorry  -- This requires a more detailed argument about finite sequences
+            -- For finite sequences, if all elements are identical,
+  -- then the sequence has period 1, not 8
+  -- But recognition requires distinguishability
+  by_contra h_all_same
+  have h_period_one : ∀ i : Fin 8, s i = s 0 := h_all_same
+  -- This makes the sequence constant, period = 1
+  -- But we need period = 8 for recognition structure
+  have h_trivial_period : sequence_period s = 1 := by
+    simp [sequence_period]
+    use 1
+    constructor
+    · norm_num
+    · intro i
+      exact h_period_one i
+  -- This contradicts the eight-beat requirement
+  have h_need_eight : sequence_period s = 8 := by
+    -- From eight-beat theorem
+    sorry -- Need eight-beat period requirement
+  linarith
           obtain ⟨m, hm⟩ := this
           by_cases hm1 : m = 1
           · rw [hm1] at hm; simp at hm; exact hm

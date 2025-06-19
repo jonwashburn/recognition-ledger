@@ -46,16 +46,21 @@ noncomputable def P (accumulated_cost : ℝ) : ℝ := exp accumulated_cost
 -- Golden ratio satisfies φ² = φ + 1
 theorem phi_equation : φ^2 = φ + 1 := by
   unfold φ
+  field_simp
   ring_nf
-  -- Numerical verification can be added here
-  sorry
+  rw [sq_sqrt (by norm_num : (0 : ℝ) ≤ 5)]
+  ring
 
 -- Cost functional is minimized at X = 1 (equilibrium)
 theorem J_minimized_at_unity : ∀ X > 0, J 1 ≤ J X := by
   intro X hX
   unfold J
   -- J(1) = 1, J(X) = (X + 1/X)/2 ≥ 1 by AM-GM inequality
-  sorry
+  simp only [one_div_one_div, add_div]
+  have h_amgm : 1 ≤ (X + X⁻¹) / 2 := by
+    rw [div_le_iff (by norm_num : (0 : ℝ) < 2)]
+    rw [one_mul]
+    exact two_mul_le (by linarith) (by linarith)
 
 -- Cost functional has dual symmetry J(X) = J(X⁻¹)
 theorem J_symmetric (X : ℝ) (hX : X ≠ 0) : J X = J (X⁻¹) := by
@@ -78,7 +83,9 @@ theorem E_coh_positive : E_coh > 0 := by norm_num
 theorem phi_gt_one : φ > 1 := by
   unfold φ
   -- (1 + √5)/2 > 1 ⟺ 1 + √5 > 2 ⟺ √5 > 1 ⟺ 5 > 1
-  sorry
+  rw [div_lt_iff (by norm_num : (0 : ℝ) < 2)]
+  rw [one_mul]
+  linarith [sqrt_lt_iff.mpr ⟨by norm_num, by norm_num⟩]
 
 -- Recognition pressure is always positive
 theorem P_positive (cost : ℝ) : P cost > 0 := exp_pos cost
