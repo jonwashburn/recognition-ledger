@@ -1,15 +1,18 @@
 import Lake
 open Lake DSL
 
-package «recognition-ledger» where
+package «RecognitionScience» where
   leanOptions := #[
     ⟨`autoImplicit, false⟩,
     ⟨`relaxedAutoImplicit, false⟩
   ]
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4" @ "v4.8.0"
+  "https://github.com/leanprover-community/mathlib4.git"
+
+lean_lib «RecognitionScience» where
+  globs := #[.submodules `formal]
 
 @[default_target]
-lean_lib «RecognitionScience» where
-  srcDir := "formal"
+lean_exe «recognition-science» where
+  root := `Main
