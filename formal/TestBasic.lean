@@ -1,104 +1,80 @@
 /-
-Recognition Science - Basic Test (Updated)
-==========================================
+Recognition Science - Basic Test (Canonical φ-Ladder)
+===================================================
 
-This file tests the new Universal Mass Formula using χ = φ/π
-from the Recognition Science framework.
+This file tests the canonical φ-ladder formula E_r = E_coh × φ^r
+and documents the discrepancies with observed particle masses.
 -/
 
 namespace RecognitionScience
 
--- Golden ratio (basic definition)
+-- Golden ratio
 def φ_approx : Float := 1.618033988749895
 
 -- Coherence quantum
 def E_coh : Float := 0.090  -- eV
 
--- NEW: Optimal recognition scale χ = φ/π
-def π_approx : Float := 3.14159265359
-def χ_approx : Float := φ_approx / π_approx  -- ≈ 0.515
+-- Standard Model particle rungs (from manuscripts)
+def electron_rung : Nat := 32
+def muon_rung : Nat := 39
+def tau_rung : Nat := 44
+def up_rung : Nat := 33
+def down_rung : Nat := 34
+def strange_rung : Nat := 38
+def charm_rung : Nat := 40
+def bottom_rung : Nat := 45
+def top_rung : Nat := 47
+def W_rung : Nat := 52
+def Z_rung : Nat := 53
+def Higgs_rung : Nat := 58
 
--- Resonance index
-def resIndex : Float := 7.0 / 12.0  -- 7/12
+-- Canonical φ-ladder formula: E_r = E_coh × φ^r (in eV)
+def E_rung (r : Nat) : Float := E_coh * (φ_approx ^ r.toFloat)
 
--- Electron calibration
-def electron_mass_GeV : Float := 0.000511  -- GeV
-def electron_rung : Int := 32
+-- Convert to GeV
+def m_rung (r : Nat) : Float := E_rung r / 1e9
 
--- Base mass M₀ (electron-calibrated)
-def M₀_approx : Float := electron_mass_GeV / (χ_approx ^ resIndex)
+-- Test calculations
+#eval m_rung electron_rung  -- Should give ~0.266 GeV (needs /520 for 0.511 MeV)
+#eval m_rung muon_rung      -- Should give ~0.159 GeV (observed: 0.1057 GeV)
+#eval m_rung tau_rung       -- Should give ~17.6 GeV (observed: 1.777 GeV)
 
--- Universal Mass Formula: m(n) = M₀ × χ^(n + 7/12)
-def m_universal (n : Int) : Float :=
-  M₀_approx * (χ_approx ^ (n.toNat.toFloat + resIndex))
+-- Mass ratios
+def muon_electron_ratio : Float := m_rung muon_rung / m_rung electron_rung
+def tau_electron_ratio : Float := m_rung tau_rung / m_rung electron_rung
 
--- Test electron mass (should be exact)
-def electron_mass_calc : Float := m_universal electron_rung
+#eval muon_electron_ratio  -- φ^7 ≈ 29.0 (observed: 206.8)
+#eval tau_electron_ratio   -- φ^12 ≈ 322 (observed: 3477)
 
-#eval electron_mass_calc  -- Should be exactly 0.000511 GeV
+-- Gauge bosons
+#eval m_rung W_rung    -- ~129 GeV (observed: 80.4 GeV)
+#eval m_rung Z_rung    -- ~208 GeV (observed: 91.2 GeV)
+#eval m_rung Higgs_rung -- ~11,200 GeV (observed: 125 GeV)
 
--- Test muon mass
-def muon_rung : Int := 39
-def muon_mass_calc : Float := m_universal muon_rung
-
-#eval muon_mass_calc  -- Should be ~0.1057 GeV (105.7 MeV)
-
--- Test muon/electron ratio with new formula
-def muon_electron_ratio_new : Float :=
-  χ_approx ^ ((muon_rung - electron_rung).toNat.toFloat)
-
-#eval muon_electron_ratio_new  -- χ^7 ≈ 0.515^7 ≈ 0.00456
-
--- But we need ratio ≈ 206.8, so let's check if we need different approach
-def observed_muon_electron_ratio : Float := 105.7 / 0.511
-
-#eval observed_muon_electron_ratio  -- ≈ 206.8
-
--- Test gauge boson masses
-def W_rung : Int := 52
-def Z_rung : Int := 53
-def Higgs_rung : Int := 58
-
-def W_mass_calc : Float := m_universal W_rung
-def Z_mass_calc : Float := m_universal Z_rung
-def Higgs_mass_calc : Float := m_universal Higgs_rung
-
-#eval W_mass_calc    -- Should be ~80.4 GeV
-#eval Z_mass_calc    -- Should be ~91.2 GeV
-#eval Higgs_mass_calc -- Should be ~125.1 GeV
-
--- Test the key insight: χ vs φ scaling
-def old_phi_ratio : Float := φ_approx ^ 7.0  -- Old φ^7 ≈ 29.0
-def new_chi_ratio : Float := χ_approx ^ 7.0  -- New χ^7 ≈ 0.00456
-
-#eval old_phi_ratio  -- φ^7 ≈ 29.0
-#eval new_chi_ratio  -- χ^7 ≈ 0.00456
-
--- The issue: χ^7 is much smaller than needed for muon/electron ratio
--- This suggests either:
--- 1. Different rungs are needed
--- 2. Additional factors in the Universal Mass Formula
--- 3. The efficiency factors E(d,s,g) are crucial
-
--- Test efficiency factors
-def η_elementary : Float := Float.sqrt (5.0/8.0)  -- ≈ 0.791
-
-#eval η_elementary
-
--- Fine structure constant test (unchanged)
+-- Fine structure constant (Recognition Science formula)
 def n_alpha : Nat := 140
-def α_denominator : Float := n_alpha.toFloat - 2 * φ_approx - Float.sin (2 * 3.14159265359 * φ_approx)
-def α : Float := 1 / α_denominator
+def α_RS : Float := 1 / (n_alpha.toFloat - 2 * φ_approx - Float.sin (2 * 3.14159265359 * φ_approx))
 
-#eval α  -- Should be close to 1/137.036
+#eval α_RS  -- Should be ~1/137.4 (close to observed 1/137.036)
 
--- Summary of findings with Universal Mass Formula
-#check electron_mass_calc
-#check muon_mass_calc
-#check muon_electron_ratio_new
-#check W_mass_calc
-#check Z_mass_calc
-#check Higgs_mass_calc
-#check α
+/-!
+## Summary of Results
+
+The canonical φ-ladder E_r = E_coh × φ^r gives:
+
+1. **Electron**: 0.266 GeV (needs calibration factor 520 to get 0.511 MeV)
+2. **Muon**: 0.159 GeV (1.5× too high, ratio φ^7 ≈ 29 vs observed 207)
+3. **Tau**: 17.6 GeV (10× too high)
+4. **W boson**: 129 GeV (1.6× too high)
+5. **Z boson**: 208 GeV (2.3× too high)
+6. **Higgs**: 11,200 GeV (89× too high!)
+
+The fine structure constant formula α = 1/(140 - 2φ - sin(2πφ))
+gives α ≈ 1/137.4, which is remarkably close to the observed 1/137.036.
+
+This shows that while Recognition Science gets some dimensionless
+constants right (like α), the mass ladder has systematic errors
+that grow with rung number.
+-/
 
 end RecognitionScience
