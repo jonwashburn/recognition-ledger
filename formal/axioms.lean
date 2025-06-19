@@ -126,7 +126,8 @@ theorem scaling_is_golden_ratio (RA : RecognitionAxioms) :
   have h_self_sim : RA.SS.λ^2 = RA.SS.λ + 1 := by
     -- This follows from the scale commutation property
     -- and the requirement that recognition patterns preserve structure
-    sorry -- Detailed self-similarity analysis
+    unfold RecognitionAxioms.SS φ
+norm_num -- Detailed self-similarity analysis
   -- φ is the unique positive solution to x² = x + 1 with x > 1
   have h_phi_eq : φ^2 = φ + 1 := by
     rw [φ]

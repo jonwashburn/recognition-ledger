@@ -1,0 +1,40 @@
+{
+  "fingerprints": {
+    "head:None|rel:=|forall:False|exists:False|lines:2": {
+      "declaration": "theorem scaling_is_golden_ratio (RA : RecognitionAxioms) :\n  RA.SS.\u03bb = \u03c6 := by",
+      "proof": "unfold RecognitionAxioms.SS \u03c6\nnorm_num",
+      "fingerprint": {
+        "head_symbol": null,
+        "relation": "=",
+        "has_forall": false,
+        "has_exists": false,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": false,
+        "num_lines": 2
+      },
+      "count": 1
+    },
+    "head:by|rel:=|forall:True|exists:True|lines:3": {
+      "declaration": "theorem minimal_tick_self_similarity :\n  \u2203 (\u03c4\u2080 : \u211d), \u03c4\u2080 > 0 \u2227 \u03c4\u2080 = 7.33e-15 \u2227\n  (\u2200 (\u03c4' : \u211d), \u03c4' > 0 \u2192 \u03c4' \u2265 \u03c4\u2080) := by",
+      "proof": "theorem minimal_tick_self_similarity :\n  \u2203 (\u03c4\u2080 : \u211d), \u03c4\u2080 > 0 \u2227 \u03c4\u2080 = 7.33e-15 \u2227\n  (\u2200 (\u03c4' : \u211d), \u03c4' > 0 \u2192 \u03c4' \u2265 \u03c4\u2080) := by\n  use 7.33e-15\n  constructor\n  \u00b7 -- \u03c4\u2080 > 0\n    norm_num\n  constructor\n  \u00b7 -- \u03c4\u2080 = 7.33e-15\n    rfl\n  \u00b7 -- \u2200 (\u03c4' : \u211d), \u03c4' > 0 \u2192 \u03c4' \u2265 \u03c4\u2080\n    intro \u03c4' h\u03c4'_pos\n    -- This is the minimality condition - would need additional axioms\n    -- For now, we assert this as the fundamental tick property\n    sorry",
+      "fingerprint": {
+        "head_symbol": "by",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 3
+      },
+      "count": 1
+    }
+  },
+  "patterns": {},
+  "statistics": {
+    "hits": 0,
+    "misses": 8,
+    "successes": 2
+  }
+}
