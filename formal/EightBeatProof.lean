@@ -157,7 +157,54 @@ theorem symmetries_force_eight_beat {α : Type*}
   ∃ (dynamics : EightBeatDynamics α),
   dynamics.dual_symmetric.1 = J := by
   -- Construct dynamics respecting all symmetries
-  sorry -- Construction details
+  -- The state evolution must respect period 8 = lcm(2,4,8)
+  cases Classical.arbitrary (Nonempty α) with
+  | intro a₀ =>
+    let state : ℕ → α := fun k =>
+      -- Cycle through 8 states determined by symmetries
+      match k % 8 with
+      | 0 => a₀
+      | 1 => J a₀  -- Dual after 1 step
+      | 2 => a₀    -- Back to original after 2 steps (dual period)
+      | 3 => J a₀  -- Dual again
+      | 4 => a₀    -- Spatial period 4 returns to start
+      | 5 => J a₀
+      | 6 => a₀
+      | _ => J a₀  -- k = 7, complete 8-cycle
+    use {
+      state := state
+      periodic := by
+        intro k
+        simp [state]
+        have : (k + 8) % 8 = k % 8 := by
+          rw [Nat.add_mod, Nat.mod_self]
+          simp
+        rw [this]
+      dual_symmetric := ⟨J, hJ, by
+        intro k
+        simp [state]
+        -- After 2 steps, dual symmetry is satisfied
+        have h_mod : (k + 2) % 8 = (k % 8 + 2) % 8 := by
+          rw [Nat.add_mod]
+        rw [h_mod]
+        -- Check each case of k % 8
+        interval_cases (k % 8) <;> simp [Function.comp_apply, hJ]⟩
+      spatial_structure := ⟨S, by
+        intro k
+        simp [state]
+        -- After 4 steps, spatial structure repeats
+        have h_mod : (k + 4) % 8 = (k % 8 + 4) % 8 := by
+          rw [Nat.add_mod]
+        rw [h_mod]
+        -- The spatial function S should be constant on dual pairs
+        interval_cases (k % 8) <;> simp⟩
+      phase_evolution := ⟨φ, by
+        intro k
+        simp [state]
+        -- Phase returns after full 8-cycle
+        rfl⟩
+    }
+    simp
 
 /-!
 ## Uniqueness: Why Not 4, 16, or Other Periods?
@@ -220,11 +267,14 @@ theorem period_four_insufficient :
       exact ⟨n, hn, rfl⟩
   obtain ⟨T, hT_card, hT_contains⟩ := h_eight_phases
   -- But hp_surj says all 8 phases appear in first 4 values of p
-  have h_subset : T ⊆ S := by
-    intro x hx
-    simp at hT_contains
-    obtain ⟨n, hn, rfl⟩ := hT_contains
-    sorry -- Details of showing phase_angle n ∈ S
+     have h_subset : T ⊆ S := by
+     intro x hx
+     simp at hT_contains
+     obtain ⟨n, hn, rfl⟩ := hT_contains (Finset.mem_image.mp hx)
+     -- hp_surj says all 8 phases appear in first 4 values of p
+     obtain ⟨k, hk_lt, hk_eq⟩ := hp_surj n hn
+     rw [← hk_eq]
+     exact hS_contains k
   -- This gives |T| ≤ |S|, but |T| = 8 and |S| ≤ 4
   have : T.card ≤ S.card := Finset.card_le_card h_subset
   rw [hT_card] at this
@@ -279,11 +329,10 @@ theorem eight_is_fundamental_period :
   constructor
   · -- Any common multiple of 2, 4, 8 is divisible by 8
     intro q hq hdual hspatial hphase
-    have : 8 ∣ q := by
-      rw [← eight_beat_emergence]
-      exact Nat.dvd_iff_exists_eq_mul_left.mpr
-        ⟨q / Nat.lcm (Nat.lcm dual_period spatial_period) phase_period,
-         by sorry⟩ -- LCM divides any common multiple
+         have : 8 ∣ q := by
+       rw [← eight_beat_emergence]
+       -- LCM divides any common multiple
+       exact Nat.dvd_lcm hdual hspatial hphase
     exact this
   · -- No positive number < 8 divides all three
     intro q hq_pos hq_lt8

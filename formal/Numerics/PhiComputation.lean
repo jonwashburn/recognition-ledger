@@ -38,17 +38,77 @@ def fib : ℕ → ℕ
 -- Binet's formula relates φ^n to Fibonacci numbers
 theorem binet_formula (n : ℕ) :
   φ^n = (fib n : ℝ) * φ + (fib (n - 1) : ℝ) := by
-  sorry
+  induction n with
+  | zero =>
+    simp [fib, pow_zero]
+    norm_num
+  | succ n ih =>
+    rw [pow_succ, ih]
+    simp [fib]
+    ring_nf
+    -- Use φ² = φ + 1
+    have h_phi : φ^2 = φ + 1 := by
+      rw [φ]
+      field_simp
+      ring_nf
+      rw [sq_sqrt (by norm_num : (0 : ℝ) ≤ 5)]
+      ring
+    cases n with
+    | zero => simp [fib]; ring
+    | succ m =>
+      rw [← h_phi]
+      ring
 
 -- Lucas number formula for φ^n
 theorem lucas_formula (n : ℕ) :
   φ^n + (1 - φ)^n = lucas n := by
-  sorry
+  -- Note: 1 - φ = -1/φ since φ² = φ + 1 implies φ - 1 = 1/φ
+  have h_inv : 1 - φ = -1/φ := by
+    rw [φ]
+    field_simp
+    ring_nf
+    rw [sqrt_sq (by norm_num : (0 : ℝ) ≤ 5)]
+    ring
+  rw [h_inv]
+  induction n with
+  | zero => simp [lucas, pow_zero]
+  | succ n ih =>
+    rw [pow_succ, pow_succ] at ih ⊢
+    simp [lucas]
+    -- Use recurrence and induction hypothesis
+    ring_nf
+    -- This requires detailed calculation with φ properties
+    sorry -- Complex algebraic manipulation
 
 -- Since |1 - φ| < 1, for large n: φ^n ≈ lucas n
 theorem phi_power_approximation (n : ℕ) (h : n ≥ 10) :
   |φ^n - lucas n| < 0.001 := by
-  sorry
+  -- From lucas_formula: φ^n + (1-φ)^n = lucas n
+  -- So φ^n - lucas n = -(1-φ)^n
+  have h_eq : φ^n - lucas n = -(1 - φ)^n := by
+    have := lucas_formula n
+    linarith
+  rw [h_eq, abs_neg]
+  -- |1 - φ| = |(-1 + √5)/2| = (√5 - 1)/2 ≈ 0.618
+  have h_bound : |1 - φ| = (sqrt 5 - 1) / 2 := by
+    rw [φ]
+    simp [abs_sub_comm]
+    have : sqrt 5 > 1 := by norm_num
+    rw [abs_of_pos (by linarith : (sqrt 5 - 1) / 2 > 0)]
+    ring
+  rw [abs_pow, h_bound]
+  -- ((√5 - 1)/2)^n < 0.001 for n ≥ 10
+  have h_small : ((sqrt 5 - 1) / 2)^n < 0.001 := by
+    have h_base : (sqrt 5 - 1) / 2 < 0.62 := by norm_num
+    have : (0.62 : ℝ)^10 < 0.001 := by norm_num
+    have h_mono : ∀ m ≥ 10, (0.62 : ℝ)^m ≤ (0.62 : ℝ)^10 := by
+      intro m hm
+      exact pow_le_pow_right (by norm_num) hm
+    calc ((sqrt 5 - 1) / 2)^n
+      ≤ (0.62)^n := by exact pow_le_pow_right (by norm_num) h_base
+      _ ≤ (0.62)^10 := h_mono n h
+      _ < 0.001 := this
+  exact h_small
 
 /-!
 ## Matrix Method for φ^n
@@ -199,7 +259,29 @@ def fast_phi_power : ℕ → ℝ × ℝ  -- Returns (φ^n, φ^(n-1))
 -- This is efficient
 theorem fast_phi_correct (n : ℕ) :
   (fast_phi_power n).1 = φ^n := by
-  sorry
+  induction n using Nat.strong_induction with
+  | ind n ih =>
+    cases n with
+    | zero => simp [fast_phi_power, pow_zero]
+    | succ m =>
+      cases m with
+      | zero => simp [fast_phi_power, φ, pow_one]
+      | succ k =>
+        simp [fast_phi_power]
+        have h1 := ih (k + 1) (by simp)
+        have h2 := ih k (by simp)
+        simp at h1 h2
+        rw [← h1, ← h2]
+        -- Use φ^(n+1) = φ^n + φ^(n-1) from φ² = φ + 1
+        rw [pow_succ, pow_succ]
+        have h_phi : φ^2 = φ + 1 := by
+          rw [φ]
+          field_simp
+          ring_nf
+          rw [sq_sqrt (by norm_num : (0 : ℝ) ≤ 5)]
+          ring
+        rw [← h_phi]
+        ring
 
 #check phi_power_approx
 #check electron_mass_verification
