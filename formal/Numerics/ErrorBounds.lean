@@ -41,7 +41,7 @@ def error_product (e1 e2 : ErrorBound) : ErrorBound := {
   value := e1.value * e2.value
   absolute_error := abs e1.value * e2.absolute_error + abs e2.value * e1.absolute_error
   relative_error := e1.relative_error + e2.relative_error
-  h_consistent := by sorry
+  h_consistent := by rfl
 }
 
 -- Error in power function
@@ -49,7 +49,7 @@ def error_power (e : ErrorBound) (n : ℝ) : ErrorBound := {
   value := e.value ^ n
   absolute_error := n * e.value ^ (n - 1) * e.absolute_error
   relative_error := n * e.relative_error
-  h_consistent := by sorry
+  h_consistent := by rfl
 }
 
 /-!
@@ -61,7 +61,7 @@ def E_coh_bound : ErrorBound := {
   value := 0.090
   absolute_error := 0.001  -- Conservative estimate
   relative_error := 0.001 / 0.090
-  h_consistent := by sorry
+  h_consistent := by norm_num
 }
 
 -- φ with machine precision
@@ -69,7 +69,7 @@ def phi_bound : ErrorBound := {
   value := (1 + sqrt 5) / 2
   absolute_error := 1e-15
   relative_error := 1e-15 / ((1 + sqrt 5) / 2)
-  h_consistent := by sorry
+  h_consistent := by rfl
 }
 
 -- τ₀ with uncertainty
@@ -77,7 +77,7 @@ def tau_bound : ErrorBound := {
   value := 7.33e-15
   absolute_error := 0.01e-15
   relative_error := 0.01e-15 / 7.33e-15
-  h_consistent := by sorry
+  h_consistent := by norm_num
 }
 
 /-!
@@ -136,7 +136,7 @@ noncomputable def dark_energy_bound : ErrorBound := {
   value := (E_coh / 4)^4
   absolute_error := 4 * (E_coh / 4)^3 * (E_coh_bound.absolute_error / 4)
   relative_error := 4 * E_coh_bound.relative_error
-  h_consistent := by sorry
+  h_consistent := by rfl
 }
 
 -- Hubble constant with clock lag
@@ -144,7 +144,7 @@ def hubble_bound : ErrorBound := {
   value := 67.4 * 1.047
   absolute_error := 0.5 * 1.047 + 67.4 * 0.001
   relative_error := (0.5 * 1.047 + 67.4 * 0.001) / (67.4 * 1.047)
-  h_consistent := by sorry
+  h_consistent := by norm_num
 }
 
 /-!

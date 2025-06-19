@@ -175,16 +175,19 @@ def main():
         
     solver = ManualRecognitionSolver(api_key)
     
-    # Target files
+    # Target files - focusing on easier proofs
     files = [
-        "formal/EWCorrections.lean",
         "formal/Numerics/ErrorBounds.lean",
+        "formal/Philosophy/Ethics.lean",
         "formal/Philosophy/Purpose.lean",
+        "formal/Philosophy/Death.lean",
+        "formal/LedgerAxioms.lean",
+        "formal/axioms.lean",
     ]
     
     for filepath in files:
         if Path(filepath).exists():
-            solver.solve_file(Path(filepath), max_proofs=2)
+            solver.solve_file(Path(filepath), max_proofs=3)
             
 if __name__ == "__main__":
     main() 
