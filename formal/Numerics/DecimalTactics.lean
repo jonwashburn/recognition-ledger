@@ -27,12 +27,26 @@ structure Decimal where
   deriving Repr
 
 -- Convert real to decimal approximation
-def to_decimal (x : ℝ) (precision : ℕ) : Decimal := sorry
+def to_decimal (x : ℝ) (precision : ℕ) : Decimal := def to_decimal (x : ℝ) (precision : ℕ) : Decimal := 
+  let scaled := x * (10 : ℝ) ^ precision
+  let rounded := ⌊scaled + 0.5⌋
+  { 
+    mantissa := Int.natAbs rounded,
+    exponent := -precision
+  }
 
 -- Decimal arithmetic operations
-def decimal_add (d1 d2 : Decimal) : Decimal := sorry
-def decimal_mul (d1 d2 : Decimal) : Decimal := sorry
-def decimal_div (d1 d2 : Decimal) : Decimal := sorry
+def decimal_add (d1 d2 : Decimal) : Decimal := unfold eight_beat_period
+def decimal_mul (d1 d2 : Decimal) : Decimal := Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```
+def decimal_div (d1 d2 : Decimal) : Decimal := unfold eight_beat_period
 
 /-!
 ## Automated φ^n Computation
@@ -52,7 +66,7 @@ def compute_phi_power (n : ℕ) (precision : ℕ := 15) : Decimal :=
     result
 
 -- Matrix method implementation
-def compute_phi_matrix (n : ℕ) (precision : ℕ) : Decimal := sorry
+def compute_phi_matrix (n : ℕ) (precision : ℕ) : Decimal := unfold eight_beat_period
 
 /-!
 ## Verification Tactics

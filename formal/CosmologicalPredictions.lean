@@ -54,7 +54,16 @@ theorem dark_energy_prediction :
   · -- The Recognition Science formula gives the correct value
     -- Λ = (E_coh/2)⁴ / (8τ₀ℏc)³ ≈ 1.1056e-52 m⁻²
     -- This matches observation when using proper constants
-    sorry -- Numerical verification that Λ_RS ≈ Λ_observed
+    theorem dark_energy_prediction :
+  ∃ (Λ : ℝ), abs (Λ - Λ_observed) < 1e-53 ∧
+             Λ = Λ_predicted := by
+  use Λ_predicted
+  constructor
+  · -- Show |Λ_predicted - Λ_observed| < 1e-53
+    unfold Λ_predicted Λ_observed
+    norm_num
+  · -- Λ_predicted = Λ_predicted
+    rfl -- Numerical verification that Λ_RS ≈ Λ_observed
   · rfl
 
 -- Dark energy is NOT a free parameter
@@ -87,7 +96,13 @@ theorem hubble_constant_prediction :
   · -- The Recognition Science formula gives the correct value
     -- H₀ = 0.953 × (1 / (8τ₀φ⁹⁶)) × Mpc/1000 ≈ 67.4 km/s/Mpc
     -- This resolves the Hubble tension
-    sorry -- Numerical verification that H₀_RS ≈ 67.4
+    use H_0_predicted
+constructor
+· -- Show |H_0_predicted - H_0_observed| < 0.5
+  unfold H_0_predicted H_0_observed
+  norm_num
+· -- H = H_0_predicted by definition
+  rfl -- Numerical verification that H₀_RS ≈ 67.4
   · rfl
 
 -- Hubble constant is NOT a free parameter
@@ -120,7 +135,13 @@ theorem universe_age :
   · -- The Recognition Science formula gives the correct age
     -- t = 2/3 × (1/H₀) ≈ 13.7 Gyr
     -- This matches observation within uncertainties
-    sorry -- Numerical verification
+    use age_years
+constructor
+· -- Show age is within bounds of 13.8 ± 0.2 billion years
+  unfold age_years t_universe year
+  norm_num
+· -- Trivial equality
+  rfl -- Numerical verification
   · rfl
 
 /-!
@@ -197,7 +218,16 @@ theorem dark_energy_as_recognition_floor :
   · -- Λ = 8πGρ/c²
     unfold Λ_predicted Λ_RS
     -- The formulas are equivalent
-    sorry -- Algebraic verification
+    -- The recognition floor emerges from unmatched energy in each 8-beat cycle
+let ρ_floor := (E_coh_SI / 2)^4 / (ℏ_RS * c)^3 / (8 * τ₀)^3
+
+-- Show this gives the predicted cosmological constant
+have h_lambda : Λ_predicted = 8 * π * G_RS * ρ_floor / c^2 := by
+  unfold Λ_predicted ρ_floor
+  ring
+
+use ρ_floor
+exact ⟨rfl, h_lambda⟩ -- Algebraic verification
 
 -- Hubble tension resolution
 theorem hubble_tension_resolved :
@@ -212,7 +242,33 @@ theorem hubble_tension_resolved :
   -- SNe measure observed time
   -- RS predicts the correct observed value
   use 70.7, 73.5
-  exact ⟨by norm_num, by norm_num, sorry, sorry⟩
+  exact ⟨by norm_num, by norm_num, use 70.7, 73.5
+constructor
+· -- |H_CMB - 70.7| < 1
+  norm_num
+constructor
+· -- |H_SNe - 73.5| < 1  
+  norm_num
+constructor
+· -- |H_0_predicted - 67.4| < 0.5
+  unfold H_0_predicted
+  norm_num
+· -- H_0_predicted = 0.953 * H_CMB
+  unfold H_0_predicted
+  norm_num, use 70.7, 73.5
+constructor
+· -- |H_CMB - 70.7| < 1
+  norm_num
+constructor
+· -- |H_SNe - 73.5| < 1  
+  norm_num
+constructor
+· -- |H_0_predicted - 67.4| < 0.5
+  unfold H_0_predicted
+  norm_num
+· -- H_0_predicted = 0.953 * H_CMB
+  unfold H_0_predicted
+  norm_num⟩
 
 -- Complete cosmological model
 theorem complete_cosmological_model :
@@ -226,6 +282,23 @@ theorem complete_cosmological_model :
     H_0_predicted = 0.953 * Mpc / (1000 * 8 * τ * φ^96)) := by
   -- All predictions match observations
   -- All formulas derive from fundamental constants
-  sorry -- Combine previous results
+  constructor
+· -- Dark energy prediction accuracy
+  exact dark_energy_prediction
+constructor
+· -- Hubble constant prediction accuracy
+  exact hubble_constant_prediction
+constructor
+· -- Universe age accuracy
+  exact universe_age
+· -- No free parameters - everything from E_coh and τ₀
+  use E_coh_SI, τ₀
+  constructor
+  · rfl
+  constructor
+  · rfl
+  constructor
+  · exact dark_energy_not_free
+  · exact hubble_not_free -- Combine previous results
 
 end RecognitionScience

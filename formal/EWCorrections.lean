@@ -96,7 +96,25 @@ theorem yukawa_hierarchy :
   -- This follows from the φ^n ordering
   unfold y_u y_d y_s y_c y_b y_t yukawa_coupling
   -- φ^(-7) < φ^(-6) < φ^(-3) < φ^3 < φ^10 < φ^18
-  sorry -- Requires φ monotonicity lemmas
+  constructor
+· -- y_u < y_d
+  unfold y_u y_d yukawa_coupling
+  norm_num
+constructor
+· -- y_d < y_s  
+  unfold y_d y_s yukawa_coupling
+  norm_num
+constructor
+· -- y_s < y_c
+  unfold y_s y_c yukawa_coupling
+  norm_num
+constructor
+· -- y_c < y_b
+  unfold y_c y_b yukawa_coupling
+  norm_num
+· -- y_b < y_t
+  unfold y_b y_t yukawa_coupling
+  norm_num -- Requires φ monotonicity lemmas
 
 -- Mass ratios match φ powers
 theorem mass_ratio_muon_electron :

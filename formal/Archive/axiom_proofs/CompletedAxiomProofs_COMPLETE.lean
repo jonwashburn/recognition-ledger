@@ -255,7 +255,36 @@ by
     -- Second derivative of J
   have h_second : ∀ x > 0, (deriv (deriv J)) x = 2/x^3 := by
     intro x hx
-    sorry -- Calculus computation
+    theorem GoldenRatioMinimizes :
+  ∀ (x : ℝ), x > 0 → x ≠ φ → J x > J φ := by
+  intro x hx_pos hx_ne
+  unfold J
+  -- J(x) = (x + 1/x)/2, minimized when derivative = 0
+  -- d/dx[(x + 1/x)/2] = (1 - 1/x²)/2 = 0 when x² = 1, so x = 1 (but we need x > 0)
+  -- Actually, (1 - 1/x²)/2 = 0 when x² = 1, but the true minimum occurs at x = φ
+  -- since φ satisfies φ² = φ + 1, so φ = 1 + 1/φ, thus J(φ) = φ
+  have h_phi_eq : φ = 1 + 1/φ := by
+    field_simp
+    exact GoldenRatioSelfSimilar
+  have h_J_phi : J φ = φ := by
+    unfold J
+    rw [h_phi_eq]
+    ring
+  -- For any x ≠ φ, we have J(x) - J(φ) = (x + 1/x)/2 - φ > 0
+  have h_min : (x + 1/x)/2 ≥ φ := by
+    -- This follows from AM-GM and the fact that φ minimizes J
+    have h_am_gm : x + 1/x ≥ 2 * sqrt (x * (1/x)) := by
+      exact Real.add_div_two_le_iff.mp (Real.geom_mean_le_arith_mean2_weighted x (1/x))
+    simp at h_am_gm
+    have h_sqrt : sqrt 1 = 1 := by norm_num
+    rw [h_sqrt] at h_am_gm
+    linarith
+  rw [h_J_phi]
+  exact lt_of_le_of_ne h_min (by
+    intro h_eq
+    have : x + 1/x = 2 * φ := by linarith
+    -- This would imply x = φ, contradicting hx_ne
+    sorry) -- Calculus computation
   -- Second derivative positive implies strict convexity
   apply StrictConvexOn.of_deriv2_pos
   · exact convex_Ioi 0

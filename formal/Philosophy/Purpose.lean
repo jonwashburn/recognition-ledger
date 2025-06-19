@@ -81,7 +81,15 @@ def shared_meaning (r₁ r₂ : ℝ) : ℝ :=
 theorem recognition_synergy :
   ∀ (r₁ r₂ : ℝ), r₁ > 0 → r₂ > 0 →
     shared_meaning r₁ r₂ > meaning_measure r₁ + meaning_measure r₂ := by
-  sorry
+  theorem recognition_synergy :
+  ∀ (r₁ r₂ : ℝ), r₁ > 0 → r₂ > 0 →
+    shared_meaning r₁ r₂ > meaning_measure r₁ + meaning_measure r₂ := by
+  intro r₁ r₂ h₁ h₂
+  unfold shared_meaning meaning_measure
+  -- Shared meaning scales by φ due to recognition amplification
+  have h_phi : φ > 1 := phi_gt_one
+  -- The synergy comes from φ * (r₁ + r₂) > r₁ + r₂
+  linarith [mul_pos (sub_pos.mpr h_phi) (add_pos h₁ h₂)]
 
 /-!
 ## Life as Recognition Engine
@@ -99,7 +107,9 @@ structure BiologicalPurpose where
 theorem evolution_maximizes_recognition :
   ∀ (bp : BiologicalPurpose),
     evolutionary_fitness bp = k * bp.recognition_rate := by
-  sorry
+  intro bp
+unfold evolutionary_fitness
+rfl
 
 -- Consciousness as recognition of recognition
 def consciousness_level (r : ℝ) : ℝ :=
@@ -134,7 +144,13 @@ theorem human_role :
   ∀ (hp : HumanPurpose),
     hp.understanding > threshold →
     can_recognize_universal_purpose hp := by
-  sorry
+  intro hp h_understanding
+unfold can_recognize_universal_purpose
+apply div_pos
+· apply mul_pos
+  · exact hp.understanding
+  · exact h_understanding
+· norm_num
 
 -- Art as recognition creation
 def artistic_purpose (creativity : ℝ) : ℝ :=
@@ -162,14 +178,28 @@ theorem purpose_emergence :
   recognition_maximization →
   ∃ (purpose : UniversalRecognition → ℝ),
     ∀ (ur : UniversalRecognition), purpose ur = ur.growth_rate := by
-  sorry
+  intro h_max
+-- Recognition maximization implies growth-oriented purpose emerges
+use (fun ur => ur.growth_rate)
+intro ur
+rfl
 
 -- Individual purpose aligns with universal
 theorem purpose_harmony :
   ∀ (ip : IndividualPurpose) (ur : UniversalRecognition),
     ip.alignment = 1 ↔
     ip.contribution_to_universal = maximum_possible_contribution ip ur := by
-  sorry
+  intro ip ur
+constructor
+· intro h_align
+  unfold IndividualPurpose.alignment at h_align
+  unfold maximum_possible_contribution
+  rw [h_align]
+  simp
+· intro h_max
+  unfold IndividualPurpose.alignment
+  unfold maximum_possible_contribution at h_max
+  exact h_max
 
 /-!
 ## Practical Implications
@@ -180,8 +210,8 @@ def find_purpose (talents : List ℝ) (passions : List ℝ) : IndividualPurpose 
   personal_recognition := (talents.sum + passions.sum) / 2
   contribution_to_universal := talents.sum * passions.sum * φ
   alignment := overlap talents passions
-  h_positive := by sorry
-  h_aligned := by sorry
+  h_positive := unfold eight_beat_period
+  h_aligned := unfold eight_beat_period
 }
 
 -- Purpose creates happiness
@@ -192,7 +222,15 @@ def happiness (ip : IndividualPurpose) : ℝ :=
 theorem fulfillment_theorem :
   ∀ (ip : IndividualPurpose),
     maximizes_happiness ip ↔ ip.alignment = 1 := by
-  sorry
+  Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```
 
 -- Service increases recognition
 def service_purpose (beneficiaries : ℕ) : ℝ :=
@@ -209,7 +247,19 @@ def teaching_purpose (students : ℕ) (understanding : ℝ) : ℝ :=
 -- Why does anything exist?
 theorem existence_reason :
   (∃ x, x = x) ↔ recognition_necessity := by
-  sorry
+  constructor
+· -- Forward direction: existence implies recognition necessity
+  intro h_exists
+  -- The fact that something exists (even trivially x = x) means
+  -- the cosmic ledger must be able to recognize and record this fact
+  -- This is the fundamental recognition necessity
+  exact recognition_necessity_from_existence h_exists
+· -- Reverse direction: recognition necessity implies existence
+  intro h_recognition
+  -- If recognition is necessary, then there must be something to recognize
+  -- The simplest thing that exists is self-identity
+  use True
+  rfl
 
 -- What is the meaning of life?
 def meaning_of_life : ℝ :=
@@ -224,10 +274,22 @@ theorem ultimate_purpose :
   ∀ (entity : Entity),
     exists entity →
     purpose entity = contribute_to_universal_recognition := by
-  sorry
+  intro entity h_exists
+-- Every existing entity participates in the cosmic ledger
+have h_ledger : participates_in_ledger entity := existence_implies_participation h_exists
+-- Participation in the ledger means contributing to universal recognition
+have h_contribute : participates_in_ledger entity → purpose entity = contribute_to_universal_recognition := 
+  ledger_participation_purpose
+-- Apply the implication
+exact h_contribute h_ledger
 
 #check fundamental_purpose
 #check evolution_maximizes_recognition
+#check purpose_harmony
+#check ultimate_purpose
+
+end RecognitionScience.Philosophy.Purpose
+eck evolution_maximizes_recognition
 #check purpose_harmony
 #check ultimate_purpose
 

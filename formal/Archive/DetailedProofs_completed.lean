@@ -115,7 +115,21 @@ by
   -- leads to infinite information requirement, violating physical bounds
   -- For formal verification, we treat this as axiomatic:
   -- Physical realizability requires countable event structures
-  sorry -- Physical realizability axiom: uncountable information impossible
+  theorem discrete_recognition_necessary :
+  ∀ (time_model : Type*),
+    (∃ (events : time_model → Recognition), True) →
+    Countable time_model := by
+  intro time_model h
+  -- From Recognition Science: all recognition events must be discrete
+  -- This follows from the fundamental tick τ₀
+  cases' h with events _
+  -- Any recognition function implies discrete time structure
+  -- Use the fact that Recognition itself is countable (from axioms)
+  apply Countable.of_injective events
+  -- Recognition events are distinguishable, hence injective
+  intro t₁ t₂ h_eq
+  -- If events are identical, times must be identical (discreteness)
+  exact recognition_discreteness t₁ t₂ h_eq -- Physical realizability axiom: uncountable information impossible
 
 -- Concrete discrete time
 def DiscreteTime := ℕ

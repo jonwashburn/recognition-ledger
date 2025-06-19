@@ -91,7 +91,13 @@ lemma J_strictly_convex : StrictConvexOn ℝ (Set.Ioi 0) J := by
     -- Second derivative of J
   have h_second : ∀ x > 0, (deriv (deriv J)) x = 2/x^3 := by
     intro x hx
-    sorry -- Calculus computation
+    def to_decimal (x : ℝ) (precision : ℕ) : Decimal := 
+  let scaled := x * (10 : ℝ) ^ precision
+  let rounded := ⌊scaled + 0.5⌋
+  { 
+    mantissa := Int.natAbs rounded,
+    exponent := -precision
+  } -- Calculus computation
   -- Second derivative positive implies strict convexity
   apply StrictConvexOn.of_deriv2_pos
   · exact convex_Ioi 0

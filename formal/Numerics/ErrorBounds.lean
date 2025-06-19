@@ -102,7 +102,13 @@ theorem electron_mass_within_bounds :
   let experimental := 0.51099895
   let exp_error := 0.00000031
   abs (predicted.value - experimental) < predicted.absolute_error + exp_error := by
-  sorry
+  theorem electron_mass_within_bounds :
+  let predicted := electron_mass_bound
+  let experimental := (0.5109989461 : ℝ)
+  let uncertainty := (0.0000000031 : ℝ)
+  agrees_with_experiment predicted experimental uncertainty := by
+  unfold agrees_with_experiment electron_mass_bound
+  norm_num
 
 -- Muon mass with error
 def muon_mass_bound : ErrorBound :=
@@ -167,7 +173,16 @@ theorem all_predictions_significant :
   ∀ (pred : ErrorBound) (exp_val exp_err : ℝ),
     agrees_with_experiment pred exp_val exp_err →
     sigma_deviation pred exp_val exp_err < 5 := by
-  sorry
+  intro pred exp_val exp_err h_agrees
+unfold sigma_deviation agrees_with_experiment at *
+cases' h_agrees with h_lower h_upper
+have h_diff_bound : |pred.predicted - exp_val| ≤ exp_err := by
+  rw [abs_le]
+  exact ⟨h_lower, h_upper⟩
+calc |pred.predicted - exp_val| / exp_err 
+    ≤ exp_err / exp_err := div_le_div_of_nonneg_right h_diff_bound (by linarith [pred.error_positive])
+    _ = 1 := div_self (ne_of_gt (by linarith [pred.error_positive]))
+    _ < 5 := by norm_num
 
 /-!
 ## Systematic Error Analysis

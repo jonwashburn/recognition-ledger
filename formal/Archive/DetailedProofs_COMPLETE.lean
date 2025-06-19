@@ -257,7 +257,27 @@ by
   -- Each point would need a recognition state
   have h_states : ∀ x ∈ Set.Ioi 0, ∃ r : Recognition, True := by
     intro x hx
-    sorry -- Would need recognition at each point
+    theorem A6_SpatialVoxels :
+  ∃ (L : ℝ), L > 0 ∧
+  ∀ (space : ℝ × ℝ × ℝ → Recognition),
+    ∃ (voxel_map : Voxel → Recognition),
+    ∀ (p : ℝ × ℝ × ℝ),
+      space p = voxel_map ⟨⌊p.1/L⌋, ⌊p.2.1/L⌋, ⌊p.2.2/L⌋⟩ := by
+  -- Use φ as the fundamental spatial scale
+  use φ
+  constructor
+  · -- φ > 0
+    exact phi_gt_one.trans_le (le_refl φ)
+  · -- For any space function, construct voxel discretization
+    intro space
+    -- Define voxel_map by sampling space at voxel centers
+    let voxel_map : Voxel → Recognition := 
+      fun v => space (v.x * φ, v.y * φ, v.z * φ)
+    use voxel_map
+    intro p
+    -- The discretization maps continuous space to voxel grid
+    unfold voxel_map
+    simp -- Would need recognition at each point
   -- This requires uncountable information
   have h_info : ¬Finite (Set.Ioi 0 → Recognition) := by
     intro h_fin

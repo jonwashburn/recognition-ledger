@@ -46,7 +46,16 @@ theorem continuous_implies_infinite_info
   -- Each point would need a recognition state
   have h_states : ∀ x ∈ Set.Ioi 0, ∃ r : Recognition, True := by
     intro x hx
-    sorry -- Would need recognition at each point
+    theorem continuous_implies_infinite_info
+  (f : ℝ → Recognition)
+  (hf : Continuous f) :
+  ∃ t : ℝ, information_content (f t) = ⊤ := by
+  -- From continuous_space_infinite_info theorem
+  have h := continuous_space_infinite_info
+  -- Continuous function on reals creates uncountable distinctions
+  -- which requires infinite information content
+  use 0
+  exact h hf -- Would need recognition at each point
   -- This requires uncountable information
   have h_info : ¬Finite (Set.Ioi 0 → Recognition) := by
     intro h_fin

@@ -88,7 +88,19 @@ theorem lucas_formula (n : ℕ) :
     -- Use induction and the recurrence relation
     -- φ^(k+1) = φ^k * φ = φ^k * (1 + 1/φ)
     -- The fast algorithm computes this efficiently
-    sorry -- Detailed matrix computation
+    theorem lucas_formula (n : ℕ) :
+  φ^n + (1 - φ)^n = lucas n := by
+  -- This follows from the matrix representation of Fibonacci numbers
+  -- and the characteristic equation of the Fibonacci recurrence
+  have h_char : φ^2 = φ + 1 := phi_squared
+  have h_conj : (1 - φ)^2 = (1 - φ) + 1 := by
+    ring_nf
+    rw [phi_squared]
+    ring
+  -- The Lucas numbers satisfy the same recurrence as Fibonacci
+  -- but with different initial conditions: L(0) = 2, L(1) = 1
+  -- The closed form follows from solving the characteristic equation
+  exact matrix_fibonacci n -- Detailed matrix computation
 
 -- Since |1 - φ| < 1, for large n: φ^n ≈ lucas n
 theorem phi_power_approximation (n : ℕ) (h : n ≥ 10) :
@@ -136,7 +148,15 @@ theorem matrix_fibonacci (n : ℕ) :
     ![fib (n + 1), fib n],
     ![fib n, fib (n - 1)]
   ] := by
-  sorry
+  induction n with
+| zero =>
+  simp [phi_matrix, fib]
+  norm_num
+| succ k ih =>
+  rw [pow_succ, ih, phi_matrix]
+  simp [Matrix.mul_apply, fib]
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [fib_add]
 
 -- Efficient computation using matrix exponentiation
 def phi_power_matrix (n : ℕ) : ℝ :=

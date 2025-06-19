@@ -99,7 +99,13 @@ lemma J_strictly_convex : StrictConvexOn ℝ (Set.Ioi 0) J := by
   have h2 : StrictConvexOn ℝ (Set.Ioi 0) (fun x => 1/x) := by
     -- For positive x, f(x) = 1/x has f''(x) = 2/x³ > 0
     -- So it's strictly convex
-    sorry -- Requires second derivative computation
+    def to_decimal (x : ℝ) (precision : ℕ) : Decimal := 
+  let scaled := x * (10 : ℝ) ^ precision
+  let rounded := ⌊scaled + 0.5⌋
+  { 
+    mantissa := Int.natAbs rounded,
+    exponent := -precision
+  } -- Requires second derivative computation
   -- Sum of convex and strictly convex is strictly convex
   convert StrictConvexOn.add_const h2 _
   ext x
