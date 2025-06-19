@@ -38,7 +38,7 @@ theorem electron_mass_calibrated :
   abs (m_rung electron_rung / electron_calibration - 0.000511) < 1e-6 := by
   -- 0.266 GeV / 520 ≈ 0.000511 GeV ✓
   unfold m_rung E_rung electron_rung electron_calibration
-  norm_num
+    norm_num
   -- Requires showing |0.090 × φ^32 / (10^9 × 520) - 0.000511| < 1e-6
   sorry -- Numerical verification
 
@@ -47,7 +47,7 @@ theorem muon_mass_raw :
   abs (m_rung muon_rung - 0.159) < 0.001 := by
   -- E_39 = 0.090 × φ^39 ≈ 1.59×10^8 eV = 159 MeV = 0.159 GeV
   unfold m_rung E_rung muon_rung
-  norm_num
+      norm_num
   -- φ^39 ≈ 1.767×10^9, so 0.090 × φ^39 ≈ 159 MeV
   sorry -- Requires numerical computation of φ^39
 
@@ -60,7 +60,7 @@ theorem muon_electron_ratio :
   simp [pow_sub φ_pos (by norm_num : (32 : ℝ) ≤ 39)]
   ring_nf
   -- Shows |φ^7 - φ^7| < 0.01 which is true
-  norm_num
+      norm_num
 
 -- Document the discrepancy
 theorem muon_mass_discrepancy :

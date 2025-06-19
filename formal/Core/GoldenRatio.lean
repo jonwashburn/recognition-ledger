@@ -10,6 +10,7 @@ critical theorem in Recognition Science as it forces all other constants.
 import RecognitionScience.Basic.LedgerState
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Tactic
 
 namespace RecognitionScience
 
@@ -347,5 +348,74 @@ theorem phi_32_bounds :
     exact lt_of_le_of_lt (pow_le_pow_of_le_left (le_of_lt phi_pos) (le_of_lt h_phi.2)) this
 
 end Numerical
+
+/-!
+## Pisano Period Properties
+-/
+
+-- The Pisano period π(n) is the period of Fibonacci numbers modulo n
+def pisano_period (n : ℕ) : ℕ := sorry
+
+-- Key property: Pisano period divides certain values
+theorem pisano_divides : ∀ n : ℕ, n > 0 →
+  pisano_period n ∣ (60 * n) := by sorry
+
+-- For our eight-beat structure
+theorem pisano_eight : pisano_period 8 = 12 := by sorry
+
+-- Connection to recognition cycles
+theorem pisano_recognition_cycle :
+  ∀ n : ℕ, n > 0 →
+  pisano_period n = recognition_period n := by sorry
+
+/-!
+## φ-Ladder Convergence
+-/
+
+-- The φ-ladder: E_n = E_0 * φ^n
+def phi_ladder (E_0 : ℝ) (n : ℕ) : ℝ := E_0 * φ^n
+
+-- Convergence ratio
+theorem phi_ladder_ratio :
+  ∀ E_0 : ℝ, E_0 > 0 → ∀ n : ℕ,
+  phi_ladder E_0 (n + 1) / phi_ladder E_0 n = φ := by
+  intro E_0 hE_0 n
+  unfold phi_ladder
+  field_simp
+  ring
+
+-- Exponential growth
+theorem phi_ladder_growth :
+  ∀ E_0 : ℝ, E_0 > 0 → ∀ n : ℕ,
+  phi_ladder E_0 n > E_0 := by sorry
+
+-- Ladder spacing is multiplicative
+theorem phi_ladder_spacing :
+  ∀ E_0 : ℝ, E_0 > 0 → ∀ m n : ℕ,
+  phi_ladder E_0 (m + n) = phi_ladder E_0 m * φ^n := by sorry
+
+-- Convergence to continuum at large n
+theorem phi_ladder_continuum :
+  ∀ E_0 : ℝ, E_0 > 0 → ∀ ε : ℝ, ε > 0 →
+  ∃ N : ℕ, ∀ n ≥ N,
+  |log (phi_ladder E_0 (n + 1) / phi_ladder E_0 n) - log φ| < ε := by sorry
+
+/-!
+## φ-Residue System
+-/
+
+-- Residue modulo φ^n
+def phi_residue (x : ℝ) (n : ℕ) : ℝ :=
+  x - ⌊x / φ^n⌋ * φ^n
+
+-- Residues form a complete system
+theorem phi_residue_complete :
+  ∀ n : ℕ, ∀ x : ℝ,
+  0 ≤ phi_residue x n ∧ phi_residue x n < φ^n := by sorry
+
+-- Connection to particle quantum numbers
+theorem residue_quantum_numbers :
+  ∀ n : ℕ, n > 0 →
+  card {r : ℝ | ∃ k : ℕ, r = phi_residue k n} = quantum_states n := by sorry
 
 end RecognitionScience

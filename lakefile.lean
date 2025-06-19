@@ -14,3 +14,14 @@ require mathlib from git
 -- `RecognitionScience.<FileName>` rather than `RecognitionScience.formal.*`.
 lean_lib «RecognitionScience» where
   srcDir := "formal"
+  -- Ensure all subdirectories are included
+  globs := #[
+    .submodules `RecognitionScience,
+    .submodules `Journal,
+    .submodules `Philosophy,
+    .submodules `Numerics,
+    .submodules `Core,
+    .submodules `Basic,
+    .submodules `RG,
+    .submodules `Geometry
+  ]
