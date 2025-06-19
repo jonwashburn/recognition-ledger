@@ -285,22 +285,34 @@ theorem fine_structure_formula :
     -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
     have h_phi_irrat : Irrational φ := by
       -- φ = (1 + √5)/2 is irrational since √5 is irrational
-      sorry -- φ is irrational
-    have h_phi5_irrat : Irrational (φ^5) := by
-      -- Powers of irrationals are irrational (except for special cases)
-      sorry -- φ^5 is irrational
+      rw [φ]
+      apply irrational_div_of_irrational_of_ne_zero
+      · apply irrational_add_of_irrational_of_rational
+        · exact irrational_sqrt_of_not_isSquare (by norm_num : ¬IsSquare (5 : ℚ))
+        · exact rational_one
+        · norm_num
+      · norm_num
+          have h_phi5_irrat : Irrational (φ^5) := by
+        -- Powers of irrationals are irrational (except for special cases)
+        exact irrational_pow_of_irrational h_phi_irrat (by norm_num : 5 ≠ 0)
     have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
       intro z
       -- 11 * (irrational) + integer = irrational
-      sorry -- 11 * φ^5 + z is irrational
+              apply irrational_add_of_irrational_of_rational
+        · apply irrational_mul_of_irrational_of_ne_zero h_phi5_irrat
+          norm_num
+        · exact Int.rational_cast z
+        · norm_num
     have h_137_rat : ¬Irrational (137.036 : ℝ) := by
       -- 137.036 = 137036/1000 is rational
-      sorry -- 137.036 is rational
+              simp [Irrational]
+        use 137036, 1000
+        norm_num
     -- Irrational ≠ rational
     have : Irrational (11 * φ^5 + r) := h_sum_irrat r
     have : ¬Irrational (137.036 : ℝ) := h_137_rat
     -- Therefore 11 * φ^5 + r ≠ 137.036
-    sorry -- Contradiction between irrational and rational
+          exact this h_137_rat
   -- Since we've shown no exact formula exists, the theorem is false
   exfalso
   exact h_approx 15 rfl

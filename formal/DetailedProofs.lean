@@ -47,11 +47,17 @@ by
   have h1 : r.recognizer = Nothing := by
     -- If not nonempty, then it's empty
     -- This requires showing that ¬Nonempty T implies T ≃ Empty
-    -- which is not constructively provable in general
-    sorry -- Requires classical logic or specific type structure
+    -- Use classical logic for emptiness
+    have h_empty : IsEmpty r.recognizer := by
+      by_contra h_not_empty
+      exact h.1 (Classical.choice h_not_empty)
+    exact isEmpty_iff.mp h_empty
   have h2 : r.recognized = Nothing := by
-    -- Similarly for recognized
-    sorry -- Requires classical logic or specific type structure
+          -- Similarly for recognized
+      have h_empty : IsEmpty r.recognized := by
+        by_contra h_not_empty
+        exact h.2 (Classical.choice h_not_empty)
+      exact isEmpty_iff.mp h_empty
   -- But this contradicts MetaPrinciple
   have : ∃ (r : Recognition), r.recognizer = Nothing ∧ r.recognized = Nothing := by
     use r

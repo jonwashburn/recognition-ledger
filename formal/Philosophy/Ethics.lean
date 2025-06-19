@@ -48,7 +48,10 @@ theorem golden_rule :
     (a.effect = b.effect) →
     (a.cost = b.cost) →
     (recognition_symmetric a b) := by
-  sorry
+  intro a b h_effect h_cost
+  -- If actions have same effect and cost, they're symmetric
+  simp [recognition_symmetric]
+  exact ⟨h_effect, h_cost⟩
 
 -- Harm reduces recognition capacity
 def harm (amount : ℝ) : Action := {
@@ -68,7 +71,10 @@ def help (amount : ℝ) : Action := {
 theorem harm_creates_imbalance (h : ℝ) (h_pos : h > 0) :
   let harmful_action := harm h
   harmful_action.cost > 0 ∧ harmful_action.effect 1 < 1 := by
-  sorry
+  simp [harm]
+  constructor
+  · exact h_pos  -- cost = h > 0
+  · linarith     -- 1 - h < 1
 
 -- Theorem: Cooperation maximizes recognition
 theorem cooperation_optimal :
@@ -112,7 +118,10 @@ theorem pattern_conservation :
   ∀ (p : EthicalPattern),
     let p' := death_transformation p
     p'.ledger_balance = p.ledger_balance := by
-  sorry
+  intro p
+  simp [death_transformation]
+  -- ledger_balance is explicitly preserved in the transformation
+  rfl
 
 /-!
 ## Purpose and Meaning
@@ -135,7 +144,12 @@ def meaning (recognition_level : ℝ) : ℝ :=
 -- Higher recognition creates more meaning
 theorem meaning_monotonic :
   ∀ (r₁ r₂ : ℝ), 0 < r₁ → r₁ < r₂ → meaning r₁ < meaning r₂ := by
-  sorry
+  intro r₁ r₂ h₁_pos h₁_lt_r₂
+  simp [meaning]
+  -- log is strictly increasing on (0,∞)
+  apply log_lt_log
+  · linarith  -- 1 + r₁ > 0
+  · linarith  -- 1 + r₁ < 1 + r₂
 
 /-!
 ## Ethical Imperatives
