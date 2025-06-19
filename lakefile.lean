@@ -17,6 +17,7 @@ lean_lib «RecognitionScience» where
   -- Ensure all subdirectories are included
   globs := #[
     .submodules `RecognitionScience,
+    .submodules `RecognitionLedger,
     .submodules `Journal,
     .submodules `Philosophy,
     .submodules `Numerics,
