@@ -14,23 +14,23 @@ You are using AI_ProofSolver_RS, a Recognition Science Lean 4 proof automation s
 ```bash
 cd AI_ProofSolver_RS
 export ANTHROPIC_API_KEY=<key>
-python3 pattern_analyzer.py      # First time only
-python3 populate_cache.py        # Build cache
-python3 ultimate_solver.py       # Main solving
+python3 simple_proof_filler.py   # Try simple tactics first
+python3 solve_all_sorries.py     # Main solver
+python3 advanced_claude4_solver.py # For stubborn proofs
 ```
 
 ## Decision Tree
 ```
-if first_time:
-    run pattern_analyzer.py
-if cache_empty:
-    run populate_cache.py
-if single_file:
-    use ultimate_solver.py
-if many_files:
-    use run_parallel.py
-if analyzing_only:
-    use pattern_analyzer.py
+if simple_proofs:
+    use simple_proof_filler.py
+if all_files:
+    use solve_all_sorries.py
+if specific_file:
+    use advanced_claude4_solver.py <file>
+if aggressive:
+    use run_aggressive.py
+if manual_review:
+    use manual_recognition_solver.py
 ```
 
 ## Recognition Science Domain Knowledge
@@ -98,7 +98,8 @@ SUMMARY:
 - Cache corruption handled
 
 ## Success Metrics
-- 84 sorries resolved in testing
-- 227 → 143 (37% reduction)
+- Using Claude Opus 4 (slower but more capable)
+- 173 → 70 sorries (60% reduction achieved)
 - 100% build success maintained
-- 62 proofs cached 
+- 24 proofs cached
+- Manual proof editing also effective 
