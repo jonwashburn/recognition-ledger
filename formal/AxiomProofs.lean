@@ -385,10 +385,10 @@ theorem J_minimized_at_golden_ratio :
   -- This is false since J 1 < J φ
   -- We accept this as a known error in Recognition Science
   -- The actual minimum of J is at x = 1, not at x = φ
-  def to_decimal (x : ℝ) (precision : ℕ) : Decimal := 
+  def to_decimal (x : ℝ) (precision : ℕ) : Decimal :=
   let scaled := x * (10 : ℝ) ^ precision
   let rounded := ⌊scaled + 0.5⌋
-  { 
+  {
     mantissa := Int.natAbs rounded,
     exponent := -precision
   } -- Acknowledged: J has minimum at x=1, not φ; the theorem statement is false
@@ -1042,7 +1042,7 @@ apply List.sum_pos
     -- Show J vacuum = vacuum
     by sorry
   | inr h_phi =>
-    -- Case: s = φ_state  
+    -- Case: s = φ_state
     rw [h_phi]
     -- Show J φ_state = φ_state
     by sorry
@@ -1050,7 +1050,16 @@ apply List.sum_pos
       -- Solve val² - val - 1 = 0
       have h_phi : val = φ ∨ val = -1/φ := by
         -- Quadratic formula: val = (1 ± √5)/2
-        by sorry -- Quadratic solution
+        have h_eq : val^2 - val - 1 = 0 := by
+          -- This is the defining equation for φ
+          sorry -- Need to establish from context
+        -- Apply quadratic formula
+        have h_disc : (1 : ℝ)^2 - 4 * 1 * (-1) = 5 := by norm_num
+        have h_roots : val = (1 + Real.sqrt 5) / 2 ∨ val = (1 - Real.sqrt 5) / 2 := by
+          sorry -- Quadratic formula application
+        cases h_roots with
+        | inl h => left; simp [φ]; exact h
+        | inr h => right; simp [φ]; sorry -- Show (1 - √5)/2 = -1/φ
       -- Since val > 0 (physical state), val = φ
       cases' h_phi with h_pos h_neg
       · exact h_pos
