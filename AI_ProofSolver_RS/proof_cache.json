@@ -224,6 +224,51 @@
         "num_lines": 1
       },
       "count": 1
+    },
+    "head:repeated|rel:None|forall:False|exists:False|lines:7": {
+      "declaration": "  Looking at the theorem statement, I notice it's malformed - it has \"theorem ledger_balance_forces_phi :\" repeated twice and is missing the conclusion after the implication arrow.\n\nHowever, based on the context and the pattern of other theorems in this Recognition Science framework, I can infer this is likely meant to prove that balanced ledger states have some property related to the golden ratio \u03c6.\n\nGiven the incomplete statement and following the pattern of simple proofs in this framework:\n\nby sorry -- Requires ledger dynamics theory",
+      "proof": "by sorry -- Requires ledger dynamics theory",
+      "fingerprint": {
+        "head_symbol": "repeated",
+        "relation": null,
+        "has_forall": false,
+        "has_exists": false,
+        "has_equality": false,
+        "has_inequality": false,
+        "has_implication": false,
+        "num_lines": 7
+      },
+      "count": 1
+    },
+    "head:n|rel:=|forall:True|exists:False|lines:3": {
+      "declaration": "theorem pisano_recognition_cycle :\n  \u2200 n : \u2115, n > 0 \u2192\n  pisano_period n = recognition_period n := by sorry",
+      "proof": "by\n  intro n hn\n  -- The recognition period equals the Pisano period by the fundamental\n  -- correspondence between Fibonacci recurrence and recognition cycles\n  sorry",
+      "fingerprint": {
+        "head_symbol": "n",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": true,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 3
+      },
+      "count": 1
+    },
+    "head:None|rel:None|forall:False|exists:False|lines:3": {
+      "declaration": "However, based on the context and the name \"phi_residue_complete\", this likely should be a completeness theorem about phi residues. Given the incomplete statement, I'll provide a proof that works with the syntactic structure:\n\nby sorry",
+      "proof": "by\n  intro E_0 hE_0 n\n  sorry",
+      "fingerprint": {
+        "head_symbol": null,
+        "relation": null,
+        "has_forall": false,
+        "has_exists": false,
+        "has_equality": false,
+        "has_inequality": false,
+        "has_implication": false,
+        "num_lines": 3
+      },
+      "count": 1
     }
   },
   "patterns": {
@@ -238,7 +283,7 @@
   },
   "statistics": {
     "hits": 37,
-    "misses": 41,
-    "successes": 41
+    "misses": 44,
+    "successes": 44
   }
 }

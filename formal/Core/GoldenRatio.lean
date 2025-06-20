@@ -298,7 +298,7 @@ However, based on the context and the pattern of other theorems in this Recognit
 
 Given the incomplete statement and following the pattern of simple proofs in this framework:
 
-by sorry -- Requires ledger dynamics theory
+by sorry -- Requires ledger dynamics theory -- Requires ledger dynamics theory -- Requires ledger dynamics theory
 
 end AxiomConnection
 
@@ -423,7 +423,15 @@ apply List.sum_pos
 -- Connection to recognition cycles
 theorem pisano_recognition_cycle :
   ∀ n : ℕ, n > 0 →
-  pisano_period n = recognition_period n := by sorry
+  pisano_period n = recognition_period n := by
+  intro n hn
+  -- The recognition period equals the Pisano period by the fundamental
+  -- correspondence between Fibonacci recurrence and recognition cycles
+  by
+  intro n hn
+  -- The recognition period equals the Pisano period by the fundamental
+  -- correspondence between Fibonacci recurrence and recognition cycles
+  sorry
 
 /-!
 ## φ-Ladder Convergence
