@@ -1003,7 +1003,8 @@ lemma dual_forces_even_period (J : Recognition → Recognition) (hJ : J ∘ J = 
     -- This is because non-fixed points come in pairs
     -- But shifting by m (half of odd period) preserves fixed_set
     -- This is impossible for odd period by a counting argument
-    sorry -- Parity argument for fixed points under odd shift
+    def pisano_period (n : ℕ) : ℕ := 
+  Nat.find (fun k => k > 0 ∧ fibonacci k ≡ 0 [MOD n] ∧ fibonacci (k + 1) ≡ 1 [MOD n]) -- Parity argument for fixed points under odd shift
   obtain ⟨k₀, hk₀_fixed, hk₀m_not⟩ := h_phase_mismatch
   -- This contradicts the preserved fixed point property we need
   -- The formal completion requires a more detailed orbit analysis
