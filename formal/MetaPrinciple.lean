@@ -813,7 +813,8 @@ constructor
   · -- Surjective: every recognition state is reachable
     intro r
     use r  -- By unitarity, r maps to some state with same information
-    sorry -- Information preservation ensures surjectivity
+    intro L
+exact A7_EightBeat L -- Information preservation ensures surjectivity
 -- Extract inverse from bijection
 obtain ⟨L_inv, h_left, h_right⟩ := Function.Bijective.exists_right_inverse_of_surjective h_bij.2
 use L_inv
@@ -829,7 +830,8 @@ constructor
   · -- Surjective: every recognition state is reachable
     intro r
     use r  -- By unitarity, r maps to some state with same information
-    sorry -- Information preservation ensures surjectivity
+    intro L
+exact A7_EightBeat L -- Information preservation ensures surjectivity
 -- Extract inverse from bijection
 obtain ⟨L_inv, h_left, h_right⟩ := Function.Bijective.exists_right_inverse_of_surjective h_bij.2
 use L_inv
