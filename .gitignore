@@ -35,4 +35,4 @@ Thumbs.db
 # Secrets (never commit API keys)
 .env
 secrets.yaml
-config/production.yaml 
+config/production.yaml *.backup_direct
