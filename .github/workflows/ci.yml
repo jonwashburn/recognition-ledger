@@ -1,0 +1,124 @@
+name: Recognition Science CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lean-build:
+    name: Build Lean Project
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install elan
+      run: |
+        curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+        echo "$HOME/.elan/bin" >> $GITHUB_PATH
+    
+    - name: Get cache
+      run: ~/.elan/bin/lake -Kenv=dev exe cache get
+    
+    - name: Build project
+      run: lake build
+    
+    - name: Lint Lean files
+      run: |
+        # Check for remaining sorries
+        if grep -r "sorry" formal/ --include="*.lean" | grep -v "Archive\|backup"; then
+          echo "::warning::Found sorry placeholders in Lean files"
+        fi
+    
+    - name: Count sorries
+      run: |
+        SORRY_COUNT=$(grep -r "sorry" formal/ --include="*.lean" | grep -v "Archive\|backup" | wc -l)
+        echo "Found $SORRY_COUNT sorries in the project"
+        echo "sorry_count=$SORRY_COUNT" >> $GITHUB_ENV
+
+  python-tests:
+    name: Test Python Scripts
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install numpy scipy matplotlib
+        pip install ruff pytest
+    
+    - name: Lint Python code
+      run: |
+        ruff check *.py || true
+    
+    - name: Run mass prediction tests
+      run: |
+        python exact_recognition_science.py > predictions.txt
+        echo "::notice::Generated mass predictions"
+    
+    - name: Verify predictions
+      run: |
+        # Check electron mass prediction
+        if grep -q "Electron.*0.511.*MeV" predictions.txt; then
+          echo "✓ Electron mass prediction found"
+        else
+          echo "✗ Electron mass prediction missing"
+          exit 1
+        fi
+
+  documentation:
+    name: Check Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check README consistency
+      run: |
+        # Verify key files exist
+        for file in README.md AXIOMS.md ROADMAP.md PEER_REVIEW_RECOGNITION_SCIENCE.md; do
+          if [ ! -f "$file" ]; then
+            echo "::error::Missing required file: $file"
+            exit 1
+          fi
+        done
+    
+    - name: Check for broken links
+      run: |
+        # Simple check for internal links
+        grep -r "\[.*\](.*.md)" *.md | while read -r line; do
+          file=$(echo "$line" | sed -n 's/.*](\([^)]*\.md\)).*/\1/p')
+          if [ ! -f "$file" ] && [ ! -f "docs/$file" ]; then
+            echo "::warning::Possible broken link to $file"
+          fi
+        done
+
+  release:
+    name: Create Release Archive
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Create backup archive
+      run: |
+        # Archive backup directories
+        tar -czf backups-archive.tar.gz backups/ AI_ProofSolver_RS/backups/
+        echo "Created backup archive: $(du -h backups-archive.tar.gz)"
+    
+    - name: Upload backup archive
+      uses: actions/upload-artifact@v3
+      with:
+        name: backups-archive
+        path: backups-archive.tar.gz
+        retention-days: 90 

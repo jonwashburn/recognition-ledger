@@ -6,7 +6,8 @@ This file provides the basic information theory lemmas needed to resolve
 the complex sorries in AxiomProofs.lean without requiring deep proofs.
 -/
 
-import Mathlib.MeasureTheory.Entropy.Basic
+import Mathlib.MeasureTheory.Measure.MeasureSpace
+import Mathlib.MeasureTheory.Integral.Lebesgue
 import Mathlib.Probability.Notation
 
 namespace RecognitionScience
@@ -19,10 +20,9 @@ lemma entropy_add {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabi
   entropy (fun ω => (X ω, Y ω)) μ = entropy X μ + entropy Y μ := by
   -- This follows from the standard entropy additivity for independent variables
   -- In the recognition context, X and Y represent independent recognition events
-  simp [entropy]
-  -- For the formalization, we use the basic property that entropy is additive
-  -- for independent random variables in the recognition framework
-  rfl
+  -- Need to prove: H(X,Y) = H(X) + H(Y) for independent X, Y
+  -- This requires showing that joint entropy decomposes when variables are independent
+  sorry
 
 -- Recognition cost lower bound
 lemma recognition_cost_lower_bound {S : Type*} [MeasurableSpace S] (μ : Measure S)
@@ -30,10 +30,9 @@ lemma recognition_cost_lower_bound {S : Type*} [MeasurableSpace S] (μ : Measure
   entropy X μ ≥ Real.log (2 : ℝ) := by
   -- This is the fundamental lower bound for any binary recognition event
   -- The recognition complexity is at least 2 (vacuum vs non-vacuum)
-  have h : entropy X μ ≥ 0 := entropy_nonneg X μ
-  -- For binary systems, entropy is at least log(2)
-  -- This follows from the fact that recognition events are fundamentally binary
-  exact Real.log_pos (by norm_num : (1 : ℝ) < 2)
+  -- Need to prove: For any non-trivial distribution, H(X) ≥ log(2)
+  -- This requires showing that the minimum entropy occurs for binary distributions
+  sorry
 
 -- Complexity bounds for recognition systems
 lemma complexity_entropy_bound {S : Type*} [Fintype S] (X : S → ℝ) :
@@ -44,11 +43,9 @@ lemma complexity_entropy_bound {S : Type*} [Fintype S] (X : S → ℝ) :
   constructor
   · norm_num
   · intro μ hμ
-    -- This follows from the maximum entropy principle
-    -- The entropy of any distribution on a finite set is bounded by log(|S|)
-    have h_card_pos : (0 : ℝ) < Fintype.card S := by
-      simp [Fintype.card_pos_iff]
-      exact Fintype.card_ne_zero
-    exact le_mul_of_one_le_left (Real.log_nonneg (Nat.one_le_iff_ne_zero.mpr (ne_of_gt (Fintype.card_pos)))) (le_refl 1)
+    -- Need to prove: H(X) ≤ log(|S|) for any probability distribution
+    -- This is the maximum entropy principle - uniform distribution maximizes entropy
+    -- Requires showing that H(X) = -Σ p_i log p_i ≤ log n
+    sorry
 
 end RecognitionScience
