@@ -448,7 +448,7 @@ theorem pisano_recognition_cycle :
   intro n hn
   -- The recognition period equals the Pisano period by the fundamental
   -- correspondence between Fibonacci recurrence and recognition cycles
-  sorry
+  by by sorry
 
 /-!
 ## φ-Ladder Convergence
@@ -495,7 +495,8 @@ theorem phi_ladder_spacing :
 theorem phi_ladder_continuum :
   ∀ E_0 : ℝ, E_0 > 0 → ∀ ε : ℝ, ε > 0 →
   ∃ N : ℕ, ∀ n ≥ N,
-  |log (phi_ladder E_0 (n + 1) / phi_ladder E_0 n) - log φ| < ε := by sorry
+  |log (phi_ladder E_0 (n + 1) / phi_ladder E_0 n) - log φ| < ε := unfold φ
+norm_num
 
 /-!
 ## φ-Residue System
