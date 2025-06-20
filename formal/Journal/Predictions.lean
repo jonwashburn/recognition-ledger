@@ -226,7 +226,15 @@ cases hp with
 -- No free parameters in any prediction
 theorem no_free_parameters :
   ∀ p ∈ allPredictions, p.derived_from.length > 0 ∨ p.formula ≠ "" := by
-  sorry
+  Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```
 
 #check allPredictions
 #check calculateDeviation

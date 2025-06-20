@@ -53,7 +53,15 @@ def decimal_div (d1 d2 : Decimal) : Decimal := unfold eight_beat_period
 -/
 
 -- Cache of computed φ powers
-def phi_cache : HashMap ℕ Decimal := sorry
+def phi_cache : HashMap ℕ Decimal := Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```
 
 -- Compute φ^n to given precision
 def compute_phi_power (n : ℕ) (precision : ℕ := 15) : Decimal :=

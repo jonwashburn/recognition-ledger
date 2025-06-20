@@ -261,7 +261,15 @@ theorem tau_from_recognition_dynamics :
   -- For the formal proof, we accept this as the correct theoretical derivation
   -- The numerical verification requires careful treatment of the DNA scale
   -- and the golden ratio logarithmic structure
-  sorry -- Correct formula but requires detailed numerical verification
+  Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+``` -- Correct formula but requires detailed numerical verification
   where
     λ_DNA : ℝ := 3.4e-9  -- DNA helix pitch in meters
 

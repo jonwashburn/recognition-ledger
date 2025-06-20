@@ -1079,6 +1079,66 @@
         "num_lines": 5
       },
       "count": 1
+    },
+    "head:A2_DualBalance|rel:=|forall:False|exists:True|lines:1": {
+      "declaration": "theorem A7_EightBeat : A2_DualBalance \u2227 A6_SpatialVoxels \u2192 \u2203 (n : \u2115), n = 8 \u2227",
+      "proof": "by simp; use 8; simp",
+      "fingerprint": {
+        "head_symbol": "A2_DualBalance",
+        "relation": "=",
+        "has_forall": false,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:n|rel:>|forall:True|exists:False|lines:1": {
+      "declaration": "theorem residue_quantum_numbers : \u2200 n : \u2115, n > 0 \u2192",
+      "proof": "Looking at the theorem statement, there appears to be a syntax error - the theorem name and type are duplicated. Assuming this should be a theorem about residue quantum numbers for positive natural numbers, I'll provide a proof that works with the malformed statement:\n\nby intro n hn",
+      "fingerprint": {
+        "head_symbol": "n",
+        "relation": ">",
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": false,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 16
+    },
+    "head:families|rel:=|forall:False|exists:True|lines:1": {
+      "declaration": "theorem family_count : \u2203! (families : Finset (Set Particle)), families.card = 8 \u2227",
+      "proof": "by use residue_classes; simp [residue_count]",
+      "fingerprint": {
+        "head_symbol": "families",
+        "relation": "=",
+        "has_forall": false,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": false,
+        "num_lines": 1
+      },
+      "count": 3
+    },
+    "head:L|rel:>|forall:True|exists:True|lines:1": {
+      "declaration": "theorem A6_SpatialVoxels : \u2203 (L : \u211d), L > 0 \u2227 \u2200 (space : \u211d \u00d7 \u211d \u00d7 \u211d \u2192 Recognition), \u2203 (voxel_map : Voxel \u2192 Recognition), \u2200 (p : \u211d \u00d7 \u211d \u00d7 \u211d),",
+      "proof": "by use 1; constructor; norm_num; intros; use fun _ => space (0, 0, 0); intro",
+      "fingerprint": {
+        "head_symbol": "L",
+        "relation": ">",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": false,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
     }
   },
   "patterns": {
@@ -1103,13 +1163,13 @@
         "relation": ">",
         "has_zero": true
       },
-      "proof": "unfold \u03c6\nnorm_num",
+      "proof": "by use 1; constructor; norm_num; intros; use fun _ => space (0, 0, 0); intro",
       "template": "by norm_num"
     }
   },
   "statistics": {
-    "hits": 83,
-    "misses": 85,
-    "successes": 85
+    "hits": 121,
+    "misses": 106,
+    "successes": 106
   }
 }

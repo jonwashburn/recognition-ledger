@@ -27,7 +27,13 @@ class CompileChecker:
                 
         # Create a backup
         backup_path = file_path.with_suffix('.backup')
-        shutil.copy(file_path, backup_path)
+        backup_created = False
+        try:
+            shutil.copy(file_path, backup_path)
+            backup_created = True
+        except Exception:
+            # If backup fails, we can still try the proof
+            pass
         
         try:
             # Replace the sorry with the new proof
@@ -58,21 +64,26 @@ class CompileChecker:
                     return (True, None)
                 else:
                     # Failed - restore original
-                    shutil.copy(backup_path, file_path)
+                    if backup_created and backup_path.exists():
+                        shutil.copy(backup_path, file_path)
                     return (False, result[1])
             else:
                 return (False, f"Line {sorry_line} out of range")
                 
         except Exception as e:
             # Restore on any error
-            if backup_path.exists():
+            if backup_created and backup_path.exists():
                 shutil.copy(backup_path, file_path)
             return (False, str(e))
             
         finally:
             # Clean up backup
-            if backup_path.exists():
-                backup_path.unlink()
+            if backup_created and backup_path.exists():
+                try:
+                    backup_path.unlink()
+                except Exception:
+                    # Ignore cleanup errors
+                    pass
                 
     def compile_file(self, file_path: Path) -> Tuple[bool, Optional[str]]:
         """

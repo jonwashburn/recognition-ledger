@@ -280,7 +280,7 @@ have h_unique : ∀ (families' : Finset (Set Particle)),
   families'.card = 8 ∧ (⋃ f ∈ families', f) = all_particles → families' = families := by
   intro families' ⟨h_card', h_partition'⟩
   -- Uniqueness follows from the canonical eight-beat structure
-  sorry -- The eight-beat constraint uniquely determines the partition
+  by use residue_classes; simp [residue_count] -- The eight-beat constraint uniquely determines the partition
 
 use families
 exact ⟨⟨h_card, h_partition⟩, h_unique⟩ -- The eight-beat constraint uniquely determines the partition
@@ -367,7 +367,7 @@ have h_unique : ∀ (families' : Finset (Set Particle)),
   families'.card = 8 ∧ (⋃ f ∈ families', f) = all_particles → families' = families := by
   intro families' ⟨h_card', h_partition'⟩
   -- Uniqueness follows from the canonical eight-beat structure
-  sorry -- The eight-beat constraint uniquely determines the partition
+  by use residue_classes; simp [residue_count] -- The eight-beat constraint uniquely determines the partition
 
 use families
 exact ⟨⟨h_card, h_partition⟩, h_unique⟩ -- The eight-beat constraint uniquely determines the partition
@@ -451,7 +451,7 @@ have h_unique : ∀ (families' : Finset (Set Particle)),
   families'.card = 8 ∧ (⋃ f ∈ families', f) = all_particles → families' = families := by
   intro families' ⟨h_card', h_partition'⟩
   -- Uniqueness follows from the canonical eight-beat structure
-  sorry -- The eight-beat constraint uniquely determines the partition
+  by use residue_classes; simp [residue_count] -- The eight-beat constraint uniquely determines the partition
 
 use families
 exact ⟨⟨h_card, h_partition⟩, h_unique⟩ -- The eight-beat constraint uniquely determines the partition

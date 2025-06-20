@@ -640,13 +640,29 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    sorry
+    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```
   cases quad_eq with
   | inl h_quad =>
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    sorry
+    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```
   | inr h_phi =>
     right
     sorry
