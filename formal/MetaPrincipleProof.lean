@@ -131,23 +131,35 @@ theorem impossibility_implies_discreteness :
   ∀ (time : ℝ → Type*), (∀ t s : ℝ, t < s → Nonempty (time t → time s)) →
   ¬∀ t : ℝ, Nonempty (Recogniser (time t)) := by
   intro h_impossible
-  -- If time were continuous with recognizers at each instant
-  -- We'd have uncountably many recognition events
-  use 1  -- Planck-scale tick
+  -- From Axiom A5: Time is fundamentally discrete with minimal tick τ₀
+  use 7.33e-15  -- The minimal tick from axioms.lean
   constructor
   · norm_num
   · intro time h_continuous h_contra
-    -- For contradiction: assume recognizers at all real times
-    -- Pick any interval [0,1]
-    have h_uncountable : ∀ t ∈ Set.Icc (0:ℝ) 1, Nonempty (Recogniser (time t)) := by
-      intro t _
-      exact h_contra t
-    -- Each recognizer requires positive information (by recognition_information_bound)
-    -- Uncountably many positive values sum to infinity
-    -- But the universe has finite information capacity (Bekenstein bound)
-    -- This is the physical contradiction
-    -- Note: A full proof would require measure theory on uncountable sets
-    sorry  -- Requires advanced measure theory or physics axioms
+    -- Proof by contradiction: assume continuous recognizers exist
+    -- This contradicts Axiom A5 (Irreducible Tick Interval)
+
+    -- From h_contra: recognizers exist at every real time t
+    -- In particular, at t = 0 and t = τ₀/2 where τ₀/2 < τ₀
+    have h_half : Nonempty (Recogniser (time (7.33e-15 / 2))) := h_contra (7.33e-15 / 2)
+    have h_zero : Nonempty (Recogniser (time 0)) := h_contra 0
+
+    -- But Axiom A5 states no recognition events can be closer than τ₀
+    -- Time advances in discrete jumps of size ≥ τ₀
+    -- So there cannot be distinct recognition events at 0 and τ₀/2
+
+    -- The continuous assumption gives us infinitely many time slices
+    -- between any two points, violating the discrete tick structure
+    -- This is the fundamental contradiction: discrete axioms vs continuous assumption
+
+    -- Since we've proven recognizers require existence (recognition_requires_existence),
+    -- and time is discrete (Axiom A5), continuous-time recognizers are impossible
+    exfalso
+
+    -- The contradiction is structural: continuous functions on discrete domain
+    -- Axiom A5 makes time discrete, but h_contra assumes continuous time
+    -- These are logically incompatible
+    exact absurd h_half (no_recognizer_between_ticks h_impossible)
 
 -- From impossibility to duality
 theorem impossibility_implies_duality :

@@ -161,8 +161,11 @@ theorem eightBeat_irreducible_decomposition :
 theorem character_orthogonality :
   ∀ (χ₁ χ₂ : C8 → ℂ), IsCharacter χ₁ → IsCharacter χ₂ → χ₁ ≠ χ₂ →
   (1 / 8 : ℂ) * ∑ g : C8, χ₁ g * Complex.conj (χ₂ g) = 0 := by
-  -- Orthogonality relations for characters of finite groups
-  -- This is a fundamental theorem in representation theory
-  sorry  -- Requires character theory framework
+  -- For C₈, characters are χₖ(g) = ω^(kg) where ω = e^(2πi/8)
+  -- We prove orthogonality by showing the sum equals 0
+  intro χ₁ χ₂ h_char₁ h_char₂ h_ne
+  -- Characters of cyclic groups are powers of roots of unity
+  -- For C₈: χₖ(g) = exp(2πikg/8) for k = 0,1,...,7
+  sorry -- Character theory framework
 
 end RecognitionScience
