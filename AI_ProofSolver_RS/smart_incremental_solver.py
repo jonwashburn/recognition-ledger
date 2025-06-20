@@ -19,7 +19,7 @@ if not API_KEY:
     sys.exit(1)
 
 client = Anthropic(api_key=API_KEY)
-MODEL = "claude-sonnet-4-20250514"  # Claude 4 Sonnet
+MODEL = "claude-opus-4-20250514"  # Claude 4 Opus
 
 # Categories of easy proofs
 EASY_PATTERNS = [

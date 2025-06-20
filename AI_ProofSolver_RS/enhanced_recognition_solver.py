@@ -14,7 +14,7 @@ import json
 class EnhancedRecognitionSolver:
     def __init__(self, api_key: str):
         self.client = anthropic.Anthropic(api_key=api_key)
-        self.model = "claude-sonnet-4-20250514"  # Claude Sonnet 4
+        self.model = "claude-opus-4-20250514"  # Claude Opus 4
         
         # Enhanced context with specific examples and patterns
         self.enhanced_context = """

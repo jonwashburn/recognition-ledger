@@ -105,7 +105,7 @@ class RecognitionProofGenerator:
     
     def __init__(self, api_key: str):
         self.client = anthropic.Anthropic(api_key=api_key)
-        self.model = "claude-sonnet-4-20250514"  # Claude Sonnet 4
+        self.model = "claude-opus-4-20250514"  # Claude Opus 4
     
     def create_rs_prompt(self, lemma_name: str, lemma_statement: str, context: str, hint: str = "") -> str:
         """Create a Recognition Science specific prompt"""

@@ -28,7 +28,7 @@ class ParallelSolver:
         
         # Create a pool of clients
         self.clients = [anthropic.Anthropic(api_key=api_key) for _ in range(max_workers)]
-        self.model = "claude-sonnet-4-20250514"
+        self.model = "claude-opus-4-20250514"
         
         # Base solver for utilities
         self.base_solver = IterativeClaude4Solver(api_key)

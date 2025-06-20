@@ -21,7 +21,7 @@ class UltimateSolver:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.client = anthropic.Anthropic(api_key=api_key)
-        self.model = "claude-sonnet-4-20250514"
+        self.model = "claude-opus-4-20250514"
         
         # Initialize all components
         self.cache = ProofCache()

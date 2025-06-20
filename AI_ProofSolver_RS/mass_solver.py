@@ -6,7 +6,7 @@ from anthropic import Anthropic
 
 API_KEY = os.environ.get('ANTHROPIC_API_KEY')
 client = Anthropic(api_key=API_KEY)
-MODEL = "claude-sonnet-4-20250514"
+MODEL = "claude-opus-4-20250514"
 
 # Target files with moderate sorry counts
 TARGET_FILES = [

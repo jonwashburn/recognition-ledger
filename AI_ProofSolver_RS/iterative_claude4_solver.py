@@ -13,7 +13,7 @@ import json
 class IterativeClaude4Solver:
     def __init__(self, api_key: str):
         self.client = anthropic.Anthropic(api_key=api_key)
-        self.model = "claude-sonnet-4-20250514"
+        self.model = "claude-opus-4-20250514"
         
         # Lessons learned from failures
         self.learned_patterns = {

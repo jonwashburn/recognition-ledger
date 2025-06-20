@@ -14,7 +14,7 @@ if not API_KEY:
     exit(1)
 
 client = Anthropic(api_key=API_KEY)
-MODEL = "claude-sonnet-4-20250514"
+MODEL = "claude-opus-4-20250514"
 
 # Specific proofs to complete
 COMPLETABLE_PROOFS = [

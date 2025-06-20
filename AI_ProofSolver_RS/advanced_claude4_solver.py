@@ -17,7 +17,7 @@ from iterative_claude4_solver import IterativeClaude4Solver
 class AdvancedClaude4Solver:
     def __init__(self, api_key: str):
         self.client = anthropic.Anthropic(api_key=api_key)
-        self.model = "claude-sonnet-4-20250514"
+        self.model = "claude-opus-4-20250514"
         
         # Initialize components
         self.cache = ProofCache()

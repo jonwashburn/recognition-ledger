@@ -113,7 +113,7 @@ class ProofCompleter:
         try:
             response = await asyncio.to_thread(
                 self.client.messages.create,
-                model="claude-sonnet-4-20250514",
+                model="claude-opus-4-20250514",
                 max_tokens=2000,
                 temperature=0.1 + (attempt - 1) * 0.1,
                 messages=[{"role": "user", "content": prompt}]

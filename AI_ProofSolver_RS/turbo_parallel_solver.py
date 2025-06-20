@@ -32,7 +32,7 @@ class TurboParallelSolver:
         
         # Create a pool of clients
         self.clients = [anthropic.Anthropic(api_key=api_key) for _ in range(max_workers)]
-        self.model = "claude-sonnet-4-20250514"
+        self.model = "claude-opus-4-20250514"
         
         # Thread pool for parallel execution
         self.executor = ThreadPoolExecutor(max_workers=max_workers)

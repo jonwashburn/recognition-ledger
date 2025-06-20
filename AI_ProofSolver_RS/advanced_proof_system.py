@@ -118,7 +118,7 @@ class Claude4ProofGenerator:
     
     def __init__(self, api_key: str):
         self.client = anthropic.Anthropic(api_key=api_key)
-        self.model = "claude-sonnet-4-20250514"
+        self.model = "claude-opus-4-20250514"
     
     def create_optimized_prompt(self, lemma_name: str, lemma_statement: str, context: str) -> str:
         """Create an optimized prompt for Claude 4"""
