@@ -315,7 +315,15 @@ apply List.sum_pos
     -- But this contradicts S being infinite with positive info per element
     exfalso
     -- This is the contradiction we're seeking
-    sorry -- Would need recognition at each point
+    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+``` -- Would need recognition at each point
   -- The contradiction shows that not all elements of infinite S can be recognizable
   exact h_total_info.elim
 
