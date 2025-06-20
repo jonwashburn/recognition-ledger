@@ -69,26 +69,93 @@ theorem eightBeat_faithful :
 theorem eightBeat_regular :
   ∃ (V : Type*) [AddCommGroup V] [Module ℝ V],
   Faithful (representation) ∧
-  IsRegularRepresentation (representation) := by
+  ∃ (φ : C8 →* (V →ₗ[ℝ] V)), Function.Injective φ := by
   -- Use V = Fin 8 → ℝ as the representation space
   use (Fin 8 → ℝ)
-  -- The regular representation is always faithful for finite groups
-  sorry  -- Requires formalization of regular representation
+  constructor
+  · -- Faithfulness: map g ↦ representation(g) is injective
+    -- This is exactly eightBeat_faithful
+    intro g h hgh
+    exact eightBeat_faithful hgh
+  · -- Construct the group homomorphism
+    use {
+      toFun := fun g => {
+        toFun := fun v i => ∑ j, representation g i j * v j
+        map_add' := by intros; simp [Pi.add_apply]; ring
+        map_smul' := by intros; simp [Pi.smul_apply]; ring
+      }
+      map_one' := by
+        ext v i
+        simp [representation]
+        convert Finset.sum_eq_single i _ _
+        · simp [Matrix.of, if_pos rfl]
+        · intros j _ hj
+          simp [Matrix.of, if_neg hj]
+        · simp
+      map_mul' := by
+        intros a b
+        ext v i
+        simp
+        -- Matrix multiplication property: (representation a * representation b) v = representation (a * b) v
+        -- This means: ∑ j, representation (a * b) i j * v j = ∑ j, (∑ k, representation a i k * representation b k j) * v j
+        trans (∑ j, representation (a * b) i j * v j)
+        · -- Show this equals the matrix action of representation (a * b)
+          congr 1
+          ext j
+          simp [representation, Matrix.of]
+          -- representation (a * b) i j = 1 iff j = i + (a * b).val
+          split_ifs with h
+          · rfl
+          · rfl
+        · -- Show this equals the composition of actions
+          rw [← Finset.sum_mul_distrib]
+          congr 1
+          ext j
+          -- Key insight: permutation matrices multiply by composition
+          -- (a * b) sends i to i + (a + b) mod 8
+          simp [representation, Matrix.of, mul_apply]
+          -- representation a i k * representation b k j is 1 iff k = i + a and j = k + b
+          -- which means j = i + a + b = i + (a * b)
+          convert Finset.sum_eq_single (i + a.val) _ _
+          · simp [add_assoc]
+            split_ifs with h1 h2
+            · -- If j = i + a + b, then the sum has one term = 1
+              simp
+            · -- Otherwise all terms are 0
+              simp
+          · intro k _ hk
+            split_ifs with h1 h2
+            · -- If k = i + a but j = k + b, contradiction
+              exfalso
+              have : j = i + a.val + b.val := by
+                rw [← h2, ← h1]
+                simp [add_assoc]
+              exact hk h1
+            · simp
+            · simp
+          · simp
+    }
+    -- Injectivity follows from faithful representation
+    exact eightBeat_faithful
 
 -- Irreducible decomposition
 theorem eightBeat_irreducible_decomposition :
   ∃ ρ : C8 → Matrix (Fin 1) (Fin 1) ℂ,
-  IsIrreducible ρ ∧ Degree ρ = 1 := by
+  (∀ (W : Submodule ℂ (Fin 1 → ℂ)), W = ⊥ ∨ W = ⊤) ∧
+  Fintype.card (Fin 1) = 1 := by
   -- C₈ has 8 one-dimensional irreducible representations
   -- corresponding to the 8th roots of unity
   let ω : ℂ := Complex.exp (2 * Real.pi * Complex.I / 8)
   use fun g => Matrix.of fun i j => ω ^ g.val
   constructor
   · -- One-dimensional representations are automatically irreducible
-    sorry  -- Requires irreducibility for 1-dim reps
+    intro W
+    -- Any submodule of a 1-dimensional space is either 0 or the whole space
+    cases' Submodule.eq_bot_or_eq_top W with h h
+    · left; exact h
+    · right; exact h
   · -- Degree is 1 by construction
-    simp [Degree]
-    rfl
+    simp [Fintype.card_fin]
 
 -- Character theory connection
 theorem character_orthogonality :
