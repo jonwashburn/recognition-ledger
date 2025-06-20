@@ -607,7 +607,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -621,7 +621,7 @@ apply List.sum_pos
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -640,7 +640,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -654,7 +654,7 @@ apply List.sum_pos
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -665,7 +665,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     right
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -679,7 +679,7 @@ apply List.sum_pos
   cases h with
   | inl h_vacuum =>
     -- Show J vacuum = vacuum
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -690,7 +690,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     -- Show J φ_state = φ_state, which follows from φ being the golden ratio
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -720,7 +720,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -734,7 +734,7 @@ apply List.sum_pos
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -745,7 +745,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     right
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -759,7 +759,7 @@ apply List.sum_pos
   cases h with
   | inl h_vacuum =>
     -- Show J vacuum = vacuum
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -770,7 +770,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     -- Show J φ_state = φ_state, which follows from φ being the golden ratio
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -792,7 +792,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -806,7 +806,7 @@ apply List.sum_pos
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -817,7 +817,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     right
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -839,7 +839,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    sorry
+    by sorry
 
 ```lean
 apply List.sum_pos
@@ -1024,7 +1024,7 @@ constructor
     -- This follows from J s = s and the definition of J
     by sorry
   -- The solutions are s = 1 (vacuum) and s = φ (φ_state)
-  sorry
+  by sorry
 
 ```lean
 apply List.sum_pos
@@ -1052,14 +1052,14 @@ apply List.sum_pos
         -- Quadratic formula: val = (1 ± √5)/2
         have h_eq : val^2 - val - 1 = 0 := by
           -- This is the defining equation for φ
-          sorry -- Need to establish from context
+          by sorry -- Need to establish from context
         -- Apply quadratic formula
         have h_disc : (1 : ℝ)^2 - 4 * 1 * (-1) = 5 := by norm_num
         have h_roots : val = (1 + Real.sqrt 5) / 2 ∨ val = (1 - Real.sqrt 5) / 2 := by
-          sorry -- Quadratic formula application
+          by sorry -- Quadratic formula application
         cases h_roots with
         | inl h => left; simp [φ]; exact h
-        | inr h => right; simp [φ]; sorry -- Show (1 - √5)/2 = -1/φ
+        | inr h => right; simp [φ]; by sorry -- Show (1 - √5)/2 = -1/φ
       -- Since val > 0 (physical state), val = φ
       cases' h_phi with h_pos h_neg
       · exact h_pos

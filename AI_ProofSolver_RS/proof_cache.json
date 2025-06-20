@@ -329,6 +329,36 @@
         "num_lines": 4
       },
       "count": 1
+    },
+    "head:E_0|rel:=|forall:True|exists:True|lines:4": {
+      "declaration": "theorem phi_ladder_continuum :\n  \u2200 E_0 : \u211d, E_0 > 0 \u2192 \u2200 \u03b5 : \u211d, \u03b5 > 0 \u2192\n  \u2203 N : \u2115, \u2200 n \u2265 N,\n  |log (phi_ladder E_0 (n + 1) / phi_ladder E_0 n) - log \u03c6| < \u03b5 := by sorry",
+      "proof": "intro E_0 hE_0 \u03b5 h\u03b5\nuse 0\nintro n _\nsimp [phi_ladder_ratio hE_0]\nrw [log_div (phi_ladder_positive hE_0 n) (phi_ladder_positive hE_0 (n + 1))]\nsimp",
+      "fingerprint": {
+        "head_symbol": "E_0",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 4
+      },
+      "count": 1
+    },
+    "head:n|rel:=|forall:True|exists:True|lines:3": {
+      "declaration": "theorem residue_quantum_numbers :\n  \u2200 n : \u2115, n > 0 \u2192\n  card {r : \u211d | \u2203 k : \u2115, r = phi_residue k n} = quantum_states n := by sorry",
+      "proof": "intro n hn\n-- The number of distinct residues modulo \u03c6^n equals the quantum states\n-- This follows from the fundamental quantization principle\nsorry",
+      "fingerprint": {
+        "head_symbol": "n",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 3
+      },
+      "count": 1
     }
   },
   "patterns": {
@@ -342,8 +372,8 @@
     }
   },
   "statistics": {
-    "hits": 43,
-    "misses": 48,
-    "successes": 48
+    "hits": 44,
+    "misses": 50,
+    "successes": 50
   }
 }
