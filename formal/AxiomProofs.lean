@@ -632,6 +632,32 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     right
+    intro s
+constructor
+· -- Forward direction: if J s = s, then s = vacuum or s = φ_state
+  intro h
+  -- Use the fact that J(x) = x has exactly two solutions
+  -- From the definition of J and the quadratic nature of the fixed point equation
+  have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
+    -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
+    sorry
+  cases quad_eq with
+  | inl h_quad =>
+    -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
+    -- So this case leads to s = vacuum (the limiting case)
+    left
+    sorry
+  | inr h_phi =>
+    right
+    sorry
+· -- Reverse direction: if s = vacuum or s = φ_state, then J s = s
+  intro h
+  cases h with
+  | inl h_vacuum =>
+    -- Show J vacuum = vacuum
+    sorry
+  | inr h_phi =>
+    -- Show J φ_state = φ_state, which follows from φ being the golden ratio
     sorry
 · -- Reverse direction: if s = vacuum or s = φ_state, then J s = s
   intro h
@@ -646,6 +672,32 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
+    intro s
+constructor
+· -- Forward direction: if J s = s, then s = vacuum or s = φ_state
+  intro h
+  -- Use the fact that J(x) = x has exactly two solutions
+  -- From the definition of J and the quadratic nature of the fixed point equation
+  have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
+    -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
+    sorry
+  cases quad_eq with
+  | inl h_quad =>
+    -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
+    -- So this case leads to s = vacuum (the limiting case)
+    left
+    sorry
+  | inr h_phi =>
+    right
+    sorry
+· -- Reverse direction: if s = vacuum or s = φ_state, then J s = s
+  intro h
+  cases h with
+  | inl h_vacuum =>
+    -- Show J vacuum = vacuum
+    sorry
+  | inr h_phi =>
+    -- Show J φ_state = φ_state, which follows from φ being the golden ratio
     sorry
   cases quad_eq with
   | inl h_quad =>
@@ -1087,6 +1139,27 @@ theorem recognition_complexity_bounds :
   -- Recognition-based algorithms (quantum coherent) can be simulated
   -- classically with φ-polynomial overhead
   -- This connects A1 (discrete recognition) to computational complexity
+  sorry -- Requires advanced computational complexity theory
+
+-- Information-theoretic foundation
+theorem recognition_information_theory :
+  ∀ (X : Type*) [Fintype X] (P : X → ℝ) (h_prob : ∑ x, P x = 1),
+  -- Entropy of recognition process
+  let H_recognition := -∑ x, P x * log (P x)
+  -- Is bounded by golden ratio times classical entropy
+  H_recognition ≤ φ * (-∑ x, P x * log (P x)) := by
+  -- Recognition processes have enhanced information capacity
+  -- The φ factor comes from the golden ratio optimization
+  -- This provides information-theoretic foundation for all axioms
+  sorry -- Requires advanced information theory and entropy bounds
+
+end RecognitionScience
+he golden ratio optimization
+  -- This provides information-theoretic foundation for all axioms
+  sorry -- Requires advanced information theory and entropy bounds
+
+end RecognitionScience
+ational complexity
   sorry -- Requires advanced computational complexity theory
 
 -- Information-theoretic foundation

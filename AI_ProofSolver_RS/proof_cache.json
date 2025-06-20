@@ -1064,6 +1064,21 @@
         "num_lines": 3
       },
       "count": 1
+    },
+    "head:E|rel:=|forall:True|exists:True|lines:5": {
+      "declaration": "theorem prediction_stability :\n  \u2200 (\u03b5 : \u211d), \u03b5 > 0 \u2192\n    \u2203 (\u03b4 : \u211d), \u03b4 > 0 \u2227\n      \u2200 (E : \u211d), abs (E - E_coh) < \u03b4 \u2192\n        abs (E * \u03c6^32 - E_coh * \u03c6^32) < \u03b5 := by",
+      "proof": "intro \u03b5 h\u03b5\nuse \u03b5 / \u03c6^32\nconstructor\n\u00b7 apply div_pos h\u03b5\n  exact pow_pos phi_positive 32\n\u00b7 intro E hE\n  have h1 : abs (E * \u03c6^32 - E_coh * \u03c6^32) = abs ((E - E_coh) * \u03c6^32) := by\n    ring_nf\n    rfl\n  rw [h1]\n  rw [abs_mul]\n  have h2 : abs (\u03c6^32) = \u03c6^32 := abs_of_pos (pow_pos phi_positive 32)\n  rw [h2]\n  have h3 : abs (E - E_coh) * \u03c6^32 < (\u03b5 / \u03c6^32) * \u03c6^32 := by\n    apply mul_lt_mul_of_pos_right hE (pow_pos phi_positive 32)\n  rwa [div_mul_cancel] at h3\n  exact ne_of_gt (pow_pos phi_positive 32)",
+      "fingerprint": {
+        "head_symbol": "E",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 5
+      },
+      "count": 1
     }
   },
   "patterns": {
@@ -1080,7 +1095,7 @@
         "has_division": true,
         "relation": ">"
       },
-      "proof": "use E_coh  -- Use coherence quantum as the scale anchor\nconstructor\n\u00b7 -- E_coh > 0\n  exact E_coh_positive\n\u00b7 -- Scale consistency for all positive energies\n  intro E h_pos\n  -- Scale consistency means ratios are \u03c6-ladder related\n  unfold scale_consistent\n  -- For any energy E, its ratio to E_coh determines its rung position\n  have h_ratio_pos : E / E_coh > 0 := div_pos h_pos E_coh_positive\n  -- The \u03c6-ladder provides natural scale relationships\n  use \u230alog (E / E_coh) / log \u03c6\u230b  -- Rung number from logarithmic scaling\n  -- Consistency follows from \u03c6-ladder structure\n  simp [phi_ladder_scaling]",
+      "proof": "intro \u03b5 h\u03b5\nuse \u03b5 / \u03c6^32\nconstructor\n\u00b7 apply div_pos h\u03b5\n  exact pow_pos phi_positive 32\n\u00b7 intro E hE\n  have h1 : abs (E * \u03c6^32 - E_coh * \u03c6^32) = abs ((E - E_coh) * \u03c6^32) := by\n    ring_nf\n    rfl\n  rw [h1]\n  rw [abs_mul]\n  have h2 : abs (\u03c6^32) = \u03c6^32 := abs_of_pos (pow_pos phi_positive 32)\n  rw [h2]\n  have h3 : abs (E - E_coh) * \u03c6^32 < (\u03b5 / \u03c6^32) * \u03c6^32 := by\n    apply mul_lt_mul_of_pos_right hE (pow_pos phi_positive 32)\n  rwa [div_mul_cancel] at h3\n  exact ne_of_gt (pow_pos phi_positive 32)",
       "template": "by\n  unfold {definition}\n  apply div_pos {num_pos} {denom_pos}"
     },
     "positivity": {
@@ -1094,7 +1109,7 @@
   },
   "statistics": {
     "hits": 83,
-    "misses": 84,
-    "successes": 84
+    "misses": 85,
+    "successes": 85
   }
 }

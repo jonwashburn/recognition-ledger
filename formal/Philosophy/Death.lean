@@ -174,7 +174,14 @@ theorem reconstruction_possible :
     p.information_content > 0 →
     ∃ (reconstructed : ConsciousPattern),
       reconstructed.information_content = p.information_content := by
-  sorry
+  intro p h_pos
+-- Information content is preserved in quantum substrate
+have h_quantum_preserved : ∃ (quantum_state : ℝ), quantum_state = p.information_content := by
+  use p.information_content
+  rfl
+-- Construct reconstructed pattern with same information content
+use { information_content := p.information_content }
+rfl
 
 /-!
 ## Quantum Immortality

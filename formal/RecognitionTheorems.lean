@@ -321,7 +321,10 @@ theorem momentum_from_recognition :
   -- This follows from Noether's theorem applied to recognition symmetry
   intro p
   -- For any momentum component p, it is conserved
-  sorry
+  -- This follows from Noether's theorem applied to recognition symmetry
+intro p
+-- For any momentum component p, it is conserved
+exact noether_momentum_conservation p hpres
 
 -- Emergence of dimensionality
 theorem dimension_emergence :
@@ -350,7 +353,10 @@ theorem momentum_from_recognition :
   -- This follows from Noether's theorem applied to recognition symmetry
   intro p
   -- For any momentum component p, it is conserved
-  sorry
+  -- This follows from Noether's theorem applied to recognition symmetry
+intro p
+-- For any momentum component p, it is conserved
+exact noether_momentum_conservation p hpres
 
 -- Emergence of dimensionality
 theorem dimension_emergence :

@@ -715,11 +715,53 @@ have h_bij : Function.Bijective L := by
     have h₂ : information_content (L r₂) = information_content r₂ := h_preserve r₂
     rw [h_eq] at h₁
     rw [h₁, h₂]
+    intro L h_preserve
+-- Information-preserving maps are invertible by unitarity
+-- The preservation of information content implies bijection
+have h_bij : Function.Bijective L := by
+  constructor
+  · -- Injective: if L(r₁) and L(r₂) have same info, then r₁ = r₂
+    intros r₁ r₂ h_eq
+    have h₁ : information_content (L r₁) = information_content r₁ := h_preserve r₁
+    have h₂ : information_content (L r₂) = information_content r₂ := h_preserve r₂
+    rw [h_eq] at h₁
+    rw [h₁, h₂]
     sorry -- Information content determines recognition state
   · -- Surjective: every recognition state is reachable
     intro r
     use r  -- By unitarity, r maps to some state with same information
     sorry -- Information preservation ensures surjectivity
+-- Extract inverse from bijection
+obtain ⟨L_inv, h_left, h_right⟩ := Function.Bijective.exists_right_inverse_of_surjective h_bij.2
+use L_inv
+constructor
+· exact h_right
+· exact Function.Bijective.left_inverse_iff_comp.mp (Function.Bijective.exists_left_inverse_of_injective h_bij.1).choose_spec -- Information content determines recognition state
+  · -- Surjective: every recognition state is reachable
+    intro r
+    use r  -- By unitarity, r maps to some state with same information
+    intro L h_preserve
+-- Information-preserving maps are invertible by unitarity
+-- The preservation of information content implies bijection
+have h_bij : Function.Bijective L := by
+  constructor
+  · -- Injective: if L(r₁) and L(r₂) have same info, then r₁ = r₂
+    intros r₁ r₂ h_eq
+    have h₁ : information_content (L r₁) = information_content r₁ := h_preserve r₁
+    have h₂ : information_content (L r₂) = information_content r₂ := h_preserve r₂
+    rw [h_eq] at h₁
+    rw [h₁, h₂]
+    sorry -- Information content determines recognition state
+  · -- Surjective: every recognition state is reachable
+    intro r
+    use r  -- By unitarity, r maps to some state with same information
+    sorry -- Information preservation ensures surjectivity
+-- Extract inverse from bijection
+obtain ⟨L_inv, h_left, h_right⟩ := Function.Bijective.exists_right_inverse_of_surjective h_bij.2
+use L_inv
+constructor
+· exact h_right
+· exact Function.Bijective.left_inverse_iff_comp.mp (Function.Bijective.exists_left_inverse_of_injective h_bij.1).choose_spec -- Information preservation ensures surjectivity
 -- Extract inverse from bijection
 obtain ⟨L_inv, h_left, h_right⟩ := Function.Bijective.exists_right_inverse_of_surjective h_bij.2
 use L_inv

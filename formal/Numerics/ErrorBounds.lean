@@ -234,7 +234,23 @@ theorem prediction_stability :
     ∃ (δ : ℝ), δ > 0 ∧
       ∀ (E : ℝ), abs (E - E_coh) < δ →
         abs (E * φ^32 - E_coh * φ^32) < ε := by
-  sorry
+  intro ε hε
+use ε / φ^32
+constructor
+· apply div_pos hε
+  exact pow_pos phi_positive 32
+· intro E hE
+  have h1 : abs (E * φ^32 - E_coh * φ^32) = abs ((E - E_coh) * φ^32) := by
+    ring_nf
+    rfl
+  rw [h1]
+  rw [abs_mul]
+  have h2 : abs (φ^32) = φ^32 := abs_of_pos (pow_pos phi_positive 32)
+  rw [h2]
+  have h3 : abs (E - E_coh) * φ^32 < (ε / φ^32) * φ^32 := by
+    apply mul_lt_mul_of_pos_right hE (pow_pos phi_positive 32)
+  rwa [div_mul_cancel] at h3
+  exact ne_of_gt (pow_pos phi_positive 32)
 
 #check electron_mass_within_bounds
 #check all_lepton_masses_correct

@@ -293,7 +293,87 @@ exact ⟨⟨h_card, h_partition⟩, h_unique⟩
 #check evolution_period
 
 end RecognitionScience.Core.EightBeat
-cles := by sorry
+cles := -- From the eight-beat structure, particles naturally organize into 8 families
+-- Each family corresponds to one beat of the fundamental cycle
+have h_families : ∃ (families : Finset (Set Particle)), families.card = 8 := by
+  -- Construct families based on particle_slot classification
+  let families := Finset.range 8 |>.image (fun i => {p : Particle | particle_slot p = i})
+  use families
+  simp [Finset.card_image_of_injective]
+  norm_num
+
+-- Extract the families from existence
+obtain ⟨families, h_card⟩ := h_families
+
+-- Show these families partition all particles
+have h_partition : (⋃ f ∈ families, f) = all_particles := by
+  ext p
+  simp
+  constructor
+  · intro h
+    -- Any particle in a family is in all_particles
+    exact Set.mem_univ p
+  · intro h
+    -- Every particle belongs to exactly one family by particle_slot
+    use {q : Particle | particle_slot q = particle_slot p}
+    constructor
+    · simp [families]
+      use particle_slot p
+      constructor
+      · -- particle_slot p ∈ range 8
+        exact Finset.mem_range.mpr (particle_slot_lt_eight p)
+      · rfl
+    · simp
+
+-- Establish uniqueness
+have h_unique : ∀ (families' : Finset (Set Particle)), 
+  families'.card = 8 ∧ (⋃ f ∈ families', f) = all_particles → families' = families := by
+  intro families' ⟨h_card', h_partition'⟩
+  -- Uniqueness follows from the canonical eight-beat structure
+  -- From the eight-beat structure, particles naturally organize into 8 families
+-- Each family corresponds to one beat of the fundamental cycle
+have h_families : ∃ (families : Finset (Set Particle)), families.card = 8 := by
+  -- Construct families based on particle_slot classification
+  let families := Finset.range 8 |>.image (fun i => {p : Particle | particle_slot p = i})
+  use families
+  simp [Finset.card_image_of_injective]
+  norm_num
+
+-- Extract the families from existence
+obtain ⟨families, h_card⟩ := h_families
+
+-- Show these families partition all particles
+have h_partition : (⋃ f ∈ families, f) = all_particles := by
+  ext p
+  simp
+  constructor
+  · intro h
+    -- Any particle in a family is in all_particles
+    exact Set.mem_univ p
+  · intro h
+    -- Every particle belongs to exactly one family by particle_slot
+    use {q : Particle | particle_slot q = particle_slot p}
+    constructor
+    · simp [families]
+      use particle_slot p
+      constructor
+      · -- particle_slot p ∈ range 8
+        exact Finset.mem_range.mpr (particle_slot_lt_eight p)
+      · rfl
+    · simp
+
+-- Establish uniqueness
+have h_unique : ∀ (families' : Finset (Set Particle)), 
+  families'.card = 8 ∧ (⋃ f ∈ families', f) = all_particles → families' = families := by
+  intro families' ⟨h_card', h_partition'⟩
+  -- Uniqueness follows from the canonical eight-beat structure
+  sorry -- The eight-beat constraint uniquely determines the partition
+
+use families
+exact ⟨⟨h_card, h_partition⟩, h_unique⟩ -- The eight-beat constraint uniquely determines the partition
+
+use families
+exact ⟨⟨h_card, h_partition⟩, h_unique⟩
 
 #check eight_beat
 #check gauge_from_eight
