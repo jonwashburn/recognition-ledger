@@ -607,7 +607,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -621,7 +621,7 @@ apply List.sum_pos
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -640,7 +640,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -654,7 +654,7 @@ apply List.sum_pos
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -665,7 +665,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     right
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -679,7 +679,7 @@ apply List.sum_pos
   cases h with
   | inl h_vacuum =>
     -- Show J vacuum = vacuum
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -690,7 +690,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     -- Show J φ_state = φ_state, which follows from φ being the golden ratio
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -720,7 +720,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -734,7 +734,7 @@ apply List.sum_pos
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -745,7 +745,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     right
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -759,7 +759,7 @@ apply List.sum_pos
   cases h with
   | inl h_vacuum =>
     -- Show J vacuum = vacuum
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -770,7 +770,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     -- Show J φ_state = φ_state, which follows from φ being the golden ratio
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -792,7 +792,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -806,7 +806,7 @@ apply List.sum_pos
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)
     -- So this case leads to s = vacuum (the limiting case)
     left
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -817,7 +817,7 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     right
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -839,7 +839,7 @@ constructor
   -- From the definition of J and the quadratic nature of the fixed point equation
   have quad_eq : s^2 - s + 1 = 0 ∨ s = φ := by
     -- This follows from J(s) = s ⟺ (s + 1/s)/2 = s ⟺ s + 1/s = 2s ⟺ s^2 - s + 1 = 0 (when s ≠ 0)
-    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+    sorry
 
 ```lean
 apply List.sum_pos
@@ -1024,7 +1024,7 @@ constructor
     -- This follows from J s = s and the definition of J
     by sorry
   -- The solutions are s = 1 (vacuum) and s = φ (φ_state)
-  Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+  sorry
 
 ```lean
 apply List.sum_pos
