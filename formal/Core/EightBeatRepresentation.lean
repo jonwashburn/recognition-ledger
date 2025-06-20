@@ -47,16 +47,23 @@ theorem eightBeat_faithful :
   -- The regular representation of a finite cyclic group is always faithful
   intro g h hgh
   -- If representation(g) = representation(h), then g = h
-  -- Check on basis vector e_0
-  have h_eq : representation g 0 0 = representation h 0 0 := by
-    rw [hgh]
-  simp [representation, Matrix.of] at h_eq
-  -- g sends e_0 to e_g, h sends e_0 to e_h
-  -- So if they're equal, g = h
   ext
-  simp [ZMod.ext_iff]
-  -- The matrices are equal iff g.val = h.val mod 8
-  sorry  -- This requires matrix equality lemmas
+  -- We need to show g.val = h.val
+  -- Look at where each matrix sends basis vector 0
+  have h_eq : representation g 0 (g.val) = representation h 0 (g.val) := by
+    rw [hgh]
+  -- g sends e_0 to e_{g.val}, so representation g 0 (g.val) = 1
+  have hg : representation g 0 (g.val) = 1 := by
+    simp [representation, Matrix.of]
+  -- If h.val ≠ g.val, then representation h 0 (g.val) = 0
+  by_cases h_ne : h.val ≠ g.val
+  · have hh : representation h 0 (g.val) = 0 := by
+      simp [representation, Matrix.of, h_ne.symm]
+    rw [hg, hh] at h_eq
+    norm_num at h_eq
+  · -- h.val = g.val
+    push_neg at h_ne
+    exact h_ne
 
 -- The representation is the regular representation
 theorem eightBeat_regular :
