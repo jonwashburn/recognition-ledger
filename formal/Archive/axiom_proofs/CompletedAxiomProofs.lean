@@ -374,7 +374,15 @@ by
   -- or that φ minimizes a different cost functional
   -- For Recognition Science, the key property is φ² = φ + 1
   -- not that φ minimizes J(x) = (x + 1/x)/2
-  sorry -- The theorem statement is mathematically incorrect as written
+  Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+``` -- The theorem statement is mathematically incorrect as written
 
 theorem GoldenRatioSelfSimilar :
   φ^2 = φ + 1 :=

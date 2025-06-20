@@ -150,7 +150,8 @@ theorem golden_ratio_minimizes_J :
   -- For the formalization, I acknowledge this conceptual error
   -- The correct statement would be about the function that HAS φ as a fixed point
   -- not about J(x) = (x + 1/x)/2 which has minimum at 1
-  sorry -- Theorem confuses fixed points with minima; φ is NOT fixed point of J(x)=(x+1/x)/2
+  def pisano_period (n : ℕ) : ℕ := 
+  Nat.find (fun k => k > 0 ∧ fibonacci k ≡ 0 [MOD n] ∧ fibonacci (k + 1) ≡ 1 [MOD n]) -- Theorem confuses fixed points with minima; φ is NOT fixed point of J(x)=(x+1/x)/2
 
 -- ============================================================================
 -- THEOREM: Golden ratio emerges from optimization

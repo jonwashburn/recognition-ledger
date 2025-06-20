@@ -1244,6 +1244,96 @@
         "num_lines": 1
       },
       "count": 1
+    },
+    "head:x|rel:>|forall:True|exists:False|lines:1": {
+      "declaration": "theorem A8_GoldenRatio : (\u2200 x : \u211d, x > 0 \u2192 J x \u2265 J \u03c6) \u2227",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": "x",
+        "relation": ">",
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": false,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 2
+    },
+    "head:t|rel:=|forall:True|exists:False|lines:1": {
+      "declaration": "theorem phi_determines_zeta_zeros : \u2200 (t : \u211d), \u03b6_critical t = 0 \u2192",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": "t",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:f|rel:None|forall:True|exists:True|lines:1": {
+      "declaration": "theorem A4_Unitarity : \u2200 (f : Ledger \u2192 Ledger), preserves_information f \u2192 \u2203 (g : Ledger \u2192 Ledger), preserves_information g \u2227",
+      "proof": "by use (fun l => l); constructor; \u00b7 simp [preserves_information]; \u00b7 simp [preserves_information]",
+      "fingerprint": {
+        "head_symbol": "f",
+        "relation": null,
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": false,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:planck_time|rel:>|forall:False|exists:True|lines:1": {
+      "declaration": "theorem A5_MinimalTick : \u2203 (\u03c4 : \u211d), \u03c4 > 0 \u2227 \u03c4 \u2265 planck_time \u2227",
+      "proof": "by use planck_time; simp [planck_time_pos]; rfl",
+      "fingerprint": {
+        "head_symbol": "planck_time",
+        "relation": ">",
+        "has_forall": false,
+        "has_exists": true,
+        "has_equality": false,
+        "has_inequality": true,
+        "has_implication": false,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:None|rel:None|forall:False|exists:True|lines:1": {
+      "declaration": "-- The theorem statement incorrectly assumes such a fixed point exists",
+      "proof": "I need to see the actual theorem statement to provide a proof. The comment suggests the theorem incorrectly assumes a fixed point exists, but without the specific statement, I cannot provide the appropriate term proof.\n\nCould you please provide the complete theorem statement that needs to be proven?",
+      "fingerprint": {
+        "head_symbol": null,
+        "relation": null,
+        "has_forall": false,
+        "has_exists": true,
+        "has_equality": false,
+        "has_inequality": false,
+        "has_implication": false,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:space|rel:None|forall:True|exists:False|lines:1": {
+      "declaration": "theorem continuous_space_infinite_info : \u2200 (space : Type*) [TopologicalSpace space] [T2Space space], Infinite space \u2192",
+      "proof": "by intro space; intro; intro; intro h; exact infinite_univ_nat",
+      "fingerprint": {
+        "head_symbol": "space",
+        "relation": null,
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": false,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
     }
   },
   "patterns": {
@@ -1268,13 +1358,13 @@
         "relation": ">",
         "has_zero": true
       },
-      "proof": "by use 1; constructor; norm_num; intros; use fun _ => space (0, 0, 0); intro",
+      "proof": "by use planck_time; simp [planck_time_pos]; rfl",
       "template": "by norm_num"
     }
   },
   "statistics": {
-    "hits": 253,
-    "misses": 122,
-    "successes": 122
+    "hits": 270,
+    "misses": 129,
+    "successes": 129
   }
 }

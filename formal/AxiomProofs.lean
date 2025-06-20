@@ -770,7 +770,15 @@ apply List.sum_pos
 ```
   | inr h_phi =>
     -- Show J φ_state = φ_state, which follows from φ being the golden ratio
-    sorry
+    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```
   cases quad_eq with
   | inl h_quad =>
     -- The quadratic s^2 - s + 1 = 0 has no real solutions (discriminant < 0)

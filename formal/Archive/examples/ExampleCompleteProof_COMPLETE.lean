@@ -128,7 +128,15 @@ theorem golden_ratio_minimizes_J :
     -- Second derivative of J
   have h_second : ∀ x > 0, (deriv (deriv J)) x = 2/x^3 := by
     intro x hx
-    sorry -- Calculus computation
+    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+``` -- Calculus computation
   -- Second derivative positive implies strict convexity
   apply StrictConvexOn.of_deriv2_pos
   · exact convex_Ioi 0

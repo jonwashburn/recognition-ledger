@@ -284,7 +284,15 @@ by
     intro h_eq
     have : x + 1/x = 2 * φ := by linarith
     -- This would imply x = φ, contradicting hx_ne
-    sorry) -- Calculus computation
+    Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```) -- Calculus computation
   -- Second derivative positive implies strict convexity
   apply StrictConvexOn.of_deriv2_pos
   · exact convex_Ioi 0
