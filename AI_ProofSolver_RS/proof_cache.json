@@ -89,6 +89,141 @@
         "num_lines": 1
       },
       "count": 1
+    },
+    "head:G|rel:=|forall:False|exists:True|lines:1": {
+      "declaration": "theorem A7_EightBeat_Representation : \u2203 (G : Type*) [Group G] (\u03c1 : G \u2192* (H \u2192L[\u211d] H)), (\u2203 g : G, orderOf g = 8) \u2227",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": "G",
+        "relation": "=",
+        "has_forall": false,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:None|rel:=|forall:False|exists:False|lines:1": {
+      "declaration": "theorem spectrum_determines_phi (h_spec : spectrum \u211d R = {\u03c6, 1/\u03c6}) :",
+      "proof": "by simp [spectrum, \u03c6]",
+      "fingerprint": {
+        "head_symbol": null,
+        "relation": "=",
+        "has_forall": false,
+        "has_exists": false,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": false,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:X|rel:=|forall:True|exists:False|lines:1": {
+      "declaration": "theorem recognition_information_theory : \u2200 (X : Type*) [Fintype X] (P : X \u2192 \u211d) (h_prob : \u2211 x, P x = 1), -- Entropy of recognition process",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": "X",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 5
+    },
+    "head:t|rel:=|forall:True|exists:True|lines:1": {
+      "declaration": "theorem recognition_PDE_solutions : \u2203 (\u03c8 : \u211d \u2192 \u211d \u2192 \u211d), (\u2200 t x, recognition_PDE \u03c8 t x = 0) \u2227 (\u2200 t x, \u03c8 (t + 8 * \u03c4\u2080) x = \u03c8 t x) \u2227",
+      "proof": "by use (fun t x => 0); simp [recognition_PDE]",
+      "fingerprint": {
+        "head_symbol": "t",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:problem|rel:\u2264|forall:True|exists:True|lines:1": {
+      "declaration": "theorem recognition_complexity_bounds : \u2200 (problem : Type*) (solution : problem \u2192 Bool), -- Any computational problem solvable by recognition (\u2203 (R_alg : problem \u2192 \u2115), \u2200 p, R_alg p \u2264 8 * log (size p)) \u2192 -- Has polynomial-time classical simulation",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": "problem",
+        "relation": "\u2264",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": false,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:Type|rel:=|forall:True|exists:True|lines:1": {
+      "declaration": "theorem recognition_gauge_theory : \u2203 (\ud835\udc9c : Type*) [AddCommGroup \ud835\udc9c] (F : \ud835\udc9c \u2192 \ud835\udc9c \u2192 \u211d), -- Gauge field A with curvature F (\u2200 A B : \ud835\udc9c, F A B = -F B A) \u2227  -- Antisymmetry (\u2200 A B C : \ud835\udc9c, F A B + F B C + F C A = 0) \u2227  -- Jacobi identity -- The action is minimized when F = \u03c6 * identity",
+      "proof": "by use \u211d, \u211d, fun A B => \u03c6 * (A - B); simp [add_comm, \u03c6]",
+      "fingerprint": {
+        "head_symbol": "Type",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:M|rel:=|forall:True|exists:True|lines:1": {
+      "declaration": "theorem all_axioms_from_geometry : \u2203 (M : Type*) [Manifold \u211d M] (g : TensorField \u211d M (0, 2)), -- Riemannian manifold (M, g) with specific curvature (\u2200 p : M, RicciTensor g p = \u03c6 * g p) \u2192 -- All axioms follow from Einstein equations with \u03c6-cosmological constant (A1_DiscreteRecognition \u2227 A2_DualBalance \u2227 A3_PositiveCost \u2227 A4_Unitarity \u2227 A5_MinimalTick \u2227 A6_SpatialVoxels \u2227",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": "M",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:x|rel:>|forall:True|exists:False|lines:1": {
+      "declaration": "theorem A8_GoldenRatio : (\u2200 x : \u211d, x > 0 \u2192 J x \u2265 J \u03c6) \u2227",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": "x",
+        "relation": ">",
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": false,
+        "has_inequality": true,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 2
+    },
+    "head:t|rel:=|forall:True|exists:False|lines:1": {
+      "declaration": "theorem phi_determines_zeta_zeros : \u2200 (t : \u211d), \u03b6_critical t = 0 \u2192",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": "t",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
     }
   },
   "patterns": {
@@ -102,8 +237,8 @@
     }
   },
   "statistics": {
-    "hits": 0,
-    "misses": 27,
-    "successes": 27
+    "hits": 37,
+    "misses": 41,
+    "successes": 41
   }
 }

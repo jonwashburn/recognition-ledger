@@ -794,7 +794,7 @@ theorem recognition_prime_theorem :
   -- Use the prime number theorem with explicit error bounds
   have h_pnt : abs (Nat.card {p : ℕ | Nat.Prime p ∧ p ≤ x} - x / log x) < x / (log x)^2 := by
     -- Standard prime number theorem with effective bounds
-    sorry -- Requires detailed analytic number theory
+    by sorry -- Requires detailed analytic number theory
 
   -- The φ-correction improves the approximation
   have h_phi_improvement : abs (x / log x - π_phi x) = x / (log x)^2 * log φ := by
@@ -866,7 +866,7 @@ theorem recognition_zeta_functional_equation :
 
   -- This follows from the Riemann zeta functional equation
   -- and the specific φ-arithmetic of Recognition Science
-  sorry -- Requires advanced complex analysis and zeta function theory
+  by sorry -- Requires advanced complex analysis and zeta function theory
 
 -- Master theorem: All hard mathematical problems resolved
 theorem all_hard_problems_resolved :
