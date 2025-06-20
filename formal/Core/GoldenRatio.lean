@@ -432,6 +432,10 @@ theorem pisano_recognition_cycle :
   intro n hn
   -- The recognition period equals the Pisano period by the fundamental
   -- correspondence between Fibonacci recurrence and recognition cycles
+  by
+  intro n hn
+  -- The recognition period equals the Pisano period by the fundamental
+  -- correspondence between Fibonacci recurrence and recognition cycles
   by sorry
 
 /-!
