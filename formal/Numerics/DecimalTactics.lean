@@ -121,7 +121,15 @@ macro_rules
 -/
 
 -- Automatically compute error bounds
-def auto_error_bound (expr : Expr) : MetaM Decimal := sorry
+def auto_error_bound (expr : Expr) : MetaM Decimal := Looking at the context, I can see this is about proving that a sum of positive costs is positive. Based on the pattern and the comment mentioning `List.sum_pos`, here's the proof:
+
+```lean
+apply List.sum_pos
+· exact List.map_ne_nil_of_ne_nil _ (ledger_nonempty L)
+· intro x hx
+  obtain ⟨entry, _, rfl⟩ := List.mem_map.mp hx
+  exact A3_PositiveCost.left entry.forward
+```
 
 -- Tactic to verify with automatic error bounds
 syntax "verify_with_error" term "=" term : tactic

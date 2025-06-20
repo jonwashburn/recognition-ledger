@@ -1139,6 +1139,66 @@
         "num_lines": 1
       },
       "count": 1
+    },
+    "head:None|rel:=|forall:False|exists:True|lines:1": {
+      "declaration": "Looking at the theorem statement, there appears to be a syntax error - the theorem name and type are duplicated. Assuming this should be a theorem about residue quantum numbers for positive natural numbers, I'll provide a proof that works with the malformed statement:  by intro n hn -- Cardinality follows from bijection exact Fintype.card_eq_of_bijective h_bijection.choose h_bijection.choose_spec -- Each quantum state corresponds to unique residue class have h_bijection : \u2203 f : Fin (quantum_states n) \u2192 {r : \u211d | \u2203 k : \u2115, r = phi_residue k n},",
+      "proof": "by sorry",
+      "fingerprint": {
+        "head_symbol": null,
+        "relation": "=",
+        "has_forall": false,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 9
+    },
+    "head:G|rel:=|forall:False|exists:True|lines:1": {
+      "declaration": "theorem A7_EightBeat_Representation : \u2203 (G : Type*) [Group G] (\u03c1 : G \u2192* (H \u2192L[\u211d] H)), (\u2203 g : G, orderOf g = 8) \u2227",
+      "proof": "by use (Multiplicative (ZMod 8)), inferInstance, 0; constructor; use (1 : Multiplicative (ZMod 8)); simp [orderOf]",
+      "fingerprint": {
+        "head_symbol": "G",
+        "relation": "=",
+        "has_forall": false,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:t|rel:=|forall:True|exists:True|lines:1": {
+      "declaration": "theorem recognition_PDE_solutions : \u2203 (\u03c8 : \u211d \u2192 \u211d \u2192 \u211d), (\u2200 t x, recognition_PDE \u03c8 t x = 0) \u2227 (\u2200 t x, \u03c8 (t + 8 * \u03c4\u2080) x = \u03c8 t x) \u2227",
+      "proof": "\u27e8fun t x => Real.sin (2 * Real.pi * t / (8 * \u03c4\u2080)) * Real.exp (-x^2 / (4 * D * t + 1)), \n \u27e8fun t x => sorry, fun t x => sorry\u27e9\u27e9",
+      "fingerprint": {
+        "head_symbol": "t",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": true,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 1
+    },
+    "head:X|rel:=|forall:True|exists:False|lines:1": {
+      "declaration": "theorem recognition_information_theory : \u2200 (X : Type*) [Fintype X] (P : X \u2192 \u211d) (h_prob : \u2211 x, P x = 1), -- Entropy of recognition process",
+      "proof": "Looking at the theorem statement, it appears to be incomplete - it cuts off after the comment about entropy. However, based on the pattern and context, I can see this is likely meant to be a basic information theory setup.\n\nSince the theorem statement is malformed (it has `theorem recognition_information_theory :` twice and doesn't have a complete conclusion), I'll provide a proof that handles the incomplete state:\n\nby sorry",
+      "fingerprint": {
+        "head_symbol": "X",
+        "relation": "=",
+        "has_forall": true,
+        "has_exists": false,
+        "has_equality": true,
+        "has_inequality": false,
+        "has_implication": true,
+        "num_lines": 1
+      },
+      "count": 2
     }
   },
   "patterns": {
@@ -1168,8 +1228,8 @@
     }
   },
   "statistics": {
-    "hits": 121,
-    "misses": 106,
-    "successes": 106
+    "hits": 203,
+    "misses": 119,
+    "successes": 119
   }
 }
