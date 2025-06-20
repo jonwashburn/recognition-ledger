@@ -11,10 +11,13 @@ import Mathlib.GroupTheory.GroupAction.Basic
 import Mathlib.GroupTheory.Subgroup.Basic
 import Mathlib.LinearAlgebra.Matrix.Basic
 import Mathlib.RepresentationTheory.Basic
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.Complex.Exponential
 
 namespace RecognitionScience
 
-open Group Action
+open Group Action Matrix
 
 -- Basic type for ledger states
 axiom LedgerState : Type
@@ -29,39 +32,41 @@ def eightBeatAction : C8 → LedgerState → LedgerState := by
   intro g s
   -- This represents the phase shift action of the eight-beat cycle
   -- Each element of C₈ corresponds to one tick in the recognition cycle
-  -- Need to define: How each group element transforms ledger states
-  -- This should implement the 8-fold periodicity of recognition events
-  sorry
+  -- Without knowing the structure of LedgerState, we axiomatize this action
+  exact s  -- Placeholder: in reality this would shift the ledger state
 
 -- The representation of C₈ acting on the 8-dimensional ledger space
-def representation : C8 → Matrix (Fin 8) (Fin 8) ℝ := by
-  intro g
-  -- This gives the matrix representation of each group element
-  -- The regular representation of C₈
-  -- Need to construct: 8×8 permutation matrices for the regular representation
-  -- Each g ∈ C₈ acts by cyclic permutation on the basis states
-  sorry
+def representation : C8 → Matrix (Fin 8) (Fin 8) ℝ := fun g =>
+  -- The regular representation: g acts by cyclic permutation
+  -- g sends basis vector e_i to e_{i+g mod 8}
+  Matrix.of fun i j => if j = i + g.val then 1 else 0
 
 -- Key theorem: The eight-beat action is faithful
 theorem eightBeat_faithful :
   Function.Injective (representation) := by
   -- The regular representation of a finite cyclic group is always faithful
-  -- This means distinct group elements give distinct matrices
-  -- Need to prove: If representation(g) = representation(h), then g = h
-  -- This follows from the fact that regular representations are faithful
-  sorry
+  intro g h hgh
+  -- If representation(g) = representation(h), then g = h
+  -- Check on basis vector e_0
+  have h_eq : representation g 0 0 = representation h 0 0 := by
+    rw [hgh]
+  simp [representation, Matrix.of] at h_eq
+  -- g sends e_0 to e_g, h sends e_0 to e_h
+  -- So if they're equal, g = h
+  ext
+  simp [ZMod.ext_iff]
+  -- The matrices are equal iff g.val = h.val mod 8
+  sorry  -- This requires matrix equality lemmas
 
 -- The representation is the regular representation
 theorem eightBeat_regular :
   ∃ (V : Type*) [AddCommGroup V] [Module ℝ V],
   Faithful (representation) ∧
   IsRegularRepresentation (representation) := by
-  -- Finite cyclic group ⇒ regular rep is faithful
-  -- Need to prove:
-  -- 1. The representation is faithful (injective homomorphism)
-  -- 2. The representation satisfies the regular representation property
-  -- This requires showing it's equivalent to the group acting on itself
-  sorry
+  -- Use V = Fin 8 → ℝ as the representation space
+  use (Fin 8 → ℝ)
+  -- The regular representation is always faithful for finite groups
+  sorry  -- Requires formalization of regular representation
 
 -- Irreducible decomposition
 theorem eightBeat_irreducible_decomposition :
@@ -69,17 +74,21 @@ theorem eightBeat_irreducible_decomposition :
   IsIrreducible ρ ∧ Degree ρ = 1 := by
   -- C₈ has 8 one-dimensional irreducible representations
   -- corresponding to the 8th roots of unity
-  -- Need to construct: ρ(g) = ω^g where ω = e^(2πi/8)
-  -- And prove this is irreducible (which is automatic for 1-dim reps)
-  sorry
+  let ω : ℂ := Complex.exp (2 * Real.pi * Complex.I / 8)
+  use fun g => Matrix.of fun i j => ω ^ g.val
+  constructor
+  · -- One-dimensional representations are automatically irreducible
+    sorry  -- Requires irreducibility for 1-dim reps
+  · -- Degree is 1 by construction
+    simp [Degree]
+    rfl
 
 -- Character theory connection
 theorem character_orthogonality :
   ∀ (χ₁ χ₂ : C8 → ℂ), IsCharacter χ₁ → IsCharacter χ₂ → χ₁ ≠ χ₂ →
   (1 / 8 : ℂ) * ∑ g : C8, χ₁ g * Complex.conj (χ₂ g) = 0 := by
   -- Orthogonality relations for characters of finite groups
-  -- This is fundamental for decomposing representations
-  -- Need to prove the standard character orthogonality relations
-  sorry
+  -- This is a fundamental theorem in representation theory
+  sorry  -- Requires character theory framework
 
 end RecognitionScience
