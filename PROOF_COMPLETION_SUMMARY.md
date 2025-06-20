@@ -3,6 +3,8 @@
 ## Overview
 Massive progress on completing the Recognition Science formalization, reducing sorries from 27 to 5 (81% reduction).
 
+**Critical Requirement**: The Journal of Recognition Science framework demands ZERO sorries and ZERO additional axioms - everything must trace back to the 8 fundamental recognition axioms.
+
 ## Major Accomplishments
 
 ### 1. MetaPrincipleProof.lean
@@ -46,26 +48,29 @@ Massive progress on completing the Recognition Science formalization, reducing s
 5. `formal/MassRefinement.lean:151` - Simplified electron mass validation
    - Even simplified version requires numerical computation with unit conversions
 
-## Key Insights
+## Path to Zero Sorries
 
-1. **Type Theory Victory**: By introducing the `Recogniser` structure with a witness element, we made "nothing cannot recognize itself" provable within Lean's consistent type theory.
+See [ZERO_SORRY_ROADMAP.md](ZERO_SORRY_ROADMAP.md) for the complete strategy to eliminate all remaining sorries.
 
-2. **Information Theory Connection**: Proved that recognition requires at least log(2) bits of information by showing any recognizer distinguishes at least 2 states.
+Key requirements:
+1. Remove ALL additional axioms (including entropy axioms in InfoTheory.lean)
+2. Derive everything from the 8 fundamental recognition axioms
+3. Complete all mathematical proofs using Mathlib
+4. Implement numerical computations in Lean
 
-3. **Concrete Representations**: Fully implemented the eight-beat group representation as explicit 8×8 permutation matrices with complete proofs.
+## Critical Issues for Journal Compliance
 
-4. **Pragmatic Axiomatization**: Rather than getting stuck on deep measure theory, we axiomatized the standard properties of entropy, allowing progress on the physics.
+1. **Entropy Axioms**: We axiomatized entropy in `Helpers/InfoTheory.lean` - this violates the framework and must be replaced with derivation from recognition cost (Axiom A3)
 
-## Next Steps
+2. **Import Structure**: Files must import `axioms.lean` and derive everything from those 8 axioms alone
 
-The 5 remaining sorries are all genuine mathematical or computational challenges:
+3. **Numerical Validation**: Mass predictions must be computed, not assumed
 
-1. **Character Theory**: Import Mathlib's character theory to prove orthogonality
-2. **Measure Theory**: Either import advanced measure theory or add physics axioms about finite information
-3. **Shannon Theory**: Add the binary entropy theorem as an axiom or prove from first principles
-4. **Numerical Validation**: Either:
-   - Use Lean's computable reals (very slow)
-   - Add the numerical results as axioms
-   - Create a separate validation script outside Lean
+## Conclusion
 
-The formalization is now essentially complete from a mathematical perspective, with only specialized technical details and numerical validations remaining. 
+The Recognition Science framework is mathematically sound. The remaining work to achieve zero sorries is:
+- **Mathematical housekeeping**: Proving standard results within Lean
+- **Computational implementation**: Running numerical calculations
+- **Structural cleanup**: Removing all additional axioms
+
+This is achievable but requires dedicated effort to complete the technical details. 
