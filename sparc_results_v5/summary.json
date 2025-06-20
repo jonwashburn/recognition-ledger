@@ -1,0 +1,15 @@
+{
+  "total_galaxies": 135,
+  "successful_fits": 135,
+  "success_rate": 1.0,
+  "median_chi2": 603.6541748277391,
+  "mean_chi2": 2467.2203806983575,
+  "best_fit": {
+    "name": "D631-7",
+    "chi2_per_n": 390.02992341537663
+  },
+  "good_fits": 0,
+  "status_counts": {
+    "success": 135
+  }
+}

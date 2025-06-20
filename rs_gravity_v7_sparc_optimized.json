@@ -1,0 +1,72 @@
+{
+  "description": "RS Gravity v7 SPARC-optimized Parameters",
+  "n_sparc_galaxies": 12,
+  "n_dwarf_spheroidals": 8,
+  "total_chi2_per_n": NaN,
+  "parameters": {
+    "beta_scale": 0.5,
+    "lambda_eff": 0.00011859999999999998,
+    "coupling_scale": 1.97,
+    "l1": 2.99342e+19,
+    "l2": 7.498980000000001e+20,
+    "rho_gap": 1.4599999999999972e-24,
+    "screening_alpha": 1.91,
+    "screening_amp": 1.145,
+    "alpha_grad_0": 2240000.0,
+    "vel_threshold": 37800.0,
+    "dwarf_anisotropy": 1.0,
+    "udg_modifier": 0.646,
+    "disk_boost": 1.2,
+    "bulge_suppression": 0.8
+  },
+  "sparc_results": {
+    "NGC3198": {
+      "chi2_per_n": NaN,
+      "n_points": 43
+    },
+    "NGC2403": {
+      "chi2_per_n": 403.9054039056431,
+      "n_points": 73
+    },
+    "NGC6503": {
+      "chi2_per_n": NaN,
+      "n_points": 31
+    },
+    "DDO154": {
+      "chi2_per_n": 6401.642888305436,
+      "n_points": 12
+    },
+    "NGC7814": {
+      "chi2_per_n": NaN,
+      "n_points": 18
+    },
+    "NGC2841": {
+      "chi2_per_n": NaN,
+      "n_points": 50
+    },
+    "NGC3521": {
+      "chi2_per_n": NaN,
+      "n_points": 41
+    },
+    "NGC5055": {
+      "chi2_per_n": NaN,
+      "n_points": 28
+    },
+    "IC2574": {
+      "chi2_per_n": 2588.1990522945853,
+      "n_points": 34
+    },
+    "NGC0300": {
+      "chi2_per_n": 238.8039167042425,
+      "n_points": 25
+    },
+    "NGC2976": {
+      "chi2_per_n": 372.4132352079542,
+      "n_points": 27
+    },
+    "NGC7331": {
+      "chi2_per_n": NaN,
+      "n_points": 36
+    }
+  }
+}

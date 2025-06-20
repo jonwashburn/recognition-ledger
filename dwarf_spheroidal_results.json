@@ -1,0 +1,62 @@
+{
+  "Draco": {
+    "name": "Draco",
+    "observed_sigma": 9.1,
+    "predicted_sigma": 45.029385861931644,
+    "r_half": 0.221,
+    "M_stellar": 566278.3991598769,
+    "M_dyn_rhalf": 185823764.01173317,
+    "M_to_L": 656.2982599633638,
+    "enhancement_rhalf": 673.5820910397427
+  },
+  "Sculptor": {
+    "name": "Sculptor",
+    "observed_sigma": 9.2,
+    "predicted_sigma": 165.98720236566527,
+    "r_half": 0.283,
+    "M_stellar": 4710098.567792018,
+    "M_dyn_rhalf": 1634708394.1281683,
+    "M_to_L": 694.1291654940803,
+    "enhancement_rhalf": 712.4092859415349
+  },
+  "Carina": {
+    "name": "Carina",
+    "observed_sigma": 6.6,
+    "predicted_sigma": 69.98319872442976,
+    "r_half": 0.25,
+    "M_stellar": 746500.3155914412,
+    "M_dyn_rhalf": 259245766.3534719,
+    "M_to_L": 694.5630455576573,
+    "enhancement_rhalf": 712.8545923796501
+  },
+  "Fornax": {
+    "name": "Fornax",
+    "observed_sigma": 11.7,
+    "predicted_sigma": 309.24054724027553,
+    "r_half": 0.71,
+    "M_stellar": 39176893.47011986,
+    "M_dyn_rhalf": 13272024042.703878,
+    "M_to_L": 677.5434633594125,
+    "enhancement_rhalf": 695.386793872374
+  },
+  "Leo_I": {
+    "name": "Leo_I",
+    "observed_sigma": 9.2,
+    "predicted_sigma": 265.5780825214668,
+    "r_half": 0.251,
+    "M_stellar": 10790212.450302538,
+    "M_dyn_rhalf": 3747157824.524746,
+    "M_to_L": 694.5475525682875,
+    "enhancement_rhalf": 712.8386913772994
+  },
+  "Leo_II": {
+    "name": "Leo_II",
+    "observed_sigma": 6.6,
+    "predicted_sigma": 79.32048640032839,
+    "r_half": 0.176,
+    "M_stellar": 1422427.0273066591,
+    "M_dyn_rhalf": 467386688.4453067,
+    "M_to_L": 657.1678960998024,
+    "enhancement_rhalf": 674.4746293305748
+  }
+}

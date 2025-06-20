@@ -1,0 +1,51 @@
+RS GRAVITY V5 PREDICTION ERROR ANALYSIS
+==================================================
+
+Total failed predictions: 7
+Average error: 11.7σ
+Worst prediction: pulsar_timing_deviation
+
+IDENTIFIED PROBLEM AREAS:
+------------------------------
+
+DWARF_SPHEROIDALS:
+  Issue: Velocity dispersions underpredicted by ~35%
+  Affects: draco, fornax, sculptor
+  Likely cause: ξ-mode screening too strong or missing physics
+  Suggested fix: Revisit screening function or add baryonic feedback
+
+RELATIVISTIC_EFFECTS:
+  Issue: No detection of predicted deviations from GR
+  Affects: pulsar_timing, strong_lensing
+  Likely cause: Effects too small or wrong functional form
+  Suggested fix: Reduce predicted amplitudes or add relativistic corrections
+
+FIT_QUALITY:
+  Issue: High χ²/N even for best fits
+  Affects: sparc_median, good_fits_fraction
+  Likely cause: Missing small-scale physics or oversimplified model
+  Suggested fix: Add gas pressure, non-circular motions, or feedback
+
+
+SUGGESTED IMPROVEMENTS (by priority):
+------------------------------
+
+1. ξ-mode screening
+   Current: S(ρ) = 1/(1 + ρ_gap/ρ)
+   Suggested: S(ρ) = 1/(1 + (ρ_gap/ρ)^α) with α ~ 0.5
+   Rationale: Softer transition better matches dwarf data
+
+2. Baryonic physics
+   Current: Pure gravitational model
+   Suggested: Add pressure support term: ∇P/ρ
+   Rationale: Gas pressure significant in low-mass galaxies
+
+3. Amplitude scaling
+   Current: β₀ = -0.0557
+   Suggested: β_eff = β₀ × (1 - v²/c²)
+   Rationale: Relativistic suppression at high velocities
+
+4. Velocity gradient coupling
+   Current: α_grad = 1.5e6 m (fixed)
+   Suggested: α_grad(ρ) = α₀/(1 + ρ/ρ_crit)
+   Rationale: Density-dependent coupling improves dwarf fits

@@ -1,0 +1,17 @@
+{
+  "description": "Unified RS Gravity v7 with \u03be-mode screening",
+  "core_params": {
+    "beta_0": -0.05572809000084121,
+    "lambda_eff": 5.08e-05,
+    "beta_scale": 1.492,
+    "coupling_scale": 1.326
+  },
+  "screening_params": {
+    "rho_gap": 1.1e-24,
+    "screening_alpha": 1.0
+  },
+  "recognition_lengths": {
+    "l1_kpc": 0.97,
+    "l2_kpc": 24.3
+  }
+}
