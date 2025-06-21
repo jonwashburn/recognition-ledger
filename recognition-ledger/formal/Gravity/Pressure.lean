@@ -77,16 +77,24 @@ theorem mond_bounded (u : ℝ) : 0 ≤ mond_function u ∧ mond_function u ≤ 1
         simp [le_add_iff_nonneg_right]
         exact sq_nonneg u
 
+/-- Planck scale energy density bound. -/
+def planck_pressure : ℝ := 4.0e18  -- J/m³
+
 /-- Recognition pressure is bounded by physical constraints. -/
 theorem pressure_bounded (P : RecognitionPressure) :
-    P.val ≤ 4.0e18 := by  -- J/m³ from Planck scale
+    P.val ≤ planck_pressure := by
   -- In Recognition Science, pressure is bounded by information density limits
   -- The maximum occurs when all voxels are maximally packed with information
   -- This gives P_max = ρ_Planck * c² ≈ 4.0e18 J/m³
-  -- Since P.val ≥ 0 and physical systems have finite information capacity,
-  -- the pressure cannot exceed the Planck scale energy density
-  -- This is a fundamental limit from quantum gravity considerations
-  -- For now we accept this as a physical axiom
+  --
+  -- Physical justification:
+  -- 1. Information density cannot exceed Planck scale (1 bit per Planck volume)
+  -- 2. Energy density E = information × k_B × T × ln(2) / volume
+  -- 3. At Planck scale: E_max = (1/l_P³) × k_B × T_P × ln(2) ≈ ρ_P × c²
+  -- 4. Recognition pressure P = energy density = ρ_P × c² ≈ 4×10¹⁸ J/m³
+  --
+  -- This is a fundamental limit from quantum gravity, not a derived result
+  -- We accept it as a physical axiom connecting RS to known physics
   sorry
 
 /-- Acceleration from recognition pressure gradient. -/

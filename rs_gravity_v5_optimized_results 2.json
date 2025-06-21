@@ -1,0 +1,16 @@
+{
+  "version": "v5_optimized",
+  "timestamp": "2025-06-19T17:47:23.016457",
+  "optimizations": {
+    "gpu_available": false,
+    "jit_available": false,
+    "autodiff_available": false,
+    "adaptive_grid": true
+  },
+  "performance": {
+    "time_ms": 3.2472610473632812,
+    "chi2_per_n": 0.09208413674433126,
+    "n_radii": 16,
+    "n_adaptive": 50
+  }
+}
