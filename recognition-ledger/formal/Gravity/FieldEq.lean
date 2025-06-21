@@ -47,8 +47,11 @@ theorem field_eq_solution (boundary : ℝ → ℝ) :
       -- The actual solution would satisfy this via construction
       -- For now we use the fact that the equation is well-posed
       simp [mond_function, acceleration_scale, mu_zero_sq, lambda_p, screening_function]
-      -- This would be proved by PDE theory - the equation has a unique solution
-      -- given the nonlinear elliptic structure and boundary conditions
+      -- This would be proved by:
+      -- 1. Showing the PDE is elliptic (μ(u) > 0 ensures this)
+      -- 2. Applying existence theorems for nonlinear elliptic PDEs
+      -- 3. Using the maximum principle for uniqueness
+      -- The key is that μ(u) > 0 for all u makes the operator elliptic
       sorry
   }
   constructor
@@ -79,12 +82,15 @@ theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
   have h_mu_small : mond_function u ≈ u := by
     simp [mond_function]
     -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u
+    -- This would require showing |μ(u) - u| < ε for small u
     sorry
   have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
     intro ρ hρ
     -- For ρ > ρ_gap, screening ≈ 1
     exact screening_high_density_approx ρ hρ
   -- Combine these to get Poisson equation
+  -- The full derivation would show ∇²P ≈ -4πGρ/μ₀²
+  -- where the constants are chosen to match Newton
   sorry
   where
     (· ≈ ·) : ℝ → ℝ → Prop := fun a b => abs (a - b) < 0.1 * max (abs a) (abs b)
@@ -93,6 +99,7 @@ theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
     screening_high_density_approx : ∀ ρ > ρ_gap, ∀ h : ρ > 0, screening_function ρ h ≈ 1 := by
       intro ρ hρ h
       -- This follows from screening_high_density theorem
+      -- For ρ >> ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) → 1
       sorry
 
 /-- The field equation exhibits MOND behavior at low accelerations. -/
@@ -105,6 +112,10 @@ theorem mond_regime (eq : FieldEquation) (x : ℝ) :
   -- So ∇²P ≈ λₚρ/μ₀² = λₚρℓ₁²
   -- And |∇P| = a₀ * u with u ≫ 1
   -- This gives the characteristic MOND square root relation
+  -- The full derivation would show:
+  -- 1. μ(u) → 1 as u → ∞
+  -- 2. The field equation becomes algebraic in this limit
+  -- 3. Solving for |∇P| gives the square root formula
   sorry
   where
     (· ≈ ·) : ℝ → ℝ → Prop := fun a b => abs (a - b) < 0.1 * max (abs a) (abs b)

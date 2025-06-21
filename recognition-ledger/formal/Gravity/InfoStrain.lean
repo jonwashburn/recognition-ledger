@@ -30,6 +30,11 @@ theorem strain_bounded (strain : InformationStrain) : strain.val ≤ 1000 := by
   -- The strain value is constructed to be bounded
   have : strain.val ≥ 0 := strain.nonneg
   -- In practice, physical strains are much smaller than 1000
+  -- This is a conservative upper bound based on physical considerations
+  -- The actual bound comes from the maximum pressure gradient divided by minimum pressure
+  -- Since pressure is bounded by Planck scale (4.0e18 J/m³) and gradients are limited
+  -- by the speed of light over Planck length, the ratio is bounded
+  -- For now we accept this conservative bound
   sorry
 
 /-- Acceleration from information strain. -/
@@ -68,7 +73,9 @@ theorem strain_weak_field_limit (strain : InformationStrain) (P : RecognitionPre
     have h_small : u < 0.1 := h_weak
     -- The error is approximately u³/2, which is small for small u
     -- For u < 0.1, we have u³/2 < 0.0005 < 0.1 * 0.01 = 0.001 (if u > 0.01)
-    -- This is a technical calculation that's correct in principle
+    -- This is a technical calculation that requires Taylor series analysis
+    -- The key insight is that μ(u) = u/√(1+u²) = u(1 - u²/2 + O(u⁴))
+    -- So |μ(u) - u| ≈ u³/2 < 0.1 * u when u < 0.1
     sorry
   -- Apply the approximation to get the bound
   have h_strain_pos : strain.val ≥ 0 := strain.nonneg
@@ -95,6 +102,9 @@ theorem strain_interpolation (strain : InformationStrain) (P : RecognitionPressu
       simp [mond_function]
       -- μ(u) = u/√(1+u²) has derivative μ'(u) = 1/(1+u²)^(3/2) ≤ 1
       -- So by mean value theorem, |μ(u) - μ(v)| ≤ |u - v|
+      -- The derivative is μ'(u) = (1+u²)^(-3/2)
+      -- Since (1+u²)^(3/2) ≥ 1 for all u, we have μ'(u) ≤ 1
+      -- By the mean value theorem, this gives the Lipschitz bound
       sorry
     -- Apply Lipschitz property
     let u := strain.val / acceleration_scale

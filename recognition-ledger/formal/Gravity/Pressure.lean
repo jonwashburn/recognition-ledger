@@ -83,6 +83,10 @@ theorem pressure_bounded (P : RecognitionPressure) :
   -- In Recognition Science, pressure is bounded by information density limits
   -- The maximum occurs when all voxels are maximally packed with information
   -- This gives P_max = ρ_Planck * c² ≈ 4.0e18 J/m³
+  -- Since P.val ≥ 0 and physical systems have finite information capacity,
+  -- the pressure cannot exceed the Planck scale energy density
+  -- This is a fundamental limit from quantum gravity considerations
+  -- For now we accept this as a physical axiom
   sorry
 
 /-- Acceleration from recognition pressure gradient. -/
