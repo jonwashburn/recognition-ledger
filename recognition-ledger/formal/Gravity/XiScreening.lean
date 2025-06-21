@@ -62,33 +62,24 @@ theorem screening_bounded (ρ : ℝ) (hρ : ρ > 0) :
 /-- In high density (ρ >> ρ_gap), screening is negligible. -/
 theorem screening_high_density (ε : ℝ) (hε : ε > 0) :
     ∃ M > 0, ∀ ρ > M, |screening_function ρ (by linarith) - 1| < ε := by
-  -- We need |1/(1 + ρ_gap/ρ) - 1| < ε
-  -- This is |1 - (1 + ρ_gap/ρ)|/|1 + ρ_gap/ρ| < ε
-  -- Which is |ρ_gap/ρ|/|1 + ρ_gap/ρ| < ε
-  -- Since ρ > 0 and ρ_gap > 0, this is (ρ_gap/ρ)/(1 + ρ_gap/ρ) < ε
   use max (ρ_gap / ε) 1
   constructor
-  · -- M > 0
-    apply lt_of_lt_of_le zero_lt_one (le_max_right _ _)
-  · -- For all ρ > M
-    intro ρ hρ
+  · apply lt_of_lt_of_le zero_lt_one (le_max_right _ _)
+  · intro ρ hρ
     simp [screening_function]
     have ρ_pos : ρ > 0 := by
       apply lt_trans zero_lt_one
       exact lt_of_le_of_lt (le_max_right _ _) hρ
     have ρ_gap_pos : ρ_gap > 0 := by norm_num [ρ_gap]
-    -- |1/(1 + ρ_gap/ρ) - 1| = |1 - 1 - ρ_gap/ρ|/|1 + ρ_gap/ρ|
     rw [abs_sub_comm, sub_div, one_div, one_div]
     simp [abs_div]
     rw [abs_of_pos (add_pos one_pos (div_pos ρ_gap_pos ρ_pos))]
     rw [abs_of_pos (div_pos ρ_gap_pos ρ_pos)]
-    -- Need to show (ρ_gap/ρ)/(1 + ρ_gap/ρ) < ε
     rw [div_div, mul_one]
     apply div_lt_iff_lt_mul
     · exact add_pos one_pos (div_pos ρ_gap_pos ρ_pos)
     · rw [mul_add, mul_one]
       rw [lt_add_iff_pos_left]
-      -- Need ρ_gap < ε * ρ, i.e., ρ > ρ_gap/ε
       have h_bound : ρ > ρ_gap / ε := by
         apply lt_of_le_of_lt (le_max_left _ _) hρ
       rwa [div_lt_iff_lt_mul (by linarith)] at h_bound
@@ -97,7 +88,48 @@ theorem screening_high_density (ε : ℝ) (hε : ε > 0) :
 theorem screening_low_density :
     ∀ ε > 0, ∃ δ > 0, ∀ ρ, 0 < ρ ∧ ρ < δ →
     |screening_function ρ (by linarith) - ρ / ρ_gap| < ε := by
-  sorry -- Taylor expansion of 1/(1 + x) for x >> 1
+  intro ε hε
+  -- For small ρ, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ ρ/(ρ + ρ_gap) ≈ ρ/ρ_gap
+  -- Use Taylor: 1/(1+x) ≈ 1-x for small x, where x = ρ_gap/ρ (large)
+  -- Actually for ρ << ρ_gap, we have 1/(1 + ρ_gap/ρ) = ρ/(ρ + ρ_gap) ≈ ρ/ρ_gap
+  use min (ε * ρ_gap) (ρ_gap / 2)
+  constructor
+  · apply lt_min
+    · apply mul_pos hε
+      exact by norm_num [ρ_gap]
+    · apply div_pos
+      · exact by norm_num [ρ_gap]
+      · norm_num
+  · intro ρ ⟨hρ_pos, hρ_small⟩
+    simp [screening_function]
+    have ρ_gap_pos : ρ_gap > 0 := by norm_num [ρ_gap]
+    -- |1/(1 + ρ_gap/ρ) - ρ/ρ_gap| = |ρ/(ρ + ρ_gap) - ρ/ρ_gap|
+    rw [one_div, ← div_div]
+    rw [← div_add_div_same]
+    simp [abs_sub_comm]
+    -- |ρ/ρ_gap - ρ/(ρ + ρ_gap)| = |ρ * (1/ρ_gap - 1/(ρ + ρ_gap))|
+    rw [← mul_div_assoc, ← mul_div_assoc, ← mul_sub]
+    simp [abs_mul, abs_of_pos hρ_pos]
+    -- = ρ * |1/ρ_gap - 1/(ρ + ρ_gap)| = ρ * |(ρ + ρ_gap - ρ_gap)/(ρ_gap(ρ + ρ_gap))|
+    rw [sub_div, div_sub_div_eq_sub_div]
+    simp [abs_div]
+    rw [abs_of_pos (mul_pos ρ_gap_pos (add_pos hρ_pos ρ_gap_pos))]
+    rw [add_sub_cancel]
+    -- = ρ² / (ρ_gap(ρ + ρ_gap))
+    rw [pow_two]
+    apply div_lt_iff_lt_mul
+    · exact mul_pos ρ_gap_pos (add_pos hρ_pos ρ_gap_pos)
+    · -- Need ρ² < ε * ρ_gap * (ρ + ρ_gap)
+      -- Since ρ < ερ_gap and ρ < ρ_gap/2, we have ρ + ρ_gap < 3ρ_gap/2
+      have h1 : ρ < ε * ρ_gap := lt_of_lt_of_le hρ_small (min_le_left _ _)
+      have h2 : ρ < ρ_gap / 2 := lt_of_lt_of_le hρ_small (min_le_right _ _)
+      have h3 : ρ + ρ_gap < 3 * ρ_gap / 2 := by
+        rw [add_div]
+        apply add_lt_add_right h2
+      apply lt_trans (mul_lt_mul_of_pos_right h1 hρ_pos)
+      rw [mul_assoc]
+      apply mul_lt_mul_of_pos_left h3
+      exact mul_pos hε ρ_gap_pos
 
 /-- The 4.688% ledger lag from 45-gap. -/
 def ledger_lag : ℝ := 45 / 960  -- = 0.046875
