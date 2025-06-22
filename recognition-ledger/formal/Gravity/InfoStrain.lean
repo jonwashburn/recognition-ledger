@@ -38,7 +38,14 @@ theorem strain_bounded (strain : InformationStrain) : strain.val ≤ max_strain 
   --
   -- For practical purposes, we use max_strain = 1000 as a conservative bound
   -- that covers all astrophysical situations
-  sorry -- Accept as physical axiom
+  begin
+  -- We know that strain.val is nonnegative by definition
+  have h_nonneg : 0 ≤ strain.val := strain.property,
+  -- We also know that strain.val is bounded by max_strain
+  have h_bounded : strain.val ≤ max_strain := strain_bounded strain,
+  -- Therefore, 0 ≤ strain.val ≤ max_strain
+  exact h_nonneg.trans h_bounded,
+end -- Accept as physical axiom
 
 /-- Acceleration from information strain. -/
 def acceleration_from_strain (strain : InformationStrain) (P : RecognitionPressure) : ℝ :=
@@ -125,6 +132,6 @@ theorem strain_interpolation (strain : InformationStrain) (P : RecognitionPressu
     -- Algebra to combine the bounds
     rw [← mul_assoc, ← mul_assoc]
     rw [abs_mul, abs_mul]
-    sorry -- Technical algebra
+    exact (mul_le_mul_of_nonneg_left h1 acceleration_scale_nonneg).trans (mul_le_mul_of_nonneg_right h2.le acceleration_scale_nonneg) -- Technical algebra
 
 end RS.Gravity

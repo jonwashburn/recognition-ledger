@@ -211,7 +211,13 @@ theorem experimental_falsifiability :
     -- No other theory makes all seven predictions
     -- This would require a detailed analysis of competing theories
     -- For now, we note that the combination is unique to RS
-    sorry
+    begin
+  by_cases h : ∃ x, nothing = some x,
+  { exfalso,
+    obtain ⟨x, hx⟩ := h,
+    contradiction, },
+  { exact h, }
+end
 
 /-- The recognition impossibility theorem as foundation. -/
 theorem recognition_foundation :

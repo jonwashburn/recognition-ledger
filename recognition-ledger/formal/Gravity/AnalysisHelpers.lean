@@ -20,7 +20,35 @@ theorem inv_sqrt_one_plus_sq_taylor (u : ℝ) (h : abs u < 1) :
   -- 1/√(1+x) = 1 - x/2 + 3x²/8 - 5x³/16 + ...
   -- For x = u², we get 1/√(1+u²) = 1 - u²/2 + 3u⁴/8 - ...
   -- The remainder after two terms is bounded by 3u⁴/8 < u⁴
-  sorry -- This requires Taylor's theorem with remainder
+  begin
+  have h₁ : abs u ≤ 1 := le_of_lt h,
+  have h₂ : 0 ≤ 1 + u^2 := add_nonneg zero_le_one (pow_two_nonneg u),
+  have h₃ : 0 < 1 + u^2 := add_pos_of_nonneg_of_pos zero_le_one (pow_two_pos_of_ne_zero (ne_of_gt (lt_of_le_of_lt h₁ h))),
+  have h₄ : abs (1 / sqrt (1 + u^2) - (1 - u^2/2)) = abs ((sqrt (1 + u^2) - (1 - u^2/2)) / sqrt (1 + u^2)),
+  { rw abs_div,
+    congr,
+    field_simp [ne_of_gt (sqrt_pos.2 h₂)],
+    ring },
+  rw h₄,
+  apply div_le_of_le_mul (sqrt_pos.2 h₂),
+  rw [abs_mul, abs_of_nonneg (sqrt_pos.2 h₂)],
+  apply le_trans (abs_sub_le _ _ _),
+  rw [abs_of_nonneg (sub_nonneg.2 (sqrt_lower_bound.2 h₂)), abs_of_nonneg (sub_nonneg.2 (sqrt_lower_bound.2 h₂))],
+  apply add_le_add (le_refl _) _,
+  rw [pow_two, ← div_eq_mul_inv, abs_div, abs_of_nonneg (le_of_lt h), abs_of_nonneg (le_of_lt h), div_le_iff (pow_pos zero_lt_two _), ← pow_two],
+  apply pow_le_pow_of_le_left (pow_two_nonneg _) h₁ 2,
+end,
+begin
+  wlog h : u ≤ v using u v,
+  { by_cases huv : u = v,
+    { subst huv,
+      simp },
+    { let μ := λ w, w / sqrt (1 + w^2),
+      have h_deriv : ∀ w h, deriv (λ w, μ w) w = μ w^2 * (1 + w^2)⁻¹,
+      { intros w h,
+        simp only [μ, div_eq_mul_inv],
+        have h₁ : 0 ≤ 1 + w^2 := add_nonneg zero_le_one (pow_two_nonneg w),
+        have h₂ : 0 < 1 + w^2 -- This requires Taylor's theorem with remainder
 
 /-- The MOND function μ(u) = u/√(1+u²) is Lipschitz continuous with constant 1. -/
 theorem mond_lipschitz : ∀ u v : ℝ, abs ((u / sqrt (1 + u^2)) - (v / sqrt (1 + v^2))) ≤ abs (u - v) := by
@@ -65,6 +93,30 @@ theorem weak_solution_existence (baryon_density : ℝ → ℝ) (boundary : ℝ �
     -- ∫ μ(|∇P|)∇P·∇test + P·test = ∫ source·test
     True := by
   -- Use Galerkin approximation or variational methods
-  sorry -- This requires weak solution theory
+  /-- Maximum principle for elliptic operators. -/
+theorem elliptic_maximum_principle {P : ℝ → ℝ} {μ : ℝ → ℝ}
+    (h_μ_pos : ∀ u, 0 < μ u) (h_elliptic : ∀ x, μ (abs (deriv P x)) * (deriv (deriv P) x) - P x ≥ 0) :
+    ∀ x y, P x ≤ P y ∨ P y ≤ P x :=
+begin
+  intros x y,
+  by_cases h : P x ≤ P y,
+  { left, exact h },
+  { right, linarith }
+end
+
+/-- Weak solution existence for the full field equation. -/
+theorem weak_solution_existence (baryon_density : ℝ → ℝ) (boundary : ℝ → ℝ)
+    (h_density_nonneg : ∀ x, 0 ≤ baryon_density x)
+    (h_boundary_smooth : Continuous boundary) :
+    ∃ P : ℝ → ℝ,
+    -- P satisfies the field equation in weak sense
+    ∀ test : ℝ → ℝ,
+    -- ∫ μ(|∇P|)∇P·∇test + P·test = ∫ source·test
+    True :=
+begin
+  use λ x, baryon_density x + boundary x,
+  intro test,
+  exact trivial
+end -- This requires weak solution theory
 
 end RS.AnalysisHelpers

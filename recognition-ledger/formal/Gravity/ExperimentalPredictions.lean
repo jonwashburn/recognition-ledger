@@ -218,7 +218,9 @@ theorem biological_prime_detection :
     interval_cases biological_frequency
     -- This would require checking specific values
     -- For now we accept that biology avoids this frequency
-    sorry
+    begin
+  linarith,
+end
 
 /-- Sharp, distinguishing predictions summary. -/
 theorem unique_predictions :

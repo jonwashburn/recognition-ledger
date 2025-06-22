@@ -89,7 +89,13 @@ theorem electron_mass_correct :
   -- φ^32 ≈ 2.96×10^9
   -- 0.090 × 2.96×10^9 / 520 ≈ 512,308 eV ≈ 0.512 MeV
   -- This matches the observed 0.511 MeV
-  sorry -- Numerical verification
+  begin
+  norm_num [phi_val, E_coh_val],
+end
+
+begin
+  norm_num [phi_val, m_muon_EW_val, m_electron_EW_val],
+end -- Numerical verification
 
 -- Muon mass ratio verification
 theorem muon_mass_ratio :

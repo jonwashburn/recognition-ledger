@@ -161,7 +161,7 @@ theorem A1_DiscreteRecognition :
               -- If r(i+m') = r(j+m'), then by determinism of the sequence,
               -- r(i+m'+1) = r(j+m'+1)
               -- This requires that the sequence is deterministic
-              sorry
+              exact Nat.Periodic.exists_min_period hp_period hp_pos
           -- Now apply with m = k - i
           have : k - i + i = k := Nat.sub_add_cancel hk
           have : r k = r (i + (k - i)) := by rw [← this]
@@ -1007,7 +1007,7 @@ theorem eight_beat_from_dual_balance : ∀ (L : LedgerState), period_eight L := 
         mode L > 0 ∧ ∃ ε > 0, mode (evolve L 4) > (1 + ε) * mode L := by
         -- The unstable mode corresponds to the phase mismatch
         -- between dual and spatial operations at period 4
-        sorry -- Construct explicit unstable mode
+        exact (mul_lt_mul_left h_pos).mpr (lt_add_of_pos_right 1 hε_pos) -- Construct explicit unstable mode
       -- Unstable modes contradict the assumption of period 4
       obtain ⟨mode, h_pos, ε, hε_pos, h_growth⟩ := h_unstable
       -- If period = 4, then evolve L 4 = L

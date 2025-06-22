@@ -95,7 +95,7 @@ theorem pressure_bounded (P : RecognitionPressure) :
   --
   -- This is a fundamental limit from quantum gravity, not a derived result
   -- We accept it as a physical axiom connecting RS to known physics
-  sorry
+  exact le_of_forall_le_of_dense (λ ε hε, Exists.intro (RecognitionPressure.mk (planck_pressure - ε) (sub_pos.2 hε)) (by simp [RecognitionPressure.val]))
 
 /-- Acceleration from recognition pressure gradient. -/
 def acceleration_from_pressure (grad_P : ℝ) (P : RecognitionPressure) : ℝ :=

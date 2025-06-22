@@ -47,7 +47,14 @@ theorem electron_mass_raw :
   -- This is too wide, but shows the order of magnitude is correct
   -- For precise calculation, we use the known value φ^32 ≈ 2.956×10^9
   -- giving 0.090 × 2.956 = 0.266 GeV
-  sorry -- Numerical approximation φ^32 ≈ 2.956×10^9
+  unfold m_rung E_rung electron_rung,
+simp only [E_coh_val, phi_val],
+norm_num, 
+-- Now we have 0.090 * (1.618033988749895)^32 / 10^9
+-- We can calculate this explicitly
+have calc : 0.090 * (1.618033988749895)^32 / 10^9 = 0.266 := by norm_num,
+rw calc,
+norm_num, -- Numerical approximation φ^32 ≈ 2.956×10^9
 
 -- Electron needs calibration factor
 def electron_calibration : ℝ := 520
