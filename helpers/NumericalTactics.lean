@@ -706,7 +706,7 @@ constructor
   simp [E_coh, phi]
   norm_num
 constructor
-· -- ν₂ case: seesaw_mass 2 120  
+· -- ν₂ case: seesaw_mass 2 120
   unfold seesaw_mass
   simp [E_coh, phi]
   norm_num
@@ -813,3 +813,29 @@ theorem recognition_seesaw_scale_problem :
 by intro n hn -- Computational verification of large discrepancy
 
 end RecognitionScience.NumericalTactics
+
+-- Core evaluation tactic
+macro "eval_numerical" : tactic => `(tactic| (
+  first
+  | norm_num
+  | ring_nf; norm_num
+  | simp only [mul_comm, mul_assoc, mul_left_comm,
+               add_comm, add_assoc, add_left_comm,
+               sub_eq_add_neg, div_eq_mul_inv]; norm_num))
+
+-- Helper for normalizing algebraic expressions before numerical evaluation
+macro "algebraic_normalize" : tactic => `(tactic| (
+  simp only [mul_comm, mul_assoc, mul_left_comm,
+             add_comm, add_assoc, add_left_comm,
+             sub_eq_add_neg, div_eq_mul_inv,
+             pow_two, pow_three]))
+
+-- Combined tactic for complex numerical proofs
+macro "numerical_proof" : tactic => `(tactic| (
+  algebraic_normalize;
+  eval_numerical))
+
+-- Example usage lemmas to verify the tactics work
+example : (2 : ℝ) + 3 = 5 := by eval_numerical
+example : (2 : ℝ) * 3 + 4 = 10 := by eval_numerical
+example : (5 : ℝ) ^ 2 = 25 := by numerical_proof

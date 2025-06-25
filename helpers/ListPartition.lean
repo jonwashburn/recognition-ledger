@@ -105,4 +105,31 @@ lemma List.filter_sorted {α : Type*} [LinearOrder α]
       · simp [hp]
         exact ih h_tail
 
+-- Count of partitions
+theorem partitions_count (l : List α) (p : ListPartition l) :
+    p.parts.length = p.parts.length := by
+  -- This is trivially true by reflexivity
+  -- The actual interesting theorem would relate length to some property
+  -- For example: ∑ part.length over parts = l.length
+  -- But as stated, this is just reflexivity
+  rfl
+
+-- The more meaningful theorem about partition lengths
+theorem partition_length_sum (l : List α) (p : ListPartition l) :
+    (p.parts.map List.length).sum = l.length := by
+  -- Convert to multiset equality and use length preservation
+  have h_union := p.parts_union
+  -- Taking length of both sides of the multiset equality
+  have h_lengths : (Multiset.ofList l).card =
+    (p.parts.map (fun part => (Multiset.ofList part))).sum.card := by
+    rw [← h_union]
+  -- Card of list multiset is list length
+  simp [Multiset.card_ofList] at h_lengths
+  -- Card of sum is sum of cards
+  rw [Multiset.card_sum] at h_lengths
+  -- Simplify map operations
+  convert h_lengths
+  ext part
+  simp [Multiset.card_ofList]
+
 end RecognitionScience.Helpers
