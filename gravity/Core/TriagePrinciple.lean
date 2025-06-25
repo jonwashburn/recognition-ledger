@@ -118,7 +118,15 @@ theorem triage_saves_bandwidth :
   -- With triage: 1000 + n_g/100 + n_c/1000
   -- Without: 1000 + n_g + n_c
   -- The difference is n_g(99/100) + n_c(999/1000) > 0
-  sorry  -- Arithmetic calculation
+  have h1 : (n_g : ℝ) / 100 < n_g := by
+    rw [div_lt_iff (by norm_num : (100 : ℝ) > 0)]
+    norm_num
+    exact Nat.cast_pos.mpr h_g
+  have h2 : (n_c : ℝ) / 1000 < n_c := by
+    rw [div_lt_iff (by norm_num : (1000 : ℝ) > 0)]
+    norm_num
+    exact Nat.cast_pos.mpr h_c
+  linarith
 
 /-! ## Connection to Recognition Weight -/
 
@@ -138,5 +146,7 @@ theorem dwarf_galaxy_enhancement :
   -- The T_dyn dependence in w(r) provides additional scaling
   intro T_dyn₁ T_dyn₂ h_compare h_gal₁ h_gal₂
   rw [h_gal₁, h_gal₂]
+  -- Both sides reduce to the same expression after rewriting
+  rfl
 
 end RecognitionScience.Gravity
