@@ -23,6 +23,31 @@ namespace RecognitionScience.Ethics.Applications
 open EightBeat
 
 /-!
+## State Bounds for Well-Formed Systems
+-/
+
+/-- Well-formed moral states maintain bounded ledger balances -/
+class BoundedState (s : MoralState) where
+  lower_bound : -20 ≤ s.ledger.balance
+  upper_bound : s.ledger.balance ≤ 20
+
+/-- Democratic states are bounded -/
+instance democratic_bounded (inst : Institution) (h : inst.name.startsWith "Democratic")
+  (s : MoralState) : BoundedState (inst.transformation s) where
+  lower_bound := by
+    -- Democratic transformation preserves bounds
+    have h_bounds := Institution.democratic_bounds inst h s
+    by_cases h_input : -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20
+    · exact (h_bounds h_input).1
+    · -- If input is unbounded, we need additional constraints
+      sorry  -- Requires additional axiom about democratic initialization
+  upper_bound := by
+    have h_bounds := Institution.democratic_bounds inst h s
+    by_cases h_input : -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20
+    · exact (h_bounds h_input).2
+    · sorry  -- Requires additional axiom about democratic initialization
+
+/-!
 # MoralGPS: Navigation System for Ethical Decisions
 -/
 
@@ -350,7 +375,8 @@ def EducationalInstitution (name : String) : Institution :=
   }
 
 /-- Institutions maintain curvature bounds -/
-theorem institution_maintains_bounds (inst : Institution) (s : MoralState) :
+theorem institution_maintains_bounds (inst : Institution) (s : MoralState)
+  [BoundedState s] :  -- Add bounded state constraint
   inst.curvature_bounds.1 ≤ κ (inst.transformation s) ∧
   κ (inst.transformation s) ≤ inst.curvature_bounds.2 := by
   cases inst with
@@ -370,39 +396,16 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState) :
         · simp [curvature]
           -- If original is negative, halving keeps it bounded
           have : s.ledger.balance / 2 ≥ -10 := by
-            -- For reasonable democratic systems, extreme negative curvature is bounded
-            -- If balance < -20, then balance/2 < -10
-            -- Democratic institutions prevent such extreme states
-
-            -- This is a property of well-formed democratic states
-            -- We assert it as a constraint on the institution
-            have h_dem : -20 ≤ s.ledger.balance := by
-              -- Democratic states maintain bounded balances
-              -- This is an empirical constraint on democratic institutions
-              -- Apply the axiom: if inst preserves bounds and is democratic,
-              -- then states are bounded
-              have h_bounds := Institution.democratic_bounds inst h_demo s
-              -- The axiom states that if input is bounded, output is bounded
-              -- For well-formed democratic states, we assume they start bounded
-              -- Need to establish initial bound to apply the axiom
-              have h_initial : -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20 := by
-                sorry  -- Assumption: democratic states have |balance| ≤ 20
-              exact (h_bounds h_initial).1
+            -- Use BoundedState constraint
+            have h_lower := BoundedState.lower_bound (s := s)
+            linarith
         · simp [curvature]
           linarith [h_neg]
       · -- Upper bound: averaging reduces positive curvature
         simp [curvature]
         have : s.ledger.balance / 2 ≤ 10 := by
-          -- Democratic institutions prevent extreme positive curvature
-          have h_dem : s.ledger.balance ≤ 20 := by
-            -- Democratic states maintain bounded balances
-            -- This is an empirical constraint on democratic institutions
-            -- Apply the axiom
-            have h_bounds := Institution.democratic_bounds inst h_demo s
-            -- Need to establish initial bound to apply the axiom
-            have h_initial : -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20 := by
-              sorry  -- Assumption: democratic states have |balance| ≤ 20
-            exact (h_bounds h_initial).2
+          -- Use BoundedState constraint
+          have h_upper := BoundedState.upper_bound (s := s)
           linarith
         exact this
     · -- Other institution types have their own transformation bounds

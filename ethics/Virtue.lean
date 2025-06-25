@@ -100,6 +100,26 @@ theorem love_reduces_variance (s₁ s₂ : MoralState) :
   -- After love, both states have same curvature (average)
   simp [Int.natAbs]
 
+  -- Love reduces variance by averaging
+  have h_reduced : κ s₁' = (κ s₁ + κ s₂) / 2 ∧ κ s₂' = (κ s₁ + κ s₂) / 2 := by
+    simp [Love, curvature]
+    constructor
+    · -- s₁' balance is average
+      simp [average_balance]
+      ring
+    · -- s₂' balance is average
+      simp [average_balance]
+      ring
+
+  -- After love, both have same curvature (the average)
+  -- So variance from average is 0
+  -- Any other curvature-preserving operation has variance ≥ 0
+  calc (κ s₁' - κ s₂')^2
+    = ((κ s₁ + κ s₂) / 2 - (κ s₁ + κ s₂) / 2)^2 := by rw [h_reduced.1, h_reduced.2]
+    _ = 0^2 := by ring
+    _ = 0 := by ring
+    _ ≤ (κ t₁ - κ t₂)^2 := sq_nonneg _
+
 /-- Justice: Accurate ledger posting ensuring eventual balance -/
 structure JusticeProtocol where
   posting : Entry → LedgerState → LedgerState
@@ -495,7 +515,16 @@ theorem patience_enables_complex_resolution (s : MoralState) (cycles : Nat) :
             -- For cycles ≥ 3, we know log(cycles) ≤ cycles/2
             have h_log_bound : Real.log (Real.ofNat cycles) ≤ (Real.ofNat cycles) / 2 := by
               -- Standard calculus result: log x ≤ x/2 for x ≥ 3
-              sorry  -- Standard: log bound for large values
+              -- More precisely: log x ≤ x - 1 < x/2 for x > 2
+              have h_cycles_ge_3 : cycles ≥ 3 := by omega [h, h_cycles]
+              have : Real.ofNat cycles ≥ 3 := by simp; exact h_cycles_ge_3
+              -- Use log x ≤ x - 1 for x ≥ 1
+              calc Real.log (Real.ofNat cycles)
+                ≤ Real.ofNat cycles - 1 := Real.log_le_sub_one_of_pos (Nat.cast_pos.mpr (Nat.zero_lt_of_lt h_cycles))
+                _ < Real.ofNat cycles / 2 := by
+                  -- x - 1 < x/2 ↔ x > 2
+                  field_simp
+                  linarith [this]
 
             -- Using this bound:
             -- s.cost * (1 + log c) / c ≥ s.cost * (1 + c/2) / c
@@ -801,7 +830,20 @@ theorem virtue_propagation_reduces_variance (community : MoralCommunity) :
   -- This follows from the fact that moving toward mean reduces squared deviations
 
   -- Standard result: if X' = (1-α)X + αμ for α ∈ (0,1), then Var(X') < Var(X)
-  sorry  -- Technical: variance reduction under averaging
+  -- This is because variance measures spread from mean
+  -- Moving values toward mean reduces spread
+
+  -- The key insight is that after propagation:
+  -- new_balance = old_balance + coupling * (mean - old_balance)
+  --            = (1 - coupling) * old_balance + coupling * mean
+  -- This is a convex combination that shrinks toward mean
+
+  -- For any coupling ∈ (0, 1), this reduces variance
+  -- The technical proof uses the fact that:
+  -- Var(X') = (1-α)² Var(X) < Var(X) when α ∈ (0,1)
+
+  -- We leave the detailed calculation to standard probability theory
+  sorry  -- Technical: standard variance reduction result
 
 /-- Virtue emergence from recognition dynamics -/
 theorem virtue_emergence (community : MoralCommunity) (generations : Nat) :
@@ -932,5 +974,42 @@ def virtue_is_virtuous (v : Virtue) (s : MoralState) : isVirtuous
   { duration := ⟨8, by norm_num⟩, energyCost := by simp : MoralTransition s (TrainVirtue v s) } := by
   simp [isVirtuous, TrainVirtue]
   exact virtue_training_reduces_curvature v s
+
+section ListHelpers
+
+/-- Foldl with positive increments gives positive result -/
+lemma List.foldl_pos {α : Type*} [LinearOrder α] [AddCommMonoid α]
+  (init : α) (l : List (α → α → α)) (f : α → α → α)
+  (h_init : init ≥ 0)
+  (h_pos : ∀ x ∈ l, ∀ acc ≥ 0, f acc x > acc) :
+  l.foldl f init > init := by
+  induction l with
+  | nil => simp; exact h_init
+  | cons x xs ih =>
+    simp [List.foldl_cons]
+    have h_x := h_pos x (List.mem_cons_self x xs) init h_init
+    have h_rest : xs.foldl f (f init x) > f init x := by
+      apply ih
+      · exact le_of_lt h_x
+      · intro y hy acc hacc
+        exact h_pos y (List.mem_cons_of_mem x hy) acc hacc
+    exact lt_trans h_x h_rest
+
+/-- Foldl with nonpositive elements -/
+lemma List.foldl_nonpos {α : Type*} [LinearOrderedAddCommGroup α]
+  (l : List α) (f : α → α → α)
+  (h_f : ∀ a b, f a b = a + b)
+  (h_elem : ∀ x ∈ l, x ≤ 0) :
+  l.foldl f 0 ≤ 0 := by
+  induction l with
+  | nil => simp
+  | cons x xs ih =>
+    simp [List.foldl_cons]
+    rw [h_f]
+    have h_x := h_elem x (List.mem_cons_self x xs)
+    have h_rest := ih (fun y hy => h_elem y (List.mem_cons_of_mem x hy))
+    linarith
+
+end ListHelpers
 
 end RecognitionScience.Ethics

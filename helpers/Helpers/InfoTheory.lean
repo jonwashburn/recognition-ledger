@@ -9,6 +9,11 @@ the complex sorries in AxiomProofs.lean without requiring deep proofs.
 import Mathlib.MeasureTheory.Measure.MeasureSpace
 import Mathlib.MeasureTheory.Integral.Lebesgue
 import Mathlib.Probability.Notation
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Data.Real.Irrational
+import Mathlib.Data.List.Basic
+import Mathlib.Analysis.SpecificLimits.Basic
 
 namespace RecognitionScience
 
@@ -147,11 +152,42 @@ lemma floor_div_mul_lt_floor_div_div
   have h_compare : b - goldenRatio > (b : Real) / (goldenRatio * goldenRatio) := by
     -- Since φ² > φ > 1, we have b/φ² < b/φ < b - φ when |b| ≥ 10
     have h_phi_sq : goldenRatio * goldenRatio > goldenRatio := by
-      apply mul_lt_iff_lt_one_right.mp
-      · simp
-      · linarith [h_phi]
+      apply mul_gt_of_gt_one_left
+      · exact Real.goldenRatio_pos
+      · exact h_phi
     -- For |b| ≥ 10 and φ ≈ 1.618, b - φ > b/φ²
-    sorry  -- Technical: numerical bound with φ
+    -- Rearranging: b - φ > b/φ² ↔ b(1 - 1/φ²) > φ
+    -- Since φ² = φ + 1, we have 1/φ² = 1/(φ+1) = (φ-1)/φ
+    -- So 1 - 1/φ² = 1 - (φ-1)/φ = 1/φ
+    -- Thus: b/φ > φ ↔ b > φ²
+    have h_phi_sq_val : goldenRatio * goldenRatio = goldenRatio + 1 := by
+      simp [Real.goldenRatio]
+      norm_num
+    -- Since |b| ≥ 10 and φ² ≈ 2.618, we have |b| > φ²
+    have h_b_large : Int.natAbs b > 2 := by
+      linarith [hb]
+    -- The comparison follows
+    by_cases h_pos : b ≥ 0
+    · -- Positive case
+      have : (b : Real) > goldenRatio * goldenRatio := by
+        calc (b : Real)
+          ≥ 10 := by simp [Int.natAbs] at hb; exact Nat.cast_le.mpr hb
+          _ > goldenRatio * goldenRatio := by
+            simp [Real.goldenRatio]
+            norm_num
+      field_simp
+      linarith
+    · -- Negative case: use |b| ≥ 10
+      have : b < 0 := by linarith
+      have : (-b : Real) > goldenRatio * goldenRatio := by
+        calc (-b : Real)
+          = Int.natAbs b := by simp [Int.natAbs, this]
+          _ ≥ 10 := by exact Nat.cast_le.mpr hb
+          _ > goldenRatio * goldenRatio := by
+            simp [Real.goldenRatio]
+            norm_num
+      field_simp
+      linarith
 
   -- Apply floor inequality
   have h_floors : Int.floor ((Int.floor ((b : Real) / goldenRatio) : Real) * goldenRatio) >
@@ -164,17 +200,56 @@ lemma floor_div_mul_lt_floor_div_div
         exact h_mul
 
   -- Convert to natAbs inequality
-  sorry  -- Technical: Int.floor inequality to natAbs
+  -- We have floor(b/φ * φ) > floor(b/φ²)
+  -- Need to show natAbs of the left > natAbs of the right
+  -- Since |b| ≥ 10, both expressions have the same sign as b
+  by_cases h_pos : b ≥ 0
+  · -- Positive b: both floors are positive
+    have h_left_pos : 0 ≤ Int.floor ((Int.floor ((b : Real) / goldenRatio) : Real) * goldenRatio) := by
+      apply Int.floor_nonneg
+      apply mul_nonneg
+      · exact Int.cast_nonneg _
+      · exact le_of_lt Real.goldenRatio_pos
+    have h_right_pos : 0 ≤ Int.floor ((b : Real) / goldenRatio / goldenRatio) := by
+      apply Int.floor_nonneg
+      apply div_nonneg (div_nonneg (Int.cast_nonneg.mpr h_pos) (le_of_lt Real.goldenRatio_pos))
+      exact le_of_lt Real.goldenRatio_pos
+    simp [Int.natAbs_of_nonneg h_left_pos, Int.natAbs_of_nonneg h_right_pos]
+    exact Nat.cast_lt.mp h_floors
+  · -- Negative b: both floors are negative
+    have h_neg : b < 0 := by linarith
+    have h_left_neg : Int.floor ((Int.floor ((b : Real) / goldenRatio) : Real) * goldenRatio) < 0 := by
+      apply Int.floor_lt_zero
+      apply mul_neg_of_neg_of_pos
+      · have : Int.floor ((b : Real) / goldenRatio) < 0 := by
+          apply Int.floor_lt_zero
+          apply div_neg_of_neg_of_pos
+          · exact Int.cast_lt_zero.mpr h_neg
+          · exact Real.goldenRatio_pos
+        exact Int.cast_lt_zero.mpr this
+      · exact Real.goldenRatio_pos
+    have h_right_neg : Int.floor ((b : Real) / goldenRatio / goldenRatio) < 0 := by
+      apply Int.floor_lt_zero
+      apply div_neg_of_neg_of_pos
+      · apply div_neg_of_neg_of_pos
+        · exact Int.cast_lt_zero.mpr h_neg
+        · exact Real.goldenRatio_pos
+      · exact Real.goldenRatio_pos
+    -- For negative numbers, larger floor means smaller absolute value
+    simp [Int.natAbs_of_neg h_left_neg, Int.natAbs_of_neg h_right_neg]
+    omega
 
 /-- Exponential dominates linear growth -/
 lemma exp_dominates_nat (a : Real) (h : 1 < a) :
     ∃ N : Nat, ∀ n ≥ N, a^n ≥ n := by
   -- Standard result: exponential growth eventually dominates linear
-  -- For a > 1, there exists N such that a^n ≥ n for all n ≥ N
-  use 2  -- For most a > 1, N = 2 works
+  -- Use the fact that a^n / n → ∞ as n → ∞ when a > 1
+  cases' exists_nat_gt (1 / (a - 1)) with N₀ hN₀
+  use max N₀ 2  -- Ensure N ≥ 2
   intro n hn
-  -- This is a standard result in analysis
-  sorry  -- Import from Mathlib.Analysis.SpecificLimits.Basic
+  -- For large enough n, we have a^n ≥ n
+  -- This is a standard result but requires careful proof
+  sorry  -- Technical: use Archimedean property and induction
 
 end NumericHelpers
 
