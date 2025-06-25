@@ -6,6 +6,10 @@ Helper lemmas for partitioning and summing lists.
 -/
 
 import Mathlib.Data.List.Basic
+import Mathlib.Data.List.Dedup
+import Mathlib.Data.Finset.Basic
+import Mathlib.Data.Multiset.Basic
+import Mathlib.Algebra.BigOperators.Basic
 import Mathlib.Algebra.BigOperators.Group.List
 
 namespace RecognitionScience.Helpers
@@ -48,40 +52,36 @@ lemma List.three_way_partition {α : Type*} [AddCommMonoid α]
   rw [←h1, ←h2]
   simp [add_assoc]
 
-/-- Sum of elements equals sum by counting -/
-lemma List.sum_eq_count_sum {α : Type*} [DecidableEq α] [AddCommMonoid β]
+/-- The sum of a function over a list equals the sum over deduplicated elements weighted by count -/
+-- Note: Changed from multiplication to scalar multiplication (nsmul)
+lemma List.sum_eq_count_sum {α β : Type*} [DecidableEq α] [AddCommMonoid β]
   (l : List α) (vals : α → β) :
-  l.map vals |>.sum = (l.dedup.map (fun x => (l.count x : β) * vals x)).sum := by
-  induction l with
-  | nil => simp
-  | cons x xs ih =>
-    simp [sum_cons, map_cons]
-    -- Key insight: if x ∈ xs, then count increases by 1
-    -- if x ∉ xs, then x is new in dedup
-    by_cases h : x ∈ xs
-    · -- x already in xs, so dedup unchanged but count increases
-      have h_dedup : (x :: xs).dedup = xs.dedup := by
-        simp [List.dedup_cons_of_mem h]
-      rw [h_dedup]
-      -- count x (x :: xs) = count x xs + 1
-      have h_count : (x :: xs).count x = xs.count x + 1 := by
-        simp [List.count_cons_self]
-      -- The sum changes by adding vals x
-      sorry  -- Technical: rearrange sum with updated count
-    · -- x not in xs, so x added to dedup
-      have h_dedup : (x :: xs).dedup = x :: xs.dedup := by
-        simp [List.dedup_cons_of_not_mem h]
-      rw [h_dedup]
-      simp [map_cons, sum_cons]
-      -- count x (x :: xs) = 1 since x ∉ xs
-      have h_count : (x :: xs).count x = 1 := by
-        simp [List.count_cons_self, List.count_eq_zero.mpr h]
-      simp [h_count]
-      -- For other elements y ≠ x, count unchanged
-      have h_count_others : ∀ y ∈ xs.dedup, y ≠ x → (x :: xs).count y = xs.count y := by
-        intro y h_y h_ne
-        simp [List.count_cons_of_ne h_ne]
-      sorry  -- Technical: complete the sum rearrangement
+  l.map vals |>.sum = (l.dedup.map (fun x => (l.count x) • vals x)).sum := by
+  -- Convert to multiset for easier manipulation
+  have h_multiset : l.map vals |>.sum = (l.toMultiset.map vals).sum := by
+    simp [Multiset.sum_coe]
+  -- Key insight: grouping by multiplicity
+  -- For each x in dedup, it contributes count(x) * vals(x) to the sum
+  rw [h_multiset]
+  -- Convert RHS to multiset
+  have h_rhs : (l.dedup.map (fun x => (l.count x) • vals x)).sum =
+    (l.dedup.toMultiset.map (fun x => (l.count x) • vals x)).sum := by
+    simp [Multiset.sum_coe]
+  rw [h_rhs]
+  -- The key lemma: sum over multiset equals sum over support with multiplicities
+  -- This is Multiset.sum_map_count_eq or similar
+  simp only [List.toMultiset_map, List.count_toMultiset]
+  -- Use that dedup gives exactly the support elements
+  have : l.dedup.toMultiset = l.toMultiset.toFinset.val := by
+    ext x
+    simp [List.count_dedup, Multiset.count_toFinset]
+    by_cases h : x ∈ l
+    · simp [h, List.count_pos]
+    · simp [h, List.count_eq_zero_of_not_mem]
+  rw [this]
+  -- Now use the standard multiset sum formula
+  convert Multiset.sum_map_count_smul_eq (l.toMultiset) vals
+  simp
 
 /-- Filtering preserves ordering -/
 lemma List.filter_sorted {α : Type*} [LinearOrder α]

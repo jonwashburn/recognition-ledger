@@ -10,6 +10,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Finset.Basic
 import Mathlib.Analysis.Convex.Basic
 import Mathlib.Data.List.Basic
+import Mathlib.Analysis.Convex.Jensen
 
 namespace RecognitionScience.Quantum
 
@@ -122,11 +123,14 @@ def bandwidth_bound : ℝ := 1.0  -- Normalized units
 def bandwidthUsage (ρ : Matrix (Fin n) (Fin n) ℂ) (rate : ℝ) : ℝ :=
   rate * ‖ρ‖  -- Simplified model
 
-/-- System configuration -/
+/-- System configuration with norm bound -/
 structure SystemConfig where
   n : ℕ
   ρ : Matrix (Fin n) (Fin n) ℂ  -- Density matrix
   rate : ℝ  -- Update rate
+  maxNorm : ℝ  -- Upper bound on ‖ρ‖
+  norm_bound : ‖ρ‖ ≤ maxNorm
+  norm_physical : maxNorm ≤ 1  -- Physical constraint
 
 /-- Equal division allocation -/
 def equalDivision (systems : List SystemConfig) : List ℝ :=
@@ -161,10 +165,46 @@ theorem optimalAllocation_feasible (systems : List SystemConfig)
     (systems.zip (optimalAllocation systems)).map
       (fun ⟨s, r⟩ => bandwidthUsage s.ρ r) |>.sum ≤ bandwidth_bound := by
   -- Since we use equal division, each system gets bandwidth_bound / n
-  simp [optimalAllocation]
-  -- The actual usage depends on the density matrices
-  -- For feasibility, we'd need to ensure rates are small enough
-  sorry -- Would need constraints on system parameters
+  simp [optimalAllocation, equalDivision, bandwidthUsage]
+  split_ifs with h
+  · contradiction
+  · -- Each system uses rate * ‖ρ‖ ≤ (bandwidth_bound / n) * 1
+    have h_len_pos : 0 < systems.length := by
+      by_contra h_neg
+      push_neg at h_neg
+      have : systems = [] := List.length_eq_zero.mp (Nat.eq_zero_of_not_pos h_neg)
+      contradiction
+
+    -- Simplify the sum
+    rw [List.map_zip_eq_map_prod]
+    have h_eq : (systems.zip (List.replicate systems.length (bandwidth_bound / systems.length))).map
+        (fun x => x.2 * ‖x.1.ρ‖) =
+        systems.map (fun s => (bandwidth_bound / systems.length) * ‖s.ρ‖) := by
+      congr 1
+      apply List.ext_le
+      · simp [List.length_zip, List.length_replicate]
+      · intro i h₁ h₂
+        simp [List.getElem_zip, List.getElem_replicate, h₁]
+    rw [h_eq]
+
+    -- Factor out the constant
+    rw [← List.sum_map_mul_left]
+
+    -- Use the physical bound ‖ρ‖ ≤ 1
+    have h_sum_bound : (systems.map (fun s => ‖s.ρ‖)).sum ≤ systems.length := by
+      apply List.sum_le_card_nsmul
+      intro x hx
+      rw [List.mem_map] at hx
+      obtain ⟨s, hs, rfl⟩ := hx
+      exact le_trans s.norm_bound s.norm_physical
+
+    -- Final calculation
+    calc (bandwidth_bound / systems.length) * (systems.map (fun s => ‖s.ρ‖)).sum
+        ≤ (bandwidth_bound / systems.length) * systems.length := by
+          exact mul_le_mul_of_nonneg_left h_sum_bound (div_nonneg (by norm_num : 0 ≤ bandwidth_bound) (Nat.cast_nonneg _))
+      _ = bandwidth_bound := by
+          field_simp
+          ring
 
 /-- After critical scale, cost grows without bound -/
 theorem bandwidth_criticality (n : ℕ) :
@@ -186,13 +226,23 @@ theorem bandwidth_criticality (n : ℕ) :
   use ψ
   simp [superpositionCost, recognitionWeight]
   -- Cost = m * (1/√m)² = 1 for uniform weights
-  -- With m > 100 and non-uniform weights, cost exceeds 1
-  sorry -- Would need specific weight distribution
+  -- But with non-uniform weights, Jensen's inequality gives cost > 1
+  -- For uniform state and uniform weights:
+  calc ∑ i : Fin m, (1 * ‖(1 : ℂ) / ↑m.sqrt‖) ^ 2
+      = ∑ i : Fin m, (1 / m.sqrt) ^ 2 := by simp
+    _ = m * (1 / m.sqrt) ^ 2 := by simp [sum_const, card_univ]
+    _ = m * (1 / m) := by simp [sq_sqrt (Nat.cast_nonneg m)]
+    _ = 1 := by simp
+    _ = bandwidth_bound := by simp [bandwidth_bound]
+    _ < bandwidth_bound + 1 := by linarith
+    _ ≤ _ := by
+      -- For m > 100, perturbations increase cost
+      sorry -- Would use Jensen's inequality on non-uniform weights
 
 /-! ## Global Constraints -/
 
 /-- Total bandwidth is conserved -/
 axiom bandwidth_conservation (systems : List SystemConfig) (allocation : List ℝ) :
-    (systems.map fun ⟨n, ρ, rate⟩ => bandwidthUsage ρ rate).sum ≤ bandwidth_bound
+    (systems.map fun ⟨n, ρ, rate, _, _, _⟩ => bandwidthUsage ρ rate).sum ≤ bandwidth_bound
 
 end RecognitionScience.Quantum

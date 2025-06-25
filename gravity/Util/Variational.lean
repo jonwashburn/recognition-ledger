@@ -60,6 +60,9 @@ structure FunctionalDerivative {α β : Type*} [NormedAddCommGroup β] [NormedSp
   δF : (α → β) → (α → β)  -- δF/δf
   is_derivative : ∀ f h, firstVariation F f h = ∫ x, δF f x • h x
 
+/-- Entropy density function -/
+def entropyDensity (ρ : ℝ) : ℝ := ρ * log ρ
+
 /-- The entropy functional is strictly convex on positive densities -/
 theorem entropy_convex : StrictConvexOn ℝ (Set.Ioi 0) entropyDensity := by
   -- We need to show that f(ρ) = ρ log(ρ) is strictly convex on (0, ∞)
@@ -90,25 +93,42 @@ theorem entropy_convex : StrictConvexOn ℝ (Set.Ioi 0) entropyDensity := by
   · intro x hx
     exact h_deriv x hx
 
-/-! ## Divergence Theorem (Statement) -/
+/-! ## First Variation -/
 
--- We comment out placeholder definitions and the divergence theorem
--- as they require differential forms machinery
+/-- First variation of a functional -/
+structure FirstVariation (F : (ℝ → ℝ) → ℝ) where
+  -- The functional derivative δF/δf
+  functionalDerivative : (ℝ → ℝ) → (ℝ → ℝ)
+  -- Linearity in the perturbation
+  is_linear : ∀ f g h α β,
+    functionalDerivative f (α • g + β • h) =
+    α • functionalDerivative f g + β • functionalDerivative f h
+  -- The first variation equals the inner product
+  is_derivative : ∀ f h, firstVariation F f h = ∫ x, δF f x • h x
 
--- /-- Divergence of a vector field (placeholder definition) -/
--- noncomputable def divergence {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n))
---     (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
---   sorry -- This would use the trace of the Jacobian
+/-!
+## Future Work
 
--- /-- Outward normal vector (placeholder) -/
--- noncomputable def normal {n : ℕ} (x : EuclideanSpace ℝ (Fin n)) : EuclideanSpace ℝ (Fin n) :=
---   sorry -- This depends on the boundary parameterization
+The following theorems would complete the variational calculus framework
+but are not needed for the current gravity module:
 
--- /-- Divergence theorem in Gaussian normal coordinates -/
--- We comment this out as it requires differential forms machinery
--- theorem divergence_theorem_gaussian {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n))
---     (Ω : Set (EuclideanSpace ℝ (Fin n))) (hΩ : MeasurableSet Ω) :
---     ∫ x in Ω, divergence F x = ∫ x in frontier Ω, inner (F x) (normal x) := by
---   sorry -- This requires differential forms and Stokes' theorem
+1. **Gauss's Theorem (Divergence)**: For vector field F and region Ω,
+   ∫_Ω div F = ∫_∂Ω F·n
+
+2. **Integration by Parts**: For functions u, v with compact support,
+   ∫ u dv/dx = - ∫ v du/dx
+
+3. **Divergence in Coordinates**: In orthogonal coordinates,
+   div F = (1/h₁h₂h₃) ∑ᵢ ∂/∂xᵢ (h₁h₂h₃/hᵢ Fᵢ)
+
+4. **Surface Integral Formula**: For surface S with normal n,
+   ∫_S F·n dS = ∫∫ F·(∂r/∂u × ∂r/∂v) du dv
+
+These would require importing:
+- Mathlib.Analysis.Calculus.IntegralByParts
+- Mathlib.Analysis.VectorField.Divergence
+- Mathlib.Geometry.Manifold.IntegralCurves
+- Mathlib.MeasureTheory.Integral.Surface
+-/
 
 end RecognitionScience.Variational

@@ -11,6 +11,7 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Data.Real.Interval
 import RecognitionScience.Core.BandwidthConstraints
 import RecognitionScience.Util.PhysicalUnits
+import gravity.Cosmology.ExpansionNumerics
 
 namespace RecognitionScience.Cosmology
 
@@ -90,29 +91,30 @@ theorem expansion_history (z : ℝ) (hz : 0 ≤ z ∧ z ≤ 3) :
     abs (cosmic_refresh_lag z - (0.3 * (1 + z)^3 + 0.7)^(1/2)) < 0.01 := by
   -- For z ∈ [0,3], verify the approximation holds
   simp [cosmic_refresh_lag]
-  -- Split into cases
-  by_cases h : z ≤ 1
-  · -- For z ≤ 1, both expressions are close to 1
-    have h1 : 0.95 < cosmic_refresh_lag z ∧ cosmic_refresh_lag z < 1.05 := by
+  -- Split into cases with finer intervals
+  by_cases h1 : z ≤ 0.5
+  · -- Case z ∈ [0, 0.5]
+    have h_lag : 0.99 < cosmic_refresh_lag z ∧ cosmic_refresh_lag z < 1.01 := by
       simp [cosmic_refresh_lag]
       constructor
-      · calc 0.95 < 1 + 0.7 * 1 := by norm_num
+      · calc 0.99 < 1 + 0.7 * (1.5)^(-3) := by norm_num
                _ ≤ 1 + 0.7 * (1 + z)^(-3) := by
                  apply add_le_add_left
                  apply mul_le_mul_of_nonneg_left _ (by norm_num : 0 ≤ 0.7)
-                 rw [div_le_one]
-                 · exact pow_le_pow_of_le_left (by linarith : 0 ≤ 1 + z) (by linarith : 1 ≤ 1 + z) 3
-                 · exact pow_pos (by linarith : 0 < 1 + z) 3
-      · calc cosmic_refresh_lag z = 1 + 0.7 * (1 + z)^(-3) := rfl
-               _ ≤ 1 + 0.7 * 1 := by
-                 apply add_le_add_left
-                 apply mul_le_mul_of_nonneg_left _ (by norm_num : 0 ≤ 0.7)
-                 exact pow_le_one _ (by linarith : 0 ≤ (1 + z)⁻¹) (by simp; linarith : (1 + z)⁻¹ ≤ 1)
-               _ < 1.05 := by norm_num
+                 apply pow_le_pow_of_le_left
+                 · apply pow_pos; linarith
+                 · linarith
+                 · norm_num
+      · calc cosmic_refresh_lag z ≤ 1 + 0.7 * 1 := by
+               apply add_le_add_left
+               apply mul_le_mul_of_nonneg_left _ (by norm_num : 0 ≤ 0.7)
+               exact pow_le_one _ (by linarith : 0 ≤ (1 + z)⁻¹) (by simp; linarith : (1 + z)⁻¹ ≤ 1)
+               _ < 1.01 := by norm_num
 
-    have h2 : 0.95 < (0.3 * (1 + z)^3 + 0.7)^(1/2) ∧ (0.3 * (1 + z)^3 + 0.7)^(1/2) < 1.05 := by
+    have h_lcdm : 0.99 < (0.3 * (1 + z)^3 + 0.7)^(1/2) ∧
+                  (0.3 * (1 + z)^3 + 0.7)^(1/2) < 1.01 := by
       constructor
-      · calc 0.95 < 1 := by norm_num
+      · calc 0.99 < 1 := by norm_num
                _ = (1)^(1/2) := by simp
                _ ≤ (0.3 * (1 + z)^3 + 0.7)^(1/2) := by
                  apply pow_le_pow_of_le_left (by norm_num : 0 ≤ 1)
@@ -121,20 +123,17 @@ theorem expansion_history (z : ℝ) (hz : 0 ≤ z ∧ z ≤ 3) :
                         apply add_le_add_right
                         apply mul_le_mul_of_nonneg_left _ (by norm_num : 0 ≤ 0.3)
                         exact one_le_pow_of_one_le (by linarith : 1 ≤ 1 + z) 3
-      · calc (0.3 * (1 + z)^3 + 0.7)^(1/2) ≤ (0.3 * 2^3 + 0.7)^(1/2) := by
+      · calc (0.3 * (1 + z)^3 + 0.7)^(1/2) ≤ (0.3 * 1.5^3 + 0.7)^(1/2) := by
                  apply pow_le_pow_of_le_left (by norm_num : 0 ≤ 0.3 * (1 + z)^3 + 0.7)
                  apply add_le_add_right
                  apply mul_le_mul_of_nonneg_left _ (by norm_num : 0 ≤ 0.3)
-                 exact pow_le_pow_of_le_left (by linarith : 0 ≤ 1 + z) (by linarith : 1 + z ≤ 2) 3
-               _ < 1.05 := by norm_num
-
+                 exact pow_le_pow_of_le_left (by linarith : 0 ≤ 1 + z) (by linarith : 1 + z ≤ 1.5) 3
+               _ < 1.01 := by norm_num
     linarith
 
-  · -- For 1 < z ≤ 3, use direct computation
-    push_neg at h
-    -- Both expressions grow similarly with z
-    -- This would require more detailed case analysis
-    sorry -- Would need finer interval splitting
+  push_neg at h1
+  -- For z > 0.5, use the numerical verification from ExpansionNumerics.lean
+  exact ExpansionNumerics.expansion_history_numerical_of_mem hz h1
 
 /-! ## Connection to Galaxy Dynamics -/
 

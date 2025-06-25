@@ -11,6 +11,8 @@ import Mathlib.Data.Real.Sqrt
 
 -- Import our axioms
 import foundation.RecognitionScience
+-- Import the involution helper
+import formal.Helpers.Involution
 
 namespace RecognitionScience
 
@@ -46,19 +48,74 @@ theorem fundamental_tick_positive : ∃ τ : ℝ, τ > 0 ∧ τ = 7.33e-15 := by
 theorem spatial_voxel_positive : ∃ L₀ : ℝ, L₀ > 0 ∧ L₀ = 0.335e-9 / 4 := by
   use 0.335e-9 / 4; constructor; norm_num; rfl
 
+-- The other root of x² = x + 1
+noncomputable def φ_neg : ℝ := (1 - Real.sqrt 5) / 2
+
+-- Verify φ_neg = -1/φ
+lemma φ_neg_eq : φ_neg = -1/φ := by
+  rw [φ_neg, φ]
+  field_simp
+  ring_nf
+  -- Need to show: 2 * (1 - √5) * (1 + √5) = -4
+  -- LHS = 2 * (1 - 5) = 2 * (-4) = -8 ≠ -4
+  -- Actually need: (1 - √5) / 2 = -2 / (1 + √5)
+  -- Cross multiply: (1 - √5)(1 + √5) = -4
+  -- LHS = 1 - 5 = -4 ✓
+  rw [mul_comm (1 - Real.sqrt 5), ← neg_mul]
+  congr 1
+  ring_nf
+  rw [← sq_sub_sq]
+  simp [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 5)]
+
+-- The quadratic x² = x + 1 has exactly two real roots
+lemma quadratic_roots : ∀ x : ℝ, x^2 = x + 1 ↔ x = φ ∨ x = φ_neg := by
+  intro x
+  constructor
+  · intro h
+    -- x² - x - 1 = 0
+    have h_eq : x^2 - x - 1 = 0 := by linarith
+    -- Factor as (x - φ)(x - φ_neg) = 0
+    have h_factor : (x - φ) * (x - φ_neg) = 0 := by
+      ring_nf
+      rw [φ, φ_neg]
+      field_simp
+      ring_nf
+      -- Need to show: x² - x - 1 = 0
+      -- After expanding we get: 4x² - 4x - 4 = 0
+      -- Which simplifies to: x² - x - 1 = 0
+      linarith
+    -- So x = φ or x = φ_neg
+    cases' mul_eq_zero.mp h_factor with h1 h2
+    · left; linarith
+    · right; linarith
+  · intro h
+    cases h with
+    | inl h => rw [h]; exact golden_ratio_equation
+    | inr h =>
+      rw [h]
+      -- Need to show: φ_neg² = φ_neg + 1
+      rw [φ_neg]
+      field_simp
+      ring_nf
+      -- After simplification: 6 - 2√5 = 4
+      -- Which means: 2 = 2√5, so √5 = 1, contradiction
+      -- Let me recalculate...
+      -- ((1 - √5)/2)² = (1 - 2√5 + 5)/4 = (6 - 2√5)/4
+      -- ((1 - √5)/2) + 1 = (1 - √5 + 2)/2 = (3 - √5)/2 = (6 - 2√5)/4 ✓
+      rw [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 5)]
+      ring
+
 -- Cost minimization leads to φ
 theorem cost_minimization_golden_ratio (DR : DiscreteRecognition) (PC : PositiveCost) (SS : SelfSimilarity PC DR) :
   SS.lambda = φ ∨ SS.lambda = -1/φ := by
   -- SS.lambda satisfies λ² = λ + 1
   have h_eq : SS.lambda^2 = SS.lambda + 1 := SS.self_similar_scaling
-  -- φ also satisfies this equation
-  have h_phi : φ^2 = φ + 1 := golden_ratio_equation
-  -- The quadratic x² - x - 1 = 0 has exactly two roots: φ and -1/φ
-  -- Since SS.lambda satisfies this equation, it must be one of these roots
-  -- For a complete proof, we would show -1/φ also satisfies the equation
-  -- and use the fact that a quadratic has at most 2 roots
-  left  -- Assume SS.lambda = φ for now
-  sorry  -- Complete proof requires showing these are the only two roots
+  -- Apply the quadratic roots lemma
+  have h := quadratic_roots SS.lambda
+  rw [h] at h_eq
+  cases' h_eq with h1 h2
+  · left; exact h1
+  · right; rw [← φ_neg_eq]; exact h2
 
 -- Recognition operator fixed points
 theorem recognition_fixed_points :
@@ -66,23 +123,7 @@ theorem recognition_fixed_points :
   (∃ vacuum phi_state : ℝ, vacuum ≠ phi_state ∧
    J vacuum = vacuum ∧ J phi_state = phi_state ∧
    ∀ x, J x = x → x = vacuum ∨ x = phi_state) := by
-  -- Define J as the identity function as a trivial example
-  let J : ℝ → ℝ := id
-  use J
-  constructor
-  · -- J is involutive (id ∘ id = id)
-    intro x; rfl
-  · -- Choose 0 and 1 as two distinct fixed points
-    use 0, 1
-    constructor
-    · norm_num  -- 0 ≠ 1
-    constructor
-    · rfl  -- J(0) = 0
-    constructor
-    · rfl  -- J(1) = 1
-    · -- For id, every point is a fixed point
-      -- This doesn't satisfy the uniqueness, but demonstrates the structure
-      intro x hx
-      left; sorry  -- Would need a proper involution with exactly 2 fixed points
+  -- Use the solution from Helpers.Involution
+  exact RecognitionScience.Helpers.recognition_fixed_points_solution
 
 end RecognitionScience
