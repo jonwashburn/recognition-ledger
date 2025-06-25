@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
 *.py[cod]
@@ -52,3 +53,24 @@ archive/
 !data/Rotmod_LTG/*.dat
 !results/.gitkeep
 !docs/*.txt
+=======
+# Lean / Lake build artifacts
+.lake/
+lake-manifest.json
+*.olean
+*.ilean
+
+# Large binaries and generated PDFs
+*.pdf
+*.png
+*.jpg
+*.aux
+*.log
+*.out
+
+# OS metadata
+.DS_Store
+
+# Ignore large dataset files
+Particle-Masses-B.txt 
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91

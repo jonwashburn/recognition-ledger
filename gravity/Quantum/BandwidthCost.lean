@@ -206,6 +206,7 @@ theorem optimalAllocation_feasible (systems : List SystemConfig)
           field_simp
           ring
 
+<<<<<<< HEAD
 /-- After critical dimension, minimum cost exceeds bandwidth -/
 theorem bandwidth_criticality :
     ∃ n_crit : ℕ, ∀ m > n_crit,
@@ -267,6 +268,40 @@ theorem collapse_threshold_exceeded :
   -- This suggests the model needs non-uniform recognition weights
   -- or a different cost function to exhibit criticality
   sorry -- Model revision needed for realistic criticality
+=======
+/-- After critical scale, cost grows without bound -/
+theorem bandwidth_criticality (n : ℕ) :
+    ∃ n_crit : ℕ, ∀ m > n_crit,
+    ∀ allocation : List ℝ,
+    ∃ ψ : QuantumState m, superpositionCost ψ > bandwidth_bound := by
+  use 100  -- Placeholder critical dimension
+  intro m hm allocation
+  -- For large m, even the most efficient state has high cost
+  -- Take uniform superposition: |ψ⟩ = (1/√m) ∑|i⟩
+  let ψ : QuantumState m :=
+    { amplitude := fun _ => (1 : ℂ) / m.sqrt
+      normalized := by
+        simp
+        rw [← Finset.card_univ, ← Finset.sum_const]
+        simp [div_pow, one_pow]
+        rw [Nat.cast_sum, sum_const, card_univ]
+        simp [sq_sqrt (Nat.cast_nonneg m)] }
+  use ψ
+  simp [superpositionCost, recognitionWeight]
+  -- Cost = m * (1/√m)² = 1 for uniform weights
+  -- But with non-uniform weights, Jensen's inequality gives cost > 1
+  -- For uniform state and uniform weights:
+  calc ∑ i : Fin m, (1 * ‖(1 : ℂ) / ↑m.sqrt‖) ^ 2
+      = ∑ i : Fin m, (1 / m.sqrt) ^ 2 := by simp
+    _ = m * (1 / m.sqrt) ^ 2 := by simp [sum_const, card_univ]
+    _ = m * (1 / m) := by simp [sq_sqrt (Nat.cast_nonneg m)]
+    _ = 1 := by simp
+    _ = bandwidth_bound := by simp [bandwidth_bound]
+    _ < bandwidth_bound + 1 := by linarith
+    _ ≤ _ := by
+      -- For m > 100, perturbations increase cost
+      sorry -- Would use Jensen's inequality on non-uniform weights
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 /-! ## Global Constraints -/
 

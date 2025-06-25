@@ -1,0 +1,46 @@
+name: NavierStokes CI
+
+on:
+  push:
+    paths:
+      - 'working/NavierStokes/**'
+      - 'foundation/EightBeat/**'
+      - '.github/workflows/navier-stokes-ci.yml'
+  pull_request:
+    paths:
+      - 'working/NavierStokes/**'
+      - 'foundation/EightBeat/**'
+
+jobs:
+  build:
+    name: Build NavierStokes
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Lean
+      uses: leanprover/lean4-action@v1
+      with:
+        auto-config: false
+
+    - name: Build NavierStokes
+      run: |
+        cd working/NavierStokes
+        lake build
+      
+    - name: Check for sorries
+      run: |
+        cd working/NavierStokes
+        if grep -r "sorry" Src/NavierStokesLedger/*.lean; then
+          echo "::warning::Found 'sorry' placeholders in the code"
+        else
+          echo "✅ No 'sorry' placeholders found!"
+        fi
+        
+    - name: Count sorries
+      run: |
+        cd working/NavierStokes
+        echo "Sorry count:"
+        grep -r "sorry" Src/NavierStokesLedger/*.lean | wc -l || echo "0" 

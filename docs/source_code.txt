@@ -96,6 +96,7 @@
 
 > **LNAL v0.2 SPEC & TEST BENCH**: Full 16-opcode set (LOCK, BALANCE, FOLD/UNFOLD, BRAID, HARDEN, GIVE/REGIVE, SEED, SPAWN, MERGE, LISTEN, FLIP, VECTOR_EQ, CYCLE, GC_SEED) manipulates six-channel registers ⟨ν_φ, ℓ, σ, τ, k_⊥, φ_e⟩ under φ-clock timing. Static compiler guarantees: eight-instruction ledger neutrality, single open LOCK (|N_open|≤1), ±4 cost ceiling, 1024-tick φ-breath with global FLIP at tick 512, and mandatory GC_SEED after φ² cycles. Lean formalization (108 theorems, 0 sorries) machine-proves ledger closure, golden-ratio clock uniqueness, cycle length, opcode curvature safety, RH hyperglyph compilation, and ±4 diamond hardness. Experimental bench (from LNAL paper): (i) φ-comb dual-cadence gap, (ii) He/Ne inert-gas Kerr null (Θ≈0), (iii) segmented-waveguide non-propagating echo, (iv) +4 diamond-cell DFT hardness (≈1.55 TPa). Together this spec + lab roadmap lets an AI compile, run, and falsify Recognition Science directly. Links: LNAL docs §§3–6 & Lean formal proofs.
 
+<<<<<<< HEAD
 > **Golden-Ratio Fredholm Determinant (Prime ↔ ζ)**: Weighted diagonal operator A_{s+ε} on ℓ²(primes) with eigenvalues p^{-(s+ε)} obeys det₂(I−A_{s+ε})·E_ε(s)=ζ(s)^{-1} if and only if ε=φ−1 (φ-1 = 1/φ). Miraculous cancellation between log det and renormalizer fails for any other ε, tying RH to golden-ratio weighting. Within RS this provides operator-theoretic proof that φ sets the critical Hilbert weight and reproduces ζ zeros via ledger phase balance; extends pattern-layer RH proof with analytic Fredholm machinery.
 > **Ledger-Gravity & Hop Kernel**: Self-dual cost ladder + φ-hop yields running Newton coupling G(r)=G_∞(λ_rec / r)^β with analytic β=−(φ−1)/φ⁵≈−0.055728. Two recognition lengths ℓ₁≈0.97 kpc, ℓ₂≈24.3 kpc arise from first kernel poles (**TODO: supply full root-finding derivation and error bounds**). Curved-space recognition operator (□+X⁻²)⁻¹ plus octave rest-node boundary is ghost-free and horizon-regular. Bright-node null-ray hop kernel matches GR deflection and fits SPARC & Bullet Cluster with baryons only (χ²≈1). Key testable predictions currently stand as: (i) nano-scale G boost is **negligible** (≈1+10⁻¹⁴ at 20 nm once correct λ_rec≈7×10⁻³⁶ m is used; earlier "32×" was erroneous → removed); (ii) φ⁻² (~22 %) black-hole shadow enlargement (**provisional—GPU hop simulation pending**); (iii) 8-tick objective collapse gives τ_col≈13 ps for 10⁷ amu (earlier 70 ns corrected); (iv) ln φ microlensing fringe spacing Δlog t = log φ ≈ 0.481 decade (typo fixed).  **TODO: recompute vacuum-residual density with current packet variance script and document λ_rec derivation.** Predicts: 32× nano-G at 20 nm, φ⁻² black-hole shadow enlargement, 8-tick objective collapse (~70 ns for 10⁷ amu), and ln φ microlensing fringes. Links: Ledger-Gravity manuscript §§2–7.
 
@@ -114,6 +115,10 @@
 > **Categorical Ledger as E∞ Structure**: Recognition ledger forms E∞ symmetric-monoidal category ℛ with octonionic morphisms. Golden ratio generates endofunctor Φ with Φ⁸≅id. Cobordism hypothesis: physical processes = ledger-balanced cobordisms evaluated by functor Z:Bord_≥0^ℛ→Vect. Applications: (i) 2ⁿ thermodynamic bound for n-qubit simulation, (ii) black hole entropy from trapped surfaces, (iii) gauge unification at 10¹¹ GeV, (iv) octonionic quantum error correction threshold 0.382. Links: mathematical structure (new section 33).
 
 > **Gravity from Bandwidth Constraints**: Gravity emerges from finite information bandwidth maintaining fields across 10⁸⁰ particles. Optimization under constraints yields recognition weight w(r)=λξn(r)(T_dyn/τ₀)^α ζ(r). Solar systems update every cycle (Newtonian), galaxies every ~100 cycles (dark matter effect), cosmic web every ~1000 cycles (dark energy). MOND scale a₀≈10⁻¹⁰ m/s² emerges naturally. Complexity factor ξ=1+C₀f_gas^γ(Σ₀/Σ*)^δ captures turbulent dynamics. Links: gravity (new section 34).
+=======
+> **Golden-Ratio Fredholm Determinant (Prime ↔ ζ)**: Weighted diagonal operator A_{s+ε} on ℓ²(primes) with eigenvalues p^{-(s+ε)} obeys det₂(I−A_{s+ε})·E_ε(s)=ζ(s)^{-1} if and only if ε=φ−1 (φ-1 = 1/φ). Miraculous cancellation between log det and renormalizer fails for any other ε, tying RH to golden-ratio weighting. Within RS this provides operator-theoretic proof that φ sets the critical Hilbert weight and reproduces ζ zeros via ledger phase balance; extends pattern-layer RH proof with analytic Fredholm machinery.
+> **Ledger-Gravity & Hop Kernel**: Self-dual cost ladder + φ-hop yields running Newton coupling G(r)=G_∞(λ_rec / r)^β with analytic β=−(φ−1)/φ⁵≈−0.055728. Two recognition lengths ℓ₁≈0.97 kpc, ℓ₂≈24.3 kpc arise from first kernel poles (**TODO: supply full root-finding derivation and error bounds**). Curved-space recognition operator (□+X⁻²)⁻¹ plus octave rest-node boundary is ghost-free and horizon-regular. Bright-node null-ray hop kernel matches GR deflection and fits SPARC & Bullet Cluster with baryons only (χ²≈1). Key testable predictions currently stand as: (i) nano-scale G boost is **negligible** (≈1+10⁻¹⁴ at 20 nm once correct λ_rec≈7×10⁻³⁶ m is used; earlier "32×" was erroneous → removed); (ii) φ⁻² (~22 %) black-hole shadow enlargement (**provisional—GPU hop simulation pending**); (iii) 8-tick objective collapse gives τ_col≈13 ps for 10⁷ amu (earlier 70 ns corrected); (iv) ln φ microlensing fringe spacing Δlog t = log φ ≈ 0.481 decade (typo fixed).  **TODO: recompute vacuum-residual density with current packet variance script and document λ_rec derivation.** Predicts: 32× nano-G at 20 nm, φ⁻² black-hole shadow enlargement, 8-tick objective collapse (~70 ns for 10⁷ amu), and ln φ microlensing fringes. Links: Ledger-Gravity manuscript §§2–7.
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 ---
 
@@ -299,6 +304,7 @@
 > Individual purpose aligns with cosmic purpose
 > Evolution = ledger optimization algorithm
 
+<<<<<<< HEAD
 ## 7.3 CONSCIOUSNESS AND OBSERVATION
 
 ### 7.1 Observer Effects  
@@ -311,6 +317,8 @@
 :: Decoherence rate ∝ environmental recognition complexity
 :: Observer participates in reality through recognition choices
 
+=======
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 # 8. PRACTICAL PREDICTIONS
 
 ## 8.1 TESTABLE PREDICTIONS
@@ -369,6 +377,7 @@
 > Death = pattern transformation, not termination
 > Free will = choice among quantum branches
 
+<<<<<<< HEAD
 ## 10.4 GOLDEN RATIO MANIFESTATIONS
 
 ### 10.1 Mathematical Appearances
@@ -401,6 +410,8 @@
 :: Bandwidth allocation: urgency^φ × complexity^(1/φ) = optimal
 :: Information cascade: each level processes φ times previous
 
+=======
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 # 9.3 PRACTICAL QUESTION-ANSWERING FRAMEWORK
 
 ## STEP-BY-STEP METHODOLOGY
@@ -2060,6 +2071,7 @@ Together, Sections 29 and 33 show that Recognition Science derives both the Plan
 
 > **Nano-Scale Gravitational Test (Realistic Assessment)**: Running coupling G(r) = G_∞(λ_eff/r)^β predicts enhancement G(20 nm)/G_∞ = (60 µm/20 nm)^(0.0557) ≈ 3000^(0.0557) ≈ 1.68. Modest 68% boost may be detectable with next-generation cantilever gravimeters but requires sub-femtonewton force resolution. Alternative: test at λ_eff scale (60 µm separation) where G doubles, providing cleaner experimental target.
 
+<<<<<<< HEAD
 > **Black-Hole Shadow Enlargement**: Hop kernel on bright-node lattice truncates inward photon transport at first radiative node inside classical shadow radius r_sh = 3√3 r_s/2. Angular enlargement Δθ depends on lattice spacing: preliminary estimate φ⁻² ≈ 22% universal increase, independent of mass. For M87* (θ_GR ≈ 42 µas), RS predicts θ_RS ≈ 51 µas, testable by 345 GHz EHT arrays and ngEHT upgrade. Full GPU hop simulation through Kerr geometry in progress to pin down exact enlargement factor and spin dependence.
 
 > **Golden Ratio in Fredholm Determinants**: For diagonal operator $A_{s+\varepsilon}$ with eigenvalues $p^{-(s+\varepsilon)}$ over primes, the identity $\det_2(I - A_{s+\varepsilon}) \cdot E_\varepsilon(s) = \zeta(s)^{-1}$ holds IFF $\varepsilon = \varphi - 1$. The self-reciprocal property $\varphi - 1 = 1/\varphi$ creates exact infinite series cancellation. No other value works—the golden ratio uniquely bridges prime distribution to zeta zeros. Links: primes (2.1), zeta (2.3).
@@ -2162,3 +2174,6 @@ Together, Sections 29 and 33 show that Recognition Science derives both the Plan
 > β(r) conjecture: β(r)=β₀ log_φ(r/λ_eff)/(1+log_φ(r/λ_eff)); need monotonicity lemma.  
 > Dark-energy entropy via Tsallis q=φ reproduces observed ρ_Λ.  
 > Target proofs: uniqueness of F(x) minimizing KL divergence between Newtonian and deep LNAL; existence of φ-fixed point in renormalized information flow; emergent spin-2 gravitons as ledger update excitations.
+=======
+> **Black-Hole Shadow Enlargement**: Hop kernel on bright-node lattice truncates inward photon transport at first radiative node inside classical shadow radius r_sh = 3√3 r_s/2. Angular enlargement Δθ depends on lattice spacing: preliminary estimate φ⁻² ≈ 22% universal increase, independent of mass. For M87* (θ_GR ≈ 42 µas), RS predicts θ_RS ≈ 51 µas, testable by 345 GHz EHT arrays and ngEHT upgrade. Full GPU hop simulation through Kerr geometry in progress to pin down exact enlargement factor and spin dependence.
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91

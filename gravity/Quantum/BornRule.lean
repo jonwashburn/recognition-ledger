@@ -14,7 +14,10 @@ import gravity.Quantum.BandwidthCost
 import gravity.Util.Variational
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.Calculus.LagrangeMultipliers
+<<<<<<< HEAD
 import Mathlib.Probability.Notation  -- For KL divergence
+=======
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 namespace RecognitionScience.Quantum
 
@@ -81,6 +84,7 @@ def xLogX : ℝ → ℝ := fun x => if x = 0 then 0 else x * log x
 lemma xLogX_continuous : ContinuousAt xLogX 0 := by
   rw [ContinuousAt, xLogX]
   simp
+<<<<<<< HEAD
   -- Use that lim_{x→0⁺} x log x = 0
   -- This is a standard limit that follows from L'Hôpital's rule
   -- or from the fact that log x grows slower than 1/x
@@ -91,16 +95,31 @@ lemma xLogX_continuous : ContinuousAt xLogX 0 := by
   use min (1/2) (ε^2)
   constructor
   · simp [hε]
+=======
+  intro ε hε
+  -- For x near 0, |x log x| ≤ |x| * |log x| → 0
+  -- We use that lim_{x→0⁺} x log x = 0
+  use min (1/2) (exp (-2/ε))
+  constructor
+  · simp [exp_pos]
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
   · intro x hx
     simp at hx
     by_cases h : x = 0
     · simp [h]
     · simp [h, abs_sub_comm]
+<<<<<<< HEAD
       -- For 0 < x < min(1/2, ε²), we have |x log x| < ε
       have hx_pos : 0 < x := by
         by_contra h_neg
         push_neg at h_neg
         have : x = 0 := le_antisymm h_neg (hx.2.trans (by simp [hε]))
+=======
+      have hx_pos : 0 < x := by
+        by_contra h_neg
+        push_neg at h_neg
+        have : x = 0 := le_antisymm h_neg (hx.2.trans (by simp [exp_pos]))
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
         contradiction
       have hx_small : x < 1/2 := hx.1
       -- For 0 < x < 1/2, we have log x < 0
@@ -108,6 +127,7 @@ lemma xLogX_continuous : ContinuousAt xLogX 0 := by
       -- So |x log x| = x * |log x| = -x * log x
       rw [abs_mul, abs_of_pos hx_pos, abs_of_neg h_log_neg]
       simp only [neg_neg]
+<<<<<<< HEAD
       -- For x < ε², we want to show -x log x < ε
       -- Use that -log x < 1/√x for small x
       have h_bound : -log x ≤ 2 / Real.sqrt x := by
@@ -179,6 +199,20 @@ lemma xLogX_continuous : ContinuousAt xLogX 0 := by
           · norm_num
         _ = ε + ε := by ring
         _ ≤ ε := by linarith [hε]
+=======
+      -- Need to show: -x * log x < ε
+      -- Since x ≤ exp(-2/ε), we have log x ≤ -2/ε
+      -- So -x * log x ≤ x * (2/ε) ≤ exp(-2/ε) * (2/ε)
+      have h_log_bound : log x ≤ -2/ε := by
+        have := log_le_log hx_pos hx.2
+        rwa [log_exp] at this
+      have : -x * log x ≤ x * (2/ε) := by
+        rw [mul_comm (-x), mul_comm x]
+        exact mul_le_mul_of_nonneg_left (neg_le_neg h_log_bound) (le_of_lt hx_pos)
+      -- Now x * (2/ε) < ε when x < ε²/2
+      -- But we need a better bound using exp(-2/ε)
+      sorry -- This requires more careful analysis of x exp(1/x) behavior
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 /-- The entropy functional is convex on the probability simplex. -/
 lemma entropy_convex_simplex {n : ℕ} :
@@ -293,6 +327,7 @@ theorem max_entropy_uniform :
     ∀ w : Fin n → ℝ, (∀ i, 0 ≤ w i) → Finset.univ.sum w = 1 →
     recognitionEntropy w ≤ log n := by
   intro w hw_pos hw_sum
+<<<<<<< HEAD
   -- Use Gibbs' inequality (KL divergence non-negativity)
   -- For probability distributions p and q:
   -- ∑ p_i log(p_i/q_i) ≥ 0, with equality iff p = q
@@ -301,6 +336,15 @@ theorem max_entropy_uniform :
   -- So -∑ p_i log p_i ≤ -log(1/n) = log n
 
   -- Direct calculation showing entropy is maximized by uniform distribution
+=======
+  -- Use Jensen's inequality on -x log x
+  -- The function f(x) = -x log x is concave on (0,1]
+  -- So by Jensen: ∑ w_i f(w_i) ≤ f(∑ w_i w_i) = f(1) = 0 is wrong
+  -- Actually: ∑ f(w_i) ≤ n f(1/n) when w_i sum to 1
+
+  -- Direct approach: -∑ w_i log w_i ≤ log n
+  -- Maximum when all w_i = 1/n (uniform distribution)
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
   have h_uniform : recognitionEntropy (fun _ => 1/n) = log n := by
     simp [recognitionEntropy]
     rw [sum_const, card_univ, Fintype.card_fin]
@@ -308,6 +352,7 @@ theorem max_entropy_uniform :
     rw [← log_inv, inv_div]
     ring_nf
 
+<<<<<<< HEAD
   -- Use convexity: -x log x is strictly concave, so entropy is strictly concave
   -- Maximum of strictly concave function on simplex is at uniform distribution
 
@@ -490,6 +535,31 @@ theorem max_entropy_uniform :
         · simp [h]
     _ ≤ -Finset.univ.sum (fun i => w i * log (1/n)) := by
         linarith [h_gibbs]
+=======
+  -- For the general case, use convexity of -x log x
+  -- Actually, we need that -∑ w_i log w_i ≤ -∑ (1/n) log(1/n) = log n
+  -- This follows from the fact that entropy is maximized by uniform distribution
+
+  -- Use Gibbs' inequality: -∑ p_i log p_i ≤ -∑ p_i log q_i for any q
+  -- Taking q_i = 1/n gives: -∑ w_i log w_i ≤ -∑ w_i log(1/n) = log n
+
+  have h_gibbs : recognitionEntropy w ≤ -Finset.univ.sum (fun i => w i * log (1/n)) := by
+    simp [recognitionEntropy]
+    apply Finset.sum_le_sum
+    intro i hi
+    by_cases h : w i = 0
+    · simp [h]
+    · simp [h]
+      apply mul_le_mul_of_nonneg_left
+      · -- log w_i ≥ log(1/n) when w_i ≥ 1/n is false in general
+        -- We need -log w_i ≤ -log(1/n) which needs a different approach
+        sorry -- Need Gibbs' inequality lemma from information theory
+      · exact hw_pos i
+
+  -- Simplify the RHS
+  calc recognitionEntropy w
+      ≤ -Finset.univ.sum (fun i => w i * log (1/n)) := h_gibbs
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
     _ = -(log (1/n)) * Finset.univ.sum w := by simp [← mul_sum]
     _ = -(log (1/n)) * 1 := by rw [hw_sum]
     _ = -log (1/n) := by simp
@@ -523,6 +593,7 @@ theorem classical_zero_cost (ψ : QuantumState n) :
   intro ⟨i, hi⟩
   simp [superpositionCost]
   -- All terms except i vanish
+<<<<<<< HEAD
   -- For classical state, recognitionWeight j = 0 for j ≠ i
   -- and recognitionWeight i = 1
   -- So the sum ∑ (recognitionWeight j * |ψ j|)² = 1 * |ψ i|² = 1
@@ -582,13 +653,21 @@ theorem classical_zero_cost (ψ : QuantumState n) :
                 have : ψ.amplitude k = 0 := hi k hk.2
                 simp [this]
         rw [← h_norm, ψ.normalized]
+=======
+  sorry -- Requires finishing superposition_cost_nonneg
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 /-- High bandwidth cost drives collapse -/
 def collapse_threshold : ℝ := 1.0  -- Normalized units
 
 /-- Collapse occurs when cumulative cost exceeds threshold -/
+<<<<<<< HEAD
 def collapseTime (SE : SchrodingerEvolution n) (h_super : ¬isClassical SE.ψ₀) : ℝ :=
   Classical.choose (collapse_time_exists SE h_super)
+=======
+def collapseTime (ψ : EvolvingState) : ℝ :=
+  Classical.choose (collapse_time_exists ψ sorry)
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 /-! ## Dimension Scaling -/
 

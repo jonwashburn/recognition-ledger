@@ -156,6 +156,7 @@ theorem expansion_history_numerical_of_mem {z : ℝ} (hz : 0 ≤ z ∧ z ≤ 3) 
   · push_neg at h1 h2
     exact expansion_history_Icc₂₃ z ⟨le_of_lt h2, hz.2⟩
 
+<<<<<<< HEAD
 /-- Corrected inequality for the specific interval we need -/
 lemma standard_inequality {x : ℝ} (hx : 0.05 ≤ x ∧ x ≤ 0.5) : -log x ≤ 1 / Real.sqrt x := by
   -- On the interval [0.05, 0.5], we have -log x ≤ 1/√x
@@ -179,4 +180,6 @@ lemma standard_inequality {x : ℝ} (hx : 0.05 ≤ x ∧ x ≤ 0.5) : -log x ≤
   -- Therefore -log x ≤ 1/√x on this interval
   sorry -- Numerical verification on compact interval
 
+=======
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 end RecognitionScience.Cosmology
