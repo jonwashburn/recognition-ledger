@@ -88,8 +88,12 @@ lemma List.sum_filter_partition {α} [AddCommMonoid α] (l : List α) (p : α �
     ext x
     simp [List.mem_filter, List.mem_append]
     by_cases h : p x <;> simp [h]
+    · tauto
   rw [←h_partition]
   simp [List.foldl_append]
+  -- Need to show the foldl over appended lists equals sum of foldls
+  -- This is exactly what List.foldl_append gives us
+  rfl
 
 /-- Helper for variance reduction proofs -/
 lemma List.sum_le_sum_of_le {α} [Preorder α] [AddCommMonoid α]

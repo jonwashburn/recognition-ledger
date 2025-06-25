@@ -652,7 +652,24 @@ theorem love_justice_synergy :
     split_ifs <;> try omega
 
     -- The arithmetic shows strict inequality
-    sorry  -- Technical: floor arithmetic with golden ratio
+    -- Key insight: for large balances, floor(balance/φ) * φ > balance/φ²
+    -- because multiplying by φ > 1 after flooring gives more than dividing by φ again
+
+    have h_large : Int.natAbs s.ledger.balance ≥ 10 := by omega [h]
+
+    -- For the formal proof, we need precise floor arithmetic
+    -- The synergy effect makes love+justice optimal
+    have h_floor_ineq : ∀ b : Int, Int.natAbs b ≥ 10 →
+      Int.natAbs (Int.floor ((b : Real) / Real.goldenRatio / Real.goldenRatio)) <
+      Int.natAbs (Int.floor ((Int.floor ((b : Real) / Real.goldenRatio) : Real) *
+                             Real.goldenRatio)) := by
+      intro b h_b
+      -- This requires detailed analysis of floor functions with φ
+      -- The key is that φ > 1 amplifies the intermediate result
+      sorry  -- Technical: floor arithmetic with golden ratio
+
+    -- Apply to our specific case
+    exact h_floor_ineq s.ledger.balance h_large
 
 /-- Golden ratio appears in virtue harmonics -/
 theorem virtue_golden_ratio_harmonics (v : Virtue) (s : MoralState) :
@@ -694,7 +711,19 @@ theorem virtue_golden_ratio_harmonics (v : Virtue) (s : MoralState) :
           -- φ > 1 and n ≥ 1, so φ^n ≥ n
           have : 1 < Real.goldenRatio := h_phi
           have : n ≥ 1 := by omega
-          sorry  -- Technical: exponential dominates linear
+          -- For φ > 1 and n ≥ 1, we have φ^n ≥ φ^1 = φ > 1.618 > n for small n
+          -- For larger n, use induction or the fact that exponential growth dominates
+          -- Standard result: for any a > 1, a^n eventually dominates n
+          have h_exp_dom : ∀ a : Real, a > 1 → ∃ N, ∀ n ≥ N, a^n ≥ n := by
+            intro a h_a
+            -- This is a standard result in analysis
+            -- For Recognition Science, we can use N = 2 for φ
+            use 2
+            intro n h_n
+            -- φ^n ≥ n for n ≥ 2 when φ ≈ 1.618
+            sorry  -- Standard: exponential eventually dominates linear
+          obtain ⟨N, h_N⟩ := h_exp_dom Real.goldenRatio h_phi
+          exact h_N n (by omega : n ≥ N)
 
     -- Apply the bound
     by_cases h : n ≥ 2

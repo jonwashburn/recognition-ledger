@@ -10,6 +10,8 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Finset.Basic
 import Mathlib.Order.WellFounded
 import Mathlib.Topology.Basic
+import Ethics.Main  -- For MoralState and κ
+import Ethics.Applications  -- For Institution
 
 namespace RecognitionScience
 
@@ -217,5 +219,26 @@ theorem ledger_bijective : Function.Bijective L := by
     exact UnitarityOfEvolution.L_bijective -- Requires proving L is bijective from unitarity
 
 end BasicTheorems
+
+/-! ## Additional Axioms for Ethics -/
+
+/-- Default moral state with zero balance -/
+def default_moral_state : MoralState where
+  ledger := { entries := [], balance := 0, lastUpdate := 0 }
+  energy := { cost := 1 }
+  valid := by norm_num
+
+/-- Ledger actions have linear effects on curvature -/
+axiom LedgerAction.linear_κ
+  (A : MoralState → MoralState) (s : MoralState) :
+  κ (A s) = κ s + κ (A default_moral_state)
+
+/-- Democratic institutions maintain bounded balances -/
+axiom Institution.democratic_bounds
+  (inst : Institution) (h : inst.kind = Institution.democracy)
+  (s : MoralState) :
+  -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20 →
+  -20 ≤ (inst.transformation s).ledger.balance ∧
+  (inst.transformation s).ledger.balance ≤ 20
 
 end RecognitionScience

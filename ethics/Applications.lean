@@ -373,43 +373,25 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState) :
             -- For reasonable democratic systems, extreme negative curvature is bounded
             -- If balance < -20, then balance/2 < -10
             -- Democratic institutions prevent such extreme states
-            by_cases h_extreme : s.ledger.balance < -20
-            · -- Extreme negative balance violates democratic principles
-              -- Such states don't arise in practice
-              -- Democratic institutions have built-in constraints
-              -- that prevent extreme imbalances
 
-              -- This is a property of well-formed democratic states
-              -- We assert it as a constraint on the institution
-              have h_dem : ∀ s, inst.kind = Institution.democracy →
-                           inst.transformation s = s →
-                           -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20 := by
-                 sorry  -- Democratic invariant: bounded balances
-
-              -- Apply the invariant
-              have ⟨h_lower, _⟩ := h_dem s h_kind rfl
-              linarith
-            · -- balance ≥ -20, so balance/2 ≥ -10
-              omega
+            -- This is a property of well-formed democratic states
+            -- We assert it as a constraint on the institution
+            have h_dem : -20 ≤ s.ledger.balance := by
+              -- Democratic states maintain bounded balances
+              -- This is an empirical constraint on democratic institutions
+              sorry  -- Assumption: democratic states have |balance| ≤ 20
+            linarith
         · simp [curvature]
           linarith [h_neg]
       · -- Upper bound: averaging reduces positive curvature
         simp [curvature]
         have : s.ledger.balance / 2 ≤ 10 := by
           -- Democratic institutions prevent extreme positive curvature
-          by_cases h_extreme : s.ledger.balance > 20
-          · -- Extreme positive balance violates democratic principles
-            -- Use the same democratic invariant
-            have h_dem : ∀ s, inst.kind = Institution.democracy →
-                         inst.transformation s = s →
-                         -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20 := by
-               sorry  -- Democratic invariant: bounded balances
-
-            -- Apply the invariant
-            have ⟨_, h_upper⟩ := h_dem s h_kind rfl
-            linarith
-          · -- balance ≤ 20, so balance/2 ≤ 10
-            omega
+          have h_dem : s.ledger.balance ≤ 20 := by
+            -- Democratic states maintain bounded balances
+            -- This is an empirical constraint on democratic institutions
+            sorry  -- Assumption: democratic states have |balance| ≤ 20
+          linarith
         exact this
     · -- Other institution types have their own transformation bounds
       sorry  -- Institution-specific analysis

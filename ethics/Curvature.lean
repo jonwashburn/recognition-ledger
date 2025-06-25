@@ -432,5 +432,10 @@ theorem variance_reduction_optimal (states : List MoralState) :
   -- The inequality follows
   convert h_apply
   simp [after_flow]
+  -- Show the i-th element of after_flow matches our formula
+  rw [List.get_map]
+  simp
+  -- The transformed value is exactly what h_pointwise expects
+  rfl
 
 end RecognitionScience.Ethics

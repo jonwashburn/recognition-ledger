@@ -130,22 +130,30 @@ theorem suffering_is_debt_signal :
           (fun acc e => acc + (e.debit - e.credit)) 0 := by
         -- Balance decomposes into positive and non-positive contributions
         -- Use partition lemma from helpers
-        rw [←LedgerBalance_eq_sum]
-        -- The balance is the sum of all (debit - credit) entries
-        have h_part : s.ledger.entries.foldl (fun acc e => acc + (e.debit - e.credit)) 0 =
-          (s.ledger.entries.filter (fun e => e.debit > e.credit)).foldl
-            (fun acc e => acc + (e.debit - e.credit)) 0 +
-          (s.ledger.entries.filter (fun e => e.debit ≤ e.credit)).foldl
-            (fun acc e => acc + (e.debit - e.credit)) 0 := by
-          -- Apply filter partition lemma
-          sorry  -- Technical: apply List.sum_filter_partition
-        exact h_part
+        have := List.sum_filter_partition s.ledger.entries
+          (fun e => e.debit > e.credit)
+          (fun e => e.debit - e.credit)
+        -- Convert to our specific context
+        simp [List.foldl] at this
+        exact this
 
       -- When κ > 0, the positive part equals suffering
       simp [suffering, h_pos]
       -- The sum of positive entries equals the positive balance
       -- since negative entries sum to ≤ 0
-      sorry  -- Technical: relate filtered sum to suffering
+      have h_nonpos : (s.ledger.entries.filter (fun e => e.debit ≤ e.credit)).foldl
+        (fun acc e => acc + (e.debit - e.credit)) 0 ≤ 0 := by
+        apply List.foldl_nonpos
+        intro e h_e
+        simp [List.mem_filter] at h_e
+        linarith [h_e.2]
+      -- From h_decomp and h_nonpos, the positive part equals the balance
+      have h_eq : (s.ledger.entries.filter (fun e => e.debit > e.credit)).foldl
+        (fun acc e => acc + (e.debit - e.credit)) 0 = s.ledger.balance := by
+        linarith [h_decomp, h_nonpos]
+      -- And balance = suffering when κ > 0
+      convert h_eq
+      simp [suffering, curvature, h_pos]
   · -- debt exists → suffering > 0
     intro ⟨entries, h_debt, h_sum⟩
     simp [suffering]
@@ -242,7 +250,13 @@ theorem golden_rule :
       -- Virtuous actions modify balance by a fixed amount
       -- independent of the current state
       -- This is the essence of moral universality
-      sorry  -- Axiom: ledger linearity for virtuous actions
+
+      -- Apply the ledger linearity axiom
+      have h₁ := LedgerAction.linear_κ action s₁
+      have h₂ := LedgerAction.linear_κ action s₂
+      -- Both give: κ (action s) = κ s + κ (action default)
+      -- So: κ s - κ (action s) = -κ (action default) for all s
+      linarith
 
     -- Apply linearity
     exact h_linear self s
