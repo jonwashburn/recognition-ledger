@@ -85,16 +85,19 @@ lemma entropy_convex : ConvexOn ℝ (Set.Ioi 0) (fun x => x * log x) := by
 
 /-! ## Divergence Theorem (Statement) -/
 
-/-- Divergence of a vector field (placeholder definition) -/
-noncomputable def divergence {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n))
-    (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
-  sorry -- This would use the trace of the Jacobian
+-- We comment out placeholder definitions and the divergence theorem
+-- as they require differential forms machinery
 
-/-- Outward normal vector (placeholder) -/
-noncomputable def normal {n : ℕ} (x : EuclideanSpace ℝ (Fin n)) : EuclideanSpace ℝ (Fin n) :=
-  sorry -- This depends on the boundary parameterization
+-- /-- Divergence of a vector field (placeholder definition) -/
+-- noncomputable def divergence {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n))
+--     (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
+--   sorry -- This would use the trace of the Jacobian
 
-/-- Divergence theorem in Gaussian normal coordinates -/
+-- /-- Outward normal vector (placeholder) -/
+-- noncomputable def normal {n : ℕ} (x : EuclideanSpace ℝ (Fin n)) : EuclideanSpace ℝ (Fin n) :=
+--   sorry -- This depends on the boundary parameterization
+
+-- /-- Divergence theorem in Gaussian normal coordinates -/
 -- We comment this out as it requires differential forms machinery
 -- theorem divergence_theorem_gaussian {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n))
 --     (Ω : Set (EuclideanSpace ℝ (Fin n))) (hΩ : MeasurableSet Ω) :

@@ -8,13 +8,14 @@
 
 import Mathlib.Analysis.Convex.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 import Mathlib.Probability.ProbabilityMassFunction.Basic
 import gravity.Quantum.BandwidthCost
 import gravity.Util.Variational
 
 namespace RecognitionScience.Quantum
 
-open Real Finset
+open Real Finset BigOperators
 open RecognitionScience.Variational
 
 /-! ## Optimization Functional -/
@@ -76,7 +77,27 @@ lemma entropy_strictly_convex {n : ℕ} (hn : n > 0) :
       (fun P => -entropy P) := by
   -- Use that x ↦ x log x is strictly convex from Variational.lean
   -- The negative entropy is the sum of strictly convex functions
-  sorry -- TODO: Apply entropy_convex from Variational.lean
+
+  -- First, we need the probability simplex to be convex
+  have h_convex : Convex ℝ {P : Fin n → ℝ | isProbability P} := by
+    rw [convex_iff_forall_pos]
+    intro P Q hP hQ a b ha hb hab
+    constructor
+    · intro k
+      exact add_nonneg (mul_nonneg ha.le (hP.1 k)) (mul_nonneg hb.le (hQ.1 k))
+    · simp only [← sum_add_distrib, ← mul_sum]
+      rw [hP.2, hQ.2, mul_one, mul_one, hab]
+
+  -- x log x is strictly convex on (0, ∞)
+  have h_xlnx : StrictConvexOn ℝ (Set.Ioi 0) (fun x => x * log x) :=
+    strictConvexOn_mul_log
+
+  -- For strict convexity on the simplex, we need to show:
+  -- 1. -entropy is strictly convex on the interior
+  -- 2. The function extends continuously to the boundary
+
+  -- This is a deep result that requires more machinery
+  sorry -- TODO: Requires sum of strictly convex functions theorem
 
 /-- The functional is convex in P (weaker than strict convexity) -/
 lemma born_functional_convex {n : ℕ} (ψ : QuantumState n) (T : ℝ) (hT : T > 0) :
@@ -84,16 +105,42 @@ lemma born_functional_convex {n : ℕ} (ψ : QuantumState n) (T : ℝ) (hT : T >
       (fun P => bornFunctional ψ T P) := by
   -- The functional is linear in P plus T times convex entropy
   unfold bornFunctional entropy
-  -- Split into linear part and entropy part
-  have : ∀ P, bornFunctional ψ T P =
-    ∑ k, P k * collapseCost n k ψ + T * ∑ k, P k * Real.log (P k) := by
-    intro P
-    simp [entropy]
-    ring
-  -- Linear functions are convex
-  -- Positive multiple of convex function is convex
-  -- Sum of convex functions is convex
-  sorry -- TODO: Combine these facts
+
+  -- First show the domain is convex
+  have h_dom : Convex ℝ {P : Fin n → ℝ | isProbability P} := by
+    rw [convex_iff_forall_pos]
+    intro P Q hP hQ a b ha hb hab
+    constructor
+    · intro k
+      exact add_nonneg (mul_nonneg ha.le (hP.1 k)) (mul_nonneg hb.le (hQ.1 k))
+    · simp only [← sum_add_distrib, ← mul_sum]
+      rw [hP.2, hQ.2, mul_one, mul_one, hab]
+
+  -- Linear part is convex (actually affine)
+  have h_linear : ConvexOn ℝ {P : Fin n → ℝ | isProbability P}
+      (fun P => ∑ k, P k * collapseCost n k ψ) := by
+    apply ConvexOn.of_convex_epigraph h_dom
+    rw [convex_iff_forall_pos]
+    intro ⟨P₁, t₁⟩ ⟨P₂, t₂⟩ h₁ h₂ a b ha hb hab
+    simp at h₁ h₂ ⊢
+    calc a * ∑ k, P₁ k * collapseCost n k ψ + b * ∑ k, P₂ k * collapseCost n k ψ
+      = ∑ k, (a * P₁ k + b * P₂ k) * collapseCost n k ψ := by
+        simp [mul_sum, sum_add_distrib, mul_assoc, mul_left_comm]
+      _ ≤ a * t₁ + b * t₂ := by
+        apply le_trans _ (add_le_add (mul_le_mul_of_nonneg_left h₁ ha.le)
+                                     (mul_le_mul_of_nonneg_left h₂ hb.le))
+        simp [mul_sum, sum_add_distrib, mul_assoc]
+
+  -- Entropy part (we use convexity, not strict convexity)
+  have h_entropy : ConvexOn ℝ {P : Fin n → ℝ | isProbability P}
+      (fun P => ∑ k, P k * log (P k)) := by
+    sorry -- TODO: Sum of convex functions
+
+  -- Combine: linear - T * convex = convex
+  convert h_linear.add (h_entropy.smul (neg_pos.mpr hT)) using 1
+  ext P
+  simp [mul_comm T]
+  ring
 
 /-- Critical point gives Born probabilities -/
 -- We comment out complex Lagrange multiplier proof

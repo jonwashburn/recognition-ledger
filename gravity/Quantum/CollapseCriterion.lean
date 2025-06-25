@@ -9,6 +9,7 @@
 import gravity.Quantum.BandwidthCost
 import gravity.Quantum.BornRule
 import Mathlib.Analysis.Asymptotics.Asymptotics
+import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 
 namespace RecognitionScience.Quantum
 
@@ -42,10 +43,7 @@ theorem eventual_collapse (ε δp ΔE Δx : ℝ)
             Real.log (Δx / Constants.ℓ_Planck.value) / Real.log 2
   let C2 := Real.log (1/δp) / Real.log 2
 
-  -- We need n² * C1 ≥ log n / log 2 + C2
-  -- Choose N large enough that n² * C1 / 2 ≥ log n / log 2 for n ≥ N
-  -- and n² * C1 / 2 ≥ C2 for n ≥ N
-
+  -- Show C1 > 0
   have hC1_pos : C1 > 0 := by
     unfold C1
     apply add_pos (add_pos _ _)
@@ -56,18 +54,76 @@ theorem eventual_collapse (ε δp ΔE Δx : ℝ)
       · exact log_pos one_lt_two
     · apply div_pos
       · apply log_pos
-        sorry -- TODO: Show ΔE * τ₀ / ℏ > 1
+        -- We need ΔE * τ₀ / ℏ > 1
+        have : ΔE * Constants.τ₀.value / Constants.ℏ.value > 1 := by
+          -- Physical constants ensure this
+          sorry -- TODO: Verify with actual constant values
       · exact log_pos one_lt_two
     · apply div_pos
       · apply log_pos
-        exact div_gt_one_of_lt (by exact hΔx) Constants.ℓ_Planck.value
+        exact (div_gt_one_iff_gt Constants.ℓ_Planck.value).mpr hΔx
       · exact log_pos one_lt_two
 
-  -- For large n, n² dominates log n
-  use max 10 (Nat.ceil (2 * C2 / C1))
+  -- Key insight: log n ≤ n for all n ≥ 1
+  have h_log_le : ∀ n : ℕ, n ≥ 1 → log n ≤ n := by
+    intro n hn
+    have : (1 : ℝ) ≤ n := Nat.one_le_cast.mpr hn
+    exact log_le_self this
+
+  -- Choose N large enough
+  -- We need n² * C1 ≥ log n / log 2 + C2
+  -- Since log n ≤ n, it suffices to have n² * C1 ≥ n / log 2 + C2
+  -- This holds when n * C1 ≥ 1 / log 2 + C2/n
+  -- For large n, we need n ≥ (1/log 2) / C1
+
+  let N₁ := Nat.ceil ((1 / log 2) / C1 + 1)
+  let N₂ := Nat.ceil (2 * C2 / C1)
+  use max N₁ N₂ + 1
+
   intro n hn
-  -- The proof that n² * C1 ≥ log n / log 2 + C2 for large n
-  sorry -- TODO: Complete asymptotic argument
+  have hn₁ : N₁ ≤ n := by
+    calc N₁ ≤ max N₁ N₂ := le_max_left _ _
+    _ < max N₁ N₂ + 1 := Nat.lt_succ_self _
+    _ ≤ n := hn
+  have hn₂ : N₂ ≤ n := by
+    calc N₂ ≤ max N₁ N₂ := le_max_right _ _
+    _ < max N₁ N₂ + 1 := Nat.lt_succ_self _
+    _ ≤ n := hn
+
+  -- Now prove the inequality
+  have h1 : log n ≤ n := h_log_le n (Nat.one_le_of_lt (Nat.lt_of_succ_le hn))
+
+  calc n^2 * C1
+    = n * (n * C1) := by ring
+    _ ≥ n * ((1 / log 2) + C1) := by
+      apply mul_le_mul_of_nonneg_left
+      · have : (n : ℝ) ≥ N₁ := Nat.cast_le.mpr hn₁
+        have : (n : ℝ) * C1 ≥ N₁ * C1 := mul_le_mul_of_nonneg_right this (le_of_lt hC1_pos)
+        have : N₁ * C1 ≥ (1 / log 2) + C1 := by
+          unfold N₁
+          have : ⌈(1 / log 2) / C1 + 1⌉ * C1 ≥ ((1 / log 2) / C1 + 1) * C1 := by
+            exact mul_le_mul_of_nonneg_right (Nat.le_ceil _) (le_of_lt hC1_pos)
+          calc ⌈(1 / log 2) / C1 + 1⌉ * C1
+            ≥ ((1 / log 2) / C1 + 1) * C1 := this
+            _ = (1 / log 2) + C1 := by field_simp
+        linarith
+      · exact Nat.cast_nonneg n
+    _ = n * (1 / log 2) + n * C1 := by ring
+    _ ≥ log n / log 2 + n * C1 := by
+      apply add_le_add_right
+      rw [div_le_div_iff (log_pos one_lt_two) (log_pos one_lt_two)]
+      exact mul_le_mul_of_nonneg_right h1 (log_pos one_lt_two).le
+    _ ≥ log n / log 2 + C2 := by
+      apply add_le_add_left
+      have : (n : ℝ) ≥ N₂ := Nat.cast_le.mpr hn₂
+      have : (n : ℝ) * C1 ≥ N₂ * C1 := mul_le_mul_of_nonneg_right this (le_of_lt hC1_pos)
+      have : N₂ * C1 ≥ 2 * C2 := by
+        unfold N₂
+        have : (⌈2 * C2 / C1⌉ : ℝ) ≥ 2 * C2 / C1 := Nat.le_ceil _
+        calc (⌈2 * C2 / C1⌉ : ℝ) * C1
+          ≥ (2 * C2 / C1) * C1 := mul_le_mul_of_nonneg_right this (le_of_lt hC1_pos)
+          _ = 2 * C2 := by field_simp
+      linarith
 
 /-- Time until collapse scales as 1/n² -/
 def collapseTime (n : ℕ) (baseTime : ℝ) : ℝ :=

@@ -7,12 +7,14 @@
 -/
 
 import Mathlib.Analysis.SpecialFunctions.Integrals
+import Mathlib.MeasureTheory.Integral.IntervalIntegral
 import gravity.Core.RecognitionWeight
 import gravity.Util.PhysicalUnits
 
 namespace RecognitionScience.Lensing
 
 open Real RecognitionScience.Gravity
+open MeasureTheory intervalIntegral
 
 /-! ## Surface Density Profiles -/
 
@@ -77,7 +79,42 @@ theorem enhanced_convergence (Σ_b : SurfaceDensity) (params : RecognitionParame
   intro R hR
   unfold convergence effectiveSurfaceDensity
   -- The integrand is larger when w(r) > 1
-  sorry -- TODO: Requires showing integral of larger function is larger
+  have h_integrand : ∀ r ∈ Set.Ioo 0 R,
+      2 * π * r * (Σ_b.Σ r * recognition_weight params r (dynamical_time r _)) >
+      2 * π * r * Σ_b.Σ r := by
+    intro r hr
+    simp at hr
+    cases' hr with hr_pos hr_lt
+    have h_w : recognition_weight params r _ > 1 := by
+      cases' lt_or_le R₀ r with h h
+      · exact hR₀ r h
+      · -- For r ≤ R₀, we need a different argument
+        -- We'll assume w ≥ 1 everywhere for simplicity
+        sorry -- TODO: Need global lower bound on w
+    calc 2 * π * r * (Σ_b.Σ r * recognition_weight params r _)
+      = 2 * π * r * Σ_b.Σ r * recognition_weight params r _ := by ring
+      _ > 2 * π * r * Σ_b.Σ r * 1 := by
+        apply mul_lt_mul_of_pos_left h_w
+        apply mul_pos (mul_pos (mul_pos two_pos π_pos) hr_pos)
+        exact Σ_b.Σ_pos r hr_pos
+      _ = 2 * π * r * Σ_b.Σ r := by ring
+
+  -- Apply integral monotonicity
+  have h_mono : (1 / _) * ∫ r in (0)..(R), 2 * π * r * effectiveSurfaceDensity Σ_b params r >
+                (1 / _) * ∫ r in (0)..(R), 2 * π * r * Σ_b.Σ r := by
+    apply mul_lt_mul_of_pos_left
+    · apply integral_lt_integral_of_ae_lt_of_measure_pos
+      · -- Integrability of both functions
+        sorry -- TODO: Show integrability
+      · -- Almost everywhere inequality
+        sorry -- TODO: Convert pointwise to a.e.
+      · -- Positive measure of support
+        sorry -- TODO: Show measure > 0
+    · apply div_pos one_pos
+      apply div_pos (pow_pos _ 2) (mul_pos (mul_pos (by norm_num : (4 : ℝ) > 0) π_pos) _)
+      exact Units.Constants.c.value
+      exact Units.Constants.G
+  exact h_mono
 
 /-- Lensing-dynamics consistency (qualitative statement) -/
 -- We simplify this to avoid numerical bounds
@@ -88,7 +125,21 @@ lemma lensing_dynamics_qualitative (Σ_b : SurfaceDensity) (params : Recognition
     M_eff ≥ M_baryon := by
   intro R hR
   -- Effective mass includes recognition weight ≥ 1
-  sorry -- TODO: Integral monotonicity
+  apply mul_le_mul_of_nonneg_left
+  · apply integral_mono
+    · -- Integrability
+      sorry -- TODO: Show integrability
+    · -- Pointwise inequality
+      intro r
+      unfold effectiveSurfaceDensity
+      apply mul_le_mul_of_nonneg_left
+      · -- Need w(r) ≥ 1
+        sorry -- TODO: Global lower bound on recognition weight
+      · apply mul_nonneg
+        · exact le_of_lt hR
+        · apply Σ_b.Σ_pos
+          sorry -- TODO: Need r > 0 in integration domain
+  · exact mul_nonneg (mul_pos two_pos π_pos).le (le_refl _)
 
 /-! ## Analytic Results for Exponential Disks -/
 
