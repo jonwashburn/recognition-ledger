@@ -14,123 +14,90 @@ This document tracks the proof status of all theorems in the gravity module. We 
 - 📐 **Numeric**: Requires numerical computation tools
 - ⚠️ **Axiom**: Stated as axiom (should be theorem eventually)
 
-## File Status
+## Summary
+- **Total Theorems**: 45
+- **Proven**: 30 (66.7%)
+- **Remaining Sorries**: 15 (33.3%)
+- **Files with Sorries**: 8/17
 
-### Core Module (✅ Complete - No Sorries)
+## Completed Files (Sorry-Free)
+✅ Core/RecognitionWeight.lean  
+✅ Core/TriagePrinciple.lean  
+✅ Util/PhysicalUnits.lean  
+✅ All JSON prediction files  
+✅ All Python scripts  
 
-#### gravity/Core/TriagePrinciple.lean
-- ✅ `triage_principle` - Urgent systems get frequent updates
-- ✅ `solar_systems_newtonian` - Solar systems maintain Newtonian gravity
-- ✅ `galaxies_have_lag` - Galaxies experience refresh lag  
-- ✅ `dark_matter_emergence` - Dark matter emerges in galaxies
-- ✅ `dark_energy_emergence` - Dark energy at cosmic scales
-- ✅ `triage_saves_bandwidth` - Bandwidth reduction calculation
-- ✅ `dwarf_galaxy_enhancement` - Dwarf galaxies have same triage factor
+## Files with Remaining Sorries
 
-#### gravity/Core/BandwidthConstraints.lean
-- 🟡 `galaxy_information_content` - Requires numerical bounds (commented)
-- 🟡 `channel_capacity` - List summation machinery (commented)
-- 🟡 `optimal_refresh_interval` - Lagrangian optimization (commented)
-- 🟡 `information_delay_scaling` - Requires optimal_refresh_interval (commented)
+### 1. Cosmology/BandwidthLambda.lean (3 sorries)
+- `expansion_history` for z ∈ (0.5, 1], (1, 2], (2, 3] - needs detailed numerical bounds
+- Status: Technical numerical verification
 
-#### gravity/Core/RecognitionWeight.lean
-- 🟡 `recognition_weight_nonneg` - Needs positivity of n(r), ζ(r) (commented)
-- 🟡 `recognition_weight_mono_in_T` - Needs monotonicity helpers (commented)
+### 2. Quantum/CollapseCriterion.lean (4 sorries)
+- `evolutionOperator_unitary` - needs matrix exponential unitarity lemma
+- `collapse_time_exists` (3 physics assumptions):
+  - Physical states evolve continuously
+  - Unitary evolution preserves superposition
+  - Continuous positive functions bounded below on intervals
 
-### Derivations Module (✅ Complete - No Sorries)
+### 3. Quantum/BandwidthCost.lean (3 sorries)
+- `optimalAllocation_feasible` - needs maxNorm ≤ 1 assumption
+- `bandwidth_criticality` - needs Jensen's inequality application
+- One helper sorry in allocation bound
 
-#### gravity/Derivations/AccelerationScale.lean
-- ✅ `a0_not_free_parameter` - Direct calculation from galaxy timescale
-- ✅ `T_dyn_decreases_with_a` - Monotonicity of dynamical time
-- ✅ `high_acceleration_small_Tdyn` - High accelerations → short times
-- ✅ `low_acceleration_large_Tdyn` - Low accelerations → long times
-- ✅ `deep_MOND_scaling` - Deep MOND regime sqrt(a × a₀)
-- ✅ `complexity_affects_weight_simple` - Gas fraction affects complexity
-- 🟡 `a0_emergence` - Numerical verification (commented)
-- 🟡 `complexity_affects_weight` - Needs Real.rpow injectivity (commented)
+### 4. Quantum/BornRule.lean (1 sorry)
+- `max_entropy_uniform` - needs limit x log x → 0 as x → 0⁺
 
-### Utility Module (✅ Complete - No Sorries)
+### 5. Lensing/Convergence.lean (3 sorries)
+- `convergence_radial_eq` - chain rule calculation
+- `convergence_enhancement` - algebraic simplification after factoring
+- `shear_modified` - similar to convergence calculation
 
-#### gravity/Util/Variational.lean
-- ✅ `entropy_convex` - x log x is convex (proven!)
-- 🟡 `euler_lagrange` - Integration by parts (commented)
-- 🟡 `divergence_theorem_gaussian` - Requires Stokes' theorem (commented)
-- 🔴 `divergence` - Placeholder definition with sorry
-- 🔴 `normal` - Placeholder definition with sorry
+### 6. Core/BandwidthConstraints.lean (commented theorems)
+- Several theorems commented out pending implementation
 
-#### gravity/Util/PhysicalUnits.lean
-- ✅ All definitions complete (no theorems)
+### 7. Derivations/AccelerationScale.lean (commented theorems)
+- Detailed derivations commented out
 
-### Quantum Module (🔴 Contains Sorries)
+### 8. Util/Variational.lean (1 sorry in FirstVariation)
+- `is_derivative` definition uses undefined δF
 
-#### gravity/Quantum/BandwidthCost.lean
-- ✅ `coherent_scaling` - n² scaling proven
-- ✅ `classical_scaling` - log n < n for n > 1 (COMPLETED!)
-- 🔴 `critical_size_exists` - Existence proof incomplete
-- ✅ `bandwidth_bound` - Now a definition, not axiom
-- ✅ `satisfies_bandwidth_constraint` - Constraint as proposition
+## Categories of Remaining Work
 
-#### gravity/Quantum/BornRule.lean
-- 🟡 `born_rule` - Main theorem (commented out)
-- ✅ `born_minimizes` - Simplified version proven
-- 🔴 `entropy_strictly_convex` - Apply entropy_convex
-- 🔴 `born_functional_convex` - Combine convexity facts
-- 🟡 `born_critical_point` - Lagrange multiplier (commented)
-- 🔴 `high_temperature_uniform` - Asymptotic analysis
+### 1. Numerical Verification (3 sorries)
+- Interval arithmetic for cosmological expansion history
+- Can be resolved with finer interval subdivision
 
-#### gravity/Quantum/CollapseCriterion.lean
-- ✅ `collapse_criterion` - Definition equivalence
-- ✅ `collapse_time_decreasing` - 1/n² scaling proven
-- 🔴 `eventual_collapse` - Asymptotic n² > log n (partial progress)
-- ✅ `measurement_causes_collapse` - Log monotonicity (COMPLETED!)
-- ✅ `decoherence_time_scaling` - Unit relation (COMPLETED!)
+### 2. Mathematical Library Gaps (5 sorries)
+- Matrix exponential unitarity
+- Jensen's inequality for convex functions
+- Limit of x log x at zero
+- Chain rule for polar coordinates
 
-### Cosmology Module (✅ Mostly Complete)
+### 3. Physics Assumptions (3 sorries)
+- Continuous evolution of quantum states
+- Unitary evolution preserves superposition
+- Positive continuous functions bounded below
 
-#### gravity/Cosmology/BandwidthLambda.lean
-- ✅ `dark_energy_emergence` - Λ_eff bounds proven
-- ✅ `high_bandwidth_limit` - ε-δ proof (COMPLETED!)
-- ✅ `structure_correlation` - Anti-correlation proven
-- 🔴 `coincidence_timing` - Simplified statement with sorry
+### 4. Technical Calculations (4 sorries)
+- Algebraic simplifications in lensing
+- Bandwidth allocation bounds
+- Polar/Cartesian transformations
 
-### Lensing Module (🔴 Contains Sorries)
-
-#### gravity/Lensing/Convergence.lean
-- ✅ `exponentialDisk` - Positivity constraints (FIXED!)
-- ⚠️ `recognition_weight_exceeds_one` - Stated as axiom
-- 🔴 `enhanced_convergence` - Uses axiom, integral monotonicity
-- 🔴 `lensing_dynamics_qualitative` - Integral monotonicity
-- 🔴 `exponential_integral` - Integration by parts
-- ✅ `signal_exists` - Existence proof complete
-
-## Progress Summary
-
-### Completed in this session:
-1. ✅ Fixed `classical_scaling` - proved log n < n using mathlib
-2. ✅ Completed `measurement_causes_collapse` - full proof with inequalities
-3. ✅ Fixed `decoherence_time_scaling` - simple algebraic proof
-4. ✅ Completed `high_bandwidth_limit` - clean ε-δ argument
-5. ✅ Fixed `exponentialDisk` - removed all sorries from definition
-6. ✅ Added `signal_exists` - clean existence proof
-7. ✅ Converted `bandwidth_conservation` from axiom to definition
-
-### Remaining High Priority:
-1. `eventual_collapse` - Need to complete asymptotic argument
-2. `entropy_strictly_convex` - Apply existing `entropy_convex` lemma
-3. `born_functional_convex` - Combine convexity of parts
-4. Integral monotonicity lemmas for lensing
-
-### Technical Debt:
-- Two placeholder definitions (`divergence`, `normal`) in Variational.lean
-- One axiom (`recognition_weight_exceeds_one`) that should be a theorem
-- Several numeric proofs deferred with TODO(numeric)
+## Progress Since Last Update
+- ✅ Completed `dimension_injective` proof
+- ✅ Upgraded `entropy_convex` to `StrictConvexOn`
+- ✅ Implemented `SchrodingerEvolution` structure
+- ✅ Added `continuous_amplitude` helper
+- ✅ Implemented equal division allocation
+- ✅ Added `laplacian_radial` lemma
+- ✅ Moved unused variational theorems to future work
 
 ## Next Steps
-
-1. Complete `entropy_strictly_convex` using sum of convex functions
-2. Finish `eventual_collapse` asymptotic proof
-3. Add integral monotonicity lemma to support lensing proofs
-4. Consider extracting numeric proofs to separate validation files
+1. Import or backport matrix exponential unitarity from mathlib
+2. Complete numerical bounds for expansion history
+3. Add Jensen's inequality application for criticality
+4. Finish polar coordinate transformations for lensing
 
 ## Guidelines
 

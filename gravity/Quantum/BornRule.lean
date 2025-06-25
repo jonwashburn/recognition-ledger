@@ -82,7 +82,38 @@ lemma xLogX_continuous : ContinuousAt xLogX 0 := by
   simp
   intro ε hε
   -- For x near 0, |x log x| ≤ |x| * |log x| → 0
-  sorry -- TODO: Requires limit x log x → 0 as x → 0⁺
+  -- We use that lim_{x→0⁺} x log x = 0
+  use min (1/2) (exp (-2/ε))
+  constructor
+  · simp [exp_pos]
+  · intro x hx
+    simp at hx
+    by_cases h : x = 0
+    · simp [h]
+    · simp [h, abs_sub_comm]
+      have hx_pos : 0 < x := by
+        by_contra h_neg
+        push_neg at h_neg
+        have : x = 0 := le_antisymm h_neg (hx.2.trans (by simp [exp_pos]))
+        contradiction
+      have hx_small : x < 1/2 := hx.1
+      -- For 0 < x < 1/2, we have log x < 0
+      have h_log_neg : log x < 0 := log_neg hx_pos (by linarith)
+      -- So |x log x| = x * |log x| = -x * log x
+      rw [abs_mul, abs_of_pos hx_pos, abs_of_neg h_log_neg]
+      simp only [neg_neg]
+      -- Need to show: -x * log x < ε
+      -- Since x ≤ exp(-2/ε), we have log x ≤ -2/ε
+      -- So -x * log x ≤ x * (2/ε) ≤ exp(-2/ε) * (2/ε)
+      have h_log_bound : log x ≤ -2/ε := by
+        have := log_le_log hx_pos hx.2
+        rwa [log_exp] at this
+      have : -x * log x ≤ x * (2/ε) := by
+        rw [mul_comm (-x), mul_comm x]
+        exact mul_le_mul_of_nonneg_left (neg_le_neg h_log_bound) (le_of_lt hx_pos)
+      -- Now x * (2/ε) < ε when x < ε²/2
+      -- But we need a better bound using exp(-2/ε)
+      sorry -- This requires more careful analysis of x exp(1/x) behavior
 
 /-- The entropy functional is convex on the probability simplex. -/
 lemma entropy_convex_simplex {n : ℕ} :
@@ -198,7 +229,23 @@ theorem max_entropy_uniform :
     recognitionEntropy w ≤ log n := by
   intro w hw_pos hw_sum
   -- Use Jensen's inequality on -x log x
-  sorry -- TODO: Requires limit x log x → 0 as x → 0⁺
+  -- The function f(x) = -x log x is concave on (0,1]
+  -- So by Jensen: f(∑ w_i) ≥ ∑ w_i f(1/n) when w_i sum to 1
+  -- This gives: -1 log 1 ≥ ∑ w_i (-1/n log(1/n))
+  -- Simplifying: 0 ≥ -log(1/n) = -(-log n) = log n
+  -- Actually we want the reverse inequality for entropy
+
+  -- Direct approach: -∑ w_i log w_i ≤ log n
+  -- Maximum when all w_i = 1/n (uniform distribution)
+  have h_uniform : recognitionEntropy (fun _ => 1/n) = log n := by
+    simp [recognitionEntropy]
+    rw [sum_const, card_univ, Fintype.card_fin]
+    simp [div_eq_iff (Nat.cast_ne_zero.mpr (Fin.size_pos))]
+    rw [← log_inv, inv_div]
+    ring_nf
+
+  -- For the general case, use convexity of -x log x
+  sorry -- TODO: Complete using Jensen's inequality
 
 /-! ## Connection to Measurement -/
 
@@ -236,5 +283,17 @@ def collapse_threshold : ℝ := 1.0  -- Normalized units
 /-- Collapse occurs when cumulative cost exceeds threshold -/
 def collapseTime (ψ : EvolvingState) : ℝ :=
   Classical.choose (collapse_time_exists ψ sorry)
+
+/-! ## Dimension Scaling -/
+
+/-- Helper: dimension as a real number -/
+def dimension_real (n : ℕ) : ℝ := n
+
+/-- Dimension determines superposition capacity -/
+lemma dimension_injective : Function.Injective dimension_real := by
+  -- Show that n ↦ (n : ℝ) is injective
+  intro n m h
+  -- If (n : ℝ) = (m : ℝ), then n = m
+  exact Nat.cast_injective h
 
 end RecognitionScience.Quantum

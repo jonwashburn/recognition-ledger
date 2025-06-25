@@ -10,6 +10,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Finset.Basic
 import Mathlib.Analysis.Convex.Basic
 import Mathlib.Data.List.Basic
+import Mathlib.Analysis.Convex.Jensen
 
 namespace RecognitionScience.Quantum
 
@@ -122,11 +123,13 @@ def bandwidth_bound : ℝ := 1.0  -- Normalized units
 def bandwidthUsage (ρ : Matrix (Fin n) (Fin n) ℂ) (rate : ℝ) : ℝ :=
   rate * ‖ρ‖  -- Simplified model
 
-/-- System configuration -/
+/-- System configuration with norm bound -/
 structure SystemConfig where
   n : ℕ
   ρ : Matrix (Fin n) (Fin n) ℂ  -- Density matrix
   rate : ℝ  -- Update rate
+  maxNorm : ℝ  -- Upper bound on ‖ρ‖
+  norm_bound : ‖ρ‖ ≤ maxNorm
 
 /-- Equal division allocation -/
 def equalDivision (systems : List SystemConfig) : List ℝ :=
@@ -161,10 +164,17 @@ theorem optimalAllocation_feasible (systems : List SystemConfig)
     (systems.zip (optimalAllocation systems)).map
       (fun ⟨s, r⟩ => bandwidthUsage s.ρ r) |>.sum ≤ bandwidth_bound := by
   -- Since we use equal division, each system gets bandwidth_bound / n
-  simp [optimalAllocation]
-  -- The actual usage depends on the density matrices
-  -- For feasibility, we'd need to ensure rates are small enough
-  sorry -- Would need constraints on system parameters
+  simp [optimalAllocation, equalDivision]
+  split_ifs with h
+  · contradiction
+  · -- Each system uses rate * ‖ρ‖ ≤ (bandwidth_bound / n) * maxNorm
+    have h_bound : ∀ s ∈ systems, ∀ r ∈ equalDivision systems,
+        bandwidthUsage s.ρ r ≤ r * s.maxNorm := by
+      intro s hs r hr
+      simp [bandwidthUsage]
+      exact mul_le_mul_of_nonneg_left s.norm_bound (le_of_lt (by simp [equalDivision] at hr; sorry))
+    -- Sum is at most n * (bandwidth_bound / n) * max_maxNorm
+    sorry -- Would need to bound total by assuming maxNorm ≤ 1 for normalized systems
 
 /-- After critical scale, cost grows without bound -/
 theorem bandwidth_criticality (n : ℕ) :
@@ -186,13 +196,23 @@ theorem bandwidth_criticality (n : ℕ) :
   use ψ
   simp [superpositionCost, recognitionWeight]
   -- Cost = m * (1/√m)² = 1 for uniform weights
-  -- With m > 100 and non-uniform weights, cost exceeds 1
-  sorry -- Would need specific weight distribution
+  -- But with non-uniform weights, Jensen's inequality gives cost > 1
+  -- For uniform state and uniform weights:
+  calc ∑ i : Fin m, (1 * ‖(1 : ℂ) / ↑m.sqrt‖) ^ 2
+      = ∑ i : Fin m, (1 / m.sqrt) ^ 2 := by simp
+    _ = m * (1 / m.sqrt) ^ 2 := by simp [sum_const, card_univ]
+    _ = m * (1 / m) := by simp [sq_sqrt (Nat.cast_nonneg m)]
+    _ = 1 := by simp
+    _ = bandwidth_bound := by simp [bandwidth_bound]
+    _ < bandwidth_bound + 1 := by linarith
+    _ ≤ _ := by
+      -- For m > 100, perturbations increase cost
+      sorry -- Would use Jensen's inequality on non-uniform weights
 
 /-! ## Global Constraints -/
 
 /-- Total bandwidth is conserved -/
 axiom bandwidth_conservation (systems : List SystemConfig) (allocation : List ℝ) :
-    (systems.map fun ⟨n, ρ, rate⟩ => bandwidthUsage ρ rate).sum ≤ bandwidth_bound
+    (systems.map fun ⟨n, ρ, rate, _, _⟩ => bandwidthUsage ρ rate).sum ≤ bandwidth_bound
 
 end RecognitionScience.Quantum
