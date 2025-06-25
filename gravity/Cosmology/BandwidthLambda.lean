@@ -11,6 +11,7 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Data.Real.Interval
 import RecognitionScience.Core.BandwidthConstraints
 import RecognitionScience.Util.PhysicalUnits
+import gravity.Cosmology.ExpansionNumerics
 
 namespace RecognitionScience.Cosmology
 
@@ -132,8 +133,7 @@ theorem expansion_history (z : ℝ) (hz : 0 ≤ z ∧ z ≤ 3) :
 
   push_neg at h1
   -- For z > 0.5, use the numerical verification from ExpansionNumerics.lean
-  -- The proof is completed there by interval subdivision
-  sorry -- See ExpansionNumerics.lean for the complete numerical verification
+  exact ExpansionNumerics.expansion_history_numerical_of_mem hz h1
 
 /-! ## Connection to Galaxy Dynamics -/
 
