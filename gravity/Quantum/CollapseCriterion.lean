@@ -13,6 +13,7 @@ import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 import Mathlib.MeasureTheory.Integral.IntervalIntegral
 import Mathlib.Analysis.SpecialFunctions.Integrals
 import Mathlib.Topology.ContinuousFunction.Basic
+import Mathlib.Analysis.ODE.Gronwall
 
 namespace RecognitionScience.Quantum
 
@@ -289,22 +290,31 @@ lemma cumulativeCost_unbounded (ψ : EvolvingState)
 theorem collapse_time_exists (ψ : EvolvingState)
     (h_super : ¬isClassical (ψ 0)) :
     ∃! t : ℝ, t > 0 ∧ cumulativeCost ψ t = collapse_threshold := by
-  -- Assume continuity of evolution
-  have h_cont : Continuous fun t => superpositionCost (ψ t) := by
-    sorry -- Requires continuity of ψ
+  -- Assume ψ comes from Schrödinger evolution
+  -- In practice, we'd have ψ = evolvedState SE for some SE
 
-  -- Assume non-classical throughout evolution until collapse
+  -- Continuity of evolution
+  have h_cont : Continuous fun t => superpositionCost (ψ t) := by
+    -- This follows from schrodinger_continuous when ψ = evolvedState SE
+    sorry -- Interface between EvolvingState and SchrodingerEvolution
+
+  -- Non-classical throughout evolution until collapse
   have h_nc : ∀ t, ¬isClassical (ψ t) := by
     intro t
-    sorry -- Requires showing evolution preserves non-classicality
+    -- Use evolution_preserves_nonclassical inductively
+    -- This requires showing ψ comes from Schrödinger evolution
+    sorry -- Interface issue
 
   -- Get lower bound on cost
   have h_bound : ∃ ε > 0, ∀ t, ε ≤ superpositionCost (ψ t) := by
+    -- Since evolution preserves non-classicality and cost is continuous
+    -- there's a positive lower bound
     use superpositionCost (ψ 0) / 2
     constructor
     · exact div_pos (cost_positive_of_nonclassical (ψ 0) h_super) two_pos
     · intro t
-      sorry -- Requires continuity argument
+      -- This follows from continuity and compactness arguments
+      sorry -- Technical detail
 
   -- Show cumulative cost starts at zero
   have h_zero : cumulativeCost ψ 0 = 0 := by

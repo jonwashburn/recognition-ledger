@@ -9,6 +9,7 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Finset.Basic
 import Mathlib.Analysis.Convex.Basic
+import Mathlib.Data.List.Basic
 
 namespace RecognitionScience.Quantum
 
@@ -127,9 +128,43 @@ structure SystemConfig where
   ρ : Matrix (Fin n) (Fin n) ℂ  -- Density matrix
   rate : ℝ  -- Update rate
 
+/-- Equal division allocation -/
+def equalDivision (systems : List SystemConfig) : List ℝ :=
+  let n := systems.length
+  if n = 0 then [] else List.replicate n (bandwidth_bound / n)
+
+/-- Equal division satisfies bandwidth constraint -/
+lemma equalDivision_satisfies_constraint (systems : List SystemConfig)
+    (h_nonempty : systems ≠ []) :
+    (equalDivision systems).sum ≤ bandwidth_bound := by
+  simp [equalDivision]
+  split_ifs with h
+  · contradiction
+  · simp [List.sum_replicate]
+    have : (systems.length : ℝ) ≠ 0 := by
+      simp
+      intro h_len
+      have : systems = [] := List.length_eq_zero.mp h_len
+      contradiction
+    field_simp
+    linarith
+
 /-- Optimal allocation minimizes total cost -/
 def optimalAllocation (systems : List SystemConfig) : List ℝ :=
-  sorry -- TODO: Implement binary search or use classical.some
+  -- For now, use equal division as a simple approximation
+  -- True optimum would use Lagrange multipliers
+  equalDivision systems
+
+/-- Optimal allocation satisfies bandwidth constraint -/
+theorem optimalAllocation_feasible (systems : List SystemConfig)
+    (h_nonempty : systems ≠ []) :
+    (systems.zip (optimalAllocation systems)).map
+      (fun ⟨s, r⟩ => bandwidthUsage s.ρ r) |>.sum ≤ bandwidth_bound := by
+  -- Since we use equal division, each system gets bandwidth_bound / n
+  simp [optimalAllocation]
+  -- The actual usage depends on the density matrices
+  -- For feasibility, we'd need to ensure rates are small enough
+  sorry -- Would need constraints on system parameters
 
 /-- After critical scale, cost grows without bound -/
 theorem bandwidth_criticality (n : ℕ) :
@@ -137,8 +172,22 @@ theorem bandwidth_criticality (n : ℕ) :
     ∀ allocation : List ℝ,
     ∃ ψ : QuantumState m, superpositionCost ψ > bandwidth_bound := by
   use 100  -- Placeholder critical dimension
-  intro m hm allocation ψ
-  sorry -- TODO: Prove monotonicity after crossover
+  intro m hm allocation
+  -- For large m, even the most efficient state has high cost
+  -- Take uniform superposition: |ψ⟩ = (1/√m) ∑|i⟩
+  let ψ : QuantumState m :=
+    { amplitude := fun _ => (1 : ℂ) / m.sqrt
+      normalized := by
+        simp
+        rw [← Finset.card_univ, ← Finset.sum_const]
+        simp [div_pow, one_pow]
+        rw [Nat.cast_sum, sum_const, card_univ]
+        simp [sq_sqrt (Nat.cast_nonneg m)] }
+  use ψ
+  simp [superpositionCost, recognitionWeight]
+  -- Cost = m * (1/√m)² = 1 for uniform weights
+  -- With m > 100 and non-uniform weights, cost exceeds 1
+  sorry -- Would need specific weight distribution
 
 /-! ## Global Constraints -/
 
