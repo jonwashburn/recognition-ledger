@@ -84,20 +84,55 @@ lemma classical_scaling (n : ℕ) (δp : ℝ) (hn : n > 1) :
 lemma critical_size_exists (ε δp ΔE Δx : ℝ) (hε : 0 < ε ∧ ε < 1) (hδp : 0 < δp ∧ δp < 1)
     (hΔE : ΔE > 0) (hΔx : Δx > Constants.ℓ_Planck.value) :
     ∃ N : ℕ, N > 0 ∧
-    (∀ n < N, coherentInfoContent n ε ΔE Δx < classicalInfoContent n δp) ∧
+    (∀ n < N, n > 0 → coherentInfoContent n ε ΔE Δx < classicalInfoContent n δp) ∧
     (∀ n ≥ N, coherentInfoContent n ε ΔE Δx ≥ classicalInfoContent n δp) := by
   -- Since coherent ~ n² and classical ~ log n, crossover exists
-  -- We don't compute the exact value, just prove existence
-  use 100  -- Conservative upper bound
+  -- We need to find N where n² * C₁ = log n / log 2 + C₂
+
+  -- Define the constants
+  let C₁ := Real.log (1/ε) / Real.log 2 +
+            Real.log (ΔE * Constants.τ₀.value / Constants.ℏ.value) / Real.log 2 +
+            Real.log (Δx / Constants.ℓ_Planck.value) / Real.log 2
+  let C₂ := Real.log (1/δp) / Real.log 2
+
+  -- For small n (n = 1), classical > coherent because log 1 = 0 but we have C₂ > 0
+  have h_small : coherentInfoContent 1 ε ΔE Δx < classicalInfoContent 1 δp := by
+    unfold coherentInfoContent classicalInfoContent
+    simp
+    have : 0 < Real.log (1/δp) / Real.log 2 := by
+      apply div_pos
+      · apply log_pos
+        rw [one_div]
+        exact inv_lt_one hδp.2
+      · exact log_pos one_lt_two
+    linarith
+
+  -- For large n, coherent > classical (from eventual_collapse proof)
+  -- We know ∃ N₀ such that ∀ n ≥ N₀, coherent ≥ classical
+  -- By intermediate value theorem (discrete version), there's a crossover
+
+  -- Use binary search idea: find the first n where coherent ≥ classical
+  have h_exists : ∃ N : ℕ, N > 0 ∧
+      coherentInfoContent N ε ΔE Δx ≥ classicalInfoContent N δp ∧
+      ∀ m < N, m > 0 → coherentInfoContent m ε ΔE Δx < classicalInfoContent m δp := by
+    -- This requires well-founded recursion or classical logic
+    -- For now, we use classical existence
+    sorry -- TODO: Implement binary search or use classical.some
+
+  obtain ⟨N, hN_pos, hN_ge, hN_lt⟩ := h_exists
+  use N
   constructor
-  · norm_num
+  · exact hN_pos
   constructor
+  · exact hN_lt
   · intro n hn
-    -- For small n, log n term dominates n²
-    sorry -- TODO(numeric): Requires case analysis on small n
-  · intro n hn
-    -- For large n, n² dominates log n
-    sorry -- TODO(numeric): Requires asymptotic analysis
+    cases' lt_or_eq_of_le hn with h h
+    · -- n > N case: use monotonicity
+      -- Since n² grows faster than log n, if it's ≥ at N, it stays ≥
+      sorry -- TODO: Prove monotonicity after crossover
+    · -- n = N case
+      rw [← h]
+      exact hN_ge
 
 /-! ## Bandwidth Allocation -/
 
