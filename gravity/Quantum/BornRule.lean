@@ -1,23 +1,18 @@
 /-
-  Born Rule from Bandwidth Optimization
-  ====================================
+  Born Rule from Recognition Weights
+  =================================
 
-  Derives the quantum mechanical Born rule P(k) = |⟨k|ψ⟩|²
-  from entropy maximization under bandwidth constraints.
+  Shows how the Born rule emerges from optimal bandwidth
+  allocation in the cosmic ledger.
 -/
 
-import Mathlib.Analysis.Convex.Basic
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
-import Mathlib.Analysis.Convex.SpecificFunctions.Basic
-import Mathlib.Probability.ProbabilityMassFunction.Basic
 import gravity.Quantum.BandwidthCost
-import gravity.Util.Variational
+import gravity.Core.RecognitionWeight
+import Mathlib.Analysis.Convex.Function
+import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.Calculus.LagrangeMultipliers
-<<<<<<< HEAD
 import Mathlib.Probability.Notation  -- For KL divergence
-=======
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 namespace RecognitionScience.Quantum
 
@@ -84,42 +79,20 @@ def xLogX : ℝ → ℝ := fun x => if x = 0 then 0 else x * log x
 lemma xLogX_continuous : ContinuousAt xLogX 0 := by
   rw [ContinuousAt, xLogX]
   simp
-<<<<<<< HEAD
-  -- Use that lim_{x→0⁺} x log x = 0
-  -- This is a standard limit that follows from L'Hôpital's rule
-  -- or from the fact that log x grows slower than 1/x
-
-  -- We'll use the fact that for small x > 0, |x log x| ≤ x^(1/2)
-  -- which gives the desired limit
   intro ε hε
   use min (1/2) (ε^2)
   constructor
   · simp [hε]
-=======
-  intro ε hε
-  -- For x near 0, |x log x| ≤ |x| * |log x| → 0
-  -- We use that lim_{x→0⁺} x log x = 0
-  use min (1/2) (exp (-2/ε))
-  constructor
-  · simp [exp_pos]
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
   · intro x hx
     simp at hx
     by_cases h : x = 0
     · simp [h]
     · simp [h, abs_sub_comm]
-<<<<<<< HEAD
-      -- For 0 < x < min(1/2, ε²), we have |x log x| < ε
+      -- For 0 < x < min(1/2, ε²), we have |x log x| ≤ x^(1/2)
       have hx_pos : 0 < x := by
         by_contra h_neg
         push_neg at h_neg
         have : x = 0 := le_antisymm h_neg (hx.2.trans (by simp [hε]))
-=======
-      have hx_pos : 0 < x := by
-        by_contra h_neg
-        push_neg at h_neg
-        have : x = 0 := le_antisymm h_neg (hx.2.trans (by simp [exp_pos]))
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
         contradiction
       have hx_small : x < 1/2 := hx.1
       -- For 0 < x < 1/2, we have log x < 0
@@ -127,7 +100,6 @@ lemma xLogX_continuous : ContinuousAt xLogX 0 := by
       -- So |x log x| = x * |log x| = -x * log x
       rw [abs_mul, abs_of_pos hx_pos, abs_of_neg h_log_neg]
       simp only [neg_neg]
-<<<<<<< HEAD
       -- For x < ε², we want to show -x log x < ε
       -- Use that -log x < 1/√x for small x
       have h_bound : -log x ≤ 2 / Real.sqrt x := by
@@ -199,20 +171,6 @@ lemma xLogX_continuous : ContinuousAt xLogX 0 := by
           · norm_num
         _ = ε + ε := by ring
         _ ≤ ε := by linarith [hε]
-=======
-      -- Need to show: -x * log x < ε
-      -- Since x ≤ exp(-2/ε), we have log x ≤ -2/ε
-      -- So -x * log x ≤ x * (2/ε) ≤ exp(-2/ε) * (2/ε)
-      have h_log_bound : log x ≤ -2/ε := by
-        have := log_le_log hx_pos hx.2
-        rwa [log_exp] at this
-      have : -x * log x ≤ x * (2/ε) := by
-        rw [mul_comm (-x), mul_comm x]
-        exact mul_le_mul_of_nonneg_left (neg_le_neg h_log_bound) (le_of_lt hx_pos)
-      -- Now x * (2/ε) < ε when x < ε²/2
-      -- But we need a better bound using exp(-2/ε)
-      sorry -- This requires more careful analysis of x exp(1/x) behavior
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 /-- The entropy functional is convex on the probability simplex. -/
 lemma entropy_convex_simplex {n : ℕ} :
@@ -327,7 +285,6 @@ theorem max_entropy_uniform :
     ∀ w : Fin n → ℝ, (∀ i, 0 ≤ w i) → Finset.univ.sum w = 1 →
     recognitionEntropy w ≤ log n := by
   intro w hw_pos hw_sum
-<<<<<<< HEAD
   -- Use Gibbs' inequality (KL divergence non-negativity)
   -- For probability distributions p and q:
   -- ∑ p_i log(p_i/q_i) ≥ 0, with equality iff p = q
@@ -336,15 +293,6 @@ theorem max_entropy_uniform :
   -- So -∑ p_i log p_i ≤ -log(1/n) = log n
 
   -- Direct calculation showing entropy is maximized by uniform distribution
-=======
-  -- Use Jensen's inequality on -x log x
-  -- The function f(x) = -x log x is concave on (0,1]
-  -- So by Jensen: ∑ w_i f(w_i) ≤ f(∑ w_i w_i) = f(1) = 0 is wrong
-  -- Actually: ∑ f(w_i) ≤ n f(1/n) when w_i sum to 1
-
-  -- Direct approach: -∑ w_i log w_i ≤ log n
-  -- Maximum when all w_i = 1/n (uniform distribution)
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
   have h_uniform : recognitionEntropy (fun _ => 1/n) = log n := by
     simp [recognitionEntropy]
     rw [sum_const, card_univ, Fintype.card_fin]
@@ -352,7 +300,6 @@ theorem max_entropy_uniform :
     rw [← log_inv, inv_div]
     ring_nf
 
-<<<<<<< HEAD
   -- Use convexity: -x log x is strictly concave, so entropy is strictly concave
   -- Maximum of strictly concave function on simplex is at uniform distribution
 
@@ -362,166 +309,166 @@ theorem max_entropy_uniform :
     -- This is Gibbs' inequality / log sum inequality
     -- Key: use that log is strictly concave
     by_cases h_all_pos : ∀ i, 0 < w i
-  · -- When all w_i > 0, use Jensen's inequality
-    -- f(∑ w_i x_i) ≥ ∑ w_i f(x_i) for concave f
-    -- With f = log, x_i = w_i, we get the result
-    -- This is Gibbs' inequality: -D(p||q) ≤ 0
-    -- where D(p||q) = ∑ p_i log(p_i/q_i) is KL divergence
+    · -- When all w_i > 0, use Jensen's inequality
+      -- f(∑ w_i x_i) ≥ ∑ w_i f(x_i) for concave f
+      -- With f = log, x_i = w_i, we get the result
+      -- This is Gibbs' inequality: -D(p||q) ≤ 0
+      -- where D(p||q) = ∑ p_i log(p_i/q_i) is KL divergence
 
-    -- Key: log is strictly concave, so ∑ w_i log(w_i) ≥ log(∑ w_i w_i) = log(1) = 0
-    -- is wrong. We need: ∑ w_i log(w_i) ≥ ∑ w_i log(1/n)
+      -- Key: log is strictly concave, so ∑ w_i log(w_i) ≥ log(∑ w_i w_i) = log(1) = 0
+      -- is wrong. We need: ∑ w_i log(w_i) ≥ ∑ w_i log(1/n)
 
-    -- Using concavity of log: log(∑ λᵢ xᵢ) ≥ ∑ λᵢ log(xᵢ) for λᵢ ≥ 0, ∑λᵢ = 1
-    -- We can't apply this directly. Instead, use that KL divergence is non-negative:
-    -- D(w||u) = ∑ w_i log(w_i / u_i) ≥ 0 where u_i = 1/n
+      -- Using concavity of log: log(∑ λᵢ xᵢ) ≥ ∑ λᵢ log(xᵢ) for λᵢ ≥ 0, ∑λᵢ = 1
+      -- We can't apply this directly. Instead, use that KL divergence is non-negative:
+      -- D(w||u) = ∑ w_i log(w_i / u_i) ≥ 0 where u_i = 1/n
 
-    have h_kl : 0 ≤ Finset.univ.sum (fun i => w i * log (w i * n)) := by
-      -- This is the non-negativity of KL divergence
-      -- D(w||u) = ∑ w_i log(w_i/u_i) where u_i = 1/n
-      -- So D(w||u) = ∑ w_i log(w_i * n) = ∑ w_i log(w_i) + ∑ w_i log(n)
-      -- KL divergence D(p||q) = ∑ p_i log(p_i/q_i) ≥ 0
-      -- with equality iff p = q
+      have h_kl : 0 ≤ Finset.univ.sum (fun i => w i * log (w i * n)) := by
+        -- This is the non-negativity of KL divergence
+        -- D(w||u) = ∑ w_i log(w_i/u_i) where u_i = 1/n
+        -- So D(w||u) = ∑ w_i log(w_i * n) = ∑ w_i log(w_i) + ∑ w_i log(n)
+        -- KL divergence D(p||q) = ∑ p_i log(p_i/q_i) ≥ 0
+        -- with equality iff p = q
 
-      -- Here p = w and q = uniform distribution u_i = 1/n
-      -- So D(w||u) = ∑ w_i log(w_i/(1/n)) = ∑ w_i log(w_i * n)
+        -- Here p = w and q = uniform distribution u_i = 1/n
+        -- So D(w||u) = ∑ w_i log(w_i/(1/n)) = ∑ w_i log(w_i * n)
 
-      -- Use Jensen's inequality: log is strictly concave, so
-      -- log(∑ λ_i x_i) > ∑ λ_i log(x_i) for λ_i > 0, ∑λ_i = 1, unless all x_i equal
+        -- Use Jensen's inequality: log is strictly concave, so
+        -- log(∑ λ_i x_i) > ∑ λ_i log(x_i) for λ_i > 0, ∑λ_i = 1, unless all x_i equal
 
-      -- Apply with λ_i = w_i, x_i = 1/w_i:
-      -- log(∑ w_i · 1/w_i) ≥ ∑ w_i log(1/w_i)
-      -- log(n) ≥ -∑ w_i log(w_i)
-      -- ∑ w_i log(w_i) ≥ -log(n)
-      -- ∑ w_i log(w_i) + log(n) ≥ 0
-      -- ∑ w_i log(w_i * n) ≥ 0
+        -- Apply with λ_i = w_i, x_i = 1/w_i:
+        -- log(∑ w_i · 1/w_i) ≥ ∑ w_i log(1/w_i)
+        -- log(n) ≥ -∑ w_i log(w_i)
+        -- ∑ w_i log(w_i) ≥ -log(n)
+        -- ∑ w_i log(w_i) + log(n) ≥ 0
+        -- ∑ w_i log(w_i * n) ≥ 0
 
-      -- Formal proof using convexity of x log x:
-      have h_convex : ConvexOn ℝ (Set.Ici 0) (fun x => x * log x) :=
-        strictConvexOn_mul_log.convexOn
+        -- Formal proof using convexity of x log x:
+        have h_convex : ConvexOn ℝ (Set.Ici 0) (fun x => x * log x) :=
+          strictConvexOn_mul_log.convexOn
 
-      -- Apply Jensen's inequality
-      have h_jensen : log (Finset.univ.sum (fun i => w i * (1 / w i))) ≥
-                      Finset.univ.sum (fun i => w i * log (1 / w i)) := by
-        -- This is Jensen's inequality for concave log
-        -- Since all w_i > 0 in this branch, 1/w_i is well-defined
-        apply log_sum_div_card_le_sum_div_card_log
-        · intro i _; exact h_all_pos i
-        · rw [hw_sum]
+        -- Apply Jensen's inequality
+        have h_jensen : log (Finset.univ.sum (fun i => w i * (1 / w i))) ≥
+                        Finset.univ.sum (fun i => w i * log (1 / w i)) := by
+          -- This is Jensen's inequality for concave log
+          -- Since all w_i > 0 in this branch, 1/w_i is well-defined
+          apply log_sum_div_card_le_sum_div_card_log
+          · intro i _; exact h_all_pos i
+          · rw [hw_sum]
 
-      -- Simplify: ∑ w_i · 1/w_i = n when all w_i > 0
-      have h_sum : Finset.univ.sum (fun i => w i * (1 / w i)) = n := by
-        simp only [mul_div_assoc', div_self (ne_of_gt (h_all_pos _)), mul_one]
-        simp [Fintype.card_fin]
+        -- Simplify: ∑ w_i · 1/w_i = n when all w_i > 0
+        have h_sum : Finset.univ.sum (fun i => w i * (1 / w i)) = n := by
+          simp only [mul_div_assoc', div_self (ne_of_gt (h_all_pos _)), mul_one]
+          simp [Fintype.card_fin]
 
-      -- Combine to get the result
-      calc 0 ≤ log n - Finset.univ.sum (fun i => w i * log (1 / w i)) := by
-              rw [← h_sum]; exact le_of_lt (sub_pos.mpr h_jensen)
-           _ = log n + Finset.univ.sum (fun i => w i * log (w i)) := by
-              congr 1; ext i; simp [log_inv]
-           _ = Finset.univ.sum (fun i => w i * (log (w i) + log n)) := by
-              rw [← Finset.sum_add_distrib, ← Finset.mul_sum, hw_sum, one_mul]
-           _ = Finset.univ.sum (fun i => w i * log (w i * n)) := by
-              congr 1; ext i; rw [← log_mul (h_all_pos i) (Nat.cast_pos.mpr Fin.size_pos)]
+        -- Combine to get the result
+        calc 0 ≤ log n - Finset.univ.sum (fun i => w i * log (1 / w i)) := by
+                rw [← h_sum]; exact le_of_lt (sub_pos.mpr h_jensen)
+             _ = log n + Finset.univ.sum (fun i => w i * log (w i)) := by
+                congr 1; ext i; simp [log_inv]
+             _ = Finset.univ.sum (fun i => w i * (log (w i) + log n)) := by
+                rw [← Finset.sum_add_distrib, ← Finset.mul_sum, hw_sum, one_mul]
+             _ = Finset.univ.sum (fun i => w i * log (w i * n)) := by
+                congr 1; ext i; rw [← log_mul (h_all_pos i) (Nat.cast_pos.mpr Fin.size_pos)]
 
-    -- Rearrange: ∑ w_i log(w_i * n) = ∑ w_i log(w_i) + log n * ∑ w_i
-    have h_expand : Finset.univ.sum (fun i => w i * log (w i * n)) =
-                    Finset.univ.sum (fun i => w i * log (w i)) + log n := by
-      simp [← Finset.sum_add_distrib, ← Finset.mul_sum]
-      congr 1
-      · ext i
-        rw [mul_comm (w i), log_mul (h_all_pos i) (Nat.cast_pos.mpr Fin.size_pos)]
-      · rw [hw_sum, one_mul]
+      -- Rearrange: ∑ w_i log(w_i * n) = ∑ w_i log(w_i) + log n
+      have h_expand : Finset.univ.sum (fun i => w i * log (w i * n)) =
+                      Finset.univ.sum (fun i => w i * log (w i)) + log n := by
+        simp [← Finset.sum_add_distrib, ← Finset.mul_sum]
+        congr 1
+        · ext i
+          rw [mul_comm (w i), log_mul (h_all_pos i) (Nat.cast_pos.mpr Fin.size_pos)]
+        · rw [hw_sum, one_mul]
 
-    -- Therefore: 0 ≤ ∑ w_i log(w_i) + log n
-    -- Which gives: ∑ w_i log(w_i) ≥ -log n = log(1/n) * 1 = ∑ w_i log(1/n)
-    rw [h_expand] at h_kl
-    linarith
-
-  · -- When some w_i = 0, handle separately
-    push_neg at h_all_pos
-    -- The terms with w_i = 0 contribute 0 to both sides
-    -- For the rest, apply Jensen to the conditional distribution
-    -- This requires careful handling of 0 log 0 = 0 convention
-
-    -- Split the sum into zero and positive terms
-    obtain ⟨j, hj⟩ := h_all_pos
-    let I₀ := Finset.univ.filter (fun i => w i = 0)
-    let I₊ := Finset.univ.filter (fun i => 0 < w i)
-
-    have h_partition : Finset.univ = I₀ ∪ I₊ := by
-      ext i
-      simp [I₀, I₊]
-      exact le_iff_eq_or_lt.mp (hw_pos i)
-
-    have h_disjoint : Disjoint I₀ I₊ := by
-      simp [Disjoint, I₀, I₊]
-      intro i h_eq h_pos
+      -- Therefore: 0 ≤ ∑ w_i log(w_i) + log n
+      -- Which gives: ∑ w_i log(w_i) ≥ -log n = log(1/n) * 1 = ∑ w_i log(1/n)
+      rw [h_expand] at h_kl
       linarith
 
-    -- The sum splits accordingly
-    have h_split : ∀ (f : Fin n → ℝ), Finset.univ.sum f = I₀.sum f + I₊.sum f := by
-      intro f
-      rw [h_partition, Finset.sum_union h_disjoint]
+    · -- When some w_i = 0, handle separately
+      push_neg at h_all_pos
+      -- The terms with w_i = 0 contribute 0 to both sides
+      -- For the rest, apply Jensen to the conditional distribution
+      -- This requires careful handling of 0 log 0 = 0 convention
 
-    -- For i ∈ I₀, w_i = 0 so both w_i log(w_i) and w_i log(1/n) are 0
-    have h_zero : ∀ i ∈ I₀, w i * log (w i) = 0 ∧ w i * log (1/n) = 0 := by
-      intro i hi
-      simp [I₀] at hi
-      simp [hi]
+      -- Split the sum into zero and positive terms
+      obtain ⟨j, hj⟩ := h_all_pos
+      let I₀ := Finset.univ.filter (fun i => w i = 0)
+      let I₊ := Finset.univ.filter (fun i => 0 < w i)
 
-    -- Apply Gibbs to the positive part with renormalized weights
-    let w_sum := I₊.sum w
-    have hw_sum_pos : 0 < w_sum := by
-      apply Finset.sum_pos
-      · intro i hi
-        simp [I₊] at hi
-        exact hi
-      · use j
-        simp [I₊]
-        push_neg at hj
-        exact ⟨hj, le_of_lt hj⟩
+      have h_partition : Finset.univ = I₀ ∪ I₊ := by
+        ext i
+        simp [I₀, I₊]
+        exact le_iff_eq_or_lt.mp (hw_pos i)
 
-    -- The result follows by applying Gibbs to the conditional distribution
-    -- For the case with some w_i = 0, we need to be more careful
-    -- The key insight: on the support {i : w_i > 0}, the conditional distribution
-    -- w'_i = w_i / (∑_{j: w_j > 0} w_j) still satisfies Gibbs' inequality
+      have h_disjoint : Disjoint I₀ I₊ := by
+        simp [Disjoint, I₀, I₊]
+        intro i h_eq h_pos
+        linarith
 
-    -- Let S = {i : w_i > 0} be the support
-    -- Define conditional weights w'_i = w_i / w_sum for i ∈ S
+      -- The sum splits accordingly
+      have h_split : ∀ (f : Fin n → ℝ), Finset.univ.sum f = I₀.sum f + I₊.sum f := by
+        intro f
+        rw [h_partition, Finset.sum_union h_disjoint]
 
-    -- Then ∑_{i ∈ S} w'_i log w'_i ≥ ∑_{i ∈ S} w'_i log(1/|S|)
-    -- Scaling back: ∑_{i ∈ S} w_i log w_i ≥ ∑_{i ∈ S} w_i log(w_sum/|S|)
+      -- For i ∈ I₀, w_i = 0 so both w_i log(w_i) and w_i log(1/n) are 0
+      have h_zero : ∀ i ∈ I₀, w i * log (w i) = 0 ∧ w i * log (1/n) = 0 := by
+        intro i hi
+        simp [I₀] at hi
+        simp [hi]
 
-    -- Since |S| ≤ n and w_sum ≤ 1, we have w_sum/|S| ≥ w_sum/n ≥ 1/n
-    -- Therefore log(w_sum/|S|) ≥ log(1/n)
+      -- Apply Gibbs to the positive part with renormalized weights
+      let w_sum := I₊.sum w
+      have hw_sum_pos : 0 < w_sum := by
+        apply Finset.sum_pos
+        · intro i hi
+          simp [I₊] at hi
+          exact hi
+        · use j
+          simp [I₊]
+          push_neg at hj
+          exact ⟨hj, le_of_lt hj⟩
 
-    -- This gives: ∑_{i ∈ S} w_i log w_i ≥ ∑_{i ∈ S} w_i log(1/n) = w_sum log(1/n)
-    -- And since terms with w_i = 0 contribute 0 to both sides:
-    -- ∑_i w_i log w_i ≥ ∑_i w_i log(1/n)
+      -- The result follows by applying Gibbs to the conditional distribution
+      -- For the case with some w_i = 0, we need to be more careful
+      -- The key insight: on the support {i : w_i > 0}, the conditional distribution
+      -- w'_i = w_i / (∑_{j: w_j > 0} w_j) still satisfies Gibbs' inequality
 
-    -- The formal proof requires careful measure theory to handle 0 log 0
-    apply Finset.sum_le_sum
-    intro i _
-    by_cases h : w i = 0
-    · simp [h]
-    · push_neg at h
-      have : 0 < w i := lt_of_le_of_ne (hw_pos i) (Ne.symm h)
-      -- For positive w_i, we need w_i log w_i ≥ w_i log(1/n)
-      -- This is equivalent to log w_i ≥ log(1/n), i.e., w_i ≥ 1/n
-      -- But this isn't always true!
+      -- Let S = {i : w_i > 0} be the support
+      -- Define conditional weights w'_i = w_i / w_sum for i ∈ S
 
-      -- The correct approach: use convexity of x log x
-      -- For w_i > 0, we have w_i log w_i ≥ w_i log(1/n)
-      -- iff log w_i ≥ log(1/n) iff w_i ≥ 1/n
+      -- Then ∑_{i ∈ S} w'_i log w'_i ≥ ∑_{i ∈ S} w'_i log(1/|S|)
+      -- Scaling back: ∑_{i ∈ S} w_i log w_i ≥ ∑_{i ∈ S} w_i log(w_sum/|S|)
 
-      -- But this isn't always true. Instead, use that
-      -- ∑ w_i log w_i is minimized when w_i = 1/n for all i
-      -- This follows from convexity and Lagrange multipliers
+      -- Since |S| ≤ n and w_sum ≤ 1, we have w_sum/|S| ≥ w_sum/n ≥ 1/n
+      -- Therefore log(w_sum/|S|) ≥ log(1/n)
 
-      -- For now, we use that for the entropy functional,
-      -- the minimum occurs at the uniform distribution
-      -- This is a standard result in information theory
-      sorry  -- Requires convex optimization theory
+      -- This gives: ∑_{i ∈ S} w_i log w_i ≥ ∑_{i ∈ S} w_i log(1/n) = w_sum log(1/n)
+      -- And since terms with w_i = 0 contribute 0 to both sides:
+      -- ∑_i w_i log w_i ≥ ∑_i w_i log(1/n)
+
+      -- The formal proof requires careful measure theory to handle 0 log 0
+      apply Finset.sum_le_sum
+      intro i _
+      by_cases h : w i = 0
+      · simp [h]
+      · push_neg at h
+        have : 0 < w i := lt_of_le_of_ne (hw_pos i) (Ne.symm h)
+        -- For positive w_i, we need w_i log w_i ≥ w_i log(1/n)
+        -- This is equivalent to log w_i ≥ log(1/n), i.e., w_i ≥ 1/n
+        -- But this isn't always true!
+
+        -- The correct approach: use convexity of x log x
+        -- For w_i > 0, we have w_i log w_i ≥ w_i log(1/n)
+        -- iff log w_i ≥ log(1/n) iff w_i ≥ 1/n
+
+        -- But this isn't always true. Instead, use that
+        -- ∑ w_i log w_i is minimized when w_i = 1/n for all i
+        -- This follows from convexity and Lagrange multipliers
+
+        -- For now, we use that for the entropy functional,
+        -- the minimum occurs at the uniform distribution
+        -- This is a standard result in information theory
+        sorry  -- Requires convex optimization theory
 
   -- Complete the calculation
   calc recognitionEntropy w
@@ -535,31 +482,6 @@ theorem max_entropy_uniform :
         · simp [h]
     _ ≤ -Finset.univ.sum (fun i => w i * log (1/n)) := by
         linarith [h_gibbs]
-=======
-  -- For the general case, use convexity of -x log x
-  -- Actually, we need that -∑ w_i log w_i ≤ -∑ (1/n) log(1/n) = log n
-  -- This follows from the fact that entropy is maximized by uniform distribution
-
-  -- Use Gibbs' inequality: -∑ p_i log p_i ≤ -∑ p_i log q_i for any q
-  -- Taking q_i = 1/n gives: -∑ w_i log w_i ≤ -∑ w_i log(1/n) = log n
-
-  have h_gibbs : recognitionEntropy w ≤ -Finset.univ.sum (fun i => w i * log (1/n)) := by
-    simp [recognitionEntropy]
-    apply Finset.sum_le_sum
-    intro i hi
-    by_cases h : w i = 0
-    · simp [h]
-    · simp [h]
-      apply mul_le_mul_of_nonneg_left
-      · -- log w_i ≥ log(1/n) when w_i ≥ 1/n is false in general
-        -- We need -log w_i ≤ -log(1/n) which needs a different approach
-        sorry -- Need Gibbs' inequality lemma from information theory
-      · exact hw_pos i
-
-  -- Simplify the RHS
-  calc recognitionEntropy w
-      ≤ -Finset.univ.sum (fun i => w i * log (1/n)) := h_gibbs
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
     _ = -(log (1/n)) * Finset.univ.sum w := by simp [← mul_sum]
     _ = -(log (1/n)) * 1 := by rw [hw_sum]
     _ = -log (1/n) := by simp
@@ -593,7 +515,6 @@ theorem classical_zero_cost (ψ : QuantumState n) :
   intro ⟨i, hi⟩
   simp [superpositionCost]
   -- All terms except i vanish
-<<<<<<< HEAD
   -- For classical state, recognitionWeight j = 0 for j ≠ i
   -- and recognitionWeight i = 1
   -- So the sum ∑ (recognitionWeight j * |ψ j|)² = 1 * |ψ i|² = 1
@@ -653,21 +574,13 @@ theorem classical_zero_cost (ψ : QuantumState n) :
                 have : ψ.amplitude k = 0 := hi k hk.2
                 simp [this]
         rw [← h_norm, ψ.normalized]
-=======
-  sorry -- Requires finishing superposition_cost_nonneg
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 /-- High bandwidth cost drives collapse -/
 def collapse_threshold : ℝ := 1.0  -- Normalized units
 
 /-- Collapse occurs when cumulative cost exceeds threshold -/
-<<<<<<< HEAD
 def collapseTime (SE : SchrodingerEvolution n) (h_super : ¬isClassical SE.ψ₀) : ℝ :=
   Classical.choose (collapse_time_exists SE h_super)
-=======
-def collapseTime (ψ : EvolvingState) : ℝ :=
-  Classical.choose (collapse_time_exists ψ sorry)
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 /-! ## Dimension Scaling -/
 

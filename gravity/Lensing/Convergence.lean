@@ -57,7 +57,6 @@ lemma laplacian_radial (f : ℝ → ℝ) (hf : Differentiable ℝ f) (R : ℝ) (
 lemma convergence_radial_eq (Φ : ℝ → ℝ) (r : ℝ × ℝ) (hΦ : Differentiable ℝ Φ) :
     let R := (r.1^2 + r.2^2).sqrt
     convergence (fun p => Φ (p.1^2 + p.2^2).sqrt) r = convergence_polar Φ R := by
-<<<<<<< HEAD
   -- The standard formula: ∇²f(R) = f''(R) + f'(R)/R for radial f
   -- This is a standard result in differential geometry
   -- For a radial function f(r) where r = √(x² + y²):
@@ -82,22 +81,7 @@ lemma convergence_radial_eq (Φ : ℝ → ℝ) (r : ℝ × ℝ) (hΦ : Different
     -- So convergence_polar Φ 0 = 2Φ''(0)
     -- But convergence at origin also equals Φ''(0) by direct calculation
     -- This would require adding C² assumption to theorem statement
-    rfl  -- Both sides are 0 for our simplified definitions
-=======
-  -- This follows from the chain rule and ∇² in polar coordinates
-  simp [convergence, convergence_polar]
-  let R := (r.1^2 + r.2^2).sqrt
-  -- For a radial function f(R) where R = sqrt(x² + y²):
-  -- ∂f/∂x = (∂f/∂R)(∂R/∂x) = f'(R) · x/R
-  -- ∂²f/∂x² = ∂/∂x[f'(R) · x/R] = f''(R)(x/R)² + f'(R)(1/R - x²/R³)
-  -- Similarly for y, and ∇²f = ∂²f/∂x² + ∂²f/∂y²
-  -- After simplification: ∇²f = f''(R) + f'(R)/R
-
-  -- First establish R ≠ 0 (unless at origin)
-  by_cases h : r = (0, 0)
-  · -- At origin, both sides are typically undefined or require special handling
     sorry -- Would need continuity extension to origin
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
   · -- R > 0 when r ≠ (0,0)
     have hR : R ≠ 0 := by
       simp [R]
@@ -110,7 +94,6 @@ lemma convergence_radial_eq (Φ : ℝ → ℝ) (r : ℝ × ℝ) (hΦ : Different
         · exact sq_eq_zero_iff.mp (le_antisymm (by linarith : r.2^2 ≤ 0) (sq_nonneg _))
       simp [this] at h
 
-<<<<<<< HEAD
     -- Apply the Laplacian formula
     simp [convergence, convergence_polar]
     -- The calculation: ∇²f = f'' + f'/R
@@ -136,60 +119,14 @@ lemma convergence_radial_eq (Φ : ℝ → ℝ) (r : ℝ × ℝ) (hΦ : Different
       -- = Φ''(R) · (x/R)² + Φ'(R) · [R - x·(x/R)]/R²
       -- = Φ''(R) · (x/R)² + Φ'(R) · (1/R - x²/R³)
 
-      -- The formal proof uses deriv_comp and product rule
-      conv_lhs => arg 1; ext x; arg 1; ext y; rw [← sqrt_sq (add_nonneg (sq_nonneg x) (sq_nonneg r.2))]
-
-      -- Use that for y fixed, ∂/∂x of function depending on √(x²+y²)
-      have h1 : ∀ x, deriv (fun t => Φ ((t^2 + r.2^2).sqrt)) x =
-                     deriv Φ ((x^2 + r.2^2).sqrt) * x / (x^2 + r.2^2).sqrt := by
-        intro x
-        rw [deriv_comp _ (differentiableAt_sqrt _)]
-        · simp only [deriv_sqrt]
-          field_simp
-          ring
-        · exact hΦ.differentiableAt
-        · by_cases hx : x = 0 ∧ r.2 = 0
-          · simp [hx.1, hx.2]
-          · push_neg at hx
-            simp only [ne_eq, add_eq_zero, sq_eq_zero_iff, not_and] at hx ⊢
-            exact hx
-
-      -- Now take derivative again
-      simp only [R]
-      rw [deriv_deriv]
-      simp only [h1]
-      -- The rest follows by careful algebra
-      simp only [deriv_mul, deriv_div]
-      ring_nf
-      -- Tedious but straightforward calculation
-      simp [hΦ.differentiableAt, hw.differentiableAt, hR]
+      -- This is a technical calculation using the chain rule
+      sorry -- Technical multi-variable chain rule calculation
 
     -- Similarly for y derivatives
     have h_dyy : deriv (fun y => deriv (fun x => Φ ((x^2 + y^2).sqrt)) r.1) r.2 =
                   deriv (deriv Φ) R * (r.2/R)^2 + deriv Φ R * (1/R - r.2^2/R^3) := by
       -- Symmetric to h_dxx, just swap x and y roles
-      conv_lhs => arg 1; ext y; arg 1; ext x; rw [← sqrt_sq (add_nonneg (sq_nonneg r.1) (sq_nonneg y))]
-
-      have h1 : ∀ y, deriv (fun t => Φ ((r.1^2 + t^2).sqrt)) y =
-                     deriv Φ ((r.1^2 + y^2).sqrt) * y / (r.1^2 + y^2).sqrt := by
-        intro y
-        rw [deriv_comp _ (differentiableAt_sqrt _)]
-        · simp only [deriv_sqrt]
-          field_simp
-          ring
-        · exact hΦ.differentiableAt
-        · by_cases hy : r.1 = 0 ∧ y = 0
-          · simp [hy.1, hy.2]
-          · push_neg at hy
-            simp only [ne_eq, add_eq_zero, sq_eq_zero_iff, and_comm] at hy ⊢
-            exact hy
-
-      simp only [R]
-      rw [deriv_deriv]
-      simp only [h1]
-      simp only [deriv_mul, deriv_div]
-      ring_nf
-      simp [hΦ.differentiableAt, hw.differentiableAt, hR]
+      sorry -- Technical multi-variable chain rule calculation
 
     -- Add them up: using r.1² + r.2² = R²
     calc (deriv (fun x => deriv (fun y => Φ ((x^2 + y^2).sqrt)) r.2) r.1 +
@@ -212,7 +149,12 @@ lemma convergence_radial_eq (Φ : ℝ → ℝ) (r : ℝ × ℝ) (hΦ : Different
             ring
       _ = convergence_polar Φ R / 2 := by
             simp [convergence_polar, laplacian_radial Φ hΦ R hR]
-      _ = _ := by simp [convergence_polar]
+      _ = _ := by
+            -- convergence_polar is already divided by 2 in our definition
+            simp [convergence_polar]
+            -- But we have convergence which also divides by 2
+            -- So they match up
+            sorry -- Final algebraic simplification
 
 /-- Recognition weight enhances lensing convergence (with correction terms) -/
 theorem convergence_enhancement (R : ℝ) (w : ℝ → ℝ)
@@ -222,17 +164,6 @@ theorem convergence_enhancement (R : ℝ) (w : ℝ → ℝ)
       w R * convergence_polar Φ_Newton R +
       (deriv w R / R) * deriv Φ_Newton R +
       deriv (deriv w) R * Φ_Newton R := by
-=======
-    -- Apply chain rule systematically
-    -- This calculation is standard in differential geometry
-    sorry -- Technical multi-variable chain rule calculation
-
-/-- Recognition weight enhances lensing convergence -/
-theorem convergence_enhancement (R : ℝ) (w : ℝ → ℝ)
-    (hw : Differentiable ℝ w) (hΦ : Differentiable ℝ Φ_Newton)
-    (hR : R > 0) :
-    convergence_polar (Φ_modified · w) R = w R * convergence_polar Φ_Newton R := by
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
   -- The key is that w depends only on R, so it factors out of derivatives
   simp [convergence_polar, Φ_modified]
 
@@ -263,28 +194,10 @@ theorem convergence_enhancement (R : ℝ) (w : ℝ → ℝ)
 
   -- Substitute and simplify
   rw [h_prod2]
-<<<<<<< HEAD
   -- After expansion: (w''Φ + 2w'Φ' + wΦ'') + (w'Φ + wΦ')/R
-  -- Goal: show this equals w * (Φ'' + Φ'/R)
+  -- Goal: show this equals w * (Φ'' + Φ'/R) + (w'/R) * Φ' + w'' * Φ
 
-  -- Rearrange terms
-  have h_rearrange : deriv (deriv w) R * Φ_Newton R + 2 * deriv w R * deriv Φ_Newton R +
-                     w R * deriv (deriv Φ_Newton) R +
-                     (deriv w R * Φ_Newton R + w R * deriv Φ_Newton R) / R =
-                     w R * (deriv (deriv Φ_Newton) R + deriv Φ_Newton R / R) +
-                     (deriv (deriv w) R * Φ_Newton R + deriv w R * Φ_Newton R / R +
-                      2 * deriv w R * deriv Φ_Newton R + deriv w R * deriv Φ_Newton R / R) := by
-    field_simp
-    ring
-
-  rw [h_rearrange]
-  -- The extra terms vanish for the Laplacian of a radial function
-  -- This is because d/dR[R * f'(R)] = R f''(R) + f'(R)
-  -- So (1/R) d/dR[R * f'(R)] = f''(R) + f'(R)/R
-  -- The cross terms with w' cancel out in this specific combination
-  -- This is a key property of the Laplacian in polar coordinates
-
-    -- The extra terms don't cancel - they are part of the correct formula
+  -- The extra terms don't cancel - they are part of the correct formula
   -- Rearrange to match theorem statement:
   -- convergence_polar (w * Φ) = w * convergence_polar Φ + (w'/R) * Φ' + w'' * Φ
 
@@ -292,23 +205,11 @@ theorem convergence_enhancement (R : ℝ) (w : ℝ → ℝ)
   -- Goal: w * (Φ'' + Φ'/R) + (w'/R) * Φ' + w'' * Φ
 
   -- Expand the goal using the definition of convergence_polar
-  rw [laplacian_radial _ hΦ R (ne_of_gt hR)] at h_rearrange
+  rw [laplacian_radial _ hΦ R (ne_of_gt hR)]
 
   -- The rearranged form matches our goal exactly
-  have h_match : deriv (deriv w) R * Φ_Newton R + deriv w R * Φ_Newton R / R +
-                 2 * deriv w R * deriv Φ_Newton R + deriv w R * deriv Φ_Newton R / R =
-                 (deriv w R / R) * deriv Φ_Newton R + deriv (deriv w) R * Φ_Newton R := by
-    field_simp
-    ring
-
-  rw [h_match]
-=======
-  -- After expansion: (w''Φ + 2w'Φ' + wΦ'') + (w'Φ + wΦ')/R = w(Φ'' + Φ'/R) + (terms with w' and w'')
-  -- For pure radial enhancement, the cross terms should vanish in the final Laplacian
-  ring_nf
-  -- The algebra shows convergence_polar (wΦ) = w * convergence_polar Φ
-  sorry -- Final algebraic simplification
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
+  field_simp
+  ring
 
 /-- Shear remains modified by same factor in thin-lens approximation -/
 theorem shear_modified (r : ℝ × ℝ) (w : ℝ → ℝ)
@@ -321,7 +222,6 @@ theorem shear_modified (r : ℝ × ℝ) (w : ℝ → ℝ)
     γ₁ = w R * γ₁_N := by
   -- Similar argument: radial weight factors out of shear components
   -- The mixed derivatives ∂²Φ/∂x∂y pick up the same w(R) factor
-<<<<<<< HEAD
   -- Shear components: γ₁ = (∂²Φ/∂x² - ∂²Φ/∂y²)/2, γ₂ = ∂²Φ/∂x∂y
 
   -- For a radial function Φ(R) with R = √(x² + y²):
@@ -340,9 +240,6 @@ theorem shear_modified (r : ℝ × ℝ) (w : ℝ → ℝ)
   -- and showing the cross terms involving derivatives of w are negligible
   -- This is valid when |∇w|/w << 1/R, which holds for our recognition weight
   sorry -- TECHNICAL: Requires thin-lens approximation |∇w|/w << 1/R
-=======
-  sorry -- Technical calculation similar to convergence
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
 
 /-! ## Observable Signatures -/
 
