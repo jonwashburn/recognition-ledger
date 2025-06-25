@@ -88,3 +88,17 @@ Jonathan Washburn
 Recognition Science Institute
 Zero-axiom formalization in Lean 4
 ```
+
+## Recognition-Ledger Foundation
+
+This directory is the **trusted base** of the Recognition-Ledger project.  All files in `foundation/` compile with **zero axioms and zero sorries**; every downstream theorem in `formal/`, `physics/`, `ethics/`, and `ledger/` ultimately depends on the proofs here.
+
+The logical chain is intentionally minimal:
+
+1. **Meta-Principle (`Core/MetaPrinciple.lean`)** – a single impossibility statement ("nothing cannot recognise itself") expressed in Lean with no imported axioms.  From this we extract the existence of discrete recognition events.
+2. **Eight Foundational Theorems (`Core/EightFoundations.lean`)** – using finite pigeonhole arguments, we derive the eight pillars of Recognition Science: discrete time, dual balance, positive cost, unitary evolution, irreducible tick, spatial voxels, eight-beat symmetry, and the golden ratio.
+3. **Foundations Layer (`Foundations/*.lean`)** – each file packages one pillar into a Lean `structure` (e.g. `IrreducibleTick`, `SpatialVoxel`) together with its proof from the previous step.  These are the only objects re-exported by `foundation/Main.lean`.
+
+Everything else (archival sketches, one-off explorations) lives under `Core/Archive/` so that newcomers can load the project, open `Main.lean`, and see the entire argument in less than 200 lines.
+
+Because this directory must never regress, CI runs `lake build foundation` and `lake exe print_axioms foundation` on every pull request.  Any new sorry or axiom fails the build.
