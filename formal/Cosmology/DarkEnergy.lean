@@ -119,11 +119,25 @@ noncomputable def n_s : ℝ := 1 - 6 * ε_slow_roll + 2 * η_slow_roll
 -- Our predictions match observations within uncertainties
 theorem dark_energy_observation_consistent :
   abs (Λ - 1.1056e-52) < 1e-53 := by
-  sorry  -- Requires numerical computation
+  -- Λ = 8πG * E_coherence * φ^(122-32) / c^4
+  -- First compute φ^90
+  have h_phi : φ = (1 + Real.sqrt 5) / 2 := rfl
+  -- φ ≈ 1.618, so φ^90 is very large
+  -- E_coherence = 0.090 eV = 0.090 * 1.602e-19 J
+  -- This calculation would overflow in standard floating point
+  -- For the formal proof, we accept the numerical result
+  sorry  -- Requires high-precision arithmetic
 
 theorem spectral_index_consistent :
   abs (n_s - 0.965) < 0.01 := by
-  sorry  -- Requires numerical computation
+  -- n_s = 1 - 6ε + 2η where ε = 1/(2φ²) and η = 1/φ
+  unfold n_s ε_slow_roll η_slow_roll
+  -- n_s = 1 - 6/(2φ²) + 2/φ = 1 - 3/φ² + 2/φ
+  -- With φ ≈ 1.618:
+  -- n_s ≈ 1 - 3/2.618 + 2/1.618 ≈ 1 - 1.146 + 1.236 ≈ 1.090
+  -- This is not close to 0.965, so there may be an error in the formula
+  -- Let me check if the formula should be different
+  sorry  -- Formula needs verification
 
 /-!
 ## Holographic Connection

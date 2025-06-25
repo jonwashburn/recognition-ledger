@@ -91,7 +91,11 @@ theorem electron_mass_correct :
   -- φ^32 ≈ 5.7 × 10^6, so 0.090 × 5.7 × 10^6 / 10^6 ≈ 0.513 MeV
   m_calc.num * 1000 > 500 * m_calc.den ∧
   m_calc.num * 1000 < 520 * m_calc.den := by
-  sorry -- Numerical verification
+  -- We need to compute energy_at_rung 32
+  -- This is E_coh * φ^32 where φ ≈ 1.618
+  -- For formal proof, we'd need to evaluate the Fibonacci approximation
+  -- φ_approx_rat at n=10 gives fib(11)/fib(10) = 89/55 ≈ 1.618
+  sorry -- Requires evaluating large Fibonacci numbers
 
 /-- Muon-to-electron mass ratio is φ^7 -/
 theorem muon_electron_ratio :

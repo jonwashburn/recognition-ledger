@@ -51,14 +51,39 @@ theorem cost_minimization_golden_ratio (DR : DiscreteRecognition) (PC : Positive
   SS.lambda = φ ∨ SS.lambda = -1/φ := by
   -- SS.lambda satisfies λ² = λ + 1
   have h_eq : SS.lambda^2 = SS.lambda + 1 := SS.self_similar_scaling
-  -- φ also satisfies this equation
-  have h_phi : φ^2 = φ + 1 := golden_ratio_equation
-  -- The quadratic x² - x - 1 = 0 has exactly two roots: φ and -1/φ
-  -- Since SS.lambda satisfies this equation, it must be one of these roots
-  -- For a complete proof, we would show -1/φ also satisfies the equation
-  -- and use the fact that a quadratic has at most 2 roots
-  left  -- Assume SS.lambda = φ for now
-  sorry  -- Complete proof requires showing these are the only two roots
+  -- Since SS.lambda > 1 (from lambda_gt_one), we must have SS.lambda = φ
+  left
+  -- Both SS.lambda and φ are positive, > 1, and satisfy x² = x + 1
+  have h_lambda_pos : SS.lambda > 1 := SS.lambda_gt_one
+  have h_phi_pos : φ > 1 := golden_ratio_gt_one
+  have h_phi_eq : φ^2 = φ + 1 := golden_ratio_equation
+
+  -- We'll show SS.lambda = φ using the uniqueness of the positive solution
+  -- Define f(x) = x² - x - 1
+  let f := fun x : ℝ => x^2 - x - 1
+  have h_lambda_root : f SS.lambda = 0 := by simp [f]; linarith
+  have h_phi_root : f φ = 0 := by simp [f]; linarith [h_phi_eq]
+
+  -- f is strictly increasing for x > 1/2
+  have f_increasing : ∀ x y : ℝ, 1 < x → x < y → f x < f y := by
+    intro x y hx hxy
+    simp [f]
+    -- f'(x) = 2x - 1, which is positive for x > 1/2
+    -- So f is strictly increasing on (1, ∞)
+    nlinarith [hxy, hx]
+
+  -- Since f is strictly increasing on (1, ∞) and both SS.lambda and φ
+  -- are roots > 1, they must be equal
+  by_contra h_ne
+  cases' Ne.lt_or_lt h_ne with h_lt h_gt
+  · -- If SS.lambda < φ
+    have : f SS.lambda < f φ := f_increasing SS.lambda φ h_lambda_pos h_lt
+    rw [h_lambda_root, h_phi_root] at this
+    exact absurd this (lt_irrefl 0)
+  · -- If SS.lambda > φ
+    have : f φ < f SS.lambda := f_increasing φ SS.lambda h_phi_pos h_gt
+    rw [h_lambda_root, h_phi_root] at this
+    exact absurd this (lt_irrefl 0)
 
 -- Recognition operator fixed points
 theorem recognition_fixed_points :
@@ -66,23 +91,58 @@ theorem recognition_fixed_points :
   (∃ vacuum phi_state : ℝ, vacuum ≠ phi_state ∧
    J vacuum = vacuum ∧ J phi_state = phi_state ∧
    ∀ x, J x = x → x = vacuum ∨ x = phi_state) := by
-  -- Define J as the identity function as a trivial example
-  let J : ℝ → ℝ := id
+  -- Define J as a simple involution that swaps pairs except for two fixed points
+  -- J(x) = -x + 1 has fixed point at x = 1/2
+  -- Let's use a quadratic involution instead
+  -- J(x) = (φ²x + φ)/(φx + 1) which fixes 1 and φ
+  let J := fun x : ℝ =>
+    if x = 0 then φ
+    else if x = φ then 0
+    else if x = 1 then 1
+    else if x = -1 then -1
+    else x  -- For simplicity, make everything else fixed
   use J
   constructor
-  · -- J is involutive (id ∘ id = id)
-    intro x; rfl
-  · -- Choose 0 and 1 as two distinct fixed points
-    use 0, 1
+  · -- J is involutive
+    intro x
+    simp only [J]
+    by_cases h0 : x = 0
+    · simp [h0, golden_ratio_gt_one, ne_of_gt]
+    · by_cases hphi : x = φ
+      · simp [h0, hphi]
+      · by_cases h1 : x = 1
+        · simp [h0, hphi, h1]
+        · by_cases hm1 : x = -1
+          · simp [h0, hphi, h1, hm1]
+          · simp [h0, hphi, h1, hm1]
+  · -- Fixed points are 1 and -1
+    use 1, (-1)
     constructor
-    · norm_num  -- 0 ≠ 1
+    · norm_num
     constructor
-    · rfl  -- J(0) = 0
+    · -- J(1) = 1
+      simp [J]
+      intro h
+      have : φ = 1 := by
+        have : φ > 1 := golden_ratio_gt_one
+        linarith
+      have : φ > 1 := golden_ratio_gt_one
+      linarith
     constructor
-    · rfl  -- J(1) = 1
-    · -- For id, every point is a fixed point
-      -- This doesn't satisfy the uniqueness, but demonstrates the structure
+    · -- J(-1) = -1
+      simp [J]
+      constructor
+      · norm_num
+      · intro h
+        have : φ = -1 := h
+        have : φ > 0 := by
+          have : φ > 1 := golden_ratio_gt_one
+          linarith
+        linarith
+    · -- For the uniqueness part, we accept that our construction
+      -- makes many points fixed. A proper involution with exactly
+      -- 2 fixed points requires more sophisticated construction.
       intro x hx
-      left; sorry  -- Would need a proper involution with exactly 2 fixed points
+      sorry
 
 end RecognitionScience
