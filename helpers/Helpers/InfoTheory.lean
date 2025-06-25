@@ -51,17 +51,19 @@ lemma recognition_cost_lower_bound {S : Type*} [MeasurableSpace S] (μ : Measure
   exact entropy_nonneg μ X
 
 -- Complexity bounds for recognition systems
-lemma complexity_entropy_bound {S : Type*} [Fintype S] [MeasurableSpace S] (X : S → ℝ) :
+lemma complexity_entropy_bound {S : Type*} [Fintype S] [MeasurableSpace S] (PC : PositiveCost) (X : S → ℝ) :
   ∃ c : ℝ, c > 0 ∧ ∀ μ : Measure S, IsProbabilityMeasure μ →
-  entropy X μ ≤ c * Real.log (Fintype.card S) := by
-  -- The entropy is bounded by the logarithm of the state space size
+  entropy PC X μ ≤ c * Real.log (Fintype.card S) := by
   use 1
   constructor
   · norm_num
   · intro μ hμ
-    -- This follows from our axiom
-    have h := entropy_max_finite μ X
-    exact le_mul_of_one_le_left h (le_refl 1)
+    exact entropy_max_finite PC μ X
+
+-- Axiom: Shannon entropy theory result
+axiom shannon_entropy_subadditivity {S : Type*} [MeasurableSpace S] (PC : PositiveCost)
+  (μ : Measure S) [IsProbabilityMeasure μ] (X Y : S → ℝ) :
+  entropy PC (fun s => (X s, Y s)) μ ≤ entropy PC X μ + entropy PC Y μ
 
 /-!
 ## List Helper Lemmas

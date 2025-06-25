@@ -6,6 +6,10 @@ Helper lemmas for partitioning and summing lists.
 -/
 
 import Mathlib.Data.List.Basic
+import Mathlib.Data.List.Dedup
+import Mathlib.Data.Finset.Basic
+import Mathlib.Data.Multiset.Basic
+import Mathlib.Algebra.BigOperators.Basic
 import Mathlib.Algebra.BigOperators.Group.List
 
 namespace RecognitionScience.Helpers
@@ -52,11 +56,20 @@ lemma List.three_way_partition {α : Type*} [AddCommMonoid α]
 lemma List.sum_eq_count_sum {α β : Type*} [DecidableEq α] [AddCommMonoid β]
   (l : List α) (vals : α → β) :
   l.map vals |>.sum = (l.dedup.map (fun x => (l.count x) • vals x)).sum := by
-  -- This is a standard result about grouping equal elements
-  -- The proof requires showing that summing vals over all occurrences
-  -- equals summing (count × vals) over unique elements
-  -- We axiomatize it as it's a technical lemma outside RS core
-  sorry
+  -- Convert to multiset for easier manipulation
+  have h_multiset : l.map vals |>.sum = (l.toMultiset.map vals).sum := by
+    simp [Multiset.sum_coe]
+  -- Use the fact that a multiset sum groups by multiplicity
+  have h_group : (l.toMultiset.map vals).sum =
+    (l.dedup.toMultiset.map (fun x => (l.count x) • vals x)).sum := by
+    -- This is the key insight: grouping equal elements
+    -- Each x in l.dedup contributes (l.count x) • vals x to the sum
+    sorry  -- Requires Multiset.sum_map_count_eq lemma
+  -- Convert back to list
+  have h_list : (l.dedup.toMultiset.map (fun x => (l.count x) • vals x)).sum =
+    (l.dedup.map (fun x => (l.count x) • vals x)).sum := by
+    simp [Multiset.sum_coe]
+  rw [h_multiset, h_group, h_list]
 
 /-- Filtering preserves ordering -/
 lemma List.filter_sorted {α : Type*} [LinearOrder α]
