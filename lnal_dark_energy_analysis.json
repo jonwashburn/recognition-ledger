@@ -1,0 +1,84 @@
+{
+  "deliverable_C_revised": {
+    "observed": {
+      "Lambda_quarter_meV": 2.26,
+      "rho_Lambda_kg_m3": 6.0595251782515134e-27,
+      "rho_Lambda_over_rho_critical": 0.7
+    },
+    "scale_analysis": [
+      {
+        "name": "Planck",
+        "scale_m": 1.6164857787771846e-35,
+        "E_coh_GeV": 1.2213768614683728e+19,
+        "tau_ratio": 2.7570548647148273e+57,
+        "rho_ratio": 2.0957343206054434e+172
+      },
+      {
+        "name": "GUT",
+        "scale_m": 1e-30,
+        "E_coh_GeV": 197433832709113.6,
+        "tau_ratio": 1.1268720128416425e+51,
+        "rho_ratio": 1.4309477577767254e+153
+      },
+      {
+        "name": "Electroweak",
+        "scale_m": 1.974338327091136e-18,
+        "E_coh_GeV": 100.0,
+        "tau_ratio": 4.549662251868772e+34,
+        "rho_ratio": 9.41753998650083e+103
+      },
+      {
+        "name": "\u03bb_micro",
+        "scale_m": 9.12e-36,
+        "E_coh_GeV": 2.1648446568981754e+19,
+        "tau_ratio": 5.914002108820014e+57,
+        "rho_ratio": 2.0684471321452525e+173
+      },
+      {
+        "name": "\u03bb_eff (21.4 \u03bcm)",
+        "scale_m": 2.14e-05,
+        "E_coh_GeV": 9.225880033136149e-12,
+        "tau_ratio": 1.8966603342490634e+17,
+        "rho_ratio": 6.82289495686254e+51
+      },
+      {
+        "name": "L\u2081 (0.97 kpc)",
+        "scale_m": 2.99342e+19,
+        "E_coh_GeV": 6.595594093348531e-36,
+        "tau_ratio": 1.2124143039686209e-15,
+        "rho_ratio": 1.782186520169042e-45
+      },
+      {
+        "name": "L\u2082 (24.3 kpc)",
+        "scale_m": 7.498980000000001e+20,
+        "E_coh_GeV": 2.6328091648345987e-37,
+        "tau_ratio": 1.6540107672510545e-17,
+        "rho_ratio": 4.5249626329981176e-51
+      },
+      {
+        "name": "Dark energy scale",
+        "scale_m": 8.736010296863434e-05,
+        "E_coh_GeV": 2.2599999999999997e-12,
+        "tau_ratio": 2.907080623822953e+16,
+        "rho_ratio": 2.456808067057496e+49
+      },
+      {
+        "name": "Hubble scale",
+        "scale_m": 1.3627272727272729e+26,
+        "E_coh_GeV": 1.4488139825218476e-42,
+        "tau_ratio": 1.6069264374436101e-24,
+        "rho_ratio": 4.1494256544375353e-72
+      }
+    ],
+    "conclusions": {
+      "standard_formula_issue": "No natural scale gives \u03c4\u2080 \u2248 t_Planck",
+      "scale_gap": "32 orders of magnitude from Planck to dark energy",
+      "possible_resolutions": [
+        "Modified power laws in half-coin formula",
+        "Cumulative effects over Hubble time",
+        "Information entropy mechanism",
+        "Emergent collective phenomena"
+      ]
+    }
+  }
+}

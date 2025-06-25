@@ -1,0 +1,54 @@
+Ledger-Gravity Programme: Twenty-Year Punch-List
+=================================================
+
+Prelude
+-------
+The following narrative organises every workstream that must converge if a commercial entity is to demonstrate, refine, and deploy urgency-driven gravity control.  Each paragraph marks a concrete outcome and the chain of predecessor steps implicit in that outcome.  Engineers may treat the boldfaced phrases as milestones; managers may treat the same phrases as gating criteria for capital releases.  No bullet symbols or numerals are used so that the text reads as a continuous roadmap rather than a checklist written in stone.
+
+Foundational Prospectus
+-----------------------
+Produce a master document that tells the story from first principles to market vision.  It begins with a lay explanation of ledger physics, rises to the formal derivation of the dynamic a₀ equation just integrated into the solver, and completes with a summary of defensible business opportunities.  Completion is achieved only when the prospectus can be read front-to-back by three archetypal audiences—a venture capitalist, a graduate physicist, and a regulatory analyst—each reporting full comprehension within her domain.
+
+Technical Requirements Charter
+------------------------------
+Draft a living charter that captures every quantitative target the programme must hit across the coming two decades.  Recognition-pump flux, cryostat base temperature, torsion-balance resolution, stray-field budgets, power-to-thrust efficiency, software throughput for ledger simulations: all appear here with present best estimates and acceptable uncertainty bands.  The document is ratified when the lead of every discipline signs that the numbers are simultaneously attainable.
+
+Experimental Validation Protocols
+---------------------------------
+Write complete protocols for each decisive laboratory demonstration.  Begin with the cryogenic torsion balance driven by a phase-locked THz comb.  Include hardware schematics, materials specs, vibration isolation stack, data-acquisition pipeline, statistical analysis script, and the Lean proof fragment that certifies why the measurement constrains κ.  The protocol is finished when an external metrology lab can reproduce it without consulting the authors.
+
+Engineering Standards Compendium
+--------------------------------
+Open a controlled-drawing repository that houses reference designs for recognition pumps, THz driver boards, photonic quasicrystal growth, cryogenic packaging, and phased-array interconnects.  Each drawing is linked to a bill of materials and supply-chain annotation.  The compendium is considered live once the first prototype lot can be built entirely from its contents without ad-hoc email clarifications.
+
+Compliance and Safety Register
+------------------------------
+Map every relevant regulation—export controls, RF emission limits, cryogen safety codes, inertial-navigation treaties—to explicit design constraints.  The register is published internally only after counsel from at least two jurisdictions confirms that no obvious legal blind spot remains.
+
+Software Stack Manifest
+-----------------------
+Catalogue the complete software toolchain: Lean ledger proofs, Python front-ends, CUDA kernels, continuous-integration scripts, data provenance tags, and public API endpoints.  The manifest is accepted when a fresh engineer can clone the repository, run the dynamic-a₀ solver with a synthetic urgency time-series, and reproduce a galaxy fit within twenty-four hours.
+
+Business Architecture Memorandum
+--------------------------------
+Articulate financing cadence, milestone-linked capital tranches, intellectual-property fences, licensing strategy, and first-market focus.  Ratification occurs when the financial model demonstrates solvency through the metrology and satellite-station-keeping phases without speculative atmospheric-flight revenue.
+
+Living Risk Ledger
+------------------
+Create and maintain a document that lists every critical assumption, assigns likelihoods, and pairs each with a mitigation plan and owner.  The ledger passes audit when every mitigation has an associated budget line and review cadence.
+
+Early Demonstrator Path
+-----------------------
+Commit to building the cryogenic torsion-balance rig inside eighteen months.  Parallel teams source the photonic quasicrystal, assemble the THz comb, and commission the interferometric readout.  Success is defined as resolving a ten-piconewton differential force correlated with urgency modulation.
+
+Iteration and Scale-Up
+----------------------
+Transition from single-crystal pumps to tiled arrays, introduce active phase alignment across modules, and integrate heat-exchanger backplanes.  Completion is reached when a one-kilowatt electrical input delivers a sustained micro-g gravity gradient in a one-litre field cage.
+
+Flight-Ready Prototype
+----------------------
+Design a self-contained gravity-assist module suitable for CubeSat integration.  Include radiation-hardened driver electronics, autonomous cool-down scheduling, and in-orbit health diagnostics.  The milestone is met when the module survives a thermal-vacuum cycle and demonstrates on-table thrust comparable to cold-gas systems.
+
+Commercial Readiness Review
+---------------------------
+Conclude the punch-list with a formal review covering physics validation, engineering reliability, regulatory clearance, and market demand.  Only when the board finds no unpriced risk high enough to sink the venture is the programme declared ready to enter full production.  At that moment the punch-list dissolves into ordinary product-development tracking. 

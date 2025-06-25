@@ -1,0 +1,95 @@
+{
+  "parameter_chain": {
+    "lambda_micro_m": 9.120044383391703e-36,
+    "f_sparsity": 3.3e-122,
+    "beta": -0.05572809000084121,
+    "L1_kpc": 0.97,
+    "L2_kpc": 24.3
+  },
+  "results": [
+    {
+      "name": "Nominal (21.4 \u03bcm)",
+      "lambda_eff_m": 2.139776762618999e-05,
+      "omega_m_eff": 0.506,
+      "g_avg": 10.0,
+      "success": false,
+      "enhancements_at_scales": [
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ]
+    },
+    {
+      "name": "L\u2081 (0.97 kpc)",
+      "lambda_eff_m": 2.993129e+19,
+      "omega_m_eff": 0.08701941755930725,
+      "g_avg": 1.719751335164175,
+      "success": false,
+      "enhancements_at_scales": [
+        1.4720462524979394,
+        1.6735918257483096,
+        1.8306352018799819,
+        1.9027320605304694
+      ]
+    },
+    {
+      "name": "L\u2082 (24.3 kpc)",
+      "lambda_eff_m": 7.498251000000001e+20,
+      "omega_m_eff": 0.07272132697505125,
+      "g_avg": 1.4371803750010128,
+      "success": false,
+      "enhancements_at_scales": [
+        1.2301755154514011,
+        1.3986052974908545,
+        1.5298450026653214,
+        1.5900956843964746
+      ]
+    },
+    {
+      "name": "10 kpc",
+      "lambda_eff_m": 3.0857e+20,
+      "omega_m_eff": 0.0764101225369574,
+      "g_avg": 1.5100814730623995,
+      "success": false,
+      "enhancements_at_scales": [
+        1.2925762742180773,
+        1.4695496714296399,
+        1.607446521930395,
+        1.6707534246714861
+      ]
+    },
+    {
+      "name": "100 kpc",
+      "lambda_eff_m": 3.0857e+21,
+      "omega_m_eff": 0.0672082838855549,
+      "g_avg": 1.3282269542599783,
+      "success": false,
+      "enhancements_at_scales": [
+        1.136915244958074,
+        1.2925762742180773,
+        1.4138666264341215,
+        1.4695496714296399
+      ]
+    },
+    {
+      "name": "1 Mpc",
+      "lambda_eff_m": 3.0857e+22,
+      "omega_m_eff": 0.059114594675026395,
+      "g_avg": 1.1682726220360948,
+      "success": false,
+      "enhancements_at_scales": [
+        1.0,
+        1.136915244958074,
+        1.2435989689682285,
+        1.2925762742180773
+      ]
+    }
+  ],
+  "summary": {
+    "omega_b": 0.0493,
+    "omega_cdm": 0.0,
+    "omega_m_physical": 0.0506,
+    "best_fit_found": false
+  }
+}

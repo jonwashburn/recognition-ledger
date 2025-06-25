@@ -234,9 +234,39 @@ theorem bandwidth_criticality (n : ℕ) :
   -- For large m, this minimum exceeds bandwidth_bound
   have h_min : 1 - 1 / m < superpositionCost ψ := by
     simp [superpositionCost]
-    -- This requires showing that ∑(wᵢ|ψᵢ|)² < 1 for large m
-    -- Which follows from the Cauchy-Schwarz bound above
-    sorry -- TECHNICAL: Cauchy-Schwarz dimension bound
+    -- Apply Cauchy-Schwarz: For any probabilities pᵢ with ∑pᵢ = 1,
+    -- we have ∑pᵢ² ≥ 1/n (equality when pᵢ = 1/n for all i)
+
+    -- First, note that recognitionWeight i = 1 for all i
+    simp [recognitionWeight]
+
+    -- So superpositionCost ψ = ∑ᵢ |ψᵢ|⁴
+    -- By Cauchy-Schwarz inequality applied to vectors (|ψᵢ|², 1, 1, ..., 1):
+    -- (∑|ψᵢ|²)² ≤ m · ∑|ψᵢ|⁴
+    -- Since ∑|ψᵢ|² = 1 (normalization), we get: 1 ≤ m · ∑|ψᵢ|⁴
+    -- Therefore: ∑|ψᵢ|⁴ ≥ 1/m
+
+    have h_cs : (1 : ℝ) / m ≤ ∑ i, ‖ψ.amplitude i‖^4 := by
+      -- Rewrite as ∑|ψᵢ|² · ∑|ψᵢ|² ≤ m · ∑|ψᵢ|⁴
+      have h_norm : ∑ i, ‖ψ.amplitude i‖^2 = 1 := ψ.normalized
+
+      -- Apply Cauchy-Schwarz in the form: (∑aᵢ)² ≤ n · ∑aᵢ²
+      -- with aᵢ = |ψᵢ|²
+      have h_cs_general : (∑ i : Fin m, ‖ψ.amplitude i‖^2)^2 ≤
+                          (Fintype.card (Fin m) : ℝ) * ∑ i, ‖ψ.amplitude i‖^4 := by
+        -- This is the standard Cauchy-Schwarz inequality
+        -- (∑aᵢ·1)² ≤ (∑aᵢ²)(∑1²) = (∑aᵢ²)·n
+        apply sq_sum_le_card_mul_sum_sq
+
+      rw [h_norm, one_pow, Fintype.card_fin] at h_cs_general
+      linarith
+
+    -- Therefore superpositionCost ψ ≥ 1/m
+    -- But we need to show 1 - 1/m < superpositionCost ψ
+    -- This is false in general! The minimum is actually 1/m, not greater than 1 - 1/m
+
+    -- The correct statement should be different
+    sorry -- The theorem statement needs correction
 
   -- For m > 100, we have 1 - 1/m > 0.99 = bandwidth_bound
   calc superpositionCost ψ

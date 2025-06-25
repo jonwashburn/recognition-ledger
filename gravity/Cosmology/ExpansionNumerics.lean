@@ -162,6 +162,62 @@ lemma standard_inequality {x : ℝ} (hx : 0 < x ∧ x < 1/2) : -log x ≤ 2 / Re
   -- Proof sketch: d/dx[-log x - 2/√x] = -1/x + 1/x^(3/2) < 0 for x < 1
   -- The function f(x) = -log x - 2/√x is decreasing on (0,1)
   -- and lim_{x→0⁺} f(x) = 0, so f(x) ≤ 0 on (0,1)
-  sorry -- STANDARD: See analysis textbooks
+  -- Define f(x) = -log x - 2/√x
+  let f := fun x => -log x - 2 / Real.sqrt x
+
+  -- We'll show f(x) ≤ 0 for x ∈ (0, 1/2)
+  -- Step 1: f is decreasing on (0, 1)
+  have h_deriv : ∀ y ∈ Set.Ioo 0 1, deriv f y = -1/y + 1/(y * Real.sqrt y) := by
+    intro y hy
+    rw [deriv_sub, deriv_neg, deriv_log, deriv_div_const, deriv_sqrt]
+    · simp [ne_eq, hy.1.ne', Real.sqrt_ne_zero'.mpr hy.1]
+      field_simp
+      ring
+    · exact differentiableAt_log hy.1.ne'
+    · exact differentiableAt_const _
+    · exact differentiableAt_sqrt hy.1.ne'
+    · exact differentiableAt_neg
+    · exact (differentiableAt_const _).div (differentiableAt_sqrt hy.1.ne')
+        (Real.sqrt_ne_zero'.mpr hy.1)
+
+  -- Step 2: f'(y) < 0 for y ∈ (0, 1)
+  have h_neg : ∀ y ∈ Set.Ioo 0 1, deriv f y < 0 := by
+    intro y hy
+    rw [h_deriv y hy]
+    -- Need to show: -1/y + 1/(y√y) < 0
+    -- Equivalently: 1/(y√y) < 1/y
+    -- Equivalently: 1/√y < 1
+    -- Equivalently: √y > 1, which is false for y < 1
+    -- Actually: 1/(y√y) < 1/y iff y < y√y iff 1 < √y iff y > 1
+    -- So for y < 1, we have 1/(y√y) > 1/y, hence -1/y + 1/(y√y) > 0
+    -- Wait, that's the wrong sign!
+
+    -- Let me recalculate: f'(x) = -1/x + 1/x^(3/2)
+    -- For x < 1: x^(3/2) < x, so 1/x^(3/2) > 1/x
+    -- Therefore f'(x) > 0 for x < 1
+    -- This means f is INCREASING on (0,1), not decreasing!
+
+    -- Actually, let me check the derivative again
+    -- f(x) = -log x - 2/√x
+    -- f'(x) = -1/x - 2 · (-1/2) · x^(-3/2) = -1/x + x^(-3/2) = -1/x + 1/x^(3/2)
+
+    -- For x < 1: Need to compare 1/x and 1/x^(3/2)
+    -- 1/x^(3/2) > 1/x iff x > x^(3/2) iff 1 > x^(1/2) iff 1 > √x
+    -- This is true for x < 1
+    -- So f'(x) = -1/x + 1/x^(3/2) > 0 for x < 1
+
+    -- This contradicts what we need. Let me reconsider the problem.
+    -- Actually, the issue is that the inequality -log x ≤ 2/√x is FALSE for small x!
+    -- For x → 0⁺: -log x → +∞ while 2/√x → +∞
+    -- We need to compare growth rates: -log x grows like log(1/x)
+    -- while 2/√x grows like x^(-1/2)
+    -- Since log grows slower than any power, eventually 2/√x dominates
+
+    -- The correct statement should involve a different bound or a different range
+    sorry  -- The inequality as stated appears to be false
+
+  -- Since the approach above doesn't work, let's try a different method
+  -- Perhaps the inequality holds for a different reason
+  sorry  -- Need to reconsider the statement
 
 end RecognitionScience.Cosmology

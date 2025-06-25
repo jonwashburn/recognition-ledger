@@ -1,0 +1,23 @@
+{
+  "description": "LNAL analysis with dynamic a\u2080(r) based on recognition urgency",
+  "method": "Dynamic MOND scale from bandwidth triage mechanism",
+  "fit_kappa": true,
+  "galaxies": [
+    {
+      "galaxy": "NGC3198",
+      "chi2": 66384.60954372448,
+      "chi2_reduced": 1543.828128923825,
+      "kappa": 3.963808805951376,
+      "n_data": 43,
+      "success": true
+    },
+    {
+      "galaxy": "DDO154",
+      "chi2": 312647.0958780946,
+      "chi2_reduced": 26053.924656507883,
+      "kappa": 1.8857422949428906,
+      "n_data": 12,
+      "success": true
+    }
+  ]
+}

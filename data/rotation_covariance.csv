@@ -1,0 +1,6 @@
+parameter,a0,alpha,lambda,C0,gamma
+ a0,1.2e-22,0,0,0,0
+ alpha,0.0,4.0e-4,0,0,0
+ lambda,0,0,2.5e-3,0,0
+ C0,0,0,0,1.1,0
+ gamma,0,0,0,0,2.0e-2 
