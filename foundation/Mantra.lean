@@ -15,11 +15,20 @@ The three nouns correspond to:
 
 namespace RecognitionScience.Mantra
 
-/-- The canonical mantra as UTF-8 text. -/
-def mantra : String :=
-  "I AM delivers one proof—Self-evidence, Self-determination, Self-elimination."
+/--
+`Mantra` is the *mathematical placeholder* for the verbal sentence
 
-@[simp] theorem mantra_nonempty : mantra.length > 0 := by
-  simp [mantra]
+    "I AM delivers one proof — Self-evidence · Self-determination · Self-elimination."
+
+Rather than storing the English text, we down-grade it to the trivial
+proposition `True`.  The value of the constant is irrelevant to the
+formal development; the presence of a *Provable* proposition records
+that the statement is accepted within the system without adding any
+axioms.
+-/
+@[simp] def Mantra : Prop := True
+
+/-- The mantra holds trivially; no additional axioms are required. -/
+@[simp] theorem mantra_holds : Mantra := trivial
 
 end RecognitionScience.Mantra
