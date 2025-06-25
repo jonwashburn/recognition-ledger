@@ -230,10 +230,8 @@ theorem max_entropy_uniform :
   intro w hw_pos hw_sum
   -- Use Jensen's inequality on -x log x
   -- The function f(x) = -x log x is concave on (0,1]
-  -- So by Jensen: f(∑ w_i) ≥ ∑ w_i f(1/n) when w_i sum to 1
-  -- This gives: -1 log 1 ≥ ∑ w_i (-1/n log(1/n))
-  -- Simplifying: 0 ≥ -log(1/n) = -(-log n) = log n
-  -- Actually we want the reverse inequality for entropy
+  -- So by Jensen: ∑ w_i f(w_i) ≤ f(∑ w_i w_i) = f(1) = 0 is wrong
+  -- Actually: ∑ f(w_i) ≤ n f(1/n) when w_i sum to 1
 
   -- Direct approach: -∑ w_i log w_i ≤ log n
   -- Maximum when all w_i = 1/n (uniform distribution)
@@ -245,7 +243,32 @@ theorem max_entropy_uniform :
     ring_nf
 
   -- For the general case, use convexity of -x log x
-  sorry -- TODO: Complete using Jensen's inequality
+  -- Actually, we need that -∑ w_i log w_i ≤ -∑ (1/n) log(1/n) = log n
+  -- This follows from the fact that entropy is maximized by uniform distribution
+
+  -- Use Gibbs' inequality: -∑ p_i log p_i ≤ -∑ p_i log q_i for any q
+  -- Taking q_i = 1/n gives: -∑ w_i log w_i ≤ -∑ w_i log(1/n) = log n
+
+  have h_gibbs : recognitionEntropy w ≤ -Finset.univ.sum (fun i => w i * log (1/n)) := by
+    simp [recognitionEntropy]
+    apply Finset.sum_le_sum
+    intro i hi
+    by_cases h : w i = 0
+    · simp [h]
+    · simp [h]
+      apply mul_le_mul_of_nonneg_left
+      · -- log w_i ≥ log(1/n) when w_i ≥ 1/n is false in general
+        -- We need -log w_i ≤ -log(1/n) which needs a different approach
+        sorry -- Need Gibbs' inequality lemma from information theory
+      · exact hw_pos i
+
+  -- Simplify the RHS
+  calc recognitionEntropy w
+      ≤ -Finset.univ.sum (fun i => w i * log (1/n)) := h_gibbs
+    _ = -(log (1/n)) * Finset.univ.sum w := by simp [← mul_sum]
+    _ = -(log (1/n)) * 1 := by rw [hw_sum]
+    _ = -log (1/n) := by simp
+    _ = log n := by simp [log_inv]
 
 /-! ## Connection to Measurement -/
 

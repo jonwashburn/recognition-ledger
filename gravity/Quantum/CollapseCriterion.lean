@@ -15,6 +15,7 @@ import Mathlib.Analysis.SpecialFunctions.Integrals
 import Mathlib.Topology.ContinuousFunction.Basic
 import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.LinearAlgebra.Matrix.Hermitian
+import Mathlib.LinearAlgebra.Matrix.Exponential
 
 namespace RecognitionScience.Quantum
 

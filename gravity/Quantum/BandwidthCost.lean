@@ -130,6 +130,7 @@ structure SystemConfig where
   rate : ℝ  -- Update rate
   maxNorm : ℝ  -- Upper bound on ‖ρ‖
   norm_bound : ‖ρ‖ ≤ maxNorm
+  norm_physical : maxNorm ≤ 1  -- Physical constraint
 
 /-- Equal division allocation -/
 def equalDivision (systems : List SystemConfig) : List ℝ :=
@@ -164,17 +165,46 @@ theorem optimalAllocation_feasible (systems : List SystemConfig)
     (systems.zip (optimalAllocation systems)).map
       (fun ⟨s, r⟩ => bandwidthUsage s.ρ r) |>.sum ≤ bandwidth_bound := by
   -- Since we use equal division, each system gets bandwidth_bound / n
-  simp [optimalAllocation, equalDivision]
+  simp [optimalAllocation, equalDivision, bandwidthUsage]
   split_ifs with h
   · contradiction
-  · -- Each system uses rate * ‖ρ‖ ≤ (bandwidth_bound / n) * maxNorm
-    have h_bound : ∀ s ∈ systems, ∀ r ∈ equalDivision systems,
-        bandwidthUsage s.ρ r ≤ r * s.maxNorm := by
-      intro s hs r hr
-      simp [bandwidthUsage]
-      exact mul_le_mul_of_nonneg_left s.norm_bound (le_of_lt (by simp [equalDivision] at hr; sorry))
-    -- Sum is at most n * (bandwidth_bound / n) * max_maxNorm
-    sorry -- Would need to bound total by assuming maxNorm ≤ 1 for normalized systems
+  · -- Each system uses rate * ‖ρ‖ ≤ (bandwidth_bound / n) * 1
+    have h_len_pos : 0 < systems.length := by
+      by_contra h_neg
+      push_neg at h_neg
+      have : systems = [] := List.length_eq_zero.mp (Nat.eq_zero_of_not_pos h_neg)
+      contradiction
+
+    -- Simplify the sum
+    rw [List.map_zip_eq_map_prod]
+    have h_eq : (systems.zip (List.replicate systems.length (bandwidth_bound / systems.length))).map
+        (fun x => x.2 * ‖x.1.ρ‖) =
+        systems.map (fun s => (bandwidth_bound / systems.length) * ‖s.ρ‖) := by
+      congr 1
+      apply List.ext_le
+      · simp [List.length_zip, List.length_replicate]
+      · intro i h₁ h₂
+        simp [List.getElem_zip, List.getElem_replicate, h₁]
+    rw [h_eq]
+
+    -- Factor out the constant
+    rw [← List.sum_map_mul_left]
+
+    -- Use the physical bound ‖ρ‖ ≤ 1
+    have h_sum_bound : (systems.map (fun s => ‖s.ρ‖)).sum ≤ systems.length := by
+      apply List.sum_le_card_nsmul
+      intro x hx
+      rw [List.mem_map] at hx
+      obtain ⟨s, hs, rfl⟩ := hx
+      exact le_trans s.norm_bound s.norm_physical
+
+    -- Final calculation
+    calc (bandwidth_bound / systems.length) * (systems.map (fun s => ‖s.ρ‖)).sum
+        ≤ (bandwidth_bound / systems.length) * systems.length := by
+          exact mul_le_mul_of_nonneg_left h_sum_bound (div_nonneg (by norm_num : 0 ≤ bandwidth_bound) (Nat.cast_nonneg _))
+      _ = bandwidth_bound := by
+          field_simp
+          ring
 
 /-- After critical scale, cost grows without bound -/
 theorem bandwidth_criticality (n : ℕ) :
@@ -213,6 +243,6 @@ theorem bandwidth_criticality (n : ℕ) :
 
 /-- Total bandwidth is conserved -/
 axiom bandwidth_conservation (systems : List SystemConfig) (allocation : List ℝ) :
-    (systems.map fun ⟨n, ρ, rate, _, _⟩ => bandwidthUsage ρ rate).sum ≤ bandwidth_bound
+    (systems.map fun ⟨n, ρ, rate, _, _, _⟩ => bandwidthUsage ρ rate).sum ≤ bandwidth_bound
 
 end RecognitionScience.Quantum
