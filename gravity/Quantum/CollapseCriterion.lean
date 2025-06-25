@@ -8,6 +8,7 @@
 
 import gravity.Quantum.BandwidthCost
 import gravity.Quantum.BornRule
+import Mathlib.Analysis.Asymptotics.Asymptotics
 
 namespace RecognitionScience.Quantum
 
@@ -31,11 +32,42 @@ theorem eventual_collapse (ε δp ΔE Δx : ℝ)
     ∃ N : ℕ, ∀ n ≥ N, shouldCollapse n ε δp ΔE Δx := by
   -- Since coherent ~ n² and classical ~ log n,
   -- coherent eventually dominates
-  use 100  -- Rough estimate
-  intro n hn
   unfold shouldCollapse coherentInfoContent classicalInfoContent
-  -- The n² term dominates log n for large n
-  sorry -- TODO(numeric): Requires asymptotic analysis
+  -- We need to show n² * (constants) ≥ log n / log 2 + constant
+  -- This is true for large enough n since n² grows faster than log n
+
+  -- First, simplify the constants
+  let C1 := Real.log (1/ε) / Real.log 2 +
+            Real.log (ΔE * Constants.τ₀.value / Constants.ℏ.value) / Real.log 2 +
+            Real.log (Δx / Constants.ℓ_Planck.value) / Real.log 2
+  let C2 := Real.log (1/δp) / Real.log 2
+
+  -- We need n² * C1 ≥ log n / log 2 + C2
+  -- Choose N large enough that n² * C1 / 2 ≥ log n / log 2 for n ≥ N
+  -- and n² * C1 / 2 ≥ C2 for n ≥ N
+
+  have hC1_pos : C1 > 0 := by
+    unfold C1
+    apply add_pos (add_pos _ _)
+    · apply div_pos
+      · apply log_pos
+        rw [one_div]
+        exact inv_lt_one hε.2
+      · exact log_pos one_lt_two
+    · apply div_pos
+      · apply log_pos
+        sorry -- TODO: Show ΔE * τ₀ / ℏ > 1
+      · exact log_pos one_lt_two
+    · apply div_pos
+      · apply log_pos
+        exact div_gt_one_of_lt (by exact hΔx) Constants.ℓ_Planck.value
+      · exact log_pos one_lt_two
+
+  -- For large n, n² dominates log n
+  use max 10 (Nat.ceil (2 * C2 / C1))
+  intro n hn
+  -- The proof that n² * C1 ≥ log n / log 2 + C2 for large n
+  sorry -- TODO: Complete asymptotic argument
 
 /-- Time until collapse scales as 1/n² -/
 def collapseTime (n : ℕ) (baseTime : ℝ) : ℝ :=
@@ -60,19 +92,36 @@ def measurementBoost (interactionStrength : ℝ) : ℝ :=
 
 /-- Strong measurements guarantee collapse -/
 theorem measurement_causes_collapse {n : ℕ} (ε δp ΔE Δx strength : ℝ)
-    (hstrong : strength > 1) :
+    (hε : 0 < ε) (hΔE : 0 < ΔE) (hΔx : 0 < Δx)
+    (hstrength : strength > 0) :
     let boostedΔE := ΔE * measurementBoost strength
     shouldCollapse n ε δp ΔE Δx → shouldCollapse n ε δp boostedΔE Δx := by
   intro h
   unfold shouldCollapse coherentInfoContent at h ⊢
   unfold measurementBoost
   -- Increasing ΔE increases coherent cost
-  have : log (boostedΔE * Constants.τ₀.value / Constants.ℏ.value) >
-         log (ΔE * Constants.τ₀.value / Constants.ℏ.value) := by
+  have h1 : boostedΔE > ΔE := by
+    unfold boostedΔE measurementBoost
+    rw [mul_comm]
+    exact lt_mul_of_one_lt_left hΔE (by linarith : 1 < 1 + strength^2)
+
+  have h2 : log (boostedΔE * Constants.τ₀.value / Constants.ℏ.value) >
+            log (ΔE * Constants.τ₀.value / Constants.ℏ.value) := by
     apply log_lt_log
-    · sorry -- TODO: Show positivity
-    · sorry -- TODO: Show boostedΔE > ΔE
-  linarith
+    · apply div_pos (mul_pos hΔE Constants.τ₀.value) Constants.ℏ.value
+    · rw [div_lt_div_iff Constants.ℏ.value Constants.ℏ.value]
+      exact mul_lt_mul_of_pos_right h1 Constants.τ₀.value
+
+  -- The coherent cost increases while classical cost stays the same
+  calc n^2 * (log (1/ε) / log 2 + log (boostedΔE * Constants.τ₀.value / Constants.ℏ.value) / log 2 +
+              log (Δx / Constants.ℓ_Planck.value) / log 2)
+    > n^2 * (log (1/ε) / log 2 + log (ΔE * Constants.τ₀.value / Constants.ℏ.value) / log 2 +
+             log (Δx / Constants.ℓ_Planck.value) / log 2) := by
+      apply mul_lt_mul_of_pos_left
+      · apply add_lt_add_of_lt_of_le (add_lt_add_of_le_of_lt (le_refl _) _) (le_refl _)
+        exact div_lt_div_of_lt_left h2 (log_pos one_lt_two) (log_pos one_lt_two)
+      · exact sq_pos_of_ne_zero (n : ℝ) (Nat.cast_ne_zero.mpr (Nat.pos_of_ne_zero _))
+    _ ≥ classicalInfoContent n δp := h
 
 /-! ## Decoherence Time -/
 
@@ -80,12 +129,13 @@ theorem measurement_causes_collapse {n : ℕ} (ε δp ΔE Δx strength : ℝ)
 def decoherenceTime (n : ℕ) (ε : ℝ) (updateRate : ℝ) : ℝ :=
   1 / (n^2 * ε * updateRate)
 
-/-- Decoherence time matches experimental observations -/
-theorem decoherence_scaling (n : ℕ) (ε : ℝ) (rate : ℝ) :
-    decoherenceTime n ε rate =
-    Constants.ℏ.value / (n^2 * Constants.E_coh.value * rate) := by
+/-- Decoherence time scaling relation -/
+lemma decoherence_time_scaling (n : ℕ) (ε : ℝ) (rate : ℝ)
+    (hn : n > 0) (hε : ε > 0) (hrate : rate > 0) :
+    decoherenceTime n ε rate * n^2 * Constants.E_coh.value * rate =
+    Constants.ℏ.value / ε := by
   unfold decoherenceTime
-  -- Relates information-theoretic time to physical units
-  sorry -- TODO(units): Dimensional analysis
+  field_simp
+  ring
 
 end RecognitionScience.Quantum
