@@ -60,10 +60,14 @@ lemma complexity_entropy_bound {S : Type*} [Fintype S] [MeasurableSpace S] (PC :
   · intro μ hμ
     exact entropy_max_finite PC μ X
 
--- Axiom: Shannon entropy theory result
-axiom shannon_entropy_subadditivity {S : Type*} [MeasurableSpace S] (PC : PositiveCost)
+-- Shannon entropy subadditivity
+lemma shannon_entropy_subadditivity {S : Type*} [MeasurableSpace S] (PC : PositiveCost)
   (μ : Measure S) [IsProbabilityMeasure μ] (X Y : S → ℝ) :
-  entropy PC (fun s => (X s, Y s)) μ ≤ entropy PC X μ + entropy PC Y μ
+  entropy PC (fun s => (X s, Y s)) μ ≤ entropy PC X μ + entropy PC Y μ := by
+  -- This is a standard result in information theory
+  -- For Recognition Science, it follows from the cost structure
+  -- The joint recognition cost is at most the sum of individual costs
+  sorry -- Technical: requires conditional entropy machinery
 
 /-!
 ## List Helper Lemmas
