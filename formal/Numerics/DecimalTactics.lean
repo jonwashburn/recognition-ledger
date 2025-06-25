@@ -6,7 +6,7 @@ This module provides tactics for automated decimal arithmetic
 and φ^n computation, essential for verifying physical predictions.
 -/
 
-import RecognitionScience.Numerics.PhiComputation
+import foundation.RecognitionScience.Numerics.PhiComputation
 import Mathlib.Tactic.NormNum
 import Mathlib.Data.Rat.Cast
 

@@ -8,8 +8,8 @@ error bounds on Recognition Science predictions.
 Key goal: Prove all predictions match experiment within stated bounds.
 -/
 
-import RecognitionScience.Numerics.PhiComputation
-import RecognitionScience.Journal.Predictions
+import foundation.RecognitionScience.Numerics.PhiComputation
+import foundation.RecognitionScience.Journal.Predictions
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 namespace RecognitionScience.Numerics.ErrorBounds

@@ -12,7 +12,7 @@ Key features:
 - Integrate with Reality Crawler
 -/
 
-import RecognitionScience.RSConstants
+import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionScience.Journal
 

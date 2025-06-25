@@ -11,7 +11,7 @@ statement without introducing new `sorry`s.
 -/
 
 import Mathlib.Analysis.SpecialFunctions.ExpLog.Basic
-import RecognitionScience.RSConstants
+import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionScience
 

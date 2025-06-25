@@ -10,7 +10,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Data.Real.Basic
 
 -- Import Recognition Science axioms
-import RecognitionScience.axioms
+import foundation.RecognitionScience
 
 namespace RecognitionScience.Cosmology
 

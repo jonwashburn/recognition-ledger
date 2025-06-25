@@ -12,7 +12,7 @@ repository without introducing additional missing references.
 
 import Mathlib.Analysis.ODE.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import RecognitionScience.RSConstants
+import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionScience
 

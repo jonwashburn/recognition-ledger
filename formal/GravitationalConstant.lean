@@ -8,7 +8,7 @@ recognition principles. G is NOT a free parameter.
 
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import RecognitionScience.RSConstants
+import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionScience
 

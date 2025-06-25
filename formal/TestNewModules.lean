@@ -3,18 +3,18 @@ Test file to verify new module structure
 -/
 
 -- Test Journal imports
-import RecognitionScience.Journal.API
-import RecognitionScience.Journal.Predictions
-import RecognitionScience.Journal.Verification
+import foundation.RecognitionScience.Journal.API
+import foundation.RecognitionScience.Journal.Predictions
+import foundation.RecognitionScience.Journal.Verification
 
 -- Test Philosophy imports
-import RecognitionScience.Philosophy.Ethics
-import RecognitionScience.Philosophy.Death
-import RecognitionScience.Philosophy.Purpose
+import foundation.RecognitionScience.Philosophy.Ethics
+import foundation.RecognitionScience.Philosophy.Death
+import foundation.RecognitionScience.Philosophy.Purpose
 
 -- Test Numerics imports
-import RecognitionScience.Numerics.PhiComputation
-import RecognitionScience.Numerics.ErrorBounds
+import foundation.RecognitionScience.Numerics.PhiComputation
+import foundation.RecognitionScience.Numerics.ErrorBounds
 
 namespace RecognitionScience.Test
 

@@ -15,8 +15,8 @@ theorem electron_mass_correct :
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Data.Complex.Basic
-import RecognitionScience.AxiomProofs
-import RecognitionScience.RSConstants
+import foundation.RecognitionScience.AxiomProofs
+import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionLedger
 

@@ -6,8 +6,8 @@ This file establishes the correct Recognition Science formulas
 with proper dimensional analysis and scale consistency.
 -/
 
-import RecognitionScience.Dimension
-import RecognitionScience.ParticleMassesRevised
+import foundation.RecognitionScience.Dimension
+import foundation.RecognitionScience.ParticleMassesRevised
 import Mathlib.Data.Real.Basic
 
 namespace RecognitionScience

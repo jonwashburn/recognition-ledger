@@ -9,7 +9,7 @@ In a four–dimensional cubic lattice with site–occupation probability
 (form‐factor) formulas.
 -/
 
-import RecognitionScience.ScaleConsistency
+import foundation.RecognitionScience.ScaleConsistency
 
 namespace RecognitionScience
 

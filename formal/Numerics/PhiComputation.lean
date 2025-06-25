@@ -8,7 +8,7 @@ and verifying numerical predictions to high precision.
 Key challenge: Computing φ^n for large n without accumulating errors.
 -/
 
-import RecognitionScience.Core.GoldenRatio
+import foundation.RecognitionScience.Core.GoldenRatio
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Fin.Basic
 import Mathlib.Tactic.NormNum

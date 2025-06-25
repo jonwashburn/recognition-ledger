@@ -12,7 +12,7 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basic
 
 -- Import Recognition Science axioms
-import RecognitionScience.axioms
+import foundation.RecognitionScience
 
 namespace RecognitionScience.Neutrinos
 

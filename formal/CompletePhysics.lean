@@ -9,10 +9,10 @@ electroweak and QCD corrections.
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import RecognitionScience.EWCorrections
-import RecognitionScience.QCDConfinement
-import RecognitionScience.ElectroweakTheory
-import RecognitionScience.HadronPhysics
+import foundation.RecognitionScience.EWCorrections
+import foundation.RecognitionScience.QCDConfinement
+import foundation.RecognitionScience.ElectroweakTheory
+import foundation.RecognitionScience.HadronPhysics
 
 namespace RecognitionScience
 

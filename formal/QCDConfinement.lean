@@ -8,7 +8,7 @@ the electroweak mass predictions for quarks and hadrons.
 
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import RecognitionScience.EWCorrections
+import foundation.RecognitionScience.EWCorrections
 
 namespace RecognitionScience
 

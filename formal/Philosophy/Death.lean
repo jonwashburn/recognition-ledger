@@ -8,8 +8,8 @@ not termination. Information cannot be destroyed, only transformed.
 Key insight: The ledger is eternal and complete.
 -/
 
-import RecognitionScience.RecognitionScience
-import RecognitionScience.Philosophy.Ethics
+import foundation.RecognitionScience.RecognitionScience
+import foundation.RecognitionScience.Philosophy.Ethics
 
 namespace RecognitionScience.Philosophy.Death
 

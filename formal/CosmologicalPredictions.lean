@@ -10,7 +10,7 @@ not free parameters.
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
-import RecognitionScience.RSConstants
+import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionScience
 

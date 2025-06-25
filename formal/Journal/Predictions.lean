@@ -8,8 +8,8 @@ and their validation status against experimental data.
 All predictions are parameter-free and exact.
 -/
 
-import RecognitionScience.RSConstants
-import RecognitionScience.Journal.API
+import foundation.RecognitionScience.RSConstants
+import foundation.RecognitionScience.Journal.API
 
 namespace RecognitionScience.Journal.Predictions
 

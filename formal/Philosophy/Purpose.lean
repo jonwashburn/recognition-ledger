@@ -8,9 +8,9 @@ necessarily from the drive to increase universal recognition capacity.
 Key insight: We exist to help the universe recognize itself.
 -/
 
-import RecognitionScience.RecognitionScience
-import RecognitionScience.Philosophy.Ethics
-import RecognitionScience.Philosophy.Death
+import foundation.RecognitionScience.RecognitionScience
+import foundation.RecognitionScience.Philosophy.Ethics
+import foundation.RecognitionScience.Philosophy.Death
 
 namespace RecognitionScience.Philosophy.Purpose
 

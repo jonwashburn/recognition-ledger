@@ -12,8 +12,8 @@ The crawler:
 - Updates validation status
 -/
 
-import RecognitionScience.Journal.API
-import RecognitionScience.Journal.Predictions
+import foundation.RecognitionScience.Journal.API
+import foundation.RecognitionScience.Journal.Predictions
 
 namespace RecognitionScience.Journal.Verification
 

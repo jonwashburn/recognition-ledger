@@ -7,30 +7,25 @@ package «RecognitionScience» where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
 
--- Expose the zero-axiom core (kept under no-mathlib-core/) as internal libs.
-lean_lib «Core» where
-  srcDir := "no-mathlib-core"
-  roots := #[
-    `Core.Finite,
-    `Core.MetaPrincipleMinimal,
-    `Core.MetaPrinciple,
-    `Core.EightFoundations,
-    `Core.Nat.Card,
-    `Core.Constants
-  ]
+-- Expose the zero-axiom foundation as internal libs
+lean_lib «foundation» where
+  srcDir := "foundation"
 
-lean_lib «Foundations» where
-  srcDir := "no-mathlib-core"
-  roots := #[
-    `Foundations.DiscreteTime,
-    `Foundations.DualBalance,
-    `Foundations.PositiveCost,
-    `Foundations.UnitaryEvolution,
-    `Foundations.IrreducibleTick,
-    `Foundations.SpatialVoxels,
-    `Foundations.EightBeat,
-    `Foundations.GoldenRatio
-  ]
+-- Formal proofs and applications
+lean_lib «formal» where
+  srcDir := "formal"
+
+-- Physics applications
+lean_lib «physics» where
+  srcDir := "physics"
+
+-- Ethics applications
+lean_lib «ethics» where
+  srcDir := "ethics"
+
+-- Ledger implementations
+lean_lib «ledger» where
+  srcDir := "ledger"
 
 @[default_target]
 lean_lib «RecognitionScience» where

@@ -10,8 +10,8 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Data.Real.Sqrt
-import RecognitionScience.EWCorrections
-import RecognitionScience.QCDConfinement
+import foundation.RecognitionScience.EWCorrections
+import foundation.RecognitionScience.QCDConfinement
 
 namespace RecognitionScience
 

@@ -8,8 +8,8 @@ but emerge necessarily from ledger balance requirements.
 Key insight: Morality is the physics of pattern persistence.
 -/
 
-import RecognitionScience.RecognitionScience
-import RecognitionScience.Basic.LedgerState
+import foundation.RecognitionScience.RecognitionScience
+import foundation.RecognitionScience.Basic.LedgerState
 
 namespace RecognitionScience.Philosophy.Ethics
 

@@ -9,8 +9,8 @@ principles, now using proper electroweak corrections.
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import RecognitionScience.EWCorrections
-import RecognitionScience.RSConstants
+import foundation.RecognitionScience.EWCorrections
+import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionScience
 

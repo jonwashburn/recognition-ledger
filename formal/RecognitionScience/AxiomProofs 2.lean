@@ -10,7 +10,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Data.Real.Sqrt
 
 -- Import our axioms
-import RecognitionScience.axioms
+import foundation.RecognitionScience
 
 namespace RecognitionScience
 

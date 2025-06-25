@@ -8,8 +8,8 @@ formulas with proper electroweak and QCD corrections.
 
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import RecognitionScience.EWCorrections
-import RecognitionScience.QCDConfinement
+import foundation.RecognitionScience.EWCorrections
+import foundation.RecognitionScience.QCDConfinement
 
 namespace RecognitionScience
 

@@ -7,7 +7,7 @@ unique scaling factor that minimizes recognition cost. This is the most
 critical theorem in Recognition Science as it forces all other constants.
 -/
 
-import RecognitionScience.Basic.LedgerState
+import foundation.RecognitionScience.Basic.LedgerState
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic

@@ -12,7 +12,7 @@ import Mathlib.Probability.Notation
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 -- Import the recognition axioms
-import RecognitionScience.axioms
+import foundation.RecognitionScience
 
 namespace RecognitionScience
 

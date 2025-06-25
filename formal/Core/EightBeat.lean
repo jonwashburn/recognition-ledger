@@ -7,8 +7,8 @@ from the recognition principle. The number 8 is not arbitrary
 but necessary for symmetry closure.
 -/
 
-import RecognitionScience.RecognitionScience
-import RecognitionScience.Core.GoldenRatio
+import foundation.RecognitionScience.RecognitionScience
+import foundation.RecognitionScience.Core.GoldenRatio
 import Mathlib.GroupTheory.Perm.Cycle.Basic
 import Mathlib.Data.ZMod.Basic
 
