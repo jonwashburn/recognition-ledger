@@ -60,28 +60,35 @@ structure FunctionalDerivative {α β : Type*} [NormedAddCommGroup β] [NormedSp
   δF : (α → β) → (α → β)  -- δF/δf
   is_derivative : ∀ f h, firstVariation F f h = ∫ x, δF f x • h x
 
-/-- Convexity of entropy functional -/
-lemma entropy_convex : ConvexOn ℝ (Set.Ioi 0) (fun x => x * log x) := by
-  -- This is used in the Born rule derivation
-  apply ConvexOn.of_deriv2_nonneg (convex_Ioi 0)
+/-- The entropy functional is strictly convex on positive densities -/
+theorem entropy_convex : StrictConvexOn ℝ (Set.Ioi 0) entropyDensity := by
+  -- We need to show that f(ρ) = ρ log(ρ) is strictly convex on (0, ∞)
+  -- This follows from f''(ρ) = 1/ρ > 0 for ρ > 0
+
+  -- First establish convexity using the second derivative test
+  have h_deriv : ∀ x ∈ Set.Ioi (0 : ℝ), 0 < (deriv (deriv entropyDensity)) x := by
+    intro x hx
+    -- The second derivative of ρ log(ρ) is 1/ρ
+    have h1 : deriv entropyDensity x = Real.log x + 1 := by
+      rw [entropyDensity]
+      rw [deriv_mul_log_right hx]
+      ring
+    have h2 : deriv (deriv entropyDensity) x = 1 / x := by
+      rw [deriv_within_univ]
+      conv => rhs; rw [div_eq_mul_inv]
+      have : deriv (fun x => Real.log x + 1) x = 1 / x := by
+        simp [deriv_add_const, Real.deriv_log hx]
+      convert this using 1
+      ext y
+      exact h1
+    rw [h2]
+    exact div_pos one_pos hx
+
+  -- Apply the second derivative test for strict convexity
+  apply StrictConvexOn.of_deriv2_pos' convex_Ioi
+  · exact contDiff_id.mul (Real.contDiff_log.comp contDiff_id)
   · intro x hx
-    exact differentiableAt_id'.mul (differentiableAt_log (ne_of_gt hx))
-  · intro x hx
-    simp [Real.deriv_log, ne_of_gt hx]
-    -- Second derivative is 1/x > 0 for x > 0
-    rw [deriv_mul, deriv_id'', deriv_log, one_mul, deriv_add, deriv_const,
-        deriv_div, deriv_const, deriv_id'', zero_mul, sub_zero, one_pow]
-    · field_simp
-      exact one_div_pos.mpr hx
-    · exact differentiableAt_log (ne_of_gt hx)
-    · exact differentiableAt_id'
-    · exact differentiableAt_const _
-    · exact differentiableAt_id'
-    · simp [ne_of_gt hx]
-    · exact differentiableAt_const _
-    · exact differentiableAt_log (ne_of_gt hx)
-    · exact differentiableAt_const _
-    · exact differentiableAt_id'
+    exact h_deriv x hx
 
 /-! ## Divergence Theorem (Statement) -/
 

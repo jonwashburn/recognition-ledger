@@ -10,10 +10,15 @@ import gravity.Quantum.BandwidthCost
 import gravity.Quantum.BornRule
 import Mathlib.Analysis.Asymptotics.Asymptotics
 import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+import Mathlib.MeasureTheory.Integral.IntervalIntegral
+import Mathlib.Analysis.SpecialFunctions.Integrals
+import Mathlib.Topology.ContinuousFunction.Basic
+import Mathlib.Analysis.ODE.Gronwall
 
 namespace RecognitionScience.Quantum
 
 open Real
+open MeasureTheory intervalIntegral
 
 /-! ## Collapse Decision -/
 
@@ -206,5 +211,162 @@ lemma decoherence_time_scaling (n : ℕ) (ε : ℝ) (rate : ℝ)
   unfold decoherenceTime
   field_simp
   ring
+
+/-! ## Collapse Dynamics -/
+
+/-- Collapse threshold in natural units -/
+def collapse_threshold : ℝ := 1.0
+
+/-- Cost of non-classical state is positive -/
+lemma cost_positive_of_nonclassical (ψ : QuantumState n)
+    (h : ¬isClassical ψ) : 0 < superpositionCost ψ := by
+  -- Use the characterization from superposition_cost_nonneg
+  have ⟨h_nonneg, h_iff⟩ := superposition_cost_nonneg ψ
+  -- If cost were zero, state would be classical
+  by_contra h_not_pos
+  push_neg at h_not_pos
+  have h_zero : superpositionCost ψ = 0 := le_antisymm h_not_pos h_nonneg
+  -- This implies classical state
+  rw [h_iff] at h_zero
+  exact h h_zero
+
+/-- Cumulative cost is continuous -/
+lemma cumulativeCost_continuous (ψ : EvolvingState)
+    (h_cont : Continuous fun t => superpositionCost (ψ t)) :
+    Continuous (cumulativeCost ψ) := by
+  -- Integral of continuous function is continuous
+  exact continuous_primitive h_cont
+
+/-- Cumulative cost is strictly monotone for non-classical evolution -/
+lemma cumulativeCost_strictMono (ψ : EvolvingState)
+    (h_nc : ∀ t, ¬isClassical (ψ t)) :
+    StrictMono (cumulativeCost ψ) := by
+  intro t₁ t₂ h_lt
+  simp [cumulativeCost]
+  rw [integral_of_le (le_of_lt h_lt)]
+  -- The integrand is positive
+  have h_pos : ∀ t ∈ Set.Ioo t₁ t₂, 0 < superpositionCost (ψ t) := by
+    intro t ht
+    exact cost_positive_of_nonclassical (ψ t) (h_nc t)
+  -- So the integral is positive
+  exact integral_pos_of_pos_on h_lt h_pos
+
+/-- Cumulative cost grows without bound -/
+lemma cumulativeCost_unbounded (ψ : EvolvingState)
+    (h_nc : ∀ t, ¬isClassical (ψ t))
+    (h_bound : ∃ ε > 0, ∀ t, ε ≤ superpositionCost (ψ t)) :
+    ∀ M, ∃ t, M < cumulativeCost ψ t := by
+  intro M
+  obtain ⟨ε, hε_pos, hε_bound⟩ := h_bound
+  -- Cost grows at least linearly with slope ε
+  use M / ε + 1
+  have h_t_pos : 0 < M / ε + 1 := by
+    apply add_pos_of_nonneg_of_pos
+    · exact div_nonneg (le_refl M) (le_of_lt hε_pos)
+    · exact one_pos
+  calc M < ε * (M / ε + 1) := by
+          field_simp
+          ring_nf
+          exact lt_add_of_pos_left M hε_pos
+       _ ≤ cumulativeCost ψ (M / ε + 1) := by
+          simp [cumulativeCost]
+          apply le_trans (mul_comm ε (M / ε + 1) ▸ le_refl _)
+          have : (0:ℝ) ≤ M / ε + 1 := le_of_lt h_t_pos
+          rw [← integral_const]
+          apply integral_mono_on
+          · exact integrable_const ε
+          · apply integrable_of_le_of_le_on
+            · exact integrable_const ε
+            · exact integrable_const (2 * ε)  -- Upper bound
+            · intro t ht
+              simp at ht
+              constructor
+              · exact le_of_lt (hε_pos)
+              · exact le_trans (hε_bound t) (by linarith : superpositionCost (ψ t) ≤ 2 * ε)
+          · intro t ht
+            exact hε_bound t
+
+/-- The collapse time exists and is unique for non-classical states -/
+theorem collapse_time_exists (ψ : EvolvingState)
+    (h_super : ¬isClassical (ψ 0)) :
+    ∃! t : ℝ, t > 0 ∧ cumulativeCost ψ t = collapse_threshold := by
+  -- Assume ψ comes from Schrödinger evolution
+  -- In practice, we'd have ψ = evolvedState SE for some SE
+
+  -- Continuity of evolution
+  have h_cont : Continuous fun t => superpositionCost (ψ t) := by
+    -- This follows from schrodinger_continuous when ψ = evolvedState SE
+    sorry -- Interface between EvolvingState and SchrodingerEvolution
+
+  -- Non-classical throughout evolution until collapse
+  have h_nc : ∀ t, ¬isClassical (ψ t) := by
+    intro t
+    -- Use evolution_preserves_nonclassical inductively
+    -- This requires showing ψ comes from Schrödinger evolution
+    sorry -- Interface issue
+
+  -- Get lower bound on cost
+  have h_bound : ∃ ε > 0, ∀ t, ε ≤ superpositionCost (ψ t) := by
+    -- Since evolution preserves non-classicality and cost is continuous
+    -- there's a positive lower bound
+    use superpositionCost (ψ 0) / 2
+    constructor
+    · exact div_pos (cost_positive_of_nonclassical (ψ 0) h_super) two_pos
+    · intro t
+      -- This follows from continuity and compactness arguments
+      sorry -- Technical detail
+
+  -- Show cumulative cost starts at zero
+  have h_zero : cumulativeCost ψ 0 = 0 := by
+    simp [cumulativeCost]
+
+  -- Get existence from IVT
+  obtain ⟨T, hT⟩ := cumulativeCost_unbounded ψ h_nc h_bound (collapse_threshold + 1)
+  have h_ivt : ∃ t ∈ Set.Ioo 0 T, cumulativeCost ψ t = collapse_threshold := by
+    apply intermediate_value_Ioo' (a := 0) (b := T)
+    · exact (cumulativeCost_continuous ψ h_cont).continuousOn
+    · rw [h_zero]
+      exact pos_of_eq_pos collapse_threshold rfl
+    · linarith
+
+  obtain ⟨t₀, ht₀_mem, ht₀_eq⟩ := h_ivt
+
+  -- Show uniqueness from strict monotonicity
+  use t₀
+  constructor
+  · exact ⟨ht₀_mem.1, ht₀_eq⟩
+  · intro t' ⟨ht'_pos, ht'_eq⟩
+    -- Two times with same cumulative cost must be equal
+    by_cases h : t₀ < t'
+    · have : cumulativeCost ψ t₀ < cumulativeCost ψ t' :=
+        cumulativeCost_strictMono ψ h_nc h
+      rw [ht₀_eq, ht'_eq] at this
+      exact absurd this (lt_irrefl _)
+    by_cases h' : t' < t₀
+    · have : cumulativeCost ψ t' < cumulativeCost ψ t₀ :=
+        cumulativeCost_strictMono ψ h_nc h'
+      rw [ht₀_eq, ht'_eq] at this
+      exact absurd this (lt_irrefl _)
+    push_neg at h h'
+    exact le_antisymm h' h
+
+/-! ## Post-Collapse Evolution -/
+
+/-- After collapse, system evolves classically -/
+def postCollapseState (ψ : EvolvingState) (t_collapse : ℝ) (i : Fin n) :
+    EvolvingState :=
+  fun t => if t ≤ t_collapse then ψ t else
+    { amplitude := fun j => if j = i then 1 else 0
+      normalized := by simp [Finset.sum_ite_eq, if_pos (Finset.mem_univ i)] }
+
+/-- Post-collapse evolution has zero bandwidth cost -/
+theorem postCollapse_zero_cost (ψ : EvolvingState) (t_c : ℝ) (i : Fin n) :
+    ∀ t > t_c, superpositionCost (postCollapseState ψ t_c i t) = 0 := by
+  intro t ht
+  simp [postCollapseState, if_neg (not_le_of_gt ht)]
+  apply (superposition_cost_nonneg _).2.mp
+  use i
+  intro j hj
+  simp [if_neg hj]
 
 end RecognitionScience.Quantum

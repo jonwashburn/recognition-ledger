@@ -69,4 +69,34 @@ def φ : ℝ := (1 + Real.sqrt 5) / 2  -- golden ratio
 
 end Constants
 
+lemma dimension_injective : Function.Injective dimension := by
+  intro q1 q2 h
+  -- h : dimension q1 = dimension q2
+  -- We need to show q1 = q2
+  cases q1 with
+  | mass =>
+    cases q2 with
+    | mass => rfl
+    | length => simp [dimension] at h
+    | time => simp [dimension] at h
+    | dimensionless => simp [dimension] at h
+  | length =>
+    cases q2 with
+    | mass => simp [dimension] at h
+    | length => rfl
+    | time => simp [dimension] at h
+    | dimensionless => simp [dimension] at h
+  | time =>
+    cases q2 with
+    | mass => simp [dimension] at h
+    | length => simp [dimension] at h
+    | time => rfl
+    | dimensionless => simp [dimension] at h
+  | dimensionless =>
+    cases q2 with
+    | mass => simp [dimension] at h
+    | length => simp [dimension] at h
+    | time => simp [dimension] at h
+    | dimensionless => rfl
+
 end RecognitionScience.Units
