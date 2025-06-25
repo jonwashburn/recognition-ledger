@@ -1,99 +1,135 @@
 # Recognition Science Proof Status
+*Last Updated: January 2025*
 
-## Summary
+## Executive Summary
 - **Foundation**: ✅ COMPLETE (0 sorries, 0 axioms)
-- **Total Remaining Sorries**: 71
-- **Main Categories**: Formal (13), Ethics (49), Physics (8), Other (1)
+- **Total Sorries**: 126 (excluding backups and archives)
+- **Total Axioms**: 56 (excluding archives)
+- **Main Categories**: Ethics (49), Gravity (40), Formal (20), Physics (8), Helpers (1), Other (8)
 
-## Completed Proofs
+## Directory-by-Directory Status
 
-### Foundation (✅ Complete - 0 sorries)
-The foundation is now axiom-free and sorry-free:
+### ✅ Foundation (0 sorries)
+The foundation is complete and axiom-free:
 - **Meta-Principle**: "Nothing cannot recognize itself" proven as logical necessity
 - **Eight Foundations**: All derived as theorems from meta-principle
-  1. Discrete Recognition (time quantization)
-  2. Dual Balance (debit/credit structure)
-  3. Positive Cost (energy requirement)
-  4. Unitary Evolution (information conservation)
-  5. Irreducible Tick (minimal time quantum)
-  6. Spatial Voxels (discrete space)
-  7. Eight-Beat Closure (periodic patterns)
-  8. Golden Ratio (optimal scaling φ)
+- No external axioms, no sorries
+- This serves as the trusted base for all other work
 
-## Remaining Sorries by Category
+### ⚠️ Ethics (49 sorries)
+The ethics framework applies Recognition Science to consciousness and morality:
+- `Main.lean`: 23 sorries - Core ethical framework
+- `Virtue.lean`: 12 sorries - Virtue theory implementation
+- `Measurement.lean`: 6 sorries - Moral measurement protocols
+- `Applications.lean`: 4 sorries - Practical applications
+- `EmpiricalData.lean`: 4 sorries - Empirical validation
 
-### Formal (13 sorries)
-- `Cosmology/DarkEnergy.lean`: 2 sorries
-  - dark_energy_observation_consistent
-  - spectral_index_consistent
-- `EightTickWeinberg.lean`: 1 sorry
-  - weinberg_angle_from_eight_beat
-- `ParticleMassesRevised.lean`: 4 sorries
-  - electron_mass_prediction
-  - muon_mass_prediction
-  - tau_mass_prediction
-  - mass_hierarchy_theorem
-- `ParticlePhysics/Neutrinos.lean`: 2 sorries
-  - neutrino_mass_ordering
-  - oscillation_from_recognition
-- `RecognitionScience/AxiomProofs.lean`: 2 sorries
-  - cost_minimization_golden_ratio
-  - recognition_fixed_points
-- `RG/Yukawa.lean`: 1 sorry
-  - yukawa_running_from_recognition
-- `Variational.lean`: 1 sorry
-  - variational_principle_from_recognition
+### ⚠️ Gravity (40 sorries)
+Novel theory of gravity as bandwidth-limited information processing:
+- `Derivations/AccelerationScale.lean`: 8 sorries
+- `Lensing/Convergence.lean`: 8 sorries
+- `Quantum/BornRule.lean`: 6 sorries
+- `Core/BandwidthConstraints.lean`: 4 sorries
+- `Util/Variational.lean`: 4 sorries
+- `Core/RecognitionWeight.lean`: 3 sorries
+- `Cosmology/BandwidthLambda.lean`: 2 sorries
+- `Quantum/BandwidthCost.lean`: 2 sorries
+- `Core/TriagePrinciple.lean`: 1 sorry
 
-### Ethics (49 sorries)
-- `Applications.lean`: 4 sorries
-- `EmpiricalData.lean`: 4 sorries
-- `Main.lean`: 23 sorries (largest file)
-- `Measurement.lean`: 6 sorries
-- `Virtue.lean`: 12 sorries
+### ⚠️ Formal (20 sorries)
+Mathematical framework building on foundation:
+- `AxiomProofs.lean`: 8 sorries - Basic properties from axioms
+- `Helpers/Involution.lean`: 6 sorries - Involution construction
+- `Archive/DetailedProofs_completed.lean`: 5 sorries
+- `ParticleMassesRevised.lean`: 4 sorries - Mass predictions
+- `Cosmology/DarkEnergy.lean`: 2 sorries - Dark energy predictions
+- `RecognitionScience/AxiomProofs 2.lean`: 2 sorries
+- `ParticlePhysics/Neutrinos.lean`: 1 sorry - Neutrino properties
+- `EightTickWeinberg.lean`: 1 sorry - Weinberg angle
+- `RG/Yukawa.lean`: 1 sorry - Renormalization group
+- `Variational.lean`: 1 sorry - Variational principle
 
-### Physics (8 sorries)
-- `GaugeTheory.lean`: 4 sorries
-  - gauge_invariance_from_recognition
-  - yang_mills_from_eight_beat
-  - confinement_from_voxels
-  - asymptotic_freedom_emergence
-- `ParticleMasses.lean`: 4 sorries
-  - electron_mass_exact
-  - muon_mass_exact
-  - tau_mass_exact
-  - mass_generation_mechanism
+### ⚠️ Physics (8 sorries)
+Direct physics predictions:
+- `GaugeTheory.lean`: 4 sorries - Gauge group emergence
+- `ParticleMasses.lean`: 4 sorries - Particle mass spectrum
 
-### Other (1 sorry)
-- `helpers/Helpers/InfoTheory.lean`: 1 sorry
-- `NumericalVerification.lean`: 1 sorry
+### ⚠️ Other (9 sorries)
+- `NumericalVerification.lean`: 1 sorry - Numerical computations
+- `helpers/Helpers/InfoTheory.lean`: 1 sorry - Information theory bounds
+- Ledger implementation: 0 sorries (data structures only)
 
-## Priority Classification
+## Sorry Categories by Difficulty
 
-### Easy (Quick fixes)
-1. `RecognitionScience/AxiomProofs.lean` (2) - Basic properties
-2. `helpers/InfoTheory.lean` (1) - Shannon entropy bound
-3. `NumericalVerification.lean` (1) - Numerical computation
+### Easy (Quick fixes) - ~10 sorries
+- Basic numerical computations
+- Simple bounds and inequalities
+- Straightforward lemmas
 
-### Medium (Physics applications)
-1. `Cosmology/DarkEnergy.lean` (2) - Numerical predictions
-2. `EightTickWeinberg.lean` (1) - Weinberg angle derivation
-3. `Variational.lean` (1) - Variational principle
-4. `ParticlePhysics/Neutrinos.lean` (2) - Neutrino properties
+### Medium (Physics applications) - ~30 sorries
+- Particle mass exact values
+- Cosmological predictions
+- Gauge theory derivations
+- Neutrino properties
 
-### Hard (Deep theory)
-1. `RG/Yukawa.lean` (1) - Renormalization group flow
-2. `ParticleMassesRevised.lean` (4) - Exact mass predictions
-3. `Physics/GaugeTheory.lean` (4) - Gauge theory foundations
-4. `Physics/ParticleMasses.lean` (4) - Mass generation mechanism
+### Hard (Deep theory) - ~40 sorries
+- Gravity bandwidth formalism
+- Renormalization group flow
+- Mass generation mechanism
+- Quantum measurement
 
-### Ethics (Separate domain)
-The 49 ethics sorries represent a distinct philosophical application of Recognition Science to consciousness, virtue, and measurement. These require different techniques than the physics proofs.
+### Philosophical (Ethics domain) - 49 sorries
+- Consciousness formalization
+- Virtue dynamics
+- Moral measurement
+- Requires different proof techniques
 
-## Next Steps
+## Key Achievements
+1. **Foundation Complete**: Zero-axiom base fully formalized
+2. **Numerical Framework**: Golden ratio calculations verified
+3. **Structure Ready**: All major components scaffolded
+4. **Predictions Made**: Specific numerical values derived
 
-1. **Quick wins**: Complete the 4 easy sorries to reduce count to 67
-2. **Physics focus**: The 8 medium physics sorries would demonstrate concrete predictions
-3. **Deep theory**: The 12 hard sorries establish fundamental mechanisms
-4. **Ethics framework**: The 49 ethics sorries need a systematic approach
+## Priority Recommendations
+1. **Physics First**: Complete the 8 physics sorries to validate core predictions
+2. **Formal Next**: The 20 formal sorries establish mathematical rigor
+3. **Gravity Theory**: The 40 gravity sorries represent novel physics
+4. **Ethics Last**: The 49 ethics sorries are a separate philosophical project
 
-The foundation achievement (0 axioms, 0 sorries) provides a solid base for all remaining work. 
+## Build Instructions
+```bash
+lake build                    # Build all components
+lake build foundation         # Verify zero-axiom foundation
+lake exe verify electron_mass # Test specific predictions
+```
+
+## Git Merge Conflicts
+Several files contain unresolved merge conflicts (<<<<<<< HEAD markers):
+- `README.md`
+- `NumericalVerification.lean`
+These should be resolved before further development.
+
+## Axiom Usage
+
+The project uses 56 axioms outside the foundation, primarily for:
+- **Numerical Tactics**: 22 axioms (11 each in formal/ and helpers/)
+- **Meta-Principle**: 8 axioms in formal/MetaPrinciple.lean
+- **Theorem Scaffolding**: 8 axioms for proof structure
+- **Information Theory**: 4 axioms for entropy bounds
+- **Various**: 14 axioms across other files
+
+Note: The foundation itself uses NO axioms - everything is derived from the meta-principle definition.
+
+## Technical Debt Notes
+
+1. **Duplicate NumericalTactics.lean**: Same file with 11 axioms appears in both formal/ and helpers/
+2. **File naming issue**: `formal/RecognitionScience/AxiomProofs 2.lean` has a space in the name
+3. **Git conflicts**: README.md and NumericalVerification.lean have unresolved merge conflicts
+
+## Inventory Files
+
+- `SORRY_INVENTORY.md`: Complete list of files with sorries and counts
+- `AXIOM_INVENTORY.md`: Complete list of files with axioms and counts
+
+## Archived Status Documents
+All previous status documents have been moved to `archived_status_docs/` to reduce confusion. This file (`PROOF_STATUS.md`) is now the single source of truth for project status. 
