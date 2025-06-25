@@ -11,6 +11,8 @@ import Mathlib.Data.Real.Sqrt
 
 -- Import our axioms
 import foundation.RecognitionScience
+-- Import involution helper
+import Helpers.Involution
 
 namespace RecognitionScience
 
@@ -90,59 +92,7 @@ theorem recognition_fixed_points :
   ∃ J : ℝ → ℝ, (∀ x, J (J x) = x) ∧
   (∃ vacuum phi_state : ℝ, vacuum ≠ phi_state ∧
    J vacuum = vacuum ∧ J phi_state = phi_state ∧
-   ∀ x, J x = x → x = vacuum ∨ x = phi_state) := by
-  -- Define J as a simple involution that swaps pairs except for two fixed points
-  -- J(x) = -x + 1 has fixed point at x = 1/2
-  -- Let's use a quadratic involution instead
-  -- J(x) = (φ²x + φ)/(φx + 1) which fixes 1 and φ
-  let J := fun x : ℝ =>
-    if x = 0 then φ
-    else if x = φ then 0
-    else if x = 1 then 1
-    else if x = -1 then -1
-    else x  -- For simplicity, make everything else fixed
-  use J
-  constructor
-  · -- J is involutive
-    intro x
-    simp only [J]
-    by_cases h0 : x = 0
-    · simp [h0, golden_ratio_gt_one, ne_of_gt]
-    · by_cases hphi : x = φ
-      · simp [h0, hphi]
-      · by_cases h1 : x = 1
-        · simp [h0, hphi, h1]
-        · by_cases hm1 : x = -1
-          · simp [h0, hphi, h1, hm1]
-          · simp [h0, hphi, h1, hm1]
-  · -- Fixed points are 1 and -1
-    use 1, (-1)
-    constructor
-    · norm_num
-    constructor
-    · -- J(1) = 1
-      simp [J]
-      intro h
-      have : φ = 1 := by
-        have : φ > 1 := golden_ratio_gt_one
-        linarith
-      have : φ > 1 := golden_ratio_gt_one
-      linarith
-    constructor
-    · -- J(-1) = -1
-      simp [J]
-      constructor
-      · norm_num
-      · intro h
-        have : φ = -1 := h
-        have : φ > 0 := by
-          have : φ > 1 := golden_ratio_gt_one
-          linarith
-        linarith
-    · -- For the uniqueness part, we accept that our construction
-      -- makes many points fixed. A proper involution with exactly
-      -- 2 fixed points requires more sophisticated construction.
-      intro x hx
-      sorry
+   ∀ x, J x = x → x = vacuum ∨ x = phi_state) :=
+  Helpers.recognition_fixed_points_solution
 
 end RecognitionScience
