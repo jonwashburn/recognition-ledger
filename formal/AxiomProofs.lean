@@ -311,6 +311,30 @@ theorem A7_EightBeat :
   · simp [dual_period, spatial_period, phase_period]
     norm_num
 
+-- Eight-beat structure from representation theory
+-- The correct mathematical foundation for A7
+theorem A7_EightBeat_Representation :
+  ∃ (G : Type*) [Group G] (ρ : G →* (H →L[ℝ] H)),
+  (∃ g : G, orderOf g = 8) ∧
+  (∀ g : G, ρ g ∘L R = R ∘L ρ g) := by
+  -- Recognition operator commutes with 8-element cyclic group action
+  -- This is the mathematical foundation of the 8-beat structure
+  -- Construct G = ℤ/8ℤ acting on the recognition Hilbert space
+  use Fin 8
+  -- Define the representation by phase rotation
+  let ρ : Fin 8 →* (H →L[ℝ] H) := sorry -- Needs MonoidHom construction
+  use ρ
+  constructor
+  · -- Show that 1 : Fin 8 has order 8
+    use 1
+    -- orderOf 1 in Fin 8 equals 8
+    sorry -- Technical: orderOf calculation in Fin n
+  · -- Show R commutes with the group action
+    intro g
+    -- ρ(g) ∘ R = R ∘ ρ(g)
+    -- This follows from R preserving the phase structure
+    sorry -- Technical: commutativity of phase rotation with R
+
 /-!
 ## Proof of A8: Golden Ratio
 -/
@@ -615,31 +639,15 @@ theorem spectrum_determines_phi (h_spec : spectrum ℝ R = {φ, 1/φ}) :
   have h_ker_nonzero : (R - φ • ContinuousLinearMap.id ℝ H).ker ≠ ⊥ := by
     intro h_trivial
     -- If ker = ⊥, then R - φ • id is injective
-    -- For finite-dimensional spaces, injective = surjective = isomorphism
+    -- In a Banach space, injective continuous linear map with closed range is an isomorphism
     -- This would make R - φ • id invertible, contradicting φ ∈ spectrum
-    sorry -- Requires detailed functional analysis
-  -- Non-zero kernel means there exists ψ ≠ 0 with (R - φ • id)ψ = 0
-  obtain ⟨ψ, hψ_mem, hψ_ne⟩ := Submodule.exists_mem_ne_zero_of_ne_bot h_ker_nonzero
-  use ψ
-  constructor
-  · exact hψ_ne
-  · -- (R - φ • id)ψ = 0 ⟹ Rψ = φψ
-    have h_ker : (R - φ • ContinuousLinearMap.id ℝ H) ψ = 0 := hψ_mem
-    rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply,
-        ContinuousLinearMap.id_apply] at h_ker
-    linarith
-
--- Eight-beat structure from representation theory
--- The correct mathematical foundation for A7
-theorem A7_EightBeat_Representation :
-  ∃ (G : Type*) [Group G] (ρ : G →* (H →L[ℝ] H)),
-  (∃ g : G, orderOf g = 8) ∧
-  (∀ g : G, ρ g ∘L R = R ∘L ρ g) := by
-  -- Recognition operator commutes with 8-element cyclic group action
-  -- This is the mathematical foundation of the 8-beat structure
-  -- The group G = ℤ/8ℤ acts on the recognition Hilbert space
-  -- and R commutes with this action (symmetry principle)
-  sorry -- Requires detailed representation theory construction
+    have h_injective : Function.Injective (R - φ • ContinuousLinearMap.id ℝ H) := by
+      rw [← LinearMap.ker_eq_bot, ← Submodule.eq_bot_iff]
+      exact h_trivial
+    -- For continuous linear maps on Banach spaces, injectivity + closed range implies isomorphism
+    -- Since φ is in the spectrum, R - φ•id cannot be an isomorphism
+    -- Therefore it cannot be injective, contradiction
+    sorry -- Still requires Banach space theory; simplified but not eliminated
 
 -- Advanced PDE formulation: Recognition as diffusion process
 -- This connects to the fundamental tick and spatial voxels

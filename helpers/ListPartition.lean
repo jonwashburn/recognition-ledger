@@ -52,24 +52,36 @@ lemma List.three_way_partition {α : Type*} [AddCommMonoid α]
   rw [←h1, ←h2]
   simp [add_assoc]
 
-/-- Sum of elements equals sum by counting -/
+/-- The sum of a function over a list equals the sum over deduplicated elements weighted by count -/
+-- Note: Changed from multiplication to scalar multiplication (nsmul)
 lemma List.sum_eq_count_sum {α β : Type*} [DecidableEq α] [AddCommMonoid β]
   (l : List α) (vals : α → β) :
   l.map vals |>.sum = (l.dedup.map (fun x => (l.count x) • vals x)).sum := by
   -- Convert to multiset for easier manipulation
   have h_multiset : l.map vals |>.sum = (l.toMultiset.map vals).sum := by
     simp [Multiset.sum_coe]
-  -- Use the fact that a multiset sum groups by multiplicity
-  have h_group : (l.toMultiset.map vals).sum =
+  -- Key insight: grouping by multiplicity
+  -- For each x in dedup, it contributes count(x) * vals(x) to the sum
+  rw [h_multiset]
+  -- Convert RHS to multiset
+  have h_rhs : (l.dedup.map (fun x => (l.count x) • vals x)).sum =
     (l.dedup.toMultiset.map (fun x => (l.count x) • vals x)).sum := by
-    -- This is the key insight: grouping equal elements
-    -- Each x in l.dedup contributes (l.count x) • vals x to the sum
-    sorry  -- Requires Multiset.sum_map_count_eq lemma
-  -- Convert back to list
-  have h_list : (l.dedup.toMultiset.map (fun x => (l.count x) • vals x)).sum =
-    (l.dedup.map (fun x => (l.count x) • vals x)).sum := by
     simp [Multiset.sum_coe]
-  rw [h_multiset, h_group, h_list]
+  rw [h_rhs]
+  -- The key lemma: sum over multiset equals sum over support with multiplicities
+  -- This is Multiset.sum_map_count_eq or similar
+  simp only [List.toMultiset_map, List.count_toMultiset]
+  -- Use that dedup gives exactly the support elements
+  have : l.dedup.toMultiset = l.toMultiset.toFinset.val := by
+    ext x
+    simp [List.count_dedup, Multiset.count_toFinset]
+    by_cases h : x ∈ l
+    · simp [h, List.count_pos]
+    · simp [h, List.count_eq_zero_of_not_mem]
+  rw [this]
+  -- Now use the standard multiset sum formula
+  convert Multiset.sum_map_count_smul_eq (l.toMultiset) vals
+  simp
 
 /-- Filtering preserves ordering -/
 lemma List.filter_sorted {α : Type*} [LinearOrder α]
