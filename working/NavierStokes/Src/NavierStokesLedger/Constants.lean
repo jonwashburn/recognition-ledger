@@ -6,33 +6,18 @@
   and the Navier-Stokes analysis.
 -/
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Foundation.EightBeat.CstarBound
 
 namespace NavierStokesLedger
 
-open Real
+-- Import all constants from the Recognition Science foundation
+noncomputable def φ := Foundation.EightBeat.φ
+noncomputable def φ_inv := Foundation.EightBeat.φ_inv
+noncomputable def C₀ := Foundation.EightBeat.C₀
+noncomputable def C_star := Foundation.EightBeat.C_star
 
-/-- The golden ratio φ = (1 + √5) / 2 -/
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
-
-/-- The inverse golden ratio φ⁻¹ = 2 / (1 + √5) -/
-noncomputable def φ_inv : ℝ := 2 / (1 + sqrt 5)
-
-/-- Geometric depletion rate from Recognition Science axioms -/
--- For now, using the numerical value. To be derived from RS foundation.
-def C₀ : ℝ := 0.025
-
-/-- The critical constant C* = 2 * C₀ * √(4π) -/
--- With C₀ = 0.025, we get C* ≈ 0.177 < φ⁻¹ ≈ 0.618
-noncomputable def C_star : ℝ := 2 * C₀ * sqrt (4 * pi)
-
-/-- Main theorem requirement: C* < φ⁻¹ -/
-theorem C_star_bound : C_star < φ_inv := by
-  -- C* = 2 * 0.025 * √(4π) ≈ 0.177
-  -- φ⁻¹ = 2/(1+√5) ≈ 0.618
-  -- So 0.177 < 0.618
-  sorry -- To be proven rigorously
+-- Import the critical theorem
+theorem C_star_bound : C_star < φ_inv := Foundation.EightBeat.C_star_bound
 
 /-- Harnack constant for parabolic equations -/
 def C_harnack : ℝ := 4 -- Standard value from parabolic theory

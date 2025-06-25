@@ -27,6 +27,10 @@ lean_lib «ethics» where
 lean_lib «ledger» where
   srcDir := "ledger"
 
+-- Navier-Stokes working directory
+lean_lib «NavierStokes» where
+  srcDir := "working/NavierStokes/Src"
+
 @[default_target]
 lean_lib «RecognitionScience» where
   roots := #[`RecognitionScience]

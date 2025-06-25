@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - 'working/NavierStokes/**'
+      - 'foundation/EightBeat/**'
       - '.github/workflows/navier-stokes-ci.yml'
   pull_request:
     paths:
       - 'working/NavierStokes/**'
+      - 'foundation/EightBeat/**'
 
 jobs:
   build:
