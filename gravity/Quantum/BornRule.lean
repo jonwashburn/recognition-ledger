@@ -14,6 +14,7 @@ import gravity.Quantum.BandwidthCost
 import gravity.Util.Variational
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.Calculus.LagrangeMultipliers
+import Mathlib.Probability.Notation  -- For KL divergence
 
 namespace RecognitionScience.Quantum
 
@@ -357,13 +358,15 @@ theorem max_entropy_uniform :
       have h_jensen : log (Finset.univ.sum (fun i => w i * (1 / w i))) ≥
                       Finset.univ.sum (fun i => w i * log (1 / w i)) := by
         -- This is Jensen's inequality for concave log
-        sorry -- Requires careful handling of w_i > 0 assumption
+        -- Since all w_i > 0 in this branch, 1/w_i is well-defined
+        apply log_sum_div_card_le_sum_div_card_log
+        · intro i _; exact h_all_pos i
+        · rw [hw_sum]
 
-      -- Simplify: ∑ w_i · 1/w_i = card(support of w) ≤ n
+      -- Simplify: ∑ w_i · 1/w_i = n when all w_i > 0
       have h_sum : Finset.univ.sum (fun i => w i * (1 / w i)) = n := by
-        simp [← Finset.card_eq_sum_ones, Fintype.card_fin]
-        -- This uses that all w_i > 0 in this branch
-        sorry
+        simp only [mul_div_assoc', div_self (ne_of_gt (h_all_pos _)), mul_one]
+        simp [Fintype.card_fin]
 
       -- Combine to get the result
       calc 0 ≤ log n - Finset.univ.sum (fun i => w i * log (1 / w i)) := by
@@ -462,10 +465,18 @@ theorem max_entropy_uniform :
       -- This is equivalent to log w_i ≥ log(1/n), i.e., w_i ≥ 1/n
       -- But this isn't always true!
 
-      -- The correct approach: use that the minimum of ∑ p_i log p_i
-      -- subject to ∑ p_i = 1, p_i ≥ 0 is achieved at p_i = 1/n
-      -- This follows from Lagrange multipliers
-      sorry  -- This requires the full KKT conditions
+      -- The correct approach: use convexity of x log x
+      -- For w_i > 0, we have w_i log w_i ≥ w_i log(1/n)
+      -- iff log w_i ≥ log(1/n) iff w_i ≥ 1/n
+
+      -- But this isn't always true. Instead, use that
+      -- ∑ w_i log w_i is minimized when w_i = 1/n for all i
+      -- This follows from convexity and Lagrange multipliers
+
+      -- For now, we use that for the entropy functional,
+      -- the minimum occurs at the uniform distribution
+      -- This is a standard result in information theory
+      sorry  -- Requires convex optimization theory
 
   -- Complete the calculation
   calc recognitionEntropy w
