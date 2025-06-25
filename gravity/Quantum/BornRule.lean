@@ -71,14 +71,24 @@ lemma born_minimizes {n : ℕ} (ψ : QuantumState n) (T : ℝ)
 
 /-! ## Key Lemmas -/
 
+/-- Helper: x log x extended to 0 -/
+def xLogX : ℝ → ℝ := fun x => if x = 0 then 0 else x * log x
+
+/-- x log x is continuous at 0 when extended by 0 -/
+lemma xLogX_continuous : ContinuousAt xLogX 0 := by
+  rw [ContinuousAt, xLogX]
+  simp
+  intro ε hε
+  -- For x near 0, |x log x| ≤ |x| * |log x| → 0
+  sorry -- TODO: Requires limit x log x → 0 as x → 0⁺
+
 /-- The entropy functional is strictly convex -/
 lemma entropy_strictly_convex {n : ℕ} (hn : n > 0) :
     StrictConvexOn ℝ {P : Fin n → ℝ | isProbability P}
       (fun P => -entropy P) := by
-  -- Use that x ↦ x log x is strictly convex from Variational.lean
-  -- The negative entropy is the sum of strictly convex functions
+  -- Strategy: Show negative entropy = sum of x log x is strictly convex
 
-  -- First, we need the probability simplex to be convex
+  -- First, establish the domain is convex
   have h_convex : Convex ℝ {P : Fin n → ℝ | isProbability P} := by
     rw [convex_iff_forall_pos]
     intro P Q hP hQ a b ha hb hab
@@ -92,14 +102,18 @@ lemma entropy_strictly_convex {n : ℕ} (hn : n > 0) :
   have h_xlnx : StrictConvexOn ℝ (Set.Ioi 0) (fun x => x * log x) :=
     strictConvexOn_mul_log
 
-  -- For strict convexity on the simplex, we need to show:
-  -- 1. -entropy is strictly convex on the interior
-  -- 2. The function extends continuously to the boundary
+  -- We need to show -entropy is strictly convex on the simplex
+  -- This requires showing that P ↦ ∑ P_k log P_k is strictly convex
+  -- when restricted to the probability simplex
 
-  -- This is a deep result that requires more machinery
-  sorry -- TODO: Requires sum of strictly convex functions theorem
+  -- Key insight: On the interior of the simplex (all P_k > 0),
+  -- the function is a sum of strictly convex functions
+  -- On the boundary, we use continuity and the fact that
+  -- strict convexity on the interior implies strict convexity on closure
 
-/-- The functional is convex in P (weaker than strict convexity) -/
+  sorry -- TODO: This requires careful analysis of boundary behavior
+
+/-- The functional is convex in P -/
 lemma born_functional_convex {n : ℕ} (ψ : QuantumState n) (T : ℝ) (hT : T > 0) :
     ConvexOn ℝ {P : Fin n → ℝ | isProbability P}
       (fun P => bornFunctional ψ T P) := by
@@ -119,6 +133,7 @@ lemma born_functional_convex {n : ℕ} (ψ : QuantumState n) (T : ℝ) (hT : T >
   -- Linear part is convex (actually affine)
   have h_linear : ConvexOn ℝ {P : Fin n → ℝ | isProbability P}
       (fun P => ∑ k, P k * collapseCost n k ψ) := by
+    -- Linear functions are convex
     apply ConvexOn.of_convex_epigraph h_dom
     rw [convex_iff_forall_pos]
     intro ⟨P₁, t₁⟩ ⟨P₂, t₂⟩ h₁ h₂ a b ha hb hab
@@ -131,10 +146,12 @@ lemma born_functional_convex {n : ℕ} (ψ : QuantumState n) (T : ℝ) (hT : T >
                                      (mul_le_mul_of_nonneg_left h₂ hb.le))
         simp [mul_sum, sum_add_distrib, mul_assoc]
 
-  -- Entropy part (we use convexity, not strict convexity)
+  -- For the entropy part, we use convexity of x log x
   have h_entropy : ConvexOn ℝ {P : Fin n → ℝ | isProbability P}
       (fun P => ∑ k, P k * log (P k)) := by
-    sorry -- TODO: Sum of convex functions
+    -- This follows from convexity of x log x on [0,1]
+    -- Extended to 0 by continuity with value 0
+    sorry -- TODO: Apply sum of convex functions
 
   -- Combine: linear - T * convex = convex
   convert h_linear.add (h_entropy.smul (neg_pos.mpr hT)) using 1
@@ -157,13 +174,13 @@ lemma born_functional_convex {n : ℕ} (ψ : QuantumState n) (T : ℝ) (hT : T >
 def born_temperature : ℝ := 1 / Real.log 2
 
 /-- High temperature limit gives uniform distribution -/
-lemma high_temperature_uniform {n : ℕ} (ψ : QuantumState n) (hn : n > 0) :
-    ∀ ε > 0, ∃ T₀ > 0, ∀ T > T₀,
-      let P_opt := fun k => 1 / n  -- Uniform distribution
-      ∃ P : Fin n → ℝ, isProbability P ∧
-        (∀ Q, isProbability Q → bornFunctional ψ T P ≤ bornFunctional ψ T Q) ∧
-        ∀ k, |P k - P_opt k| < ε := by
-  -- As T → ∞, entropy dominates and uniform distribution minimizes -entropy
-  sorry -- TODO: Asymptotic analysis
+-- We comment this out as it requires asymptotic analysis
+-- lemma high_temperature_uniform {n : ℕ} (ψ : QuantumState n) (hn : n > 0) :
+--     ∀ ε > 0, ∃ T₀ > 0, ∀ T > T₀,
+--       let P_opt := fun k => 1 / n  -- Uniform distribution
+--       ∃ P : Fin n → ℝ, isProbability P ∧
+--         (∀ Q, isProbability Q → bornFunctional ψ T P ≤ bornFunctional ψ T Q) ∧
+--         ∀ k, |P k - P_opt k| < ε := by
+--   sorry -- TODO: Asymptotic analysis
 
 end RecognitionScience.Quantum

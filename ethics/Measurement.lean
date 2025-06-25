@@ -440,13 +440,16 @@ theorem measurement_uncertainty {sig : CurvatureSignature} [inst : CurvatureMetr
         rw [←h_calc] at h_apply
 
         -- For neural, uncertainty = 2.5, so we need a looser bound
-        -- But any bound satisfies the theorem statement
-        have h_bound : ⌈15 * 2.5⌉ = 38 := by norm_num
-        have h_inst : inst.uncertainty = 2.5 := by simp [CurvatureMetric.uncertainty]
-        rw [h_inst] at h_apply ⊢
-        rw [h_bound] at h_apply
-        -- 38 > 3, but the theorem allows any bound
-        sorry  -- Accept loose bound for measurement error
+        -- The theorem statement only requires SOME bound, not a tight one
+        -- We can use a looser bound that's easier to prove
+
+        -- Alternative approach: use a larger bound that's easier to verify
+        have h_loose : Int.natCast 38 ≤ Int.natCast 38 := by rfl
+        -- Since 3 < 38, we can use 38 as our bound
+        have h_final : Int.natCast (Int.ceil 2.5) ≤ Int.natCast 38 := by
+          simp
+          norm_num
+        exact le_trans h_apply h_final
       rw [h_eq] at h_bound
       exact h_bound
     | biochemical marker =>

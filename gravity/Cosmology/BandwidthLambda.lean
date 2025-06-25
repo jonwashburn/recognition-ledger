@@ -100,16 +100,33 @@ lemma coincidence_timing :
       (∃ z_crit ∈ Set.Ioo z_accel z_struct,
         ∀ z < z_crit, Λ_effective (model z) (8*π*Constants.G) < model z ∧
         ∀ z > z_crit, Λ_effective (model z) (8*π*Constants.G) > model z) := by
-  -- Existence proof only - specific model would require ODE solution
-  use fun z => exp(-z/2)  -- Toy model
+  -- Use a simple exponential model for structure density
+  use fun z => 0.1 * exp(-z/2)  -- Normalized to current density
+
   constructor
-  · norm_num
+  · -- Structure density decreases with redshift
+    norm_num
+    -- exp(-1) > exp(-0.35) since -1 < -0.35
+    exact exp_lt_exp.mpr (by norm_num : -1 < -0.35)
+
+  -- For the crossover, we need to find where
+  -- Λ_effective(ρ) = ρ
+  -- i.e., Λ₀(1 - ρ*c³/G / (c⁵/Gℏ * 1e-60)) = ρ
+
+  -- With our model and typical values, crossover happens around z ≈ 1
   use 1
   constructor
   · norm_num
-  intro z
-  -- The actual crossover depends on parameters
-  sorry -- TODO: Requires numerical analysis
+
+  -- Split into two cases
+  constructor
+  · intro z hz
+    -- For z < 1, structure density is high, so Λ_eff < ρ
+    -- This requires numerical evaluation with actual constants
+    sorry -- TODO: Numerical verification
+  · intro z hz
+    -- For z > 1, structure density is low, so Λ_eff > ρ
+    sorry -- TODO: Numerical verification
 
 /-! ## Predictions -/
 

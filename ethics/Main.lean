@@ -120,9 +120,32 @@ theorem suffering_is_debt_signal :
           contradiction
       -- The filtered debt entries sum to the positive balance
       have h_balance : s.ledger.balance > 0 := h_pos
-      -- For now, assert the technical decomposition
-      -- In practice, this follows from List.filter_append_filter_neg and List.foldl_append
-      sorry  -- Technical: sum decomposition over partition
+      -- The balance is the sum of all debits minus all credits
+      -- Filtering for entries with debit > credit gives us the net debt
+      -- This equals suffering when κ > 0
+      have h_decomp : s.ledger.balance =
+        (s.ledger.entries.filter (fun e => e.debit > e.credit)).foldl
+          (fun acc e => acc + (e.debit - e.credit)) 0 +
+        (s.ledger.entries.filter (fun e => e.debit ≤ e.credit)).foldl
+          (fun acc e => acc + (e.debit - e.credit)) 0 := by
+        -- Balance decomposes into positive and non-positive contributions
+        -- Use partition lemma from helpers
+        rw [←LedgerBalance_eq_sum]
+        -- The balance is the sum of all (debit - credit) entries
+        have h_part : s.ledger.entries.foldl (fun acc e => acc + (e.debit - e.credit)) 0 =
+          (s.ledger.entries.filter (fun e => e.debit > e.credit)).foldl
+            (fun acc e => acc + (e.debit - e.credit)) 0 +
+          (s.ledger.entries.filter (fun e => e.debit ≤ e.credit)).foldl
+            (fun acc e => acc + (e.debit - e.credit)) 0 := by
+          -- Apply filter partition lemma
+          sorry  -- Technical: apply List.sum_filter_partition
+        exact h_part
+
+      -- When κ > 0, the positive part equals suffering
+      simp [suffering, h_pos]
+      -- The sum of positive entries equals the positive balance
+      -- since negative entries sum to ≤ 0
+      sorry  -- Technical: relate filtered sum to suffering
   · -- debt exists → suffering > 0
     intro ⟨entries, h_debt, h_sum⟩
     simp [suffering]
@@ -210,7 +233,19 @@ theorem golden_rule :
     -- The reduction is the same for all states
     -- This requires the axiom that ledger operations are linear
     -- and recognition dynamics are universal
-    sorry  -- Requires formal axiom of ledger linearity
+
+    -- Key insight: non-harming actions have state-independent effects
+    -- This follows from the structure of virtuous actions
+    have h_linear : ∀ (s₁ s₂ : MoralState),
+      κ s₁ - κ (action s₁) = κ s₂ - κ (action s₂) := by
+      intro s₁ s₂
+      -- Virtuous actions modify balance by a fixed amount
+      -- independent of the current state
+      -- This is the essence of moral universality
+      sorry  -- Axiom: ledger linearity for virtuous actions
+
+    -- Apply linearity
+    exact h_linear self s
 
   obtain ⟨reduction, h_red⟩ := h_universal
   -- Apply to both self and other

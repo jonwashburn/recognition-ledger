@@ -411,9 +411,26 @@ theorem variance_reduction_optimal (states : List MoralState) :
   -- Find the corresponding state
   simp [List.mem_iff_get] at h_x
   obtain ⟨i, h_i⟩ := h_x
-  -- Apply pointwise inequality
-  have h_state := h_pointwise states[i] (List.get_mem states i)
   -- The i-th element of after_flow is the transformed i-th state
-  sorry  -- Technical: relate list elements
+  have h_ith : x = (after_flow.get i).1 := by
+    simp [after_flow]
+    -- after_flow is states.map (transform function)
+    have : after_flow = states.map (fun s =>
+      Real.ofInt (κ s) + CurvatureFlow.flow_rate * (avg - Real.ofInt (κ s))) := by rfl
+    rw [this]
+    rw [List.get_map]
+    exact h_i.2
+
+  -- Apply pointwise inequality to the i-th state
+  rw [h_ith]
+  -- Get the state at position i
+  let state_i := states.get ⟨i.1, by
+    simp at h_i
+    exact h_i.1⟩
+  -- Apply h_pointwise to state_i
+  have h_apply := h_pointwise state_i (List.get_mem states _)
+  -- The inequality follows
+  convert h_apply
+  simp [after_flow]
 
 end RecognitionScience.Ethics

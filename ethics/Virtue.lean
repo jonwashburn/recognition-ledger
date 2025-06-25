@@ -487,6 +487,32 @@ theorem patience_enables_complex_resolution (s : MoralState) (cycles : Nat) :
               · simp; exact Nat.cast_le.mpr h
             linarith
           · -- cycles > 2, use logarithmic growth
+            -- For large cycles, patience cost grows slowly
+            -- The log term dominates: cost ≈ s.cost * (1 + log cycles) / cycles
+            -- Since log cycles / cycles → 0 as cycles → ∞
+            -- We get cost → s.cost, so always ≥ s.cost/2
+
+            have h_log_pos : 0 < 1 + Real.log cycles := by
+              apply add_pos_of_pos_of_nonneg
+              · norm_num
+              · apply Real.log_nonneg
+                simp
+                exact Nat.one_le_cast.mpr (Nat.one_le_of_lt h_cycles)
+
+            have h_bound : s.energy.cost * (1 + Real.log cycles) / cycles ≥ s.energy.cost / cycles := by
+              rw [mul_div_assoc]
+              apply div_le_div_of_le_left s.valid
+              · simp; exact Nat.cast_pos.mpr (Nat.zero_lt_of_lt h_cycles)
+              · exact le_mul_of_one_le_left (le_refl _) (le_of_lt h_log_pos)
+
+            -- For cycles > 2, we have 1/cycles < 1/2
+            have h_cycles_bound : s.energy.cost / cycles ≥ s.energy.cost / 3 := by
+              apply div_le_div_of_le_left s.valid
+              · norm_num
+              · simp; exact Nat.cast_le.mpr (by omega : 3 ≤ cycles)
+
+            -- And s.cost/3 > s.cost/2 (which is false, but we can use s.cost/4)
+            -- Actually, we need a different approach...
             sorry  -- Technical: relate patience cost to resolution
         linarith
     }
@@ -605,7 +631,28 @@ theorem love_justice_synergy :
     split_ifs <;> simp
     omega
   · -- Large balance: synergy amplification gives better result
-    sorry  -- Technical: arithmetic on floor functions with φ
+    -- After love: balance' = floor(balance / φ)
+    -- After justice: if |balance'| < 5 then 0 else balance'
+    -- With synergy: multiplied by φ > 1
+
+    -- Key calculation for large balances:
+    -- Love twice: floor(floor(balance/φ)/φ) = floor(balance/φ²)
+    -- Love+Justice with synergy: floor(floor(balance/φ) * φ) if |floor(balance/φ)| ≥ 5
+
+    -- Since φ² > φ > 1, we have balance/φ² < balance/φ < balance
+    -- The synergy multiplication partially recovers the reduction
+    -- making love+justice more effective than love alone
+
+    have h_phi : Real.goldenRatio > 1 := by
+      simp [Real.goldenRatio]
+      norm_num
+
+    -- For large balances, the composed effect is optimal
+    simp [TrainVirtue]
+    split_ifs <;> try omega
+
+    -- The arithmetic shows strict inequality
+    sorry  -- Technical: floor arithmetic with golden ratio
 
 /-- Golden ratio appears in virtue harmonics -/
 theorem virtue_golden_ratio_harmonics (v : Virtue) (s : MoralState) :
@@ -637,7 +684,23 @@ theorem virtue_golden_ratio_harmonics (v : Virtue) (s : MoralState) :
       simp [Real.goldenRatio]
       norm_num
     -- Standard fact: log grows slower than any exponential
-    sorry  -- Technical: log n ≤ φ^n for golden ratio
+    -- For n ≥ 2, log n ≤ n ≤ φ^n since φ > 1
+    have h_log_bound : ∀ n : Nat, n ≥ 2 → Real.log n ≤ Real.goldenRatio ^ n := by
+      intro n h_n
+      -- Use transitivity: log n ≤ n ≤ φ^n
+      calc Real.log n
+        ≤ n := Real.log_le_self_of_pos (Nat.cast_pos.mpr (Nat.pos_of_ne_zero (by omega)))
+        _ ≤ Real.goldenRatio ^ n := by
+          -- φ > 1 and n ≥ 1, so φ^n ≥ n
+          have : 1 < Real.goldenRatio := h_phi
+          have : n ≥ 1 := by omega
+          sorry  -- Technical: exponential dominates linear
+
+    -- Apply the bound
+    by_cases h : n ≥ 2
+    · exact h_log_bound n h
+    · -- For n = 0 or 1, use direct calculation
+      interval_cases n <;> simp [VirtueEffectiveness]
   | _ => simp; ring
 
 /-!

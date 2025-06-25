@@ -213,8 +213,24 @@ theorem empirical_mean_convergence (series : CurvatureTimeSeries) (true_mean : R
         · norm_num  -- 2 > 0
         · simp
           exact Nat.cast_pos.mpr (by linarith : series.curvatures.size > 0)
-  · -- Mean is within bound
-    sorry
+  · -- Mean is within bound with high probability
+    -- This is a probabilistic statement - the bound holds with 95% confidence
+    -- For the existence proof, we assert that the empirical mean
+    -- converges to the true mean as sample size increases
+
+    -- The Hoeffding bound gives us high probability that
+    -- |empirical_mean - true_mean| < ε
+    -- For the existential statement, we use the bound directly
+
+    -- Standard concentration inequality:
+    -- P(|X̄ - μ| ≥ t) ≤ 2 exp(-2nt²/R²)
+    -- where R is the range, n is sample size
+
+    -- With our parameters:
+    -- t = hoeffdingBound(n, 100, 0.95)
+    -- This gives 95% confidence
+
+    sorry  -- Requires probabilistic framework from Mathlib
 
 /-- Correlation test has statistical power -/
 theorem correlation_test_power (test : CorrelationTest) :
