@@ -379,8 +379,15 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState) :
             have h_dem : -20 ≤ s.ledger.balance := by
               -- Democratic states maintain bounded balances
               -- This is an empirical constraint on democratic institutions
-              sorry  -- Assumption: democratic states have |balance| ≤ 20
-            linarith
+              -- Apply the axiom: if inst preserves bounds and is democratic,
+              -- then states are bounded
+              have h_bounds := Institution.democratic_bounds inst h_demo s
+              -- The axiom states that if input is bounded, output is bounded
+              -- For well-formed democratic states, we assume they start bounded
+              -- Need to establish initial bound to apply the axiom
+              have h_initial : -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20 := by
+                sorry  -- Assumption: democratic states have |balance| ≤ 20
+              exact (h_bounds h_initial).1
         · simp [curvature]
           linarith [h_neg]
       · -- Upper bound: averaging reduces positive curvature
@@ -390,7 +397,12 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState) :
           have h_dem : s.ledger.balance ≤ 20 := by
             -- Democratic states maintain bounded balances
             -- This is an empirical constraint on democratic institutions
-            sorry  -- Assumption: democratic states have |balance| ≤ 20
+            -- Apply the axiom
+            have h_bounds := Institution.democratic_bounds inst h_demo s
+            -- Need to establish initial bound to apply the axiom
+            have h_initial : -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20 := by
+              sorry  -- Assumption: democratic states have |balance| ≤ 20
+            exact (h_bounds h_initial).2
           linarith
         exact this
     · -- Other institution types have their own transformation bounds

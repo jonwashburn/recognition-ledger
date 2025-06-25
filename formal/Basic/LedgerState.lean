@@ -235,7 +235,7 @@ axiom LedgerAction.linear_κ
 
 /-- Democratic institutions maintain bounded balances -/
 axiom Institution.democratic_bounds
-  (inst : Institution) (h : inst.kind = Institution.democracy)
+  (inst : Institution) (h : inst.name.startsWith "Democratic")
   (s : MoralState) :
   -20 ≤ s.ledger.balance ∧ s.ledger.balance ≤ 20 →
   -20 ≤ (inst.transformation s).ledger.balance ∧

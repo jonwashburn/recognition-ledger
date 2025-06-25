@@ -129,12 +129,18 @@ theorem suffering_is_debt_signal :
         (s.ledger.entries.filter (fun e => e.debit ≤ e.credit)).foldl
           (fun acc e => acc + (e.debit - e.credit)) 0 := by
         -- Balance decomposes into positive and non-positive contributions
-        -- Use partition lemma from helpers
+        -- Apply filter partition lemma
         have := List.sum_filter_partition s.ledger.entries
           (fun e => e.debit > e.credit)
           (fun e => e.debit - e.credit)
         -- Convert to our specific context
         simp [List.foldl] at this
+        -- The partition lemma directly gives us the balance decomposition
+        have h_balance_eq : s.ledger.balance =
+          s.ledger.entries.foldl (fun acc e => acc + (e.debit - e.credit)) 0 := by
+          -- This is the definition of ledger balance
+          sorry  -- Definition: LedgerBalance_eq_sum
+        rw [h_balance_eq]
         exact this
 
       -- When κ > 0, the positive part equals suffering
