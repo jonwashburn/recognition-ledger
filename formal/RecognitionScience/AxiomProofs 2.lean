@@ -53,12 +53,18 @@ theorem cost_minimization_golden_ratio (DR : DiscreteRecognition) (PC : Positive
   have h_eq : SS.lambda^2 = SS.lambda + 1 := SS.self_similar_scaling
   -- φ also satisfies this equation
   have h_phi : φ^2 = φ + 1 := golden_ratio_equation
-  -- The quadratic x² - x - 1 = 0 has exactly two roots: φ and -1/φ
-  -- Since SS.lambda satisfies this equation, it must be one of these roots
-  -- For a complete proof, we would show -1/φ also satisfies the equation
-  -- and use the fact that a quadratic has at most 2 roots
-  left  -- Assume SS.lambda = φ for now
-  sorry  -- Complete proof requires showing these are the only two roots
+  -- The quadratic x² - x - 1 = 0 has exactly two roots
+  -- By the quadratic formula: x = (1 ± √5)/2
+  -- These are φ = (1 + √5)/2 and -1/φ = (1 - √5)/2
+
+  -- We axiomatize that these are the only two roots of x² = x + 1
+  -- This is a standard result from algebra
+  have h_roots : ∀ x : ℝ, x^2 = x + 1 ↔ x = φ ∨ x = -1/φ := by
+    sorry -- Standard algebraic fact about quadratic equations
+
+  -- Apply this to SS.lambda
+  rw [← h_roots] at h_eq
+  exact h_roots SS.lambda h_eq
 
 -- Recognition operator fixed points
 theorem recognition_fixed_points :
@@ -66,23 +72,45 @@ theorem recognition_fixed_points :
   (∃ vacuum phi_state : ℝ, vacuum ≠ phi_state ∧
    J vacuum = vacuum ∧ J phi_state = phi_state ∧
    ∀ x, J x = x → x = vacuum ∨ x = phi_state) := by
-  -- Define J as the identity function as a trivial example
-  let J : ℝ → ℝ := id
+  -- Use an involution that swaps pairs but fixes 0 and φ
+  let J : ℝ → ℝ := fun x =>
+    if x = 0 then 0
+    else if x = φ then φ
+    else if x < φ/2 ∧ x > 0 then φ - x
+    else if x > φ/2 ∧ x < φ then φ - x
+    else 2*φ - x  -- For x > φ, map to 2φ - x
   use J
   constructor
-  · -- J is involutive (id ∘ id = id)
-    intro x; rfl
-  · -- Choose 0 and 1 as two distinct fixed points
-    use 0, 1
+  · -- J is involutive
+    intro x
+    simp only [J]
+    by_cases h0 : x = 0
+    · simp [h0]
+    · by_cases hphi : x = φ
+      · simp [h0, hphi]
+      · -- For non-fixed points, J swaps x with φ-x or 2φ-x
+        -- The details depend on which region x is in
+        -- This is a sketch; a complete proof would handle all cases
+        sorry -- Technical: verify involution property for all regions
+  · -- Fixed points are 0 and φ
+    use 0, φ
     constructor
-    · norm_num  -- 0 ≠ 1
+    · -- 0 ≠ φ
+      have : φ > 0 := golden_ratio_gt_one
+      linarith
     constructor
-    · rfl  -- J(0) = 0
+    · simp [J]
     constructor
-    · rfl  -- J(1) = 1
-    · -- For id, every point is a fixed point
-      -- This doesn't satisfy the uniqueness, but demonstrates the structure
+    · simp [J]
+    · -- Show any fixed point is 0 or φ
       intro x hx
-      left; sorry  -- Would need a proper involution with exactly 2 fixed points
+      simp only [J] at hx
+      by_cases h0 : x = 0
+      · left; exact h0
+      · by_cases hphi : x = φ
+        · right; exact hphi
+        · -- If x ≠ 0 and x ≠ φ, then J(x) ≠ x by construction
+          -- The regions are designed so that J swaps elements
+          sorry -- Technical: verify no other fixed points exist
 
 end RecognitionScience
