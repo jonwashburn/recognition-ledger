@@ -1,0 +1,10 @@
+# CODEOWNERS - GitHub code ownership configuration
+# This file defines who must review changes to specific parts of the codebase
+
+# The foundation is IMMUTABLE - any changes require explicit approval
+# from the repository owner to ensure zero-axiom integrity is maintained
+/foundation/ @jonwashburn
+
+# Other directories can be modified more freely but still require review
+/formal/ @jonwashburn
+/physics/ @jonwashburn
