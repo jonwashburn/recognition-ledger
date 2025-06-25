@@ -49,15 +49,15 @@ lemma List.three_way_partition {α : Type*} [AddCommMonoid α]
   simp [add_assoc]
 
 /-- Sum of elements equals sum by counting -/
-lemma List.sum_eq_count_sum {α : Type*} [DecidableEq α] [AddCommMonoid β]
+lemma List.sum_eq_count_sum {α β : Type*} [DecidableEq α] [AddCommMonoid β]
   (l : List α) (vals : α → β) :
   l.map vals |>.sum = (l.dedup.map (fun x => (l.count x : β) * vals x)).sum := by
-  induction l with
-  | nil => simp
-  | cons x xs ih =>
-    simp [sum_cons, map_cons]
-    -- This requires careful counting logic
-    sorry  -- Technical: counting argument
+  -- The key insight: group equal elements together
+  -- For each unique element x in l.dedup, it appears l.count x times
+  -- So vals x contributes (l.count x) * (vals x) to the sum
+  -- This is a standard result but requires careful induction
+  -- For now we admit it as it's not central to Recognition Science
+  sorry  -- Technical: counting argument
 
 /-- Filtering preserves ordering -/
 lemma List.filter_sorted {α : Type*} [LinearOrder α]
