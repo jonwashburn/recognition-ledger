@@ -29,11 +29,19 @@ Every particle sits at a specific rung on the golden ladder.
 /-- The coherence quantum in eV -/
 def E_coh : SimpleRat := ⟨90, 1000, by simp⟩  -- 0.090 eV
 
+/-- Golden ratio approximation as a simple rational -/
+def φ_approx_rat : SimpleRat := ⟨89, 55, by simp⟩  -- fib(11)/fib(10) ≈ 1.618
+
+/-- Multiply a SimpleRat by the golden ratio approximation -/
+def mul_golden_rat (x : SimpleRat) : SimpleRat :=
+  ⟨x.num * φ_approx_rat.num, x.den * φ_approx_rat.den,
+   Nat.mul_pos x.den_pos φ_approx_rat.den_pos⟩
+
 /-- Energy at rung r on the φ-ladder -/
 def energy_at_rung (r : Nat) : SimpleRat :=
   match r with
   | 0 => E_coh  -- Base case
-  | n + 1 => mul_golden (energy_at_rung n) φ_approx_rat
+  | n + 1 => mul_golden_rat (energy_at_rung n)
 
 /-- Particle type enumeration -/
 inductive Particle
@@ -217,6 +225,17 @@ def particle_mass_mechanism (p : Particle) : Option MassGeneration :=
 # Universal Mass Formula
 -/
 
+/-- Helper: energy_at_rung r equals E_coh times φ^r -/
+lemma energy_at_rung_power (r : Nat) :
+  energy_at_rung r = ⟨E_coh.num * (φ_approx_rat.num ^ r),
+                      E_coh.den * (φ_approx_rat.den ^ r),
+                      Nat.mul_pos E_coh.den_pos (Nat.pos_pow_of_pos r φ_approx_rat.den_pos)⟩ := by
+  induction r with
+  | zero => rfl
+  | succ n ih =>
+    simp [energy_at_rung, mul_golden_rat, ih]
+    ext <;> simp [Nat.pow_succ, Nat.mul_assoc, Nat.mul_left_comm]
+
 /-- The universal mass formula: no free parameters -/
 theorem universal_mass_formula :
   ∀ (p : Particle), p ≠ Particle.photon →
@@ -229,6 +248,7 @@ theorem universal_mass_formula :
         decide⟩ := by
   intro p h_not_photon
   use particle_rung p
-  sorry  -- Unfold energy_at_rung recursion
+  simp [particle_mass_MeV, energy_at_rung_power]
+  ext <;> simp [Nat.mul_assoc]
 
 end Physics
