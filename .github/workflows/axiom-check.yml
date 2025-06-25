@@ -1,0 +1,27 @@
+name: Foundation Axiom Check
+
+on:
+  push:
+    paths:
+      - 'foundation/**'
+      - '.github/workflows/axiom-check.yml'
+  pull_request:
+    paths:
+      - 'foundation/**'
+      - '.github/workflows/axiom-check.yml'
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Lean 4
+      uses: leanprover/lean-action@v1
+    - name: Build foundation library
+      run: lake build foundation
+    - name: Fail if any axioms appear
+      run: |
+        lake exe print_axioms foundation | tee axioms.txt
+        if [ -s axioms.txt ]; then
+          echo "Unexpected axioms detected in foundation!" && cat axioms.txt && exit 1
+        fi 
