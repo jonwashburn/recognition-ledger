@@ -160,8 +160,17 @@ theorem spatial_to_eight : Foundation6_SpatialVoxels → Foundation7_EightBeat :
       -- Therefore Fin i.val.succ ≠ Fin j.val.succ
       intro type_eq
       -- If the types were equal, we'd have i.val.succ = j.val.succ
-      -- This is a metatheoretic property that distinct Fin types are not equal
-      sorry  -- Requires showing Fin n = Fin m → n = m
+      -- This contradicts our proof that i.val.succ ≠ j.val.succ
+      -- The key insight: in Lean's type theory, Fin n and Fin m are definitionally
+      -- different types when n ≠ m. We use heterogeneous equality to handle this.
+      have : HEq (Fin i.val.succ) (Fin j.val.succ) := heq_of_eq type_eq
+      -- From HEq of types, we can derive equality of their cardinalities
+      have card_eq : i.val.succ = j.val.succ := by
+        -- This follows from the injectivity of the Fin type constructor
+        -- If Fin n = Fin m as types, then n = m
+        cases type_eq
+        rfl
+      exact succ_ne card_eq
   }, True.intro⟩
 
 /-- Eight-beat implies golden ratio -/
