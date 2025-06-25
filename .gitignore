@@ -1,0 +1,19 @@
+# Lean / Lake build artifacts
+.lake/
+lake-manifest.json
+*.olean
+*.ilean
+
+# Large binaries and generated PDFs
+*.pdf
+*.png
+*.jpg
+*.aux
+*.log
+*.out
+
+# OS metadata
+.DS_Store
+
+# Ignore large dataset files
+Particle-Masses-B.txt 

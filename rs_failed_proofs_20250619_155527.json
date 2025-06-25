@@ -1,0 +1,14 @@
+[
+  {
+    "file": "formal/Numerics/ErrorBounds.lean",
+    "name": "error_sum",
+    "reason": "Timeout",
+    "attempted_proof": "by simp [ErrorBound.h_consistent]"
+  },
+  {
+    "file": "formal/Numerics/ErrorBounds.lean",
+    "name": "error_product",
+    "reason": "error: invalid script spec 'formal/Numerics/ErrorBounds.lean' (too many '/')",
+    "attempted_proof": "by\n  simp [ErrorBound.h_consistent]\n  field_simp\n  ring_nf\n  rw [abs_mul]\n  ring"
+  }
+]
