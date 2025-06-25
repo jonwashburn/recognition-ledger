@@ -56,8 +56,32 @@ lemma List.sum_eq_count_sum {α : Type*} [DecidableEq α] [AddCommMonoid β]
   | nil => simp
   | cons x xs ih =>
     simp [sum_cons, map_cons]
-    -- This requires careful counting logic
-    sorry  -- Technical: counting argument
+    -- Key insight: if x ∈ xs, then count increases by 1
+    -- if x ∉ xs, then x is new in dedup
+    by_cases h : x ∈ xs
+    · -- x already in xs, so dedup unchanged but count increases
+      have h_dedup : (x :: xs).dedup = xs.dedup := by
+        simp [List.dedup_cons_of_mem h]
+      rw [h_dedup]
+      -- count x (x :: xs) = count x xs + 1
+      have h_count : (x :: xs).count x = xs.count x + 1 := by
+        simp [List.count_cons_self]
+      -- The sum changes by adding vals x
+      sorry  -- Technical: rearrange sum with updated count
+    · -- x not in xs, so x added to dedup
+      have h_dedup : (x :: xs).dedup = x :: xs.dedup := by
+        simp [List.dedup_cons_of_not_mem h]
+      rw [h_dedup]
+      simp [map_cons, sum_cons]
+      -- count x (x :: xs) = 1 since x ∉ xs
+      have h_count : (x :: xs).count x = 1 := by
+        simp [List.count_cons_self, List.count_eq_zero.mpr h]
+      simp [h_count]
+      -- For other elements y ≠ x, count unchanged
+      have h_count_others : ∀ y ∈ xs.dedup, y ≠ x → (x :: xs).count y = xs.count y := by
+        intro y h_y h_ne
+        simp [List.count_cons_of_ne h_ne]
+      sorry  -- Technical: complete the sum rearrangement
 
 /-- Filtering preserves ordering -/
 lemma List.filter_sorted {α : Type*} [LinearOrder α]
