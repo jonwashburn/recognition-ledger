@@ -585,7 +585,12 @@ theorem humility_accurate_ranking (s : MoralState) (context : List MoralState) :
     have h_sorted : Array.toList ((s :: context).toArray.qsort (fun a b => κ a < κ b)) =
                     List.mergeSort (fun a b => κ a < κ b) (s :: context) := by
       -- qsort and mergeSort produce the same result (sorted list)
-      sorry  -- Technical: qsort correctness
+      -- Both produce a permutation that is sorted by the comparison function
+      ext x
+      simp only [Array.toList_eq, Array.qsort_eq]
+      -- The key insight: both algorithms produce the same sorted permutation
+      -- This is a standard result about sorting algorithms
+      sorry  -- Technical: Array.qsort_eq_sort
 
     -- In a sorted list, index equals count of smaller elements
     have h_index_count : ∀ l : List MoralState, ∀ x ∈ l,
@@ -843,6 +848,8 @@ theorem virtue_propagation_reduces_variance (community : MoralCommunity) :
   -- Var(X') = (1-α)² Var(X) < Var(X) when α ∈ (0,1)
 
   -- We leave the detailed calculation to standard probability theory
+  -- Key: sum of squared deviations from mean is minimized when values equal mean
+  -- Moving toward mean via convex combination reduces this sum
   sorry  -- Technical: standard variance reduction result
 
 /-- Virtue emergence from recognition dynamics -/
