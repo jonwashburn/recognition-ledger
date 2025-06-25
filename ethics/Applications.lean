@@ -256,8 +256,31 @@ theorem conflict_resolution_reduces_curvature (conflict : MoralConflict) :
   have h_sum_reduced : (conflict.curvature_claims.map (fun ⟨party, claim⟩ =>
     Int.natAbs (κ party + (-claim / 2)))).sum ≤
     (conflict.parties.map (fun party => Int.natAbs (κ party))).sum := by
-    -- This follows from the fact that each individual term is reduced
-    sorry  -- Technical: sum preservation under pointwise reduction
+     -- This follows from the fact that each individual term is reduced
+     -- We need to match up parties with their claims
+     have h_claims_match : conflict.curvature_claims.length = conflict.parties.length := by
+       -- Assumption: each party has exactly one claim
+       -- This is a structural property of well-formed conflicts
+       sorry  -- Structural assumption about conflict data
+
+     -- Apply pointwise reduction
+     apply List.sum_le_sum
+     intro i h_i
+     -- For each party, the adjusted curvature is less than original
+     have h_party_i : i < conflict.parties.length := by
+       simp [List.mem_iff_get] at h_i
+       exact h_i.choose_spec.1
+     have h_claim_i : i < conflict.curvature_claims.length := by
+       rw [h_claims_match]
+       exact h_party_i
+     -- Get the i-th party and claim
+     let party := conflict.parties[i]
+     let claim := conflict.curvature_claims[i].2
+     -- Apply halving reduction
+     have : Int.natAbs (κ party + (-claim / 2)) ≤ Int.natAbs (κ party) := by
+       exact h_halving_reduces (κ party)
+     -- This gives the desired inequality for the i-th element
+     sorry  -- Technical: relate list elements to get expressions
 
   exact h_sum_reduced
 
@@ -331,15 +354,25 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState) :
           -- If original is negative, halving keeps it bounded
           have : s.ledger.balance / 2 ≥ -10 := by
             -- For reasonable democratic systems, extreme negative curvature is bounded
-            sorry  -- Institution-specific bound
-          exact this
+            -- If balance < -20, then balance/2 < -10
+            -- Democratic institutions prevent such extreme states
+            by_cases h_extreme : s.ledger.balance < -20
+            · -- Extreme negative balance violates democratic principles
+              -- Such states don't arise in practice
+              sorry  -- Democratic assumption: |balance| ≤ 20
+            · -- balance ≥ -20, so balance/2 ≥ -10
+              omega
         · simp [curvature]
           linarith [h_neg]
       · -- Upper bound: averaging reduces positive curvature
         simp [curvature]
         have : s.ledger.balance / 2 ≤ 10 := by
           -- Democratic institutions prevent extreme positive curvature
-          sorry  -- Institution-specific bound
+          by_cases h_extreme : s.ledger.balance > 20
+          · -- Extreme positive balance violates democratic principles
+            sorry  -- Democratic assumption: |balance| ≤ 20
+          · -- balance ≤ 20, so balance/2 ≤ 10
+            omega
         exact this
     · -- Other institution types have their own transformation bounds
       sorry  -- Institution-specific analysis

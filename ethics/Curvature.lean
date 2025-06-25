@@ -355,4 +355,65 @@ theorem curvature_minimization (s : MoralState) :
       energyCost := by simp  -- Energy preserved
     }
 
+/-- Variance reduction optimal -/
+theorem variance_reduction_optimal (states : List MoralState) :
+  states.length > 0 →
+  let avg := states.map (fun s => Real.ofInt (κ s)) |>.sum / Real.ofNat states.length
+  let variance := states.map (fun s => (Real.ofInt (κ s) - avg)^2) |>.sum
+  let after_flow := states.map (fun s =>
+    Real.ofInt (κ s) + CurvatureFlow.flow_rate * (avg - Real.ofInt (κ s)))
+  let new_variance := after_flow.map (fun x => (x - avg)^2) |>.sum
+  new_variance ≤ variance := by
+  intro h_nonempty
+  simp
+  -- Flow toward mean reduces variance
+  -- Each term (κᵢ - μ)² becomes ((1-λ)(κᵢ - μ))² where λ = flow_rate
+
+  -- Key algebraic identity:
+  -- new_κᵢ = κᵢ + λ(μ - κᵢ) = κᵢ - λκᵢ + λμ = (1-λ)κᵢ + λμ
+  -- So: new_κᵢ - μ = (1-λ)κᵢ + λμ - μ = (1-λ)(κᵢ - μ)
+  -- Therefore: (new_κᵢ - μ)² = (1-λ)²(κᵢ - μ)²
+
+  -- Since 0 < flow_rate < 1, we have (1-λ)² < 1
+  -- So each squared deviation is reduced
+
+  have h_flow_bound : 0 < CurvatureFlow.flow_rate ∧ CurvatureFlow.flow_rate < 1 := by
+    simp [CurvatureFlow.flow_rate]
+    norm_num
+
+  -- Map over states and show pointwise reduction
+  have h_pointwise : ∀ s ∈ states,
+    let κ_s := Real.ofInt (κ s)
+    let new_κ := κ_s + CurvatureFlow.flow_rate * (avg - κ_s)
+    (new_κ - avg)^2 ≤ (κ_s - avg)^2 := by
+    intro s h_in
+    simp
+    -- new_κ - avg = (1 - flow_rate)(κ_s - avg)
+    have h_identity : κ_s + CurvatureFlow.flow_rate * (avg - κ_s) - avg =
+                      (1 - CurvatureFlow.flow_rate) * (κ_s - avg) := by ring
+    rw [h_identity]
+    rw [mul_pow]
+    -- (1 - flow_rate)² < 1 when 0 < flow_rate < 1
+    have h_sq_lt : (1 - CurvatureFlow.flow_rate)^2 < 1 := by
+      rw [sq_lt_one_iff_abs_lt_one]
+      simp [abs_sub_comm]
+      exact ⟨h_flow_bound.2, by linarith⟩
+    -- So (1 - flow_rate)² * (κ_s - avg)² ≤ (κ_s - avg)²
+    by_cases h : κ_s = avg
+    · simp [h]
+    · apply mul_le_of_le_one_left
+      · apply sq_nonneg
+      · linarith [h_sq_lt]
+
+  -- Sum the pointwise inequalities
+  apply List.sum_le_sum
+  intro x h_x
+  -- Find the corresponding state
+  simp [List.mem_iff_get] at h_x
+  obtain ⟨i, h_i⟩ := h_x
+  -- Apply pointwise inequality
+  have h_state := h_pointwise states[i] (List.get_mem states i)
+  -- The i-th element of after_flow is the transformed i-th state
+  sorry  -- Technical: relate list elements
+
 end RecognitionScience.Ethics

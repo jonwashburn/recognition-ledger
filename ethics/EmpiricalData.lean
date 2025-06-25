@@ -202,7 +202,17 @@ theorem empirical_mean_convergence (series : CurvatureTimeSeries) (true_mean : R
   use hoeffdingBound series.curvatures.size 100 0.95
   constructor
   · -- Bound is positive
-    sorry
+    simp [hoeffdingBound]
+    apply mul_pos
+    · norm_num  -- 100 > 0
+    · apply Real.sqrt_pos.mpr
+      apply div_pos
+      · apply Real.log_pos
+        norm_num  -- 2/(1-0.95) = 2/0.05 = 40 > 1
+      · apply mul_pos
+        · norm_num  -- 2 > 0
+        · simp
+          exact Nat.cast_pos.mpr (by linarith : series.curvatures.size > 0)
   · -- Mean is within bound
     sorry
 
@@ -212,6 +222,14 @@ theorem correlation_test_power (test : CorrelationTest) :
   test.series2.curvatures.size > 50 →
   abs test.coefficient > 0.3 →
   test.p_value < 0.05 := by
-  sorry
+  intro h_size1 h_size2 h_corr
+  -- For correlation |r| > 0.3 with n > 50, p-value < 0.05
+  -- This is a standard result from statistics
+  -- The t-statistic is t = r * sqrt(n-2) / sqrt(1-r²)
+  -- For n = 50 and |r| = 0.3, t ≈ 2.16 > 2.01 (critical value)
+
+  -- We model this by setting p_value in the test construction
+  -- In practice, this would be computed from the t-distribution
+  sorry  -- Requires statistical distribution theory
 
 end RecognitionScience.Ethics.Empirical
