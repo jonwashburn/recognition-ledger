@@ -1,0 +1,96 @@
+/-
+  Variational Calculus Helpers
+  ============================
+
+  Basic tools for calculus of variations, including
+  Euler-Lagrange equations and functional derivatives.
+-/
+
+import Mathlib.Analysis.Calculus.Deriv
+import Mathlib.Analysis.Calculus.FDeriv
+import Mathlib.MeasureTheory.Integral.Bochner
+
+namespace RecognitionScience.Variational
+
+open Real MeasureTheory
+
+/-! ## Functionals and Variations -/
+
+/-- A functional maps functions to real numbers -/
+def Functional (α β : Type*) := (α → β) → ℝ
+
+/-- First variation of a functional -/
+def firstVariation {α β : Type*} [NormedAddCommGroup β] [NormedSpace ℝ β]
+    (F : Functional α β) (f : α → β) (h : α → β) : ℝ :=
+  deriv (fun ε => F (f + ε • h)) 0
+
+/-- A functional F has a critical point at f if its first variation vanishes -/
+def isCriticalPoint {α β : Type*} [NormedAddCommGroup β] [NormedSpace ℝ β]
+    (F : Functional α β) (f : α → β) : Prop :=
+  ∀ h : α → β, firstVariation F f h = 0
+
+/-! ## Euler-Lagrange Equation -/
+
+/-- Lagrangian for a 1D system -/
+structure Lagrangian where
+  L : ℝ → ℝ → ℝ → ℝ  -- L(t, q, q̇)
+
+/-- The action functional -/
+def action (lag : Lagrangian) (t₀ t₁ : ℝ) (q : ℝ → ℝ) : ℝ :=
+  ∫ t in t₀..t₁, lag.L t (q t) (deriv q t)
+
+/-- Euler-Lagrange equation (statement only - proof requires more machinery) -/
+theorem euler_lagrange (lag : Lagrangian) (q : ℝ → ℝ)
+    (hq : ∀ t, DifferentiableAt ℝ q t)
+    (hL : ∀ t q v, DifferentiableAt ℝ (fun x => lag.L t x v) q ∧
+                   DifferentiableAt ℝ (fun x => lag.L t q x) v) :
+    isCriticalPoint (action lag 0 1) q ↔
+    ∀ t ∈ Set.Ioo 0 1,
+      deriv (fun s => deriv (fun v => lag.L s (q s) v) (deriv q s)) t =
+      deriv (fun x => lag.L t x (deriv q t)) (q t) := by
+  -- The proof involves integration by parts and requires smooth test functions
+  -- vanishing at the boundary. We defer this for now.
+  sorry
+
+/-! ## Functional Derivatives -/
+
+/-- Functional derivative (formal definition) -/
+structure FunctionalDerivative {α β : Type*} [NormedAddCommGroup β] [NormedSpace ℝ β] where
+  F : Functional α β
+  δF : (α → β) → (α → β)  -- δF/δf
+  is_derivative : ∀ f h, firstVariation F f h = ∫ x, δF f x • h x
+
+/-- Convexity of entropy functional -/
+lemma entropy_convex : ConvexOn ℝ (Set.Ioi 0) (fun x => x * log x) := by
+  -- This is used in the Born rule derivation
+  apply ConvexOn.of_deriv2_nonneg (convex_Ioi 0)
+  · intro x hx
+    exact differentiableAt_id'.mul (differentiableAt_log (ne_of_gt hx))
+  · intro x hx
+    simp [Real.deriv_log, ne_of_gt hx]
+    -- Second derivative is 1/x > 0 for x > 0
+    rw [deriv_mul, deriv_id'', deriv_log, one_mul, deriv_add, deriv_const,
+        deriv_div, deriv_const, deriv_id'', zero_mul, sub_zero, one_pow]
+    · field_simp
+      exact one_div_pos.mpr hx
+    · exact differentiableAt_log (ne_of_gt hx)
+    · exact differentiableAt_id'
+    · exact differentiableAt_const _
+    · exact differentiableAt_id'
+    · simp [ne_of_gt hx]
+    · exact differentiableAt_const _
+    · exact differentiableAt_log (ne_of_gt hx)
+    · exact differentiableAt_const _
+    · exact differentiableAt_id'
+
+/-! ## Divergence Theorem (Statement) -/
+
+/-- Divergence theorem in Gaussian normal coordinates -/
+theorem divergence_theorem_gaussian {n : ℕ} (F : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n))
+    (Ω : Set (EuclideanSpace ℝ (Fin n))) (hΩ : MeasurableSet Ω) :
+    ∫ x in Ω, divergence F x = ∫ x in frontier Ω, inner (F x) (normal x) := by
+  -- This requires differential forms and Stokes' theorem
+  -- For now we state it as an axiom to be proved later
+  sorry
+
+end RecognitionScience.Variational
