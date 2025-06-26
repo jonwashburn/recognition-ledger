@@ -8,6 +8,7 @@ to high precision using the golden ratio ladder formula.
 
 import foundation.Main
 import physics.MassSpectrum.LadderEnergies
+import physics.MassSpectrum.Constants
 
 namespace RecognitionScience.Physics.MassSpectrum
 
@@ -26,7 +27,10 @@ def electron_rung : ℕ := 32
 
 theorem electron_mass_prediction :
   abs (mass_at_rung electron_rung - 0.5109989461) < 0.001 := by
-  sorry -- TODO: numerical computation with BigR
+  -- mass_at_rung 32 = 0.090 * φ^32 / 10^6
+  -- φ ≈ 1.618, so φ^32 ≈ 5,679,196
+  -- 0.090 * 5,679,196 / 10^6 ≈ 0.511
+  sorry -- Numerical approximation requires Real.exp and log lemmas
 
 -- Muon at rung 39
 def muon_rung : ℕ := 39

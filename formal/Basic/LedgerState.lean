@@ -153,8 +153,7 @@ theorem tick_surjective : Function.Surjective L := by
   intro S
   -- Need to show ∃ S', L S' = S
   -- This follows from L being bijective (unitary evolution)
-  theorem tick_surjective : Function.Surjective L := by
-  exact DiscreteRecognition.L_surjective -- Requires proving L is bijective from unitarity
+  sorry -- Requires proving L is bijective from unitarity
 
 /-- F3: Dual operator is an involution -/
 theorem dual_involution : ∀ (S : LedgerState), J (J S) = S := by
@@ -216,7 +215,7 @@ theorem ledger_bijective : Function.Bijective L := by
     simp [L]
     -- The surjectivity follows from the recognition dynamics
     -- Every state can be reached through the recognition process
-    exact UnitarityOfEvolution.L_bijective -- Requires proving L is bijective from unitarity
+    sorry -- Requires proving L is bijective from unitarity
 
 end BasicTheorems
 
