@@ -17,6 +17,17 @@ lean_lib «Core» where
   -- Core modules from no-mathlib-core
   roots := #[`Core.Finite, `Core.MetaPrincipleMinimal, `Core.MetaPrinciple, `Core.EightFoundations, `Core.Nat.Card, `Core.Arith]
 
+lean_lib «Derivations» where
+  -- Constant derivations
+  roots := #[
+    `Core.Derivations.GoldenRatioDerivation,
+    `Core.Derivations.CoherenceQuantumDerivation,
+    `Core.Derivations.EightBeatDerivation,
+    `Core.Derivations.RecognitionLengthDerivation,
+    `Core.Derivations.TopologicalCharge,
+    `Core.Derivations.YangMillsMassGap
+  ]
+
 lean_lib «Foundations» where
   -- Concrete foundation implementations
   roots := #[
@@ -29,6 +40,10 @@ lean_lib «Foundations» where
     `Foundations.EightBeat,
     `Foundations.GoldenRatio
   ]
+
+lean_lib «Parameters» where
+  -- Derived constants
+  roots := #[`Parameters.Constants]
 
 lean_lib «RecognitionScience» where
   -- Main library combining everything
