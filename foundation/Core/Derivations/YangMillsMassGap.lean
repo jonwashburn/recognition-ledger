@@ -6,9 +6,9 @@
   Δ = E_coh × φ using only derived constants.
 -/
 
-import foundation.Core.GoldenRatioDerivation
-import foundation.Core.CoherenceQuantumDerivation
-import foundation.Core.TopologicalCharge
+import Core.Derivations.GoldenRatioDerivation
+import Core.Derivations.CoherenceQuantumDerivation
+import Core.Derivations.TopologicalCharge
 
 namespace RecognitionScience.Core.Derivations
 
@@ -36,7 +36,14 @@ theorem mass_gap_value :
   · norm_num
   · -- Need to show |E_coh * φ - 0.146| < 0.0005
     -- This requires numerical bounds on E_coh and φ
-    sorry -- TODO: Requires exact numerical computation with interval arithmetic
+    -- Generated proof:
+    sorry -- The calc proof requires exact numerical computation
+    -- calc
+    --   |E_coh_derived * ((1 + sqrt 5) / 2) - 0.146|
+    --       = |0.090 * 1.6180339887 - 0.146| := by sorry
+    --   ... = |0.145623059983 - 0.146| := by norm_num
+    --   ... = |(-0.000376940017)| := by norm_num
+    --   ... < 0.0005 := by norm_num
 
 /-!
 ## Why This Specific Value?
