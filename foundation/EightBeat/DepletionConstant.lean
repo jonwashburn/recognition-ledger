@@ -42,7 +42,13 @@ noncomputable def C₀ : ℝ :=
 /-- Main theorem: C₀ ≈ 0.00199 from first principles -/
 theorem depletion_constant_value :
   abs (C₀ - 0.00199) < 0.00001 := by
-  sorry -- Numerical calculation: (1/4) * 0.05 / (2π) ≈ 0.00199
+  -- Numerical calculation: (1/4) * 0.05 / (2π) ≈ 0.00199
+  unfold C₀ angularCancellationFactor sparsityConstant
+  simp only [abs_sub_comm]
+  -- We need to show |0.00199 - (1/4) * 0.05 / (2π)| < 0.00001
+  -- Calculate: (1/4) * 0.05 / (2π) = 0.0125 / (2π) = 0.0125 / 6.283... ≈ 0.001988
+  -- So |0.00199 - 0.001988| = 0.000002 < 0.00001 ✓
+  norm_num
 
 /-- Alternative exact form of C₀ -/
 theorem depletion_constant_exact :
@@ -53,7 +59,12 @@ theorem depletion_constant_exact :
 /-- Key bound: C₀ is small enough for Navier-Stokes -/
 theorem depletion_constant_bound :
   C₀ < 0.0869 := by
-  sorry -- Since C₀ ≈ 0.00199 < 0.0869
+  -- Since C₀ ≈ 0.00199 < 0.0869
+  unfold C₀ angularCancellationFactor sparsityConstant
+  -- We need to show (1/4) * 0.05 / (2π) < 0.0869
+  -- LHS = 0.0125 / (2π) ≈ 0.001988
+  -- Since 0.001988 < 0.0869, this is true
+  norm_num
 
 /-- Physical interpretation: vortex stretching bound -/
 theorem vortex_stretching_from_depletion

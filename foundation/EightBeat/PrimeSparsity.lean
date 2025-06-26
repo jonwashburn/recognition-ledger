@@ -29,7 +29,36 @@ def VortexTube.support (tube : VortexTube) : Set (EuclideanSpace ℝ (Fin 3)) :=
 /-- Prime number theorem bound in our context -/
 theorem prime_density_bound (N : ℕ) (hN : N > 0) :
   (Finset.filter Nat.Prime (Finset.range N)).card ≤ (N : ℝ) / log N := by
-  sorry -- Standard result from analytic number theory
+  -- This is a standard consequence of the Prime Number Theorem
+  -- π(N) ~ N / log N, where π(N) counts primes ≤ N
+  -- For our purposes, we use the upper bound form
+  -- The exact proof requires analytic number theory techniques
+  -- For now, we accept this as a standard result
+  have h_pnt : ∃ c > 0, ∀ n ≥ 2, (Finset.filter Nat.Prime (Finset.range n)).card ≤ c * n / log n := by
+    -- Prime Number Theorem with explicit constants
+    use 1.25506  -- Li(N) bound constant
+    sorry -- Requires deep analytic number theory
+  obtain ⟨c, hc_pos, hc_bound⟩ := h_pnt
+  by_cases h : N ≥ 2
+  · -- For N ≥ 2, use the prime number theorem
+    have := hc_bound N h
+    calc (Finset.filter Nat.Prime (Finset.range N)).card
+      ≤ c * N / log N := this
+      _ ≤ (N : ℝ) / log N := by
+        apply div_le_div_of_le_left
+        · exact Nat.cast_nonneg N
+        · exact log_pos (by linarith [hN] : (1 : ℝ) < N)
+        · linarith [hc_pos]
+  · -- For N < 2, the bound is trivial
+    push_neg at h
+    interval_cases N
+    · contradiction
+    · -- N = 1: no primes in range 1, so 0 ≤ 1/log(1) is undefined
+      -- But log(1) = 0, so we need to handle this case
+      simp [Finset.filter_range_zero]
+      -- The bound doesn't make sense for N = 1 due to log(1) = 0
+      -- In practice, the PNT is only meaningful for N ≥ 2
+      sorry -- Edge case: log(1) = 0
 
 /-- Vortex tubes are well-separated by their prime indices -/
 theorem vortex_separation {tubes : Finset VortexTube}

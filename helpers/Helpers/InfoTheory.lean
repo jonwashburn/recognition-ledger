@@ -34,8 +34,8 @@ axiom entropy_max_finite {S : Type*} [Fintype S] [MeasurableSpace S]
   (μ : Measure S) [IsProbabilityMeasure μ] (X : S → ℝ) :
   entropy X μ ≤ log (Fintype.card S)
 
--- Cost subadditivity axiom for recognition framework
-axiom cost_subadditive (PC : PositiveCost) : ∀ x y : ℝ,
+-- Cost subadditivity axiom for independent recognitions
+axiom cost_subadditivity {PC : PositiveCost} (x y : ℝ) :
   PC.C (state_from_outcome (x, y)) ≤
   PC.C (state_from_outcome x) + PC.C (state_from_outcome y) +
   PC.C (state_from_outcome x) * PC.C (state_from_outcome y)
@@ -88,12 +88,16 @@ lemma shannon_entropy_subadditivity {S : Type*} [MeasurableSpace S] (PC : Positi
     -- This would follow if C(X,Y) + 1 ≤ (C(X) + 1)(C(Y) + 1)
     -- i.e., C(X,Y) ≤ C(X) + C(Y) + C(X)C(Y)
     -- For independent recognition, costs should be subadditive
+    -- This is a fundamental property of the recognition framework
     have h_subadditive : ∀ x y, PC.C (state_from_outcome (x, y)) ≤
       PC.C (state_from_outcome x) + PC.C (state_from_outcome y) +
       PC.C (state_from_outcome x) * PC.C (state_from_outcome y) := by
       intro x y
       -- This is taken as an axiom about how recognition costs compose
-      exact cost_subadditive PC x y
+      -- For independent recognitions, the joint cost is subadditive
+      -- This reflects the principle that recognizing two independent things
+      -- is at most as costly as recognizing them separately plus interaction
+      exact cost_subadditivity x y
     apply le_trans (h_subadditive (X s) (Y s))
     -- Now show C(X) + C(Y) + C(X)C(Y) + 1 ≤ (C(X) + 1)(C(Y) + 1)
     ring_nf

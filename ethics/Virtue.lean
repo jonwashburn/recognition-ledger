@@ -448,7 +448,7 @@ theorem compassion_reduces_field_variance (field : CompassionField center) :
     constructor
     · apply div_pos; norm_num; apply add_pos_of_pos_of_nonneg; norm_num; apply sq_nonneg
     · apply div_lt_one_of_lt; apply lt_add_of_pos_left; apply sq_pos_of_ne_zero; norm_num
-    -- The theorem claims variance reduces, but the implementation moves states toward center, not mean
+  -- The theorem claims variance reduces, but the implementation moves states toward center, not mean
   -- This only reduces variance if center's curvature is close to the mean
 
   -- Actually looking more carefully at the comment "averaging operations", this seems to be
