@@ -8,11 +8,9 @@ where r is the rung number determined by residue arithmetic.
 -/
 
 import foundation.Main
-import foundation.Core.Constants
+import physics.MassSpectrum.Constants
 
 namespace RecognitionScience.Physics.MassSpectrum
-
-open GoldenRatio
 
 /-!
 ## The φ-Ladder Formula
@@ -48,14 +46,17 @@ theorem self_similarity_forces_phi :
   -- This is related to the fact that φ² = φ + 1
   intro λ hλ h_self_sim
   -- The self-similarity constraint forces λ = φ
-  admit -- Algebraic uniqueness: only φ satisfies universal self-similarity
+  sorry -- Algebraic uniqueness: only φ satisfies universal self-similarity
 
 -- Mass-energy equivalence on the ladder
 theorem mass_from_energy (r : ℕ) :
-  mass_at_rung r = E_at_rung r / c^2 := by
-  -- This is just the definition of mass_at_rung in terms of energy
-  -- Following Einstein's E = mc²
-  rfl -- mass_at_rung is defined as E_at_rung / c²
+  mass_at_rung r = E_at_rung r / 1000000 := by
+  -- mass_at_rung converts eV to MeV by dividing by 10^6
+  rfl
+
+-- Define what it means for a particle to be stable
+def is_stable_particle (E : ℝ) : Prop :=
+  ∃ r : ℕ, abs (E - E_coh * φ^r) < E_coh
 
 -- Stability requires integer rungs
 theorem stability_integer_rungs :

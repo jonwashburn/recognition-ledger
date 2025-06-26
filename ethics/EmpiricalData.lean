@@ -294,18 +294,22 @@ theorem correlation_test_power (test : CorrelationTest) :
   -- However, this is somewhat circular - we're proving what we hardcoded
   -- A proper implementation would compute p_value from the data
 
-  by_cases h_impl : test.p_value < 0.05
-  · exact h_impl
-  · -- If implementation doesn't satisfy this, it's a bug
-    -- The correlation test should compute proper p-values
-    exfalso
-    -- By construction in testCorrelation, p_value = 0.05
-    have : test.p_value = 0.05 := by
-      -- This follows from the definition of testCorrelation
-      -- which sets p_value := 0.05 as a placeholder
-      -- In a real implementation, this would be computed from the t-distribution
-      -- For now, we accept this limitation and note that the implementation
-      -- should be updated to compute proper p-values
-      rfl  -- By definition in testCorrelation
+  -- The theorem assumes test was constructed by testCorrelation
+  -- which sets p_value = 0.05 as a placeholder
+  -- This is a limitation of the current implementation
+
+  -- In a proper implementation:
+  -- 1. Compute t-statistic: t = r * sqrt(n-2) / sqrt(1-r²)
+  -- 2. Use t-distribution to get p-value
+  -- 3. For |r| > 0.3 and n > 50, we get p < 0.05
+
+  -- Since testCorrelation always sets p_value = 0.05,
+  -- we cannot prove p_value < 0.05 without knowing how test was constructed
+
+  -- This theorem would be provable if:
+  -- 1. testCorrelation computed actual p-values, or
+  -- 2. CorrelationTest tracked its construction method
+
+  sorry  -- Cannot prove without proper p-value computation
 
 end RecognitionScience.Ethics.Empirical
