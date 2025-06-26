@@ -633,11 +633,18 @@ theorem community_virtue_effectiveness :
     -- The key insight: propagation redistributes curvature without creating or destroying it
 
     -- Actually, looking at PropagateVirtues more carefully:
-    -- Each member gets: balance + floor(coupling * (mean - balance) / 2)
+    -- Each member gets: balance + floor(coupling * (mean - balance))
     -- This is NOT guaranteed to preserve total curvature due to floor operations
 
     -- The mean is only approximately preserved, not exactly
     -- This is a limitation of the discrete implementation
+
+    -- Example showing non-conservation:
+    -- Members: [10, 20], mean = 15, coupling = 0.5
+    -- Member 1: 10 + floor(0.5 * (15 - 10)) = 10 + floor(2.5) = 10 + 2 = 12
+    -- Member 2: 20 + floor(0.5 * (15 - 20)) = 20 + floor(-2.5) = 20 + (-3) = 17
+    -- Total before: 30, Total after: 29 (lost 1 due to floor)
+
     sorry  -- The discrete floor operations break exact conservation
 
   -- When mean is small and variance reduces, sum of absolute values reduces
@@ -863,7 +870,19 @@ theorem ethics_convergence :
   have h_decay : κₜ ≤ κ₀ * Real.exp (-Γ * t) := by
     -- Each ethical action reduces curvature
     -- Aggregate effect is exponential decay
-    sorry  -- Technical: induction on ethical actions
+
+    -- The proof would proceed by induction on t:
+    -- 1. Base case: κ₀ ≤ κ₀ * exp(0) = κ₀ ✓
+    -- 2. Inductive step: If κₜ ≤ κ₀ * exp(-Γt), then κₜ₊₁ ≤ κ₀ * exp(-Γ(t+1))
+    --    This requires showing that ethical actions at time t reduce curvature
+    --    by at least a factor of exp(-Γ)
+
+    -- The challenge is that:
+    -- - We don't have a specific model of how ethical actions evolve over time
+    -- - The hypothesis h_ethical only says states follow ethics, not how they change
+    -- - We need a dynamics model: κₜ₊₁ ≤ κₜ * (1 - δ) for some δ > 0
+
+    sorry  -- Technical: requires dynamics model for ethical evolution
 
   -- Progress = (κ₀ - κₜ)/κ₀ = 1 - κₜ/κ₀
   -- We need: 1 - κₜ/κ₀ > 1 - ε
