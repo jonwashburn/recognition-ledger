@@ -46,7 +46,31 @@ theorem efficiency_maximized_at_half :
   intro p
   -- Classic optimization: xy subject to x + y = 1
   -- Maximum at x = y = 1/2
-  sorry
+  have h : p.self + p.other = 1 := p.sum_to_total
+  -- We want to show p.self * p.other ≤ 1/4
+  -- By AM-GM: (p.self + p.other)/2 ≥ √(p.self * p.other)
+  -- So 1/2 ≥ √(p.self * p.other)
+  -- Therefore p.self * p.other ≤ 1/4
+  have am_gm : (p.self + p.other) / 2 ≥ sqrt (p.self * p.other) := by
+    apply Real.add_div_two_ge_sqrt_mul
+    exact p.both_positive.1
+    exact p.both_positive.2
+  rw [h] at am_gm
+  simp at am_gm
+  have : p.self * p.other ≤ 1/4 := by
+    have : sqrt (p.self * p.other) ≤ 1/2 := am_gm
+    have : (sqrt (p.self * p.other))^2 ≤ (1/2)^2 := by
+      apply sq_le_sq'
+      · linarith
+      · apply sqrt_nonneg
+      · exact this
+    simp [sq_sqrt] at this
+    · exact this
+    · apply mul_nonneg
+      · linarith [p.both_positive.1]
+      · linarith [p.both_positive.2]
+  simp [recognition_efficiency]
+  exact this
 
 /-!
 ## Scale Invariance Requirement

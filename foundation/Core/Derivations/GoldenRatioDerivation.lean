@@ -165,7 +165,19 @@ theorem phi_is_scaling_fixed_point : scaling_fixed_point φ ∧
       -- Using quadratic formula: λ = (1 ± √5) / 2
       have : λ^2 - λ - 1 = 0 := by linarith
       -- The quadratic x² - x - 1 = 0 has solutions (1 ± √5)/2
-      sorry -- Quadratic formula application
+      -- This follows from the quadratic formula:
+      -- For ax² + bx + c = 0, x = (-b ± √(b² - 4ac)) / 2a
+      -- Here a = 1, b = -1, c = -1
+      -- So x = (1 ± √(1 + 4)) / 2 = (1 ± √5) / 2
+
+      -- We need to show λ equals one of these values
+      -- Since λ² = λ + 1, we have λ² - λ - 1 = 0
+      -- The discriminant is 1 + 4 = 5
+      -- So the solutions are (1 ± √5) / 2
+
+      -- Formal proof would require showing these are the only solutions
+      -- to the quadratic equation, which follows from field properties
+      sorry -- TODO: Formalize quadratic formula in Lean
     cases this with
     | inl h => exact h
     | inr h =>

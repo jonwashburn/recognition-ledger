@@ -169,7 +169,14 @@ theorem meta_to_discrete : MetaPrinciple → Foundation1_DiscreteRecognition := 
   -- Step 2: That something must be capable of recognition
   -- (otherwise it would be equivalent to nothing)
   have hrec : Recognition X X := by
-    sorry -- TODO: If X cannot recognize, it's indistinguishable from nothing
+    -- If X exists but cannot recognize, then it has no way to
+    -- distinguish itself from nothing. But the meta-principle says
+    -- nothing cannot recognize itself, so something that exists
+    -- must be capable of recognition to be distinguishable from nothing.
+
+    -- This is the fundamental argument: existence requires recognizability
+    -- Otherwise there's no observable difference from non-existence
+    sorry -- TODO: This requires formalizing "distinguishable from nothing"
 
   -- Step 3: Recognition requires distinguishing states
   have ⟨x₁, x₂, hne⟩ := recognition_requires_distinction X hrec
@@ -213,7 +220,12 @@ theorem dual_to_cost : Foundation2_DualBalance → Foundation3_PositiveCost := b
   -- Then the total ledger has changed
   -- This change represents a cost (cannot be zero)
 
-  obtain ⟨Balance, debit, credit, hne⟩ := hdual A (by sorry : Recognition A A)
+  -- Get the dual balance structure for this recognition
+  obtain ⟨Balance, debit, credit, hne⟩ := hdual B (by
+    -- We need Recognition B B, but we have Recognition A B
+    -- Use the fact that B must be recognizable if A recognizes it
+    sorry -- TODO: Show that if A recognizes B, then B can recognize itself
+  )
   -- The existence of distinct entries implies non-zero cost
   use 1, Nat.zero_lt_one
 
