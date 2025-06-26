@@ -414,25 +414,61 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState)
           linarith
         exact this
     · -- Other institution types have their own transformation bounds
-      -- For Market and Educational institutions the ledger balance is unchanged,
-      -- or unchanged modulo energy only, so bounds are preserved directly.
-      -- Concretely, the transformation in Market/Educational does not touch
-      -- the ledger balance field.
+      -- For Market and Educational institutions the ledger balance is unchanged
+      -- The transformation only modifies the energy field
       have h_lb : -20 ≤ s.ledger.balance := BoundedState.lower_bound (s := s)
       have h_ub : s.ledger.balance ≤ 20 := BoundedState.upper_bound (s := s)
-      -- Simplify κ under these transformations.
-      -- For Market institutions: κ (energy modified) = κ s
-      -- For Educational institutions: κ (energy modified) = κ s
-      -- Because κ depends only on ledger balance.
-      simp [curvature] at h_lb h_ub ⊢
-      -- The transformation does not change balance.
-      -- For non-Democratic institutions, we can't prove the bounds hold
-      -- without knowing the specific transformation
-      -- The theorem needs additional constraints or a different approach
 
-      -- For now, we assume the institution is designed correctly
-      -- This is a design constraint, not a provable property
-      sorry  -- Institution-specific transformation bounds
+      -- Since these institutions don't change the ledger balance,
+      -- the curvature remains the same: κ(trans s) = κ s
+      have h_unchanged : κ (trans s) = κ s := by
+        -- Check if it's a Market institution
+        by_cases h_market : name.startsWith "Market"
+        · -- Market institution only changes energy.cost
+          simp [curvature]
+          -- The transformation is { s with energy := { cost := s.energy.cost * 0.9 } }
+          -- This doesn't affect the ledger balance
+          rfl
+        · -- Must be Educational or other institution
+          by_cases h_edu : name.startsWith "Educational"
+          · -- Educational institution only changes energy.cost
+            simp [curvature]
+            -- The transformation is { s with energy := { cost := s.energy.cost * 1.2 } }
+            -- This doesn't affect the ledger balance
+            rfl
+          · -- For other institution types, we can't prove this without knowing the transformation
+            -- But the given examples (Market and Educational) both preserve curvature
+            sorry  -- Unknown institution type
+
+      -- Now we need to show the bounds hold
+      rw [h_unchanged]
+      -- The original curvature is within [-20, 20] by BoundedState
+      -- But the institution bounds might be different (e.g., (-50, 50) for Market)
+      -- We need additional constraints to ensure this works
+
+      -- For the specific institutions defined:
+      -- - Market: bounds = (-50, 50), and -20 ≤ κ s ≤ 20, so it fits
+      -- - Educational: bounds = (-5, 25), but κ s might be outside this range!
+
+      -- The theorem statement is too strong without additional constraints
+      constructor
+      · -- Lower bound
+        by_cases h_market : name.startsWith "Market"
+        · -- Market allows (-50, 50), and we have κ s ≥ -20
+          linarith [h_lb]
+        · by_cases h_edu : name.startsWith "Educational"
+          · -- Educational allows (-5, 25), but κ s might be < -5
+            -- This requires κ s ≥ -5, which isn't guaranteed by BoundedState
+            sorry  -- Educational institution requires tighter input bounds
+          · sorry  -- Unknown institution type
+      · -- Upper bound
+        by_cases h_market : name.startsWith "Market"
+        · -- Market allows (-50, 50), and we have κ s ≤ 20
+          linarith [h_ub]
+        · by_cases h_edu : name.startsWith "Educational"
+          · -- Educational allows (-5, 25), and we have κ s ≤ 20, so it fits
+            linarith [h_ub]
+          · sorry  -- Unknown institution type
 
 /-!
 # Technological Ethics Framework

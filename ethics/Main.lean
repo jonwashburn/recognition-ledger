@@ -988,8 +988,35 @@ theorem ultimate_good_achievable :
           intro a b ha hb
           -- This holds because floor(a) ≤ a < floor(a) + 1
           -- So floor(a)/b ≤ a/b < (floor(a)+1)/b
-          -- And floor preserves this relationship
-          sorry  -- Technical floor arithmetic
+          -- We need to show floor(floor(a)/b) = floor(a/b)
+
+          -- Key inequalities:
+          -- floor(a) ≤ a < floor(a) + 1
+          -- floor(a)/b ≤ a/b < (floor(a)+1)/b
+
+          -- Since floor is monotone:
+          -- floor(floor(a)/b) ≤ floor(a/b)
+
+          -- For the reverse inequality, we need to be more careful
+          -- The issue is that floor(floor(a)/b) might be less than floor(a/b)
+          -- when floor(a) is significantly less than a
+
+          -- Actually, this equality doesn't always hold!
+          -- Counter-example: a = 2.9, b = 2
+          -- floor(a) = 2, floor(a)/b = 1, floor(floor(a)/b) = 1
+          -- a/b = 1.45, floor(a/b) = 1
+          -- So they're equal in this case
+
+          -- But consider: a = 2.1, b = 2
+          -- floor(a) = 2, floor(a)/b = 1, floor(floor(a)/b) = 1
+          -- a/b = 1.05, floor(a/b) = 1
+          -- Still equal
+
+          -- The equality holds when b is an integer, but not in general
+          -- For the golden ratio case, b = φ is not an integer
+          -- So this lemma is false as stated
+
+          sorry  -- This equality doesn't hold in general for non-integer b
         apply h_floor_div
         · exact h_pos
         · exact Real.goldenRatio_pos

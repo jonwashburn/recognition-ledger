@@ -713,6 +713,9 @@ theorem humility_accurate_ranking (s : MoralState) (context : List MoralState) :
       -- 2. Both produce sorted lists
       -- 3. Sorted permutations are unique
 
+      -- For now, we can't prove this without the right library lemmas
+      -- The key insight is that any two correct sorting algorithms
+      -- must produce the same result (up to stability for equal elements)
       sorry  -- Requires lemmas about sorting algorithm equivalence
 
     -- In a sorted list, index equals count of smaller elements
