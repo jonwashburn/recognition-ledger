@@ -9,6 +9,7 @@ exceeds 1 bit of information.
 
 import foundation.Main
 import pattern.Core.PatternAxioms
+import pattern.Core.Types
 import pattern.Geometry.LogSpiralLattice
 
 namespace RecognitionScience.Pattern.Interface
@@ -83,7 +84,12 @@ theorem lock_in_conservation (event : LockInEvent) :
 -- Multiple patterns can interfere before lock-in
 def quantum_superposition (patterns : List Pattern) (amplitudes : List ℂ) :
   PreLockInState :=
-  sorry -- TODO: define superposition state
+  { quantum_state := {
+      patterns := patterns
+      amplitudes := amplitudes
+      normalized := sorry -- TODO: prove normalization
+    }
+    maintenance_cost := patterns.length * E_coh }
 
 -- Measurement causes lock-in
 theorem measurement_causes_lock_in (s : PreLockInState) :

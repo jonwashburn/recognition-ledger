@@ -8,6 +8,7 @@ can actually manifest in physical reality.
 
 import foundation.Main
 import pattern.Core.PatternAxioms
+import pattern.Core.Types
 import pattern.Interface.LockInMechanism
 
 namespace RecognitionScience.Pattern.Interface
@@ -48,7 +49,9 @@ theorem least_action_selection :
 
 -- Quantum superposition before selection
 def superposition_state (patterns : List Pattern) (amps : List ℂ) : QuantumState :=
-  sorry -- TODO: define quantum state
+  { patterns := patterns
+    amplitudes := amps
+    normalized := sorry -- TODO: prove normalization }
 
 -- Born rule emerges from selection weights
 theorem born_rule_from_selection :
