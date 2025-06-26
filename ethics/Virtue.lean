@@ -1040,15 +1040,23 @@ theorem virtue_emergence (community : MoralCommunity) (generations : Nat) :
     -- 3. Additional wisdom virtue providing perspective
 
     -- Each member's curvature is reduced by propagation
-    have h_prop : ∀ m ∈ community.members,
-      Int.natAbs (κ ((PropagateVirtues community).members.head!)) ≤
-      Int.natAbs (κ m) := by
-      intro m h_m
-      -- Propagation reduces individual curvatures
-      sorry  -- Technical: propagation effect
+    -- Actually, this doesn't make sense - we're comparing m's curvature
+    -- to the head of the propagated list, not to m's propagated version
 
-    -- Sum of reduced terms is reduced
-    sorry  -- Technical: sum reduction
+    -- The correct statement would be:
+    -- ∀ i < community.members.length,
+    --   Int.natAbs (κ ((PropagateVirtues community).members[i])) ≤
+    --   Int.natAbs (κ (community.members[i]))
+
+    -- But the evolved community construction is flawed:
+    -- It maps all members to the head of propagated members
+    -- This doesn't preserve the community structure
+
+    -- The theorem needs reformulation with proper evolution mechanics
+    sorry  -- Evolved community construction is incorrect
+
+    -- Sum reduction would follow from individual reductions
+    -- But the current construction doesn't support this
 
 /-!
 # The Technology Stack
