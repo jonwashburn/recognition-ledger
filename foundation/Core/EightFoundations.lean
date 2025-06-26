@@ -123,7 +123,26 @@ theorem recognition_requires_distinction :
   -- If A recognizes itself, it must distinguish states
   -- Otherwise it would be static identity (nothing)
   -- This contradicts the meta-principle
-  sorry -- TODO: Complete using meta-principle
+
+  -- Proof by contradiction: suppose all states are equal
+  by_contra h
+  push_neg at h
+  -- h: ∀ (a₁ a₂ : A), a₁ = a₂
+
+  -- This means A has at most one element
+  have one_elem : ∀ a b : A, a = b := h
+
+  -- But recognition requires change/transition
+  -- If all states are identical, no recognition can occur
+  -- This means A behaves like "nothing" - static, unchanging
+
+  -- But by meta-principle, nothing cannot recognize itself
+  -- So A cannot have Recognition A A
+  -- This contradicts hrec
+
+  -- The formal argument requires showing that single-element types
+  -- cannot support non-trivial recognition structure
+  sorry -- TODO: Formalize the meta-principle application
 
 /-- Helper: Distinction requires temporal ordering -/
 theorem distinction_requires_time :
@@ -132,7 +151,14 @@ theorem distinction_requires_time :
   intro ⟨A, a₁, a₂, hne⟩
   -- To distinguish a₁ from a₂, we need "before" and "after"
   -- Static coexistence cannot create distinction
-  sorry -- TODO: Complete
+
+  -- The key insight: distinction is not just difference, but
+  -- the ability to transition from one to the other
+  -- This transition defines temporal ordering
+
+  -- Use Bool as the minimal temporal structure
+  use Bool, false, true
+  exact Bool.false_ne_true
 
 /-- The meta-principle implies discrete time (with proper justification) -/
 theorem meta_to_discrete : MetaPrinciple → Foundation1_DiscreteRecognition := by
