@@ -30,8 +30,21 @@ theorem recognition_requires_change : MetaPrinciple →
   -- Recognition means distinguishing states
   -- Static identity cannot distinguish itself from itself
   -- Therefore recognition requires change
-  use X, fun s => s  -- Placeholder for now
-  sorry -- TODO: Complete this proof
+  use X
+  -- We need a non-identity function on X
+  -- If X has only one element, no non-identity function exists
+  -- But then X cannot support recognition, contradicting that something exists
+  by_contra h
+  push_neg at h
+  -- h: ∀ change, change = id
+  -- This means every function X → X is the identity
+  -- This is only possible if X has at most one element
+
+  -- But if X has only one element, it cannot recognize
+  -- (recognition requires distinguishing states)
+  -- This would make X equivalent to "nothing"
+  -- Contradicting the meta-principle
+  sorry -- TODO: Formalize single-element types cannot recognize
 
 /-- Change requires temporal ordering to distinguish before/after -/
 theorem change_requires_time :
@@ -41,7 +54,11 @@ theorem change_requires_time :
   -- If states can change, we need to order the changes
   -- "Before change" and "after change" require temporal ordering
   -- This ordering must be strict (irreflexive, transitive)
-  sorry -- TODO: Complete this proof
+
+  -- Use Nat as time with standard ordering
+  use Nat, (· < ·)
+  -- The natural number ordering is a strict order
+  exact Nat.lt_irrefl_iff_strict_order.mp Nat.lt_irrefl
 
 /-- Combining the above: Recognition requires time -/
 theorem recognition_requires_time : MetaPrinciple →

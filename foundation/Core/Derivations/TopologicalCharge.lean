@@ -53,8 +53,36 @@ theorem seventy_three_is_21st_prime :
     have h_length : prime_list.length = 21 := by rfl
     have h_complete : ∀ p < 74, Nat.Prime p → p ∈ prime_list := by
       -- This shows our list is complete
-      sorry -- Exhaustive check
-    sorry -- Combine the above to show the result
+      intro p hp hprime
+      -- Check each number less than 74
+      interval_cases p
+      -- p = 0 or 1: not prime
+      · norm_num at hprime
+      · norm_num at hprime
+      -- p = 2: in list
+      · simp [prime_list]
+      -- p = 3: in list
+      · simp [prime_list]
+      -- For efficiency, we could use a decision procedure
+      -- but for now we note this can be verified computationally
+      all_goals {
+        -- Each case either shows p is in prime_list or p is not prime
+        try { simp [prime_list] }
+        try { norm_num at hprime }
+      }
+    -- Combine the above to show the filter result equals our list
+    have : (List.range 74).filter Nat.Prime = prime_list := by
+      ext p
+      simp [List.mem_filter, List.mem_range]
+      constructor
+      · intro ⟨hp_lt, hp_prime⟩
+        exact h_complete p hp_lt hp_prime
+      · intro hp_mem
+        constructor
+        · -- All elements of prime_list are < 74
+          fin_cases hp_mem <;> norm_num
+        · exact h_all_prime p hp_mem
+    rw [this, h_length]
 
 /-- 73 in base 8 is 111 -/
 theorem seventy_three_base_eight :

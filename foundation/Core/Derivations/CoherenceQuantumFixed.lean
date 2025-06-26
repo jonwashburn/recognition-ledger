@@ -70,7 +70,17 @@ def E_per_recognition : ℝ :=
 theorem E_per_recognition_estimate :
   0.05 < E_per_recognition ∧ E_per_recognition < 0.15 := by
   -- E ≈ 13.6 / (8 × 16) ≈ 0.106 eV
-  sorry
+  simp [E_per_recognition, Ry_fundamental]
+  -- typical_quantum_number = 4, so typical_quantum_number² = 16
+  -- E = 13.6 / (8 × 16) = 13.6 / 128
+  norm_num
+  -- 13.6 / 128 = 0.10625
+  -- Need to show 0.05 < 0.10625 < 0.15
+  constructor
+  · -- 0.05 < 13.6 / 128
+    norm_num
+  · -- 13.6 / 128 < 0.15
+    norm_num
 
 /-!
 ## Step 3: Thermal Stability Constraint

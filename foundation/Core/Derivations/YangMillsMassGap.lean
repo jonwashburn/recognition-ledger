@@ -31,7 +31,12 @@ theorem mass_gap_value :
   -- E_coh ≈ 0.090 eV
   -- φ ≈ 1.618
   -- Δ ≈ 0.090 × 1.618 ≈ 0.146 eV
-  sorry -- Numerical calculation
+  use 0.0005
+  constructor
+  · norm_num
+  · -- Need to show |E_coh * φ - 0.146| < 0.0005
+    -- This requires numerical bounds on E_coh and φ
+    sorry -- TODO: Requires exact numerical computation with interval arithmetic
 
 /-!
 ## Why This Specific Value?
@@ -82,8 +87,18 @@ theorem mass_gap_positive : mass_gap > 0 := by
 theorem mass_gap_QCD_scale :
   0.1 < mass_gap ∧ mass_gap < 1 := by
   constructor
-  · sorry -- Numerical lower bound
-  · sorry -- Numerical upper bound
+  · -- Lower bound: mass_gap > 0.1
+    -- E_coh ≈ 0.090, φ ≈ 1.618
+    -- So mass_gap ≈ 0.146 > 0.1
+    sorry -- TODO: Requires numerical bounds on E_coh
+  · -- Upper bound: mass_gap < 1
+    -- E_coh < 0.1 (by construction)
+    -- φ < 2
+    -- So mass_gap < 0.2 < 1
+    rw [mass_gap]
+    -- Need to show E_coh * φ < 1
+    -- We know E_coh < 0.1 and φ < 2
+    sorry -- TODO: Complete with bounds
 
 /-!
 ## Connection to Confinement
