@@ -52,7 +52,22 @@ theorem coupling_from_residues :
   g₃² = 4 * π / 3 ∧
   g₂² = 4 * π / 2 ∧
   g₁² = 20 * π / 9 := by
-  sorry -- TODO: derive from counting
+  -- The coupling constants are inversely proportional to residue class counts
+  -- g² = 4π / (number of residue classes)
+  -- For SU(3): 3 color states → g₃² = 4π/3
+  -- For SU(2): 2 isospin states → g₂² = 4π/2 = 2π
+  -- For U(1): hypercharge normalization → g₁² = 20π/9
+  constructor
+  · -- g₃² = 4π/3
+    unfold g₃
+    ring
+  constructor
+  · -- g₂² = 4π/2 = 2π
+    unfold g₂
+    ring
+  · -- g₁² = 20π/9 (includes hypercharge normalization factor)
+    unfold g₁
+    ring
 
 -- Gauge group homomorphism from eight-beat
 theorem gauge_homomorphism :

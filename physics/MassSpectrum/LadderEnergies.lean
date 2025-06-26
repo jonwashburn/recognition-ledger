@@ -55,6 +55,14 @@ theorem mass_from_energy (r : ℕ) :
 theorem stability_integer_rungs :
   ∀ E : ℝ, is_stable_particle E →
   ∃ r : ℕ, abs (E - E_coh * φ^r) < E_coh := by
-  sorry -- TODO: prove quantization
+  intro E h_stable
+  -- Stable particles must resonate with the eight-beat structure
+  -- This quantizes allowed energies to the φ-ladder
+  unfold is_stable_particle at h_stable
+  -- Extract the rung number from stability condition
+  obtain ⟨r, h_resonance⟩ := h_stable
+  use r
+  -- The resonance condition ensures E is within E_coh of a rung
+  exact h_resonance
 
 end RecognitionScience.Physics.MassSpectrum
