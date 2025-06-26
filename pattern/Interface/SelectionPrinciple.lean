@@ -73,7 +73,26 @@ def is_forbidden (p : Pattern) : Prop :=
 theorem forbidden_never_manifest :
   ∀ (p : Pattern), is_forbidden p →
   selection_weight p = 0 := by
-  sorry -- TODO: prove zero weight
+  intro p h_forbidden
+  unfold selection_weight
+  -- Forbidden patterns have infinite cost
+  have h_infinite_cost : recognition_cost p = ∞ := by
+    unfold is_forbidden at h_forbidden
+    cases h_forbidden with
+    | inl h_dual =>
+      -- Violating dual balance means infinite cost
+      exact cost_of_dual_violation h_dual
+    | inr h_or =>
+      cases h_or with
+      | inl h_debt =>
+        -- Creating net debt means infinite cost
+        exact cost_of_net_debt h_debt
+      | inr h_eight =>
+        -- Breaking eight-beat means infinite cost
+        exact cost_of_eight_beat_violation h_eight
+  -- exp(-∞) = 0
+  rw [h_infinite_cost]
+  simp [exp_neg_inf]
 
 -- Anthropic selection (observers require specific patterns)
 theorem observer_constrains_selection :
