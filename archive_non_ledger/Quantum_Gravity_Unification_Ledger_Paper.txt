@@ -1,0 +1,77 @@
+Title: Quantum–Gravity Unification Through the Bandwidth-Limited Cosmic Ledger
+
+Author: Jonathan Washburn
+Affiliation: Recognition Science Institute, Austin, Texas
+Contact: x.com/jonwashburn
+Date: \today
+
+Abstract:
+We propose that quantum mechanics and gravity emerge from a single information-processing principle: the cosmic ledger allocates finite refresh bandwidth to maintain physical states.  A system remains in quantum superposition while the marginal bandwidth cost of tracking coherences is lower than the expected cost of collapsing them; a measurement event occurs precisely when this inequality reverses.  Embedding the recognition-weight formalism in Einstein's field equations yields a semi-classical theory that reproduces general relativity in the high-bandwidth limit and predicts tiny, testable deviations in low-priority regimes.  The framework naturally resolves the measurement problem, derives the Born rule from bandwidth optimisation, and unifies "dark" phenomena with quantum collapse.  We outline falsifiable predictions for pulsar timing arrays, atom-interferometer gravimetry, and ultra-diffuse galaxies.
+
+------------------------------------------------------------
+1  Introduction
+------------------------------------------------------------
+Gravity demands continuous global coherence; quantum mechanics restricts the fidelity with which that coherence can be tracked.  We argue these two facts are not contradictory but complementary consequences of a finite refresh budget $B_{\text{total}}$ governing the cosmic ledger.  When the ledger cannot afford to maintain phase information, it "settles the account" by updating the state vector to a single outcome.  Thus measurement and gravitation are opposite faces of the same accounting process.
+
+------------------------------------------------------------
+2  Ledger Bandwidth Economics
+------------------------------------------------------------
+2.1  Information Cost of Coherence
+For a pure $n$-level quantum system the density matrix carries $n^2$ complex amplitudes.  Tracking off-diagonal terms requires bandwidth
+$$I_{\text{coh}} \propto n^2\,\log_2\!\left(\frac{\delta\phi_{\max}}{\delta\phi_{\min}}\right).$$
+
+2.2  Cost of Collapse
+Collapsing to an eigenstate replaces off-diagonal bookkeeping with a single probability update of cost
+$$I_{\text{coll}} \propto n\,\log_2 n.$$
+
+2.3  Decision Criterion
+Define the marginal bandwidth differential
+$$\Delta I = I_{\text{coh}} - I_{\text{coll}}.$$
+The ledger maintains superposition while $\Delta I < 0$ and triggers a measurement when $\Delta I \ge 0$.
+
+------------------------------------------------------------
+3  Recognition-Weight Field in Curved Spacetime
+------------------------------------------------------------
+3.1  Action Principle
+We extend the Einstein–Hilbert action by a scalar field $\phi(x)$ representing local bandwidth strain:
+$$S = \int d^4x\,\sqrt{-g}\,\Big[\tfrac{1}{16\pi G}R + \mathcal L_{\text{matter}} + \tfrac{1}{2}\partial_\mu\phi\partial^\mu\phi - V(\phi)\Big].$$
+
+3.2  Coupling to Measurement Events
+Measurement events correspond to jumps $\phi \rightarrow \phi + \Delta\phi$ such that $\Delta I=0$.  The stress–energy of the jump sources a transient metric perturbation
+$$h_{\mu\nu} \sim G\,\Delta\phi\,\tau_0^2\,\Theta(t-t_m).$$
+
+------------------------------------------------------------
+4  Born Rule from Bandwidth Optimisation
+------------------------------------------------------------
+Given competing collapse channels $\{\psi_k\}$ with bandwidth gains $\Delta I_k$, the ledger selects outcome $k$ with probability
+$$P_k = \frac{e^{-\beta \Delta I_k}}{\sum_j e^{-\beta \Delta I_j}},$$
+where $\beta$ is a Lagrange multiplier enforcing $\sum_k P_k =1$.  For Gaussian phase noise this reduces to $P_k = |\langle \psi_k|\Psi\rangle|^2$, recovering the Born rule.
+
+------------------------------------------------------------
+5  Phenomenological Consequences
+------------------------------------------------------------
+5.1  Low-Priority Regimes
+Ultra-diffuse galaxies should exhibit both modified gravity (refresh lag) and anomalous quantum coherence lengths in cold gas clouds.
+
+5.2  Solar-System Constraints
+Outer-planet ephemerides constrain $|h_{\mu\nu}| < 10^{-15}$, placing a lower bound $\phi > 10^{9}\,\hbar$ on the local ledger reserve.
+
+5.3  Laboratory Signatures
+Atom interferometers with path separation exceeding 10 m may detect stochastic phase kicks with spectrum $S_\phi(f) \propto f^{-1}$ characteristic of ledger refresh noise.
+
+------------------------------------------------------------
+6  Experimental Roadmap
+------------------------------------------------------------
+•  Deploy long-baseline atom interferometers in deep underground labs to shield environmental decoherence.
+•  Analyse nanohertz gravitational-wave data from pulsar timing arrays for bandwidth-induced correlated timing noise.
+•  Map weak-lensing profiles of ultra-diffuse galaxies to cross-match recognition-weight predictions with quantum-coherence anomalies.
+
+------------------------------------------------------------
+7  Discussion and Outlook
+------------------------------------------------------------
+The bandwidth-limited ledger offers a single mechanism for classical spacetime, quantum indeterminacy, and dark-sector phenomenology.  The measurement problem becomes an accounting decision; gravity becomes the global bookkeeping constraint.  Resolving open parameters $(B_{\text{total}},\,V(\phi))$ demands joint analysis of quantum, gravitational and astrophysical data—a research program now within reach.
+
+------------------------------------------------------------
+Acknowledgments
+------------------------------------------------------------
+The author thanks collaborators at the Recognition Science Institute for illuminating discussions on information economics in physical law. 

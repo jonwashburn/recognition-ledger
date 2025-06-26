@@ -1,0 +1,13 @@
+{
+  "parameter_chain": {
+    "lambda_micro_m": 9.120044383391703e-36,
+    "f_sparsity": 3.3e-122,
+    "lambda_eff_m": 2.139776762618999e-05,
+    "beta": -0.05572809000084121
+  },
+  "scan_results": [
+    {
+      "lambda_eff_um": 40.0,
+      "omega_m_eff": 3.309404120027567,
+      "g_avg": 10.0,
+      "passes_criterion": 

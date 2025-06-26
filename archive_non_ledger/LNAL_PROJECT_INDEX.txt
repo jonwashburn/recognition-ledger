@@ -1,0 +1,106 @@
+LNAL GRAVITY PROJECT INDEX
+==========================
+Last Updated: June 2024
+
+MAIN PAPERS & DOCUMENTATION
+---------------------------
+1. LNAL_Gravity_Theory_Paper_v3.txt
+   - Complete framework paper with cosmic budget derivation
+   - Includes all three deliverables and empirical validation
+   
+2. LNAL_Complete_Results_Summary.txt
+   - Concise summary of all key numerical results
+   - Quick reference for main findings
+
+3. LNAL_Cosmic_Budget_Summary.txt
+   - Detailed explanation of top-down derivation
+   - Shows how G_eff/G = 6.8 emerges from information constraints
+
+KEY PYTHON IMPLEMENTATIONS
+--------------------------
+
+DELIVERABLE A - Solar System Test:
+- lnal_solar_test.py - Initial implementation with astropy
+- lnal_solar_test_simple.py - Simplified version (no dependencies)
+- lnal_solar_detailed.py - Complete analysis with all planets
+- Result: |Δg/g| < 10^-17 ✓
+
+DELIVERABLE B - Cosmic Gravity:
+- lnal_cosmology_simple.py - Basic cosmic enhancement calculation
+- lnal_cosmology_v2.py - Improved with multiple scenarios
+- lnal_cosmology_final.py - Complete analysis with volume averaging
+- Result: ⟨G_eff/G⟩ ≈ 2 (bottom-up), needs cosmic budget approach
+
+DELIVERABLE C - Dark Energy:
+- lnal_dark_energy.py - Initial half-coin calculation
+- lnal_dark_energy_v2.py - Information entropy approach
+- Result: ρ_Λ = 5.4×10^-10 J/m³ (90% agreement) ✓
+
+COSMIC BUDGET BREAKTHROUGH:
+- lnal_cosmic_budget.py - Top-down derivation
+- Result: G_eff/G = 6.8 (matches requirement!) ✓
+
+SPARC GALAXY ANALYSIS:
+- lnal_sparc_realistic.py - Main galaxy fitting code
+- lnal_sparc_deep_analysis.py - Detailed residual analysis
+- Result: χ²/N = 1.04, δ₀ = 0.48% residual
+
+VISUALIZATIONS
+--------------
+- lnal_solar_system_test.png - Solar system deviations
+- lnal_cosmic_gravity_v2.png - Cosmic enhancement vs scale
+- lnal_dark_energy_scale_analysis.png - Dark energy mechanisms
+- lnal_cosmic_budget_derivation.png - Information budget flow
+- lnal_sparc_realistic.png - Galaxy rotation curves
+
+DATA FILES
+----------
+- lnal_solar_results.json - Solar system test results
+- lnal_deliverable_B_results.json - Cosmic gravity results
+- lnal_deliverable_C_results.json - Dark energy results
+- lnal_cosmic_budget_results.json - Information budget results
+- lnal_sparc_galaxy_analysis.csv - SPARC fitting results
+
+PARAMETER CHAIN
+---------------
+From Recognition Science axioms to observable universe:
+
+1. Planck-pixel: λ_micro = 9.12×10^-36 m
+2. Sparsity: f = 3.3×10^-122
+3. Recognition hop: λ_eff = 21.4 μm
+4. LNAL scale: a₀ = 1.2×10^-10 m/s²
+5. Running G: β = -0.0557
+6. Galaxy scales: ℓ₁ = 0.97 kpc, ℓ₂ = 24.3 kpc
+
+KEY RESULTS
+-----------
+✓ Solar System: |Δg/g| < 10^-17 (PASS by 11 orders)
+✓ Cosmic Gravity: G_eff/G = 6.8 (cosmic budget)
+✓ Dark Energy: ρ_Λ = 5.4×10^-10 J/m³ (90% match)
+✓ SPARC Galaxies: χ²/N = 1.04 (175 galaxies, 0 parameters)
+
+BREAKTHROUGH INSIGHT
+--------------------
+Dark phenomena emerge from information bandwidth limits:
+- Universe can process only ~60 recognitions/cycle
+- Must track ~400 gravitational configurations
+- Forced enhancement: 400/60 ≈ 6.8×
+- No new particles needed!
+
+NEXT STEPS
+----------
+1. Resolve 0.48% residual pattern
+2. Extended galaxy samples (dwarfs, clusters)
+3. Laboratory tests at φ-scales
+4. Complete Lean formalization
+5. Connect to quantum gravity
+
+GITHUB REPOSITORIES
+-------------------
+Code: https://github.com/recognitionscience/lnal-gravity
+Lean: https://github.com/recognitionscience/recognition-ledger
+
+=====================================
+Project Lead: Jonathan Washburn
+Recognition Science Institute
+Twitter: @jonwashburn 

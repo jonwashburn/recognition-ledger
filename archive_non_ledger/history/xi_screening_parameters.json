@@ -1,0 +1,12 @@
+{
+  "fusion_constant_kappa": 0.9341723589627158,
+  "xi_mass_kg": 8.26804e-29,
+  "xi_coupling": 2.956655516116995e-26,
+  "screening_density_kg_m3": 1e-24,
+  "compton_wavelength_m": 4.253325657189209e-15,
+  "explains": {
+    "beta_scale": "\u03ba = \u03c6/\u221a3 = 1.492",
+    "dwarf_suppression": "\u03c1 < \u03c1_gap activates screening",
+    "disk_enhancement": "\u03c1 > \u03c1_gap, no screening"
+  }
+}

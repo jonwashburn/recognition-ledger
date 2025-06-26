@@ -1,0 +1,107 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{LNAL Global Bandwidth Approach: Summary}
+\author{Recognition Science Institute}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Executive Summary}
+
+We have developed a global bandwidth normalization approach for the LNAL gravity theory based on the concept of limited ledger update capacity. The key insight is that the cosmic ledger must triage updates based on complexity and timescales, leading to scale-dependent effective gravity.
+
+\section{Core Physics}
+
+\subsection{Recognition Weight Formula}
+The recognition weight at radius $r$ is:
+\begin{equation}
+w(r) = \lambda \cdot \xi \cdot n(r) \cdot \left(\frac{T_{\text{dyn}}(r)}{\tau_0}\right)^\alpha
+\end{equation}
+
+where:
+\begin{itemize}
+\item $\lambda$ = global normalization factor (enforces bandwidth constraint)
+\item $\xi = 1 + C_0 f_{\text{gas}}^\gamma \left(\frac{\Sigma_0}{\Sigma_*}\right)^\delta$ = complexity factor
+\item $n(r)$ = radial-dependent refresh interval
+\item $T_{\text{dyn}}(r) = 2\pi r / v_{\text{baryon}}(r)$ = local dynamical time
+\end{itemize}
+
+\subsection{Bandwidth Constraint}
+The global normalization ensures:
+\begin{equation}
+\sum_{\text{all galaxies}} \int w(r) \, dr = \sum_{\text{all galaxies}} \int dr
+\end{equation}
+
+This enforces that total recognition resources equal the Newtonian baseline.
+
+\section{Results Summary}
+
+\subsection{Basic Unified Solver}
+\begin{itemize}
+\item 4 global parameters: $\alpha, C_0, \gamma, \delta$
+\item Median $\chi^2/N = 4.71$
+\item 51.4\% of galaxies with $\chi^2/N < 5$
+\item Average boost $\rho = 8.0$
+\end{itemize}
+
+\subsection{Advanced Solver with Radial Dependence}
+\begin{itemize}
+\item 9 parameters including radial transitions
+\item Median $\chi^2/N = 3.36$ 
+\item 47.4\% of galaxies with $\chi^2/N < 3$
+\item Average boost $\rho = 13.5$
+\end{itemize}
+
+Optimized parameters:
+\begin{align}
+\alpha &= 0.642 \quad \text{(time scaling)}\\
+\beta &= 3.0 \quad \text{(transition sharpness)}\\
+C_0 &= 8.6 \quad \text{(gas complexity)}\\
+\gamma &= 3.0 \quad \text{(gas exponent)}\\
+\delta &= 0.325 \quad \text{(surface brightness)}\\
+r_1 &= 0.5 \text{ kpc} \quad \text{(inner transition)}\\
+n_1 &= 3.2 \quad \text{(disk boost)}\\
+n_2 &= 2.0 \quad \text{(outer boost)}
+\end{align}
+
+\section{Key Findings}
+
+\begin{enumerate}
+\item \textbf{Gas-rich galaxies require stronger boosts}: The optimization pushes $C_0$ and $\gamma$ to their bounds, suggesting gas complexity is crucial.
+
+\item \textbf{Sharp radial transitions}: $\beta = 3$ indicates rapid changes between inner/disk/outer regions.
+
+\item \textbf{Inner regions update frequently}: At $r < 0.5$ kpc, refresh interval $n \approx 1$ (every cycle).
+
+\item \textbf{Disk regions need moderate boost}: $n_1 = 3.2$ gives effective $G_{\text{eff}} \approx 3.2 G_N$ in disks.
+
+\item \textbf{Outer regions surprisingly low}: $n_2 = 2.0$ hit lower bound, suggesting outer regions don't need as much boost as expected.
+\end{enumerate}
+
+\section{Remaining Challenges}
+
+While median $\chi^2/N = 3.36$ is a significant improvement over the catastrophic failure of standard LNAL ($\chi^2/N > 1000$), we are still $\sim$3× away from MOND-level fits. The main issues:
+
+\begin{itemize}
+\item One-size-fits-all radial profile doesn't match galaxy diversity
+\item Missing vertical structure effects
+\item No accounting for environmental factors
+\item Crude gas fraction estimates (need proper H$_2$ data)
+\end{itemize}
+
+\section{Next Steps}
+
+\begin{enumerate}
+\item Implement galaxy-specific radial profiles based on morphology
+\item Add vertical disk structure terms
+\item Include environmental density effects
+\item Obtain proper molecular gas measurements
+\item Consider time-domain variations (orbital phase effects)
+\end{enumerate}
+
+The global bandwidth approach provides a physically motivated framework that significantly improves LNAL performance on galaxy rotation curves while maintaining cosmic-scale successes.
+
+\end{document} 
