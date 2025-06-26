@@ -1495,7 +1495,17 @@ lemma curvature_determines_goodness (s₁ s₂ : MoralState) :
       -- This means |κ s₁| > |κ s₂|, not |κ s₁| < |κ s₂|
       -- So s₁ is actually worse than s₂ in this case!
       -- The lemma statement is wrong - it should account for sign
-      sorry  -- The definition of is_morally_better_than needs revision
+
+      -- The issue is that the lemma assumes κ s₁ < κ s₂ always means s₁ is better
+      -- But when both are negative, the one closer to 0 (less negative) is better
+      -- So if κ s₁ < κ s₂ < 0, then |κ s₂| < |κ s₁|, meaning s₂ is better
+
+      -- The correct statement would be:
+      -- - If κ s₁, κ s₂ ≥ 0: κ s₁ < κ s₂ → s₁ is better
+      -- - If κ s₁, κ s₂ ≤ 0: κ s₁ > κ s₂ → s₁ is better
+      -- - If κ s₁ < 0 ≤ κ s₂: s₁ is better
+
+      sorry  -- Lemma statement needs sign-aware formulation
 
 /-- Goodness determines curvature (corrected version) -/
 lemma goodness_determines_curvature (s₁ s₂ : MoralState) :
@@ -1544,8 +1554,60 @@ theorem virtue_training_collective_improvement
     trained.length = students.length ∧
     trained.map κ |>.map Int.natAbs |>.sum <
     students.map κ |>.map Int.natAbs |>.sum := by
-  -- The combined effect is multiplicative
-  exact Nat.zero_lt_of_lt h_non_zero
+  -- Apply the curriculum to all students
+  let trained := students.map (fun s => curriculum.foldl (fun acc v => TrainVirtue v acc) s)
+  use trained
+  constructor
+  · simp [trained]
+  · -- Each virtue in the curriculum reduces curvature
+    simp [trained]
+    -- At least one student has non-zero curvature
+    have h_exists_nonzero : ∃ s ∈ students, κ s ≠ 0 := by
+      by_contra h_all_zero
+      push_neg at h_all_zero
+      have h_sum_zero : students.map κ |>.map Int.natAbs |>.sum = 0 := by
+        apply List.sum_eq_zero
+        intro x h_in
+        simp at h_in
+        obtain ⟨s, h_s_in, h_eq⟩ := h_in
+        rw [←h_eq]
+        have h_zero := h_all_zero s h_s_in
+        simp [h_zero]
+      exact h_non_zero h_sum_zero
+
+    -- For any non-empty curriculum, training reduces curvature
+    cases curriculum with
+    | nil =>
+      -- Empty curriculum: no change
+      simp
+      exact absurd rfl (ne_of_gt h_non_zero)
+    | cons v vs =>
+      -- At least one virtue applied
+      obtain ⟨s_nonzero, h_s_in, h_s_nonzero⟩ := h_exists_nonzero
+      -- First virtue reduces curvature for non-zero states
+      have h_first_reduce : ∀ s ∈ students,
+        Int.natAbs (κ (TrainVirtue v s)) ≤ Int.natAbs (κ s) := by
+        intro s _
+        exact virtue_training_reduces_curvature v s
+      have h_first_strict : ∃ s ∈ students,
+        Int.natAbs (κ (TrainVirtue v s)) < Int.natAbs (κ s) := by
+        use s_nonzero, h_s_in
+        exact virtue_training_reduces_curvature_nonzero v s_nonzero h_s_nonzero
+      -- The fold preserves the reduction
+      have h_fold_reduce : ∀ s,
+        Int.natAbs (κ ((v::vs).foldl (fun acc v => TrainVirtue v acc) s)) ≤
+        Int.natAbs (κ s) := by
+        intro s
+        simp [List.foldl]
+        induction vs generalizing s with
+        | nil => exact virtue_training_reduces_curvature v s
+        | cons v' vs' ih =>
+          calc Int.natAbs (κ (vs'.foldl (fun acc v => TrainVirtue v acc) (TrainVirtue v' (TrainVirtue v s))))
+            ≤ Int.natAbs (κ (TrainVirtue v' (TrainVirtue v s))) := ih _
+            _ ≤ Int.natAbs (κ (TrainVirtue v s)) := virtue_training_reduces_curvature v' _
+            _ ≤ Int.natAbs (κ s) := virtue_training_reduces_curvature v s
+      -- Apply to get strict reduction
+      exact List.sum_lt_sum_of_exists_lt_of_all_le' h_first_strict h_first_reduce
 
 /-- Virtue curvature reduction factors -/
 def virtue_curvature_reduction (v : Virtue) : Real :=
