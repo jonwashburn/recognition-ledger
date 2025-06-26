@@ -726,18 +726,43 @@ theorem virtues_are_discoveries :
       rfl
 
 /-- Virtue cultivation reduces systemic curvature -/
-theorem virtue_reduces_systemic_curvature :
-  ∀ (system : List MoralState) (v : Virtue),
-    let trained := system.map (TrainVirtue v)
-    (trained.map κ |>.map Int.natAbs |>.sum) <
-    (system.map κ |>.map Int.natAbs |>.sum) := by
-  intro system v
-  simp [List.map_map]
-  apply List.sum_lt_sum
-  intro s h_in
-  -- Each individual training reduces curvature
-  have h_individual := virtue_training_reduces_curvature v s
-  exact Int.natAbs_lt_natAbs.mpr h_individual
+theorem virtue_reduces_systemic_curvature
+  (system : List MoralState) (v : Virtue)
+  (h_nonzero : system.map κ |>.map Int.natAbs |>.sum > 0) :
+  let trained := system.map (TrainVirtue v)
+  (trained.map κ |>.map Int.natAbs |>.sum) <
+  (system.map κ |>.map Int.natAbs |>.sum) := by
+  -- At least one state must have non-zero curvature
+  have h_exists : ∃ s ∈ system, κ s ≠ 0 := by
+    by_contra h_all_zero
+    push_neg at h_all_zero
+    have h_sum_zero : system.map κ |>.map Int.natAbs |>.sum = 0 := by
+      apply List.sum_eq_zero
+      intro x h_in
+      simp at h_in
+      obtain ⟨s, h_s_in, h_eq⟩ := h_in
+      rw [←h_eq]
+      have h_zero := h_all_zero s h_s_in
+      simp [h_zero]
+    exact h_nonzero h_sum_zero
+
+  obtain ⟨s_nonzero, h_s_in, h_s_nonzero⟩ := h_exists
+
+  -- For the non-zero state, reduction is strict
+  have h_strict : ∃ s ∈ system,
+    Int.natAbs (κ (TrainVirtue v s)) < Int.natAbs (κ s) := by
+    use s_nonzero, h_s_in
+    exact virtue_training_reduces_curvature_nonzero v s_nonzero h_s_nonzero
+
+  -- For all states, reduction is non-strict
+  have h_all : ∀ s ∈ system,
+    Int.natAbs (κ (TrainVirtue v s)) ≤ Int.natAbs (κ s) := by
+    intro s h_in
+    exact virtue_training_reduces_curvature v s
+
+  -- Apply the sum lemma
+  simp only [List.map_map]
+  exact List.sum_lt_sum_of_exists_lt_of_all_le' h_strict h_all
 
 /-- Helper lemma: Curriculum reduces curvature through virtue training -/
 lemma curriculum_reduces_curvature (curriculum : List Virtue) (student : MoralState) :
@@ -768,13 +793,13 @@ theorem ai_moral_alignment :
 -/
 
 /-- Helper lemma: Exponential decay inequality -/
-lemma exp_decay_bound (κ₀ : Real) (t : Real) (ε : Real) (h_pos : ε > 0) :
+lemma exp_decay_bound (κ₀ : Real) (t : Real) (ε : Real) (h_pos : ε > 0) (h_κ_pos : κ₀ > 0) :
   κ₀ * Real.exp (-t / 8) < ε ↔ t > 8 * Real.log (κ₀ / ε) := by
   rw [mul_comm κ₀]
   rw [← Real.exp_log h_pos]
   rw [mul_lt_iff_lt_one_left (Real.exp_pos _)]
   rw [Real.exp_lt_exp]
-  rw [Real.log_div (by linarith : κ₀ > 0) h_pos]
+  rw [Real.log_div h_κ_pos h_pos]
   ring_nf
   rw [lt_neg, neg_div, div_lt_iff (by norm_num : (8 : Real) > 0)]
   ring_nf
@@ -1211,8 +1236,12 @@ theorem virtue_emergence (basic_virtues : List Virtue) :
     | _ =>
       -- For any other virtues, use all basic virtues as composition
       use basic_virtues
-      simp
-      sorry  -- Would need to verify this holds for all virtues
+      constructor
+      · simp [basic_virtues]
+      · -- Other virtues don't have specific decompositions in our model
+        -- This is a limitation - we've only modeled specific virtue compositions
+        -- The theorem statement is too strong without enumerating all virtues
+        sorry  -- Cannot prove for unspecified virtues without complete enumeration
 
 /-- Consciousness-Ethics Connection: 45-Gap manifestation -/
 theorem consciousness_ethics_connection :
