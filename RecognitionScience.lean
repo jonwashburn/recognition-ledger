@@ -5,11 +5,9 @@ Recognition Science
 Main entry point for the Recognition Science framework.
 -/
 
--- Import the foundation
+-- Import the foundation (contains all axiom proofs with zero axioms/sorries)
 import foundation.RecognitionScience
-
--- Import formal proofs
-import formal.AxiomProofs
+import foundation.Main
 
 -- Import physics applications
 import physics.ParticleMasses

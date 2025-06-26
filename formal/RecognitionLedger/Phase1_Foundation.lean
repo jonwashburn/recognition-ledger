@@ -15,8 +15,8 @@ theorem electron_mass_correct :
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Data.Complex.Basic
-import foundation.RecognitionScience.AxiomProofs
-import foundation.RecognitionScience.RSConstants
+import foundation.Main
+import foundation.Core.Constants
 
 namespace RecognitionLedger
 
@@ -30,14 +30,14 @@ We import and re-export them here for the Recognition Ledger system.
 -/
 
 -- Re-export the 8 fundamental theorems (formerly axioms)
-theorem Axiom1_DiscreteRecognition := RecognitionScience.A1_DiscreteRecognition
-theorem Axiom2_DualBalance := RecognitionScience.A2_DualBalance
-theorem Axiom3_PositiveCost := RecognitionScience.A3_PositiveCost
-theorem Axiom4_Unitarity := RecognitionScience.A4_Unitarity
-theorem Axiom5_MinimalTick := RecognitionScience.A5_MinimalTick
-theorem Axiom6_SpatialVoxels := RecognitionScience.A6_SpatialVoxels
-theorem Axiom7_EightBeat := RecognitionScience.A7_EightBeat
-theorem Axiom8_GoldenRatio := RecognitionScience.A8_GoldenRatio_Corrected
+theorem Axiom1_DiscreteRecognition := DiscreteTime.discrete_recognition
+theorem Axiom2_DualBalance := DualBalance.dual_involution
+theorem Axiom3_PositiveCost := PositiveCost.cost_positive
+theorem Axiom4_Unitarity := UnitaryEvolution.evolution_preserves_norm
+theorem Axiom5_MinimalTick := IrreducibleTick.minimal_duration
+theorem Axiom6_SpatialVoxels := SpatialVoxel.discrete_space
+theorem Axiom7_EightBeat := EightBeat.eight_periodicity
+theorem Axiom8_GoldenRatio := GoldenRatio.golden_emerges
 
 /-!
 ## Phase 1 Milestone 2: Golden Ratio Lock-in Theorem
