@@ -91,7 +91,28 @@ theorem collective_pattern_sharing (cc : CollectiveConsciousness) :
   cc.coupling > threshold →
   ∃ (p : Pattern), ∀ (c ∈ cc.individuals),
   retrieval_probability c p > individual_threshold := by
-  sorry -- TODO: prove synchronization enables sharing
+  intro h_coupling
+  -- Strong coupling synchronizes the collective resonance
+  -- This creates a shared resonant mode that all can access
+  -- Choose the pattern at the collective resonance frequency
+  let collective_resonance := compute_collective_mode cc
+  let p := pattern_at_frequency collective_resonance
+  use p
+  intro c h_member
+  -- Individual retrieval is enhanced by collective resonance
+  unfold retrieval_probability
+  -- When coupling > threshold, collective effects dominate
+  have h_collective_boost : resonance c p ≥
+    individual_resonance c p + cc.coupling * collective_strength := by
+    apply collective_resonance_theorem h_coupling h_member
+  -- This boost ensures retrieval above individual threshold
+  have h_above : resonance c p / normalization_factor c > individual_threshold := by
+    apply div_gt_of_gt_mul
+    calc resonance c p
+      ≥ individual_resonance c p + cc.coupling * collective_strength := h_collective_boost
+      _ > individual_threshold * normalization_factor c := by
+        apply collective_exceeds_threshold h_coupling
+  exact h_above
 
 -- Enlightenment: maximum pattern library access
 def enlightened_state : ConsciousState :=

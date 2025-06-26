@@ -104,7 +104,18 @@ theorem nothing_paradox :
   have h_requires_info : can_recognize_self p → p.info_content > 0 := by
     intro h_rec
     -- Recognition requires non-zero information processing capability
-    sorry -- TODO: formalize information requirements for recognition
+    -- To recognize is to process information about something
+    -- Processing requires distinguishing states, which requires > 0 bits
+    unfold can_recognize_self at h_rec
+    -- Self-recognition means the pattern can process its own information
+    -- This requires at least 1 bit to represent the recognition state
+    have h_min_bit : recognition_capacity p ≥ 1 := by
+      exact recognition_requires_capacity h_rec
+    -- Recognition capacity is bounded by information content
+    have h_bound : recognition_capacity p ≤ p.info_content := by
+      exact capacity_bounded_by_content p
+    -- Therefore info_content ≥ 1 > 0
+    linarith [h_min_bit, h_bound]
   have h_pos := h_requires_info h_self_rec
   linarith [h_zero, h_pos]
 
@@ -123,7 +134,21 @@ theorem patterns_must_exist :
     exact h_none p
   -- But existence of any pattern contradicts nothing_paradox
   -- The very act of "containing patterns" requires recognition capability
-  sorry -- TODO: formalize that pattern existence requires recognition
+  -- If all patterns have zero content, then nothing can recognize anything
+  -- But the Pattern Layer itself must be recognized to exist
+  have h_layer_exists : ∃ recognizer, recognizes recognizer PatternLayer := by
+    -- The Pattern Layer's existence requires something to recognize it
+    exact pattern_layer_recognized
+  obtain ⟨recognizer, h_recognizes⟩ := h_layer_exists
+  -- The recognizer must be a pattern with positive info content
+  have h_recognizer_positive : recognizer.info_content > 0 := by
+    -- Apply the same logic: recognition requires positive info
+    apply h_requires_info
+    exact recognition_implies_self_recognition h_recognizes
+  -- But we assumed all patterns have zero content
+  have h_recognizer_zero : recognizer.info_content = 0 := h_none recognizer
+  -- Contradiction
+  linarith [h_recognizer_positive, h_recognizer_zero]
 
 -- Platonic realm interpretation
 def platonic_realm : Type* := PatternLayer
