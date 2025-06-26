@@ -1246,7 +1246,8 @@ theorem moral_gps_optimality (position : MoralPosition) :
   exact moral_gps_optimizes_curvature position choice h_in
 
 /-- Virtue Training Effectiveness: Guaranteed curvature reduction -/
-theorem virtue_training_effectiveness (v : Virtue) (s : MoralState) (cycles : Nat) :
+theorem virtue_training_effectiveness (v : Virtue) (s : MoralState) (cycles : Nat)
+  (h_nonzero : κ s ≠ 0) :
   cycles > 0 →
   ∃ (trained : MoralState),
     (∀ i : Fin cycles, ∃ t : MoralTransition s trained, isVirtuous t) ∧
@@ -1257,7 +1258,7 @@ theorem virtue_training_effectiveness (v : Virtue) (s : MoralState) (cycles : Na
   · intro i
     use { duration := ⟨8, by norm_num⟩, energyCost := by simp }
     exact virtue_is_virtuous v s
-  · exact virtue_training_reduces_curvature v s
+  · exact virtue_training_reduces_curvature_nonzero v s h_nonzero
 
 /-- Institutional Stability: Virtue-based institutions self-correct -/
 theorem institutional_stability (inst : Institution) :
