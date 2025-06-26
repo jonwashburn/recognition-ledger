@@ -101,16 +101,38 @@ def phase_rotation : Phase3D → Phase3D
 /-- Eight applications return to a different state -/
 lemma rotation_eight_not_id : ∃ p : Phase3D, phase_rotation^[8] p ≠ p := by
   use ⟨true, false, false⟩
+  -- Since rotation has period 3, rotation^[8] = rotation^[8 mod 3] = rotation^[2]
+  -- (true,false,false) → (false,false,true) → (false,true,false)
   simp [phase_rotation, Function.iterate]
-  -- After 8 rotations: (true,false,false) → (false,false,true)
-  norm_num
+  -- Check: (true,false,false) ≠ (false,true,false)
+  decide
 
 /-- Sixteen applications return to original -/
 lemma rotation_sixteen_id : ∀ p : Phase3D, phase_rotation^[16] p = p := by
   intro p
-  -- 16 = 8 * 2, and we cycle through with period 3
-  -- Actually, let me think about this more carefully
-  sorry
+  -- The rotation (x,y,z) → (y,z,x) has period 3
+  -- So rotation^[3] = id
+  -- Since 16 = 3*5 + 1, we have rotation^[16] = rotation^[1] = rotation
+  -- This is wrong - let me check what rotation^[3] actually does
+
+  -- First prove rotation^[3] = id
+  have h3 : phase_rotation^[3] = id := by
+    ext ⟨x, y, z⟩
+    simp [phase_rotation, Function.iterate]
+    -- (x,y,z) → (y,z,x) → (z,x,y) → (x,y,z)
+    rfl
+
+  -- Now use that 16 = 3*5 + 1
+  have h16 : phase_rotation^[16] = phase_rotation^[3*5 + 1] := by norm_num
+  rw [h16]
+  rw [Function.iterate_add]
+  rw [Function.iterate_mul]
+  rw [h3]
+  simp [Function.iterate]
+  -- Actually, 16 = 3*5 + 1, so rotation^[16] = rotation, not id
+  -- This contradicts what we want to prove
+  -- Let me reconsider - maybe the rotation should be different
+  sorry  -- The stated rotation doesn't have period 16
 
 /-- Double cover property -/
 theorem fermion_double_cover :
