@@ -101,8 +101,10 @@ noncomputable def T : ℝ := 300  -- Room temperature in Kelvin
 
 -- Placeholders for undefined functions
 def realized_path (initial final : Pattern) : List Pattern := []
-noncomputable def argmin {α β : Type*} [LinearOrder β] (f : α → β) (s : Set α) : α :=
-  Classical.choice (Set.nonempty_def.mp sorry)
+noncomputable def argmin {α β : Type*} [LinearOrder β] (f : α → β) (s : Set α) (h : s.Nonempty) : α :=
+  -- Return an element from s that minimizes f
+  -- This is a placeholder implementation
+  Classical.choice h
 def all_paths (initial final : Pattern) : Set (List Pattern) := ∅
 
 def violates_dual_balance (p : Pattern) : Prop := False
