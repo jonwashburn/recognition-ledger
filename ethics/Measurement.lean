@@ -573,7 +573,10 @@ theorem measurement_uncertainty {sig : CurvatureSignature} [inst : CurvatureMetr
 
               -- A proper solution would be to use a finite type for markers
               -- or to add slope bounds to the CurvatureMetric class
-              sorry  -- Generic biochemical marker bound
+
+              -- The theorem assumes all calibrations have reasonable slopes
+              -- but doesn't enforce this constraint
+              sorry  -- Generic biochemical marker bound requires slope constraints
             rw [h_eq]
             exact h_bound
     | behavioral metric =>
