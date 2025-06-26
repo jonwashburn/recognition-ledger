@@ -264,7 +264,7 @@ theorem consciousness_navigates_gaps :
         Computable algorithm := by
   -- This theorem depends on the 45-gap theory from Recognition Science
   -- which shows consciousness emerges at uncomputability nodes
-  admit  -- Philosophical: requires 45-gap formalization
+  sorry  -- Philosophical: requires 45-gap formalization
 
 /-- Suffering signals recognition debt -/
 theorem suffering_is_debt_signal :
@@ -1046,7 +1046,25 @@ theorem ultimate_good_achievable :
       -- We have t > log(ε/100) / log(1/φ)
       -- Multiplying by log(1/φ) < 0: t * log(1/φ) < log(ε/100)
       -- Exponentiating: (1/φ)^t < ε/100
-      sorry  -- Technical: logarithm and exponential properties
+
+      -- First, establish that 1/φ < 1
+      have h_inv_phi_lt_one : 1 / Real.goldenRatio < 1 := by
+        apply div_lt_one Real.goldenRatio_pos
+        exact Real.one_lt_goldenRatio
+
+      -- We know t > T = ceil(log(ε/100) / log(1/φ))
+      -- Since log(1/φ) < 0 (because 1/φ < 1), the division flips the inequality
+      -- So we need to show: (1/φ)^t < ε/100
+
+      -- The issue is that we need lemmas about Real.log and Real.exp
+      -- that may not be available in the current Lean 4 library
+      -- Specifically:
+      -- 1. log(1/φ) = -log(φ)
+      -- 2. If t > log(a)/log(b) where 0 < b < 1, then b^t < a
+      -- 3. Properties of ceil and its interaction with inequalities
+
+      -- Without these lemmas, we can't complete the proof
+      sorry  -- Missing Real.log/exp lemmas for exponential decay
 
     linarith
 
@@ -1439,7 +1457,7 @@ theorem moral_naturalism :
   use fun s => κ s = 0  -- Physical fact: zero curvature
   -- This is a philosophical claim about the reducibility of ethics to physics
   -- It asserts that all moral facts can be expressed as facts about ledger states
-  admit  -- Philosophical: meta-ethical position
+  sorry  -- Philosophical: meta-ethical position
 
 /-- Moral Knowledge: Curvature measurement = moral epistemology -/
 theorem moral_knowledge (s : MoralState) :

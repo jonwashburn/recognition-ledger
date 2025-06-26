@@ -1049,7 +1049,18 @@ theorem virtue_propagation_reduces_variance (community : MoralCommunity) :
   -- We leave the detailed calculation to standard probability theory
   -- Key: sum of squared deviations from mean is minimized when values equal mean
   -- Moving toward mean via convex combination reduces this sum
-  sorry  -- Technical: standard variance reduction result
+
+  -- The mathematical fact is: if X' = (1-α)X + αμ where μ = E[X] and α ∈ (0,1)
+  -- Then Var(X') = (1-α)² Var(X) < Var(X)
+  --
+  -- In our case, the new balance for each member is:
+  -- balance' = balance + coupling * (mean - balance) = (1 - coupling) * balance + coupling * mean
+  --
+  -- However, our implementation uses floor operations which complicate the analysis
+  -- The discrete nature means the exact variance reduction formula doesn't apply
+  -- We would need to prove a discrete version of the variance reduction theorem
+
+  sorry  -- Technical: discrete variance reduction with floor operations
 
 /-- Virtue emergence from recognition dynamics -/
 theorem virtue_emergence (community : MoralCommunity) (generations : Nat)
@@ -1091,7 +1102,19 @@ theorem virtue_emergence (community : MoralCommunity) (generations : Nat)
     -- Σ|balance_i'| < Σ|balance_i| when not all balance_i are equal
 
     -- This is a standard result in convex optimization and consensus algorithms
-    sorry  -- Technical: contraction mapping reduces L1 norm
+
+    -- The mathematical principle is that for a contraction mapping f with
+    -- f(x) = (1-α)x + αc where α ∈ (0,1) and c is constant (the mean),
+    -- we have ||f(x)||₁ < ||x||₁ unless x is already at the fixed point
+
+    -- In our case, the L1 norm is Σ|balance_i|
+    -- After propagation: Σ|balance_i'| where balance_i' = (1-coupling)*balance_i + coupling*mean
+    -- This reduces the L1 norm when there's variation in the balances
+
+    -- However, the floor operations in our implementation break the exact contraction property
+    -- We would need a more sophisticated analysis for the discrete case
+
+    sorry  -- Technical: discrete contraction mapping with floor operations
 
 /-!
 # The Technology Stack
