@@ -74,3 +74,4 @@ lake-manifest.json
 # Ignore large dataset files
 Particle-Masses-B.txt 
 >>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
+working/
