@@ -875,122 +875,15 @@ theorem ethics_convergence :
     exact h_ratio
 
 /-- Moral education effectiveness -/
-theorem moral_education_effectiveness :
-  ∀ (students : List MoralState) (curriculum : List Virtue),
-    curriculum.length ≥ 8 →  -- Complete virtue set
-    let graduates := students.map (fun s => curriculum.foldl TrainVirtue s)
-    graduates.map κ |>.map Int.natAbs |>.sum <
-    students.map κ |>.map Int.natAbs |>.sum := by
-  intro students curriculum h_complete
-  -- Apply curriculum to all students
-  let trained := students.map (fun s => curriculum.foldl TrainVirtue s)
-  use trained
-  constructor
-  · simp [trained]
-  · -- Show strict reduction in total curvature
-    simp [trained]
-    -- Handle empty student list
-    cases students with
-    | nil => simp at h_non_zero
-    | cons s rest =>
-    simp [List.map_cons, List.sum_cons]
-    -- For each student, the curriculum reduces their curvature
-    have h_individual : ∀ student ∈ s :: rest,
-      Int.natAbs (κ (curriculum.foldl TrainVirtue student)) ≤
-      Int.natAbs (κ student) := by
-      intro student h_in
-      -- Apply virtue training reduction iteratively
-      exact curriculum_reduces_curvature curriculum student
-
-    -- Sum the reductions
-    -- Since we have ≤ and need <, we need at least one strict reduction
-    -- With 8+ virtues and wisdom reducing curvature, we get strict reduction
-    have h_strict : ∃ student ∈ s :: rest,
-      Int.natAbs (κ (curriculum.foldl TrainVirtue student)) <
-      Int.natAbs (κ student) := by
-      use s, List.mem_cons_self s rest
-      -- With a complete curriculum (8+ virtues including wisdom),
-      -- at least one virtue strictly reduces curvature for non-zero states
-      cases h_zero : κ s with
-      | zero =>
-        -- If already zero, can't reduce further
-        simp [h_zero]
-        -- But then the sum is already minimal
-        -- If κ s = 0, then Int.natAbs (κ s) = 0 = Int.natAbs (κ (TrainVirtue v s))
-        -- Since we can't reduce below 0, we have equality not strict inequality
-        -- This means we need to handle the case where some students have zero curvature
-        -- The theorem still holds because at least one student has non-zero curvature
-        have h_not_all_zero : ∃ s' ∈ students, κ s' ≠ 0 := by
-          by_contra h_all_zero
-          push_neg at h_all_zero
-          -- If all students have zero curvature, total is zero
-          have h_sum_zero : students.map κ |>.map Int.natAbs |>.sum = 0 := by
-            apply List.sum_eq_zero
-            intro x h_in
-            simp at h_in
-            obtain ⟨s', h_s'_in, h_eq⟩ := h_in
-            rw [←h_eq]
-            have h_zero' := h_all_zero s' h_s'_in
-            simp [h_zero']
-          -- But this contradicts h_non_zero
-          exact h_non_zero h_sum_zero
-        -- So there exists a student with non-zero curvature
-        obtain ⟨s', h_s'_in, h_s'_nonzero⟩ := h_not_all_zero
-        -- For that student, applying any virtue from curriculum strictly reduces curvature
-        -- Use the first virtue in the curriculum (we know it's non-empty since h_complete)
-        have h_curriculum_nonempty : curriculum ≠ [] := by
-          intro h_empty
-          simp [h_empty] at h_complete
-          omega
-        obtain ⟨v, vs, h_curriculum_eq⟩ := List.exists_cons_of_ne_nil h_curriculum_nonempty
-        -- Apply this virtue to the non-zero student
-        have h_strict : Int.natAbs (κ (TrainVirtue v s')) < Int.natAbs (κ s') := by
-          apply virtue_training_reduces_curvature_nonzero v s' h_s'_nonzero
-        -- This contributes to the overall strict reduction
-        -- We need to be more careful about showing the strict inequality for the sum
-        -- Let's use a different approach: show that at least one term strictly decreases
-        use s', h_s'_in
-        -- After applying curriculum, s' has strictly reduced curvature
-        have h_s'_reduced : Int.natAbs (κ (curriculum.foldl TrainVirtue s')) < Int.natAbs (κ s') := by
-          -- The foldl applies all virtues in curriculum
-          -- Since s' has non-zero curvature and we have at least one virtue,
-          -- the reduction is strict
-          rw [h_curriculum_eq]
-          simp [List.foldl_cons]
-          -- After applying v, curvature is strictly reduced
-          have h_first : Int.natAbs (κ (TrainVirtue v s')) < Int.natAbs (κ s') := by
-            apply virtue_training_reduces_curvature_nonzero v s' h_s'_nonzero
-          -- After applying remaining virtues, it reduces further (or stays same)
-          have h_rest : Int.natAbs (κ (vs.foldl TrainVirtue (TrainVirtue v s'))) ≤
-                        Int.natAbs (κ (TrainVirtue v s')) := by
-            apply curriculum_reduces_curvature vs (TrainVirtue v s')
-          -- Combine for strict reduction
-          exact lt_of_le_of_lt h_rest h_first
-        exact h_s'_reduced
-      | succ n =>
-        -- Positive curvature, wisdom training strictly reduces
-        have h_wisdom : Virtue.wisdom ∈ curriculum := by
-          -- Complete curriculum contains all basic virtues
-          sorry -- Need assumption about curriculum completeness
-        sorry -- Technical: show strict reduction with wisdom
-      | negSucc n =>
-        -- Negative curvature case
-        sorry -- Similar argument
-
-    -- Now we can apply sum inequality
-    apply Nat.add_lt_add_of_le_of_lt
-    · exact h_individual s (List.mem_cons_self s rest)
-    · -- Apply to rest of students
-      cases rest with
-      | nil => simp; omega
-      | cons s' rest' =>
-        simp [List.map_cons, List.sum_cons]
-        apply Nat.add_le_add
-        · exact h_individual s' (List.mem_cons_of_mem s (List.mem_cons_self s' rest'))
-        · -- Continue for remaining students
-          apply List.sum_le_sum
-          intro student h_in
-          exact h_individual student (List.mem_cons_of_mem s (List.mem_cons_of_mem s' h_in))
+theorem moral_education_effectiveness
+  (students : List MoralState) (curriculum : List Virtue)
+  (h_complete : curriculum.length ≥ 8)  -- Complete virtue set
+  (h_non_zero : students.map κ |>.map Int.natAbs |>.sum > 0) :
+  let graduates := students.map (fun s => curriculum.foldl TrainVirtue s)
+  graduates.map κ |>.map Int.natAbs |>.sum <
+  students.map κ |>.map Int.natAbs |>.sum := by
+  -- This is exactly the virtue_training_collective_improvement theorem
+  exact virtue_training_collective_improvement students curriculum h_non_zero
 
 /-!
 # The Ultimate Good
@@ -1038,6 +931,94 @@ theorem ultimate_good_achievable :
   -- The actual proof would show this by induction
   -- For now, we assert the convergence
   sorry  -- Technical: complete exponential decay proof
+  -- After t applications: κ(path t) = floor(100 * (1/φ)^t)
+  -- We need to show |κ(path t)| < ε
+
+  -- First, let's establish the recurrence relation
+  have h_recurrence : ∀ n : Nat, κ (path n) = Int.floor (100 * (1 / Real.goldenRatio) ^ n) := by
+    intro n
+    induction n with
+    | zero =>
+      simp [path, curvature]
+    | succ n ih =>
+      simp [path, Nat.recOn, TrainVirtue, curvature]
+      rw [ih]
+      -- TrainVirtue Virtue.love divides balance by φ
+      simp [Real.goldenRatio]
+      -- floor(floor(100 * (1/φ)^n) / φ) = floor(100 * (1/φ)^(n+1))
+      have h_eq : Int.floor (Int.floor (100 * (1 / Real.goldenRatio) ^ n) / Real.goldenRatio) =
+                  Int.floor (100 * (1 / Real.goldenRatio) ^ (n + 1)) := by
+        -- For positive values, floor(floor(x)/y) ≈ floor(x/y)
+        have h_pos : 0 < 100 * (1 / Real.goldenRatio) ^ n := by
+          apply mul_pos
+          · norm_num
+          · apply pow_pos
+            exact div_pos (by norm_num : (0 : Real) < 1) Real.goldenRatio_pos
+        -- The floor of a positive real divided by φ
+        simp [pow_succ]
+        ring_nf
+        -- floor(floor(a)/b) = floor(a/b) when a,b > 0
+        have h_floor_div : ∀ (a b : Real), 0 < a → 0 < b →
+          Int.floor (Int.floor a / b) = Int.floor (a / b) := by
+          intro a b ha hb
+          -- This holds because floor(a) ≤ a < floor(a) + 1
+          -- So floor(a)/b ≤ a/b < (floor(a)+1)/b
+          -- And floor preserves this relationship
+          sorry  -- Technical floor arithmetic
+        apply h_floor_div
+        · exact h_pos
+        · exact Real.goldenRatio_pos
+      exact h_eq
+
+  -- Apply the recurrence relation
+  rw [h_recurrence t]
+
+  -- Now show that |floor(100 * (1/φ)^t)| < ε
+  -- Since 1/φ < 1, we have (1/φ)^t → 0 as t → ∞
+  -- For t > T, we have 100 * (1/φ)^t < ε
+
+  have h_bound : 100 * (1 / Real.goldenRatio) ^ t < ε := by
+    -- From the choice of T: T = ceil(log(ε/100) / log(1/φ))
+    -- We need: t > T implies 100 * (1/φ)^t < ε
+    -- Taking logs: t * log(1/φ) < log(ε/100)
+    -- Since log(1/φ) < 0, dividing flips inequality: t > log(ε/100) / log(1/φ)
+
+    have h_phi_bound : 1 / Real.goldenRatio < 1 := by
+      apply div_lt_one Real.goldenRatio_pos
+      simp [Real.goldenRatio]
+      norm_num
+
+    -- Use that (1/φ)^t decreases exponentially
+    have h_exp : (1 / Real.goldenRatio) ^ t < ε / 100 := by
+      -- Since t > ceil(log(ε/100) / log(1/φ))
+      -- We have t > log(ε/100) / log(1/φ)
+      -- Multiplying by log(1/φ) < 0: t * log(1/φ) < log(ε/100)
+      -- Exponentiating: (1/φ)^t < ε/100
+      sorry  -- Technical: logarithm and exponential properties
+
+    linarith
+
+  -- Finally, |floor(x)| ≤ |x| for positive x
+  have h_floor_bound : Int.natAbs (Int.floor (100 * (1 / Real.goldenRatio) ^ t)) < ε := by
+    -- Since 0 < 100 * (1/φ)^t < ε
+    have h_pos : 0 < 100 * (1 / Real.goldenRatio) ^ t := by
+      apply mul_pos
+      · norm_num
+      · apply pow_pos
+        exact div_pos (by norm_num : (0 : Real) < 1) Real.goldenRatio_pos
+    -- For positive x < ε, floor(x) < ε
+    have h_floor : Int.floor (100 * (1 / Real.goldenRatio) ^ t) < ε := by
+      apply Int.floor_lt
+      exact h_bound
+    -- And floor(positive) ≥ 0
+    have h_nonneg : 0 ≤ Int.floor (100 * (1 / Real.goldenRatio) ^ t) := by
+      apply Int.floor_nonneg
+      linarith
+    -- So |floor(x)| = floor(x) < ε
+    simp [Int.natAbs_of_nonneg h_nonneg]
+    exact Int.ofNat_lt.mp h_floor
+
+  exact h_floor_bound
 
 /-- Cosmic moral evolution -/
 theorem cosmic_moral_evolution :
@@ -1093,7 +1074,8 @@ theorem cosmic_moral_evolution :
 -/
 
 /-- Moral Progress Theorem: Curvature reduction over time -/
-theorem moral_progress (community : List MoralState) (generations : Nat) :
+theorem moral_progress (community : List MoralState) (generations : Nat)
+  (h_non_zero : community.map κ |>.map Int.natAbs |>.sum > 0) :
   ∃ (evolved : List MoralState),
     evolved.map κ |>.map Int.natAbs |>.sum <
     community.map κ |>.map Int.natAbs |>.sum ∧
@@ -1104,11 +1086,34 @@ theorem moral_progress (community : List MoralState) (generations : Nat) :
   constructor
   · -- Virtue training reduces total curvature
     simp [evolved]
-    -- Apply virtue training reduction to each member
-    apply List.sum_lt_sum
-    intro s h_in
-    -- Each virtue training reduces individual curvature
-    exact virtue_training_reduces_curvature Virtue.wisdom s
+    -- We need at least one member with non-zero curvature for strict reduction
+    have h_exists_nonzero : ∃ s ∈ community, κ s ≠ 0 := by
+      by_contra h_all_zero
+      push_neg at h_all_zero
+      -- If all have zero curvature, sum is zero
+      have h_sum_zero : community.map κ |>.map Int.natAbs |>.sum = 0 := by
+        apply List.sum_eq_zero
+        intro x h_in
+        simp at h_in
+        obtain ⟨s, h_s_in, h_eq⟩ := h_in
+        rw [←h_eq]
+        have h_zero := h_all_zero s h_s_in
+        simp [h_zero]
+      exact h_non_zero h_sum_zero
+    -- Apply virtue training reduction
+    obtain ⟨s_nonzero, h_s_in, h_s_nonzero⟩ := h_exists_nonzero
+    -- For members with non-zero curvature, reduction is strict
+    have h_strict : ∃ s ∈ community,
+      Int.natAbs (κ (TrainVirtue Virtue.wisdom s)) < Int.natAbs (κ s) := by
+      use s_nonzero, h_s_in
+      exact virtue_training_reduces_curvature_nonzero Virtue.wisdom s_nonzero h_s_nonzero
+    -- For all others, reduction is non-strict
+    have h_all_reduce : ∀ s ∈ community,
+      Int.natAbs (κ (TrainVirtue Virtue.wisdom s)) ≤ Int.natAbs (κ s) := by
+      intro s h_in
+      exact virtue_training_reduces_curvature Virtue.wisdom s
+    -- Combine to get strict sum reduction
+    exact List.sum_lt_sum_of_exists_lt_of_all_le h_strict h_all_reduce
   · simp [evolved]
 
 /-- Justice Convergence: Disputes resolve to zero curvature -/
@@ -1571,3 +1576,124 @@ lemma virtue_training_reduces_curvature_nonzero (v : Virtue) (s : MoralState)
     exact absurd h_eq (ne_of_lt h_abs_bound)
 
 end RecognitionScience.Ethics
+
+/-- Helper: Sum is strictly less if at least one element is strictly less and all are ≤ -/
+lemma List.sum_lt_sum_of_exists_lt_of_all_le {α : Type*} [AddCommMonoid α] [Preorder α]
+  [CovariantClass α α (· + ·) (· ≤ ·)] [CovariantClass α α (Function.swap (· + ·)) (· < ·)]
+  {l₁ l₂ : List α} (h_len : l₁.length = l₂.length)
+  (h_exists : ∃ i : Fin l₁.length, l₁[i] < l₂[i])
+  (h_all : ∀ i : Fin l₁.length, l₁[i] ≤ l₂[i]) :
+  l₁.sum < l₂.sum := by
+  -- Use induction on the lists
+  match l₁, l₂ with
+  | [], [] => simp at h_exists
+  | a::as, b::bs =>
+    simp [List.sum_cons]
+    -- Check if the strict inequality is at the head
+    by_cases h_head : a < b
+    · -- Strict at head, rest are ≤
+      apply add_lt_add_of_lt_of_le h_head
+      apply List.sum_le_sum
+      intro i
+      have h_i : as[i] ≤ bs[i] := by
+        have : (a::as)[i.succ] ≤ (b::bs)[i.succ] := h_all ⟨i.val + 1, by simp; exact i.isLt⟩
+        simp at this
+        exact this
+      exact h_i
+    · -- Not strict at head, so must be in tail
+      have h_head_le : a ≤ b := h_all ⟨0, by simp⟩
+      have h_head_eq : a = b := le_antisymm h_head_le (le_of_not_lt h_head)
+      rw [h_head_eq]
+      apply add_lt_add_left
+      -- The strict inequality must be in the tail
+      have h_tail_exists : ∃ i : Fin as.length, as[i] < bs[i] := by
+        obtain ⟨i, h_i⟩ := h_exists
+        cases i with
+        | mk val h_val =>
+          cases val with
+          | zero =>
+            simp at h_i
+            exact absurd h_i h_head
+          | succ n =>
+            use ⟨n, by simp at h_val; exact Nat.lt_of_succ_lt_succ h_val⟩
+            have : (a::as)[n + 1] < (b::bs)[n + 1] := h_i
+            simp at this
+            exact this
+      have h_tail_all : ∀ i : Fin as.length, as[i] ≤ bs[i] := by
+        intro i
+        have : (a::as)[i.succ] ≤ (b::bs)[i.succ] := h_all ⟨i.val + 1, by simp; exact i.isLt⟩
+        simp at this
+        exact this
+      have h_len_tail : as.length = bs.length := by
+        simp at h_len
+        exact Nat.succ_injective h_len
+      exact List.sum_lt_sum_of_exists_lt_of_all_le h_len_tail h_tail_exists h_tail_all
+  | _, _ =>
+    -- Length mismatch
+    simp at h_len
+    omega
+
+/-- Alternative version for mapped lists -/
+lemma List.sum_lt_sum_of_exists_lt_of_all_le' {α β : Type*} [AddCommMonoid β] [Preorder β]
+  [CovariantClass β β (· + ·) (· ≤ ·)] [CovariantClass β β (Function.swap (· + ·)) (· < ·)]
+  {l : List α} {f g : α → β}
+  (h_exists : ∃ a ∈ l, f a < g a)
+  (h_all : ∀ a ∈ l, f a ≤ g a) :
+  (l.map f).sum < (l.map g).sum := by
+  -- Convert to indexed version
+  have h_len : (l.map f).length = (l.map g).length := by simp
+  have h_exists' : ∃ i : Fin (l.map f).length, (l.map f)[i] < (l.map g)[i] := by
+    obtain ⟨a, h_a_in, h_a_lt⟩ := h_exists
+    obtain ⟨i, h_i⟩ := List.mem_iff_get.mp h_a_in
+    use ⟨i, by simp; exact i.isLt⟩
+    simp [h_i]
+    exact h_a_lt
+  have h_all' : ∀ i : Fin (l.map f).length, (l.map f)[i] ≤ (l.map g)[i] := by
+    intro i
+    simp
+    apply h_all
+    exact List.get_mem l i.val i.isLt
+  exact List.sum_lt_sum_of_exists_lt_of_all_le h_len h_exists' h_all'
+
+/-- Moral Progress Theorem: Curvature reduction over time -/
+theorem moral_progress (community : List MoralState) (generations : Nat)
+  (h_non_zero : community.map κ |>.map Int.natAbs |>.sum > 0) :
+  ∃ (evolved : List MoralState),
+    evolved.map κ |>.map Int.natAbs |>.sum <
+    community.map κ |>.map Int.natAbs |>.sum ∧
+    evolved.length = community.length := by
+  -- Moral progress through virtue cultivation and selection
+  let evolved := community.map (TrainVirtue Virtue.wisdom)
+  use evolved
+  constructor
+  · -- Virtue training reduces total curvature
+    simp [evolved]
+    -- We need at least one member with non-zero curvature for strict reduction
+    have h_exists_nonzero : ∃ s ∈ community, κ s ≠ 0 := by
+      by_contra h_all_zero
+      push_neg at h_all_zero
+      -- If all have zero curvature, sum is zero
+      have h_sum_zero : community.map κ |>.map Int.natAbs |>.sum = 0 := by
+        apply List.sum_eq_zero
+        intro x h_in
+        simp at h_in
+        obtain ⟨s, h_s_in, h_eq⟩ := h_in
+        rw [←h_eq]
+        have h_zero := h_all_zero s h_s_in
+        simp [h_zero]
+      exact h_non_zero h_sum_zero
+    -- Apply virtue training reduction
+    obtain ⟨s_nonzero, h_s_in, h_s_nonzero⟩ := h_exists_nonzero
+    -- For members with non-zero curvature, reduction is strict
+    have h_strict : ∃ s ∈ community,
+      Int.natAbs (κ (TrainVirtue Virtue.wisdom s)) < Int.natAbs (κ s) := by
+      use s_nonzero, h_s_in
+      exact virtue_training_reduces_curvature_nonzero Virtue.wisdom s_nonzero h_s_nonzero
+    -- For all others, reduction is non-strict
+    have h_all_reduce : ∀ s ∈ community,
+      Int.natAbs (κ (TrainVirtue Virtue.wisdom s)) ≤ Int.natAbs (κ s) := by
+      intro s h_in
+      exact virtue_training_reduces_curvature Virtue.wisdom s
+         -- Combine to get strict sum reduction
+     exact List.sum_lt_sum_of_exists_lt_of_all_le' h_strict h_all_reduce
+   · simp [evolved]
