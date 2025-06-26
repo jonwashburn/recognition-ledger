@@ -1,0 +1,30 @@
+{
+  "description": "LNAL analysis using SPARC component decomposition",
+  "method": "Direct inversion of V_gas, V_disk, V_bulge to get \u03a3(r)",
+  "galaxies": [
+    {
+      "galaxy": "NGC3198",
+      "chi2": 124094.11950826686,
+      "chi2_reduced": 2885.909756006206,
+      "n_data": 43
+    },
+    {
+      "galaxy": "NGC2403",
+      "chi2": 313931.97810255655,
+      "chi2_reduced": 4300.438056199405,
+      "n_data": 73
+    },
+    {
+      "galaxy": "NGC6503",
+      "chi2": 152901.3430541951,
+      "chi2_reduced": 4932.301388845003,
+      "n_data": 31
+    },
+    {
+      "galaxy": "DDO154",
+      "chi2": 511556.5396494416,
+      "chi2_reduced": 42629.71163745347,
+      "n_data": 12
+    }
+  ]
+}
