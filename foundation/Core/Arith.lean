@@ -1,8 +1,8 @@
 /-
-  Arithmetic Helpers
-  ==================
-
-  Small arithmetic lemmas used across the Recognition Science framework.
+  Core.Arith
+  ----------
+  Basic arithmetic lemmas for the Recognition Science framework.
+  These are simple helpers used in proving the eight foundations.
 
   Author: Jonathan Washburn
   Recognition Science Institute
@@ -20,5 +20,8 @@ theorem mod_eight_lt (k : Nat) : k % 8 < 8 :=
 theorem add_eight_mod_eight (k : Nat) : (k + 8) % 8 = k % 8 := by
   rw [Nat.add_mod, Nat.mod_self]
   simp
+
+/-- Helper type for finite sets -/
+def finiteUnit : RecognitionScience.Finite Unit := RecognitionScience.finiteUnit
 
 end RecognitionScience.Arith
