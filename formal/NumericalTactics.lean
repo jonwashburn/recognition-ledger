@@ -125,16 +125,78 @@ lemma fib_10 : fib 10 = 55 := by rfl
 lemma fib_11 : fib 11 = 89 := by rfl
 lemma fib_12 : fib 12 = 144 := by rfl
 
--- For larger Fibonacci numbers, we state them as axioms for now
-axiom fib_24 : fib 24 = 46368
-axiom fib_25 : fib 25 = 75025
-axiom fib_26 : fib 26 = 121393
-axiom fib_31 : fib 31 = 1346269
-axiom fib_32 : fib 32 = 2178309
-axiom fib_36 : fib 36 = 14930352
-axiom fib_37 : fib 37 = 24157817
-axiom fib_39 : fib 39 = 63245986
-axiom fib_40 : fib 40 = 102334155
+-- For larger Fibonacci numbers, we compute them explicitly
+lemma fib_13 : fib 13 = 233 := by rfl
+lemma fib_14 : fib 14 = 377 := by rfl
+lemma fib_15 : fib 15 = 610 := by rfl
+lemma fib_16 : fib 16 = 987 := by rfl
+lemma fib_17 : fib 17 = 1597 := by rfl
+lemma fib_18 : fib 18 = 2584 := by rfl
+lemma fib_19 : fib 19 = 4181 := by rfl
+lemma fib_20 : fib 20 = 6765 := by rfl
+lemma fib_21 : fib 21 = 10946 := by rfl
+lemma fib_22 : fib 22 = 17711 := by rfl
+lemma fib_23 : fib 23 = 28657 := by rfl
+lemma fib_24 : fib 24 = 46368 := by rfl
+lemma fib_25 : fib 25 = 75025 := by rfl
+lemma fib_26 : fib 26 = 121393 := by rfl
+
+-- These take longer to compute, so we use a more efficient approach
+lemma fib_31 : fib 31 = 1346269 := by
+  -- fib 31 = fib 30 + fib 29
+  -- We can compute this step by step
+  have h30 : fib 30 = 832040 := by rfl
+  have h29 : fib 29 = 514229 := by rfl
+  simp [fib, h30, h29]
+  norm_num
+
+lemma fib_32 : fib 32 = 2178309 := by
+  have h31 : fib 31 = 1346269 := fib_31
+  have h30 : fib 30 = 832040 := by rfl
+  simp [fib, h31, h30]
+  norm_num
+
+lemma fib_36 : fib 36 = 14930352 := by
+  -- We can use the fact that fib grows exponentially
+  -- and compute a few intermediate values
+  have h35 : fib 35 = 9227465 := by rfl
+  have h34 : fib 34 = 5702887 := by rfl
+  simp [fib, h35, h34]
+  norm_num
+
+lemma fib_37 : fib 37 = 24157817 := by
+  have h36 : fib 36 = 14930352 := fib_36
+  have h35 : fib 35 = 9227465 := by rfl
+  simp [fib, h36, h35]
+  norm_num
+
+lemma fib_39 : fib 39 = 63245986 := by
+  have h38 : fib 38 = 39088169 := by rfl
+  have h37 : fib 37 = 24157817 := fib_37
+  simp [fib, h38, h37]
+  norm_num
+
+lemma fib_40 : fib 40 = 102334155 := by
+  have h39 : fib 39 = 63245986 := fib_39
+  have h38 : fib 38 = 39088169 := by rfl
+  simp [fib, h39, h38]
+  norm_num
+
+-- φ^50 bounds (for top quark)
+lemma fib_49 : fib 49 = 7778742049 := by
+  -- For very large Fibonacci numbers, we compute step by step
+  -- fib 49 = fib 48 + fib 47
+  have h48 : fib 48 = 4807526976 := by rfl
+  have h47 : fib 47 = 2971215073 := by rfl
+  simp [fib, h48, h47]
+  norm_num
+
+lemma fib_50 : fib 50 = 12586269025 := by
+  -- fib 50 = fib 49 + fib 48
+  have h49 : fib 49 = 7778742049 := fib_49
+  have h48 : fib 48 = 4807526976 := by rfl
+  simp [fib, h49, h48]
+  norm_num
 
 -- φ^25 ≈ 121393 (for up quark)
 lemma phi_25_approx : abs (φ^25 - 121393) < 100 := by
@@ -272,9 +334,6 @@ lemma phi_40_approx : abs (φ^40 - 228826127) < 1 := by
     _ < 1 := by norm_num
 
 -- φ^50 bounds (for top quark)
-axiom fib_49 : fib 49 = 7778742049
-axiom fib_50 : fib 50 = 12586269025
-
 lemma phi_50_approx : abs (φ^50 - 28143753123) < 100 := by
   -- φ^50 = F_50 * φ + F_49 = 12586269025 * φ + 7778742049
   -- ≈ 12586269025 * 1.618 + 7778742049 ≈ 28143753123
@@ -706,7 +765,7 @@ constructor
   simp [E_coh, phi]
   norm_num
 constructor
-· -- ν₂ case: seesaw_mass 2 120  
+· -- ν₂ case: seesaw_mass 2 120
   unfold seesaw_mass
   simp [E_coh, phi]
   norm_num
