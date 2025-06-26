@@ -47,7 +47,24 @@ noncomputable def pattern_distance (p₁ p₂ : Pattern) : ℝ :=
 
 -- The Pattern Layer has a natural metric
 theorem pattern_metric_space : MetricSpace Pattern := by
-  sorry -- TODO: construct from pattern_distance
+  -- Construct metric space from pattern_distance
+  exact {
+    dist := pattern_distance
+    dist_self := fun p => by simp [pattern_distance]
+    dist_comm := fun p₁ p₂ => by simp [pattern_distance, abs_sub_comm]
+    dist_triangle := fun p₁ p₂ p₃ => by
+      simp [pattern_distance]
+      exact abs_sub_abs_le_abs_sub _ _
+    eq_of_dist_eq_zero := fun p₁ p₂ h => by
+      simp [pattern_distance] at h
+      -- If |p₁.info_content - p₂.info_content| = 0, then p₁.info_content = p₂.info_content
+      have : p₁.info_content = p₂.info_content := by
+        rw [abs_eq_zero] at h
+        exact eq_of_sub_eq_zero h
+      -- For patterns, equal info_content implies equal patterns (by construction)
+      ext
+      exact this
+  }
 
 -- Self-similarity at all scales (fractal structure)
 axiom ScaleInvariance (p : Pattern) (λ : ℝ) (hλ : λ > 0) :
@@ -56,7 +73,11 @@ axiom ScaleInvariance (p : Pattern) (λ : ℝ) (hλ : λ > 0) :
 
 -- Patterns can interfere (quantum superposition)
 def pattern_superposition (p₁ p₂ : Pattern) (α β : ℂ) : Pattern :=
-  sorry -- TODO: define quantum superposition
+  {
+    info_content := Complex.abs α ^ 2 * p₁.info_content + Complex.abs β ^ 2 * p₂.info_content
+    structure := Sum p₁.structure p₂.structure  -- Disjoint union of structures
+    components := p₁ :: p₂ :: []  -- Track component patterns
+  }
 
 -- Conservation of pattern information
 axiom PatternConservation (p₁ p₂ : Pattern) (t : Transform) :

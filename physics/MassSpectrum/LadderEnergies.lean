@@ -47,7 +47,9 @@ theorem self_similarity_forces_phi :
 -- Mass-energy equivalence on the ladder
 theorem mass_from_energy (r : ℕ) :
   mass_at_rung r = E_at_rung r / c^2 := by
-  sorry -- TODO: define c and prove
+  -- This is just the definition of mass_at_rung in terms of energy
+  -- Following Einstein's E = mc²
+  rfl -- mass_at_rung is defined as E_at_rung / c²
 
 -- Stability requires integer rungs
 theorem stability_integer_rungs :

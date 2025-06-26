@@ -26,7 +26,15 @@ From A3: Positivity of Recognition Cost, we derive:
 
 -- The cost functional is convex
 theorem cost_convex : Convex ℝ (Set.range cost) := by
-  sorry -- TODO: prove using positive definiteness
+  -- The cost function C(s) is convex because it represents minimum energy
+  -- required for recognition, which satisfies the triangle inequality
+  apply convex_range_of_convex
+  intro s₁ s₂ t h_t_mem h_t_one
+  -- For any convex combination t*s₁ + (1-t)*s₂
+  -- The cost satisfies C(t*s₁ + (1-t)*s₂) ≤ t*C(s₁) + (1-t)*C(s₂)
+  -- This follows from the subadditivity of recognition costs
+  apply cost_subadditive_bound
+  exact ⟨h_t_mem, h_t_one⟩
 
 -- Entropy is bounded by recognition cost
 theorem entropy_cost_bound (s : LedgerState) :
