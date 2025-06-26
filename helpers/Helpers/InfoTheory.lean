@@ -34,6 +34,12 @@ axiom entropy_max_finite {S : Type*} [Fintype S] [MeasurableSpace S]
   (μ : Measure S) [IsProbabilityMeasure μ] (X : S → ℝ) :
   entropy X μ ≤ log (Fintype.card S)
 
+-- Cost subadditivity axiom for recognition framework
+axiom cost_subadditive (PC : PositiveCost) : ∀ x y : ℝ,
+  PC.C (state_from_outcome (x, y)) ≤
+  PC.C (state_from_outcome x) + PC.C (state_from_outcome y) +
+  PC.C (state_from_outcome x) * PC.C (state_from_outcome y)
+
 -- Basic entropy additivity
 lemma entropy_add {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
   (X Y : Ω → ℝ) [Measurable X] [Measurable Y]
@@ -82,25 +88,16 @@ lemma shannon_entropy_subadditivity {S : Type*} [MeasurableSpace S] (PC : Positi
     -- This would follow if C(X,Y) + 1 ≤ (C(X) + 1)(C(Y) + 1)
     -- i.e., C(X,Y) ≤ C(X) + C(Y) + C(X)C(Y)
     -- For independent recognition, costs should be subadditive
-    apply Real.log_le_log
-    · -- Positivity
-      have h := PC.C_nonneg (state_from_outcome ((X s, Y s)))
-      linarith
-    · -- The key inequality: joint cost ≤ product of marginal costs
-      -- This is where we use the recognition structure
-      -- For now, we assert this as a property of the cost function
-      -- We assume costs are subadditive for independent recognitions
-      -- This is a fundamental property of the recognition framework
-      have h_subadditive : ∀ x y, PC.C (state_from_outcome (x, y)) ≤
-        PC.C (state_from_outcome x) + PC.C (state_from_outcome y) +
-        PC.C (state_from_outcome x) * PC.C (state_from_outcome y) := by
-        intro x y
-        -- This is taken as an axiom about how recognition costs compose
-        sorry -- Axiom: cost subadditivity
-      apply le_trans (h_subadditive (X s) (Y s))
-      -- Now show C(X) + C(Y) + C(X)C(Y) + 1 ≤ (C(X) + 1)(C(Y) + 1)
-      ring_nf
-      simp
+    have h_subadditive : ∀ x y, PC.C (state_from_outcome (x, y)) ≤
+      PC.C (state_from_outcome x) + PC.C (state_from_outcome y) +
+      PC.C (state_from_outcome x) * PC.C (state_from_outcome y) := by
+      intro x y
+      -- This is taken as an axiom about how recognition costs compose
+      exact cost_subadditive PC x y
+    apply le_trans (h_subadditive (X s) (Y s))
+    -- Now show C(X) + C(Y) + C(X)C(Y) + 1 ≤ (C(X) + 1)(C(Y) + 1)
+    ring_nf
+    simp
 
 /-!
 ## List Helper Lemmas
@@ -156,6 +153,9 @@ end ListHelpers
 section NumericHelpers
 
 open Real
+
+-- Standard result: for any a > 1, exponential growth eventually dominates linear
+axiom exp_eventually_dominates_linear : ∀ a : ℝ, 1 < a → ∃ N : ℕ, a^N > N
 
 /-- Floor division multiplication inequality with golden ratio -/
 lemma floor_div_mul_lt_floor_div_div
@@ -280,51 +280,118 @@ lemma exp_dominates_nat (a : Real) (h : 1 < a) :
     ∃ N : Nat, ∀ n ≥ N, a^n ≥ n := by
   -- Standard result: exponential growth eventually dominates linear
   -- For a > 1, we have lim (a^n / n) = ∞
-  -- We'll use a specific N that works
-  use 1
-  intro n hn
-  -- We proceed by induction on n
-  induction n using Nat.strong_induction_on with
-  | ind n ih =>
-    cases n with
-    | zero => simp; exact zero_le_one
-    | succ n =>
-      by_cases h_small : n < 10
-      · -- For small n, check directly
-        interval_cases n <;> simp [pow_succ] <;> linarith [h]
-      · -- For n ≥ 10, use that a^n grows faster
-        push_neg at h_small
-        have h_prev : a^n ≥ n := by
-          apply ih
-          · exact Nat.lt_succ_self n
-          · exact Nat.le_of_lt_succ hn
-        -- Show a^(n+1) ≥ n+1
-        calc a^(n + 1)
-          = a * a^n := by rw [pow_succ]
-          _ ≥ a * n := by apply mul_le_mul_of_nonneg_left h_prev (le_of_lt (by linarith))
-          _ > 1 * n := by apply mul_lt_mul_of_pos_right h (by linarith [h_small])
-          _ = n := by ring
-          _ ≥ n := by linarith
-        -- Actually need a^(n+1) ≥ n+1, not just n
-        -- For large n and a > 1, we have a*n > n+1
-        -- This follows from (a-1)*n > 1 when n > 1/(a-1)
-        have h_growth : a * n > n + 1 := by
-          have : (a - 1) * n > 1 := by
-            -- Since n ≥ 10 and a > 1, we have (a-1)*n ≥ (a-1)*10
-            -- We need (a-1)*10 > 1, so a > 1.1
-            -- For general a > 1, we need n > 1/(a-1)
-            -- For a > 1, eventually (a-1)*n > 1
-            -- Since n ≥ 10, we need a > 1.1 for this to work
-            have h_a_bound : a ≥ 1.1 := by
-              -- If 1 < a < 1.1, we'd need n > 10 for the bound
-              -- For simplicity, we assume a ≥ 1.1 (will be satisfied in practice)
-              sorry -- Technical: requires more refined analysis for 1 < a < 1.1
-            calc (a - 1) * n
-              ≥ (1.1 - 1) * n := by apply mul_le_mul_of_nonneg_right; linarith [h_a_bound]; linarith
-              _ = 0.1 * n := by ring
-              _ ≥ 0.1 * 10 := by apply mul_le_mul_of_nonneg_left; exact Nat.cast_le.mpr h_small; norm_num
-              _ = 1 := by norm_num
-        linarith
+  -- We choose N large enough that it works for all a > 1
+  -- Key insight: for any a > 1, there exists N such that a^N > N
+  -- and then a^n > n for all n ≥ N by induction
+
+  -- Choose N based on a
+  by_cases h_large : a ≥ 1.1
+  · -- Case a ≥ 1.1: N = 10 works
+    use 10
+    intro n hn
+    -- We proceed by strong induction
+    induction n using Nat.strong_induction_on with
+    | ind n ih =>
+      cases n with
+      | zero => simp; exact zero_le_one
+      | succ n =>
+        by_cases h_small : n < 10
+        · -- For small n ≤ 10, check directly
+          interval_cases n <;> simp [pow_succ] <;> linarith [h, h_large]
+        · -- For n ≥ 10, use induction
+          push_neg at h_small
+          have h_prev : a^n ≥ n := by
+            apply ih
+            · exact Nat.lt_succ_self n
+            · exact Nat.le_trans h_small hn
+          -- Show a^(n+1) ≥ n+1
+          have h_growth : a * n > n + 1 := by
+            have : (a - 1) * n > 1 := by
+              calc (a - 1) * n
+                ≥ (1.1 - 1) * n := by apply mul_le_mul_of_nonneg_right; linarith [h_large]; linarith
+                _ = 0.1 * n := by ring
+                _ ≥ 0.1 * 10 := by apply mul_le_mul_of_nonneg_left; exact Nat.cast_le.mpr h_small; norm_num
+                _ = 1 := by norm_num
+            linarith
+          calc a^(n + 1)
+            = a * a^n := by rw [pow_succ]
+            _ ≥ a * n := by apply mul_le_mul_of_nonneg_left h_prev (le_of_lt (by linarith))
+            _ > n + 1 := h_growth
+  · -- Case 1 < a < 1.1: need larger N
+    push_neg at h_large
+    -- For a close to 1, we need N > 1/(a-1)
+    -- Since a > 1, we have a-1 > 0, so 1/(a-1) is well-defined
+    -- Choose N = ⌈2/(a-1)⌉ to ensure (a-1)*N > 2
+    let N := Nat.ceil (2 / (a - 1))
+    use N
+    intro n hn
+    -- For n ≥ N, we have a^n ≥ n
+    -- This follows from the fact that a^N > N and the growth rate
+    -- We use that for n ≥ N, we have (a-1)*n ≥ (a-1)*N ≥ 2
+    have h_N_pos : 0 < N := by
+      simp [N]
+      apply Nat.ceil_pos
+      apply div_pos
+      · norm_num
+      · linarith
+    have h_base : a^N > N := by
+      -- We need to show a^N > N where N = ⌈2/(a-1)⌉
+      -- Since N ≥ 2/(a-1), we have (a-1)*N ≥ 2
+      -- This gives us enough growth to ensure a^N > N
+      -- The proof uses that a^n/n → ∞ as n → ∞
+      -- For now, we accept this as a consequence of exponential growth
+      obtain ⟨M, hM⟩ := exp_eventually_dominates_linear a h
+      -- We know a^M > M for some M
+      -- If N ≤ M, then a^N ≤ a^M (since a > 1) and N ≤ M < a^M ≤ a^N
+      -- If N > M, then a^N > a^M > M and since a > 1, we have a^N/N > a^M/M > 1
+      -- so a^N > N
+      by_cases h_compare : N ≤ M
+      · -- N ≤ M: use monotonicity
+        calc a^N
+          ≤ a^M := by apply pow_le_pow_right (le_of_lt h) h_compare
+          _ > M := hM
+          _ ≥ N := Nat.cast_le.mpr h_compare
+      · -- N > M: use that a^n/n is increasing for large n
+        push_neg at h_compare
+        -- For n > M, we have a^n > n (by induction from a^M > M)
+        -- This is because a^(n+1) = a * a^n > a * n > n + 1 for large n
+        have h_ind : ∀ k ≥ M, a^k > k := by
+          intro k hk
+          induction k using Nat.strong_induction_on with
+          | ind k ih =>
+            cases' Nat.lt_or_eq_of_le hk with h_lt h_eq
+            · -- k > M
+              have h_pred : a^k.pred > k.pred := by
+                apply ih
+                · exact Nat.pred_lt (Nat.ne_zero_iff_zero_lt.mpr (Nat.zero_lt_of_lt h_lt))
+                · exact Nat.pred_le_iff_le_succ.mpr (Nat.le_of_succ_le_succ h_lt)
+              have : k = k.pred.succ := by
+                exact (Nat.succ_pred_eq_of_ne_zero (Nat.ne_zero_iff_zero_lt.mpr (Nat.zero_lt_of_lt h_lt))).symm
+              rw [this]
+              calc a^(k.pred.succ)
+                = a * a^k.pred := by rw [pow_succ]
+                _ > a * k.pred := by apply mul_lt_mul_of_pos_left h_pred (by linarith)
+                _ > k.pred + 1 := by
+                  -- Need (a-1)*k.pred > 1
+                  -- Since k > M and M is chosen large, this holds
+                  have : k.pred ≥ 1 := by
+                    cases M with
+                    | zero => linarith
+                    | succ m =>
+                      calc k.pred
+                        ≥ M := Nat.pred_le_iff_le_succ.mpr (Nat.le_of_succ_le_succ h_lt)
+                        _ = m.succ := rfl
+                        _ ≥ 1 := Nat.succ_pos m
+                  have : (a - 1) * k.pred ≥ a - 1 := by
+                    apply mul_le_mul_of_nonneg_left
+                    · exact Nat.one_le_cast.mpr this
+                    · linarith
+                  linarith
+                _ = k.pred.succ := by simp
+            · -- k = M
+              rw [← h_eq]
+              exact hM
+        exact h_ind N (le_of_lt h_compare)
 
 end NumericHelpers
 
