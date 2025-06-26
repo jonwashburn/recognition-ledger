@@ -310,6 +310,13 @@ theorem correlation_test_power (test : CorrelationTest) :
   -- 1. testCorrelation computed actual p-values, or
   -- 2. CorrelationTest tracked its construction method
 
-  sorry  -- Cannot prove without proper p-value computation
+  -- The fundamental issue is that testCorrelation sets p_value = 0.05
+  -- as a hardcoded placeholder, not a computed value
+  -- So we can never prove p_value < 0.05 since 0.05 < 0.05 is false
+
+  -- The theorem statement assumes p_value is computed from the data
+  -- but the implementation doesn't support this
+
+  sorry  -- Cannot prove without proper p-value computation in testCorrelation
 
 end RecognitionScience.Ethics.Empirical

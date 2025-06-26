@@ -576,6 +576,9 @@ theorem measurement_uncertainty {sig : CurvatureSignature} [inst : CurvatureMetr
 
               -- The theorem assumes all calibrations have reasonable slopes
               -- but doesn't enforce this constraint
+
+              -- For this generic case, we can't prove the bound without knowing
+              -- the specific calibration function and its slope
               sorry  -- Generic biochemical marker bound requires slope constraints
             rw [h_eq]
             exact h_bound

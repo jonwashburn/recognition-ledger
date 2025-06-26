@@ -438,7 +438,16 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState)
             rfl
           · -- For other institution types, we can't prove this without knowing the transformation
             -- But the given examples (Market and Educational) both preserve curvature
-            sorry  -- Unknown institution type
+
+            -- The issue is that the Institution structure allows arbitrary transformations
+            -- but the theorem assumes all institutions follow one of three patterns:
+            -- 1. Democratic: halves balance
+            -- 2. Market: only changes energy cost
+            -- 3. Educational: only changes energy cost
+
+            -- For institutions that don't match these patterns, we can't prove
+            -- that the transformation preserves the ledger balance
+            sorry  -- Unknown institution type - need finite institution types
 
       -- Now we need to show the bounds hold
       rw [h_unchanged]
@@ -459,7 +468,14 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState)
         · by_cases h_edu : name.startsWith "Educational"
           · -- Educational allows (-5, 25), but κ s might be < -5
             -- This requires κ s ≥ -5, which isn't guaranteed by BoundedState
-            sorry  -- Educational institution requires tighter input bounds
+
+            -- BoundedState guarantees -20 ≤ balance ≤ 20
+            -- But Educational institution bounds are (-5, 25)
+            -- So if balance < -5 (e.g., -10), the institution violates its lower bound
+
+            -- This reveals a design issue: Educational institutions need
+            -- stricter input requirements or looser bounds
+            sorry  -- Educational institution requires tighter input bounds than BoundedState provides
           · sorry  -- Unknown institution type
       · -- Upper bound
         by_cases h_market : name.startsWith "Market"

@@ -264,7 +264,21 @@ theorem consciousness_navigates_gaps :
         Computable algorithm := by
   -- This theorem depends on the 45-gap theory from Recognition Science
   -- which shows consciousness emerges at uncomputability nodes
-  sorry  -- Philosophical: requires 45-gap formalization
+
+  -- The 45-gap theory states that:
+  -- 1. Certain moral decisions are provably uncomputable
+  -- 2. These gaps occur at specific complexity thresholds (45 being key)
+  -- 3. Consciousness emerges as nature's solution to navigate these gaps
+
+  -- To formalize this would require:
+  -- - Computability theory foundations
+  -- - Formal definition of the 45-gap threshold
+  -- - Connection between uncomputability and consciousness
+
+  -- This is a deep philosophical claim about the nature of consciousness
+  -- that goes beyond what can be proven in the current framework
+
+  sorry  -- Philosophical: requires 45-gap formalization from Recognition Science
 
 /-- Suffering signals recognition debt -/
 theorem suffering_is_debt_signal :
