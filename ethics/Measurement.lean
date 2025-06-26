@@ -369,7 +369,63 @@ theorem calibration_monotonic {sig : CurvatureSignature} [inst : CurvatureMetric
           apply Int.floor_mono
           linarith
         · -- Mixed cases and middle range are monotonic
-          sorry  -- Technical: case analysis on piecewise function
+          -- We need to show that for all cases where not (h1 or h2), toκ is monotonic
+          -- This breaks down into several subcases based on the piecewise definition
+          push_neg at h1 h2
+
+          -- Analyze the possible cases:
+          -- 1. x < 0.5, y ≥ 0.5 (since x < y and not both < 0.5)
+          -- 2. 0.5 ≤ x < 5, 0.5 ≤ y < 5 (middle range for both)
+          -- 3. x < 5, y ≥ 5 (x in lower/middle, y in high range)
+
+          by_cases hx05 : x < 0.5
+          · -- x < 0.5, so y ≥ 0.5 (since not both < 0.5)
+            have hy05 : ¬(y < 0.5) := by
+              intro hy
+              exact h1 ⟨hx05, hy⟩
+            simp [hx05, hy05]
+            -- toκ(x) = -5, need to show this is ≤ toκ(y)
+            by_cases hy5 : y < 5
+            · -- y in [0.5, 5), so toκ(y) = floor((y-2)*3)
+              simp [hy5]
+              -- floor((y-2)*3) ≥ floor((0.5-2)*3) = floor(-4.5) = -5
+              have : -5 ≤ Int.floor ((y - 2) * 3) := by
+                apply Int.le_floor
+                linarith
+              exact this
+            · -- y ≥ 5, so toκ(y) = floor((y-2)*8)
+              simp [hy5]
+              -- floor((y-2)*8) ≥ floor(3*8) = 24 > -5
+              have : -5 < Int.floor ((y - 2) * 8) := by
+                apply Int.lt_floor
+                linarith
+              exact le_of_lt this
+          · -- x ≥ 0.5
+            by_cases hx5 : x < 5
+            · -- x in [0.5, 5)
+              by_cases hy5 : y < 5
+              · -- Both in middle range [0.5, 5)
+                have hy05 : ¬(y < 0.5) := by linarith
+                simp [hx05, hy05, hx5, hy5]
+                apply Int.floor_mono
+                linarith
+              · -- x < 5, y ≥ 5
+                simp [hx5, hy5, hx05]
+                -- toκ(x) = floor((x-2)*3), toκ(y) = floor((y-2)*8)
+                -- Need: floor((x-2)*3) ≤ floor((y-2)*8)
+                -- Since x < 5 and y ≥ 5:
+                -- (x-2)*3 < 3*3 = 9
+                -- (y-2)*8 ≥ 3*8 = 24
+                have hx_bound : Int.floor ((x - 2) * 3) < 9 := by
+                  apply Int.floor_lt
+                  linarith
+                have hy_bound : 24 ≤ Int.floor ((y - 2) * 8) := by
+                  apply Int.le_floor
+                  linarith
+                linarith
+            · -- x ≥ 5, but then y > x ≥ 5, contradicting h2
+              have hy5 : y ≥ 5 := by linarith
+              exact absurd ⟨hx5, hy5⟩ h2
     · -- Other behavioral metrics are monotonic
       apply Int.floor_mono
       linarith
@@ -455,10 +511,134 @@ theorem measurement_uncertainty {sig : CurvatureSignature} [inst : CurvatureMetr
     | biochemical marker =>
       -- Similar analysis for biochemical markers
       simp [CurvatureMetric.toκ, CurvatureMetric.uncertainty]
-      sorry  -- Technical: bound depends on specific calibration slope
+      -- For biochemical markers, we need to handle cortisol and oxytocin separately
+      by_cases h_cortisol : marker = "cortisol"
+      · -- Cortisol: toκ = floor((x - 15) * 1.5)
+        simp [h_cortisol]
+        -- Uncertainty = 4.0, calibration slope = 1.5
+        -- |Δκ| ≤ |floor((measured + 2 - 15) * 1.5) - floor((measured - 15) * 1.5)|
+        -- ≤ ceiling(2 * 1.5) = ceiling(3) = 3
+        have h_bound : Int.natAbs (Int.floor ((measured + 4.0 / 2 - 15) * 1.5) -
+                                   Int.floor ((measured - 15) * 1.5)) ≤ 4 := by
+          -- Apply floor_diff_bound
+          have h_apply := floor_diff_bound (measured - 15) (4.0 / 2) 1.5 (by norm_num : 1.5 > 0)
+          simp at h_apply
+          -- ⌈2 * 1.5⌉ = ⌈3⌉ = 3 ≤ 4
+          have : ⌈4.0 / 2 * 1.5⌉ = 3 := by norm_num
+          rw [this] at h_apply
+          norm_num at h_apply
+          exact h_apply
+        -- ceil(4.0) = 4, so the bound holds
+        rw [←h_eq] at h_bound
+        simp at h_bound
+        exact h_bound
+      · -- Oxytocin: toκ = floor((30 - x) * 0.3)
+        by_cases h_oxytocin : marker = "oxytocin"
+        · simp [h_oxytocin]
+          -- Uncertainty = 5.0, calibration slope = 0.3 (but inverted)
+          -- |Δκ| ≤ |floor((30 - (measured + 2.5)) * 0.3) - floor((30 - measured) * 0.3)|
+          have h_bound : Int.natAbs (Int.floor ((30 - (measured + 5.0 / 2)) * 0.3) -
+                                     Int.floor ((30 - measured) * 0.3)) ≤ 5 := by
+            -- Rewrite to standard form
+            have h_rewrite : Int.floor ((30 - (measured + 5.0 / 2)) * 0.3) -
+                             Int.floor ((30 - measured) * 0.3) =
+                             Int.floor ((30 - measured - 5.0 / 2) * 0.3) -
+                             Int.floor ((30 - measured) * 0.3) := by ring_nf
+            rw [h_rewrite]
+            -- Apply floor_diff_bound
+            have h_apply := floor_diff_bound (30 - measured) (-5.0 / 2) 0.3 (by norm_num : 0.3 > 0)
+            simp at h_apply
+            -- ⌈2.5 * 0.3⌉ = ⌈0.75⌉ = 1 ≤ 5
+            have : ⌈5.0 / 2 * 0.3⌉ = 1 := by norm_num
+            rw [this] at h_apply
+            norm_num at h_apply
+            exact h_apply
+          rw [←h_eq] at h_bound
+          simp at h_bound
+          exact h_bound
+                          · -- Other biochemical markers (should not exist in our implementation)
+            -- We only have instances for cortisol and oxytocin
+            -- For the theorem to be general, we provide a trivial bound
+            -- The actual bound would depend on the specific calibration slope
+            have h_bound : Int.natAbs (inst.toκ (measured + inst.uncertainty / 2) - inst.toκ measured) ≤
+                          Int.natCast (Int.ceil inst.uncertainty) := by
+              -- Since we don't know the specific calibration, we can't prove a tight bound
+              -- However, for reasonable calibrations, the bound should hold
+              -- This is a limitation that would be fixed by constraining marker types
+
+              -- For now, we use a generic argument:
+              -- Most biochemical calibrations have slopes between 0.1 and 2.0
+              -- With uncertainty/2 as error, the change in κ is at most uncertainty
+              -- This gives |Δκ| ≤ ceil(uncertainty)
+
+              -- A proper solution would be to use a finite type for markers
+              -- or to add slope bounds to the CurvatureMetric class
+              sorry  -- Generic biochemical marker bound
+            rw [h_eq]
+            exact h_bound
     | behavioral metric =>
       simp [CurvatureMetric.toκ, CurvatureMetric.uncertainty]
-      sorry  -- Technical: piecewise function requires case analysis
+      -- For behavioral metrics, handle response_time specially due to piecewise definition
+      by_cases h_rt : metric = "response_time"
+      · simp [h_rt]
+        -- Response time has uncertainty = 3.5
+        -- The piecewise function has different slopes in different regions
+        -- Slopes: instant (<0.5): 0, middle (0.5-5): 3, high (>5): 8
+        have h_bound : Int.natAbs (inst.toκ (measured + 3.5 / 2) - inst.toκ measured) ≤ 4 := by
+          -- Case analysis based on where measured and measured + 1.75 fall
+          by_cases h1 : measured < 0.5
+          · -- measured < 0.5, so toκ(measured) = -5
+            by_cases h2 : measured + 3.5 / 2 < 0.5
+            · -- Both give -5, so difference is 0
+              simp [h1, h2]
+            · -- measured < 0.5 but measured + 1.75 ≥ 0.5
+              -- This is impossible since 1.75 > 0.5
+              have : measured ≥ 0.5 - 3.5 / 2 := by linarith
+              have : measured ≥ -1.25 := by norm_num at this; exact this
+              -- But if measured < 0.5 and measured ≥ -1.25, then measured + 1.75 could be ≥ 0.5
+              -- toκ(measured) = -5, toκ(measured + 1.75) = floor((measured + 1.75 - 2) * 3)
+              simp [h1, h2]
+              -- |floor((measured + 1.75 - 2) * 3) - (-5)| = |floor((measured - 0.25) * 3) + 5|
+              -- Since measured < 0.5, we have measured - 0.25 < 0.25
+              -- So floor((measured - 0.25) * 3) ≤ floor(0.75) = 0
+              -- Thus |0 + 5| = 5, but we need ≤ 4...
+              -- Actually, with measured < 0.5 and measured + 1.75 ≥ 0.5,
+              -- the worst case is measured just below 0.5
+              sorry  -- Piecewise boundary case
+          · -- measured ≥ 0.5
+            by_cases h2 : measured > 5
+            · -- measured > 5, high range with slope 8
+              simp [h1, h2]
+              -- toκ = floor((measured - 2) * 8)
+              -- Change with error 1.75: floor((measured + 1.75 - 2) * 8) - floor((measured - 2) * 8)
+              -- = floor(measured * 8 - 2 * 8) - floor(measured * 8 - 16)
+              -- Difference ≤ ceiling(1.75 * 8) = ceiling(14) = 14
+              -- This exceeds our bound of 4...
+              sorry  -- High range has too steep slope
+            · -- 0.5 ≤ measured ≤ 5, middle range with slope 3
+              push_neg at h1 h2
+              have h_middle : measured ≥ 0.5 ∧ measured ≤ 5 := ⟨h1, h2⟩
+              -- Check if measured + 1.75 stays in middle range
+              by_cases h3 : measured + 3.5 / 2 > 5
+              · -- Crosses into high range
+                sorry  -- Boundary crossing case
+              · -- Stays in middle range
+                simp [h_middle.1, h_middle.2, h3]
+                -- Both use slope 3
+                have h_diff := floor_diff_bound (measured - 2) (3.5 / 2) 3 (by norm_num : 3 > 0)
+                simp at h_diff
+                -- ⌈1.75 * 3⌉ = ⌈5.25⌉ = 6 > 4
+                sorry  -- Middle range slope still too steep
+        -- Need to use that ceil(3.5) = 4 to match theorem statement
+        rw [←h_eq] at h_bound
+        sorry  -- Complete response time bound
+      · -- Other behavioral metrics (generic case)
+        -- Similar to biochemical, we need a generic bound
+        have h_bound : Int.natAbs (inst.toκ (measured + inst.uncertainty / 2) - inst.toκ measured) ≤
+                      Int.natCast (Int.ceil inst.uncertainty) := by
+          sorry  -- Generic behavioral metric bound
+        rw [h_eq]
+        exact h_bound
     | social scale =>
       simp [CurvatureMetric.toκ, CurvatureMetric.uncertainty]
       sorry  -- Technical: bound for social cohesion metric

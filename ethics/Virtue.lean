@@ -287,7 +287,112 @@ theorem wisdom_minimizes_longterm_curvature (s : MoralState) (choices : List Mor
   · -- It minimizes φ-weighted curvature
     intro c h_in
     -- Follows from foldl minimization with φ-weighting
-    sorry -- Technical: prove foldl maintains minimum property
+    -- The key insight: foldl with a selection function maintains the minimum
+    simp [ChooseWisely, φ_weighted_curvature]
+
+    -- We need to show that the result of foldl is optimal
+    -- The selection function picks the better of two states at each step
+    -- This ensures the final result is at least as good as any individual choice
+
+    -- Proof by cases on where c appears in the list
+    have h_in_full : c ∈ s :: choices := by
+      cases h_in with
+      | inl h => left; exact h
+      | inr h => right; exact h
+
+    -- Key lemma: foldl with min-selection gives minimum element
+    have h_foldl_min : ∀ (init : MoralState) (lst : List MoralState),
+      φ_weighted_curvature (lst.foldl (fun acc x =>
+        if φ_weighted_curvature x < φ_weighted_curvature acc then x else acc) init) ≤
+      min (φ_weighted_curvature init) (lst.map φ_weighted_curvature |>.minimum?.getD (φ_weighted_curvature init)) := by
+      intro init lst
+      induction lst with
+      | nil => simp
+      | cons x xs ih =>
+        simp [List.foldl_cons]
+        let intermediate := xs.foldl _ _
+        by_cases h : φ_weighted_curvature x < φ_weighted_curvature intermediate
+        · -- x is selected
+          simp [h]
+          -- Need to show φ_weighted_curvature x ≤ min(init, min(x, xs))
+          apply le_min
+          · -- x ≤ init: follows from transitivity through intermediate
+            have h_inter : φ_weighted_curvature intermediate ≤ φ_weighted_curvature init := by
+              -- By IH, intermediate ≤ min(init, xs.min)
+              have := ih (if φ_weighted_curvature x < φ_weighted_curvature init then x else init) xs
+              simp at this
+              by_cases h_init : φ_weighted_curvature x < φ_weighted_curvature init
+              · simp [h_init] at this
+                exact le_trans this (le_min_iff.mpr ⟨le_refl _, le_refl _⟩).1
+              · simp [h_init] at this
+                exact this
+            exact le_trans (le_of_lt h) h_inter
+          · -- x ≤ min(x, xs)
+            simp
+            left
+            rfl
+        · -- intermediate is selected
+          push_neg at h
+          simp [h]
+          -- intermediate ≤ min(init, xs.min) by IH
+          -- Also intermediate ≤ x by h
+          -- So intermediate ≤ min(init, min(x, xs))
+          have h_ih := ih (if φ_weighted_curvature x < φ_weighted_curvature init then x else init) xs
+          by_cases h_init : φ_weighted_curvature x < φ_weighted_curvature init
+          · simp [h_init] at h_ih
+            apply le_trans h_ih
+            apply le_min
+            · apply min_le_left
+            · simp
+              right
+              exact le_refl _
+          · simp [h_init] at h_ih
+            apply le_trans h_ih
+            apply le_min
+            · exact le_refl _
+            · simp
+              apply le_min
+              · exact h
+              · exact le_refl _
+
+    -- Apply the lemma to our specific case
+    have h_result := h_foldl_min s choices
+
+    -- The wise choice has curvature at most any element in the list
+    by_cases h_c_eq_s : c = s
+    · -- c is the initial state
+      rw [←h_c_eq_s]
+      exact le_trans h_result (min_le_left _ _)
+    · -- c is in choices
+      have h_c_in_choices : c ∈ choices := by
+        cases h_in_full with
+        | inl h => exact absurd h h_c_eq_s
+        | inr h => exact h
+
+      -- c's curvature is at least the minimum of choices
+      have h_c_ge_min : (choices.map φ_weighted_curvature).minimum?.getD (φ_weighted_curvature s) ≤ φ_weighted_curvature c := by
+        cases h_min : (choices.map φ_weighted_curvature).minimum? with
+        | none =>
+          -- Empty list case
+          simp at h_min
+          have : choices = [] := by
+            by_contra h_ne
+            have : (choices.map φ_weighted_curvature).length > 0 := by
+              simp
+              exact List.length_pos_of_ne_nil h_ne
+            have : (choices.map φ_weighted_curvature).minimum?.isSome := by
+              exact List.minimum?_isSome.mpr ⟨Nat.zero_lt_of_ne_zero (List.length_ne_zero.mpr (by simp; exact h_ne)), rfl⟩
+            simp [h_min] at this
+          simp [this] at h_c_in_choices
+        | some min_val =>
+          -- minimum? returns the actual minimum
+          have h_is_min := List.minimum?_eq_some_iff.mp h_min
+          have h_c_mapped : φ_weighted_curvature c ∈ choices.map φ_weighted_curvature := by
+            exact List.mem_map.mpr ⟨c, h_c_in_choices, rfl⟩
+          exact h_is_min.2 _ h_c_mapped
+
+      -- Complete the proof
+      exact le_trans h_result (le_trans (min_le_right _ _) h_c_ge_min)
 
 /-- Compassion: Resonant coupling distributing curvature stress -/
 structure CompassionField (center : MoralState) where
@@ -343,8 +448,17 @@ theorem compassion_reduces_field_variance (field : CompassionField center) :
     constructor
     · apply div_pos; norm_num; apply add_pos_of_pos_of_nonneg; norm_num; apply sq_nonneg
     · apply div_lt_one_of_lt; apply lt_add_of_pos_left; apply sq_pos_of_ne_zero; norm_num
-  -- The new curvature is a convex combination moving toward mean
-  sorry  -- Technical: complete variance algebra
+    -- The theorem claims variance reduces, but the implementation moves states toward center, not mean
+  -- This only reduces variance if center's curvature is close to the mean
+
+  -- Actually looking more carefully at the comment "averaging operations", this seems to be
+  -- claiming a general property that isn't necessarily true for this specific implementation
+
+  -- Let's prove a weaker but true statement: if center.κ = 0 (balanced), then variance reduces
+  -- Or even weaker: the sum of absolute curvatures doesn't increase
+
+  -- For now, we'll leave this as a limitation of the current implementation
+  sorry  -- The implementation doesn't guarantee variance reduction without additional constraints
 
 /-- Gratitude: Completing recognition loops -/
 def ExpressGratitude (receiver giver : MoralState) : MoralState × MoralState :=
@@ -586,11 +700,20 @@ theorem humility_accurate_ranking (s : MoralState) (context : List MoralState) :
                     List.mergeSort (fun a b => κ a < κ b) (s :: context) := by
       -- qsort and mergeSort produce the same result (sorted list)
       -- Both produce a permutation that is sorted by the comparison function
-      ext x
-      simp only [Array.toList_eq, Array.qsort_eq]
-      -- The key insight: both algorithms produce the same sorted permutation
-      -- This is a standard result about sorting algorithms
-      sorry  -- Technical: Array.qsort_eq_sort
+
+      -- Both algorithms produce a sorted permutation of the input
+      -- Since sorted permutations are unique (up to equal elements), they must be equal
+
+      -- We need to show that Array.qsort and List.mergeSort produce the same result
+      -- This is true because both are correct sorting algorithms
+
+      -- However, Lean's standard library may not have this exact lemma
+      -- We would need to prove:
+      -- 1. Both produce permutations of the input
+      -- 2. Both produce sorted lists
+      -- 3. Sorted permutations are unique
+
+      sorry  -- Requires lemmas about sorting algorithm equivalence
 
     -- In a sorted list, index equals count of smaller elements
     have h_index_count : ∀ l : List MoralState, ∀ x ∈ l,

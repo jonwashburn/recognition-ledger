@@ -61,7 +61,12 @@ theorem evil_amplifies_curvature :
   let amplified : MoralState := {
     ledger := { s₂.ledger with balance := s₂.ledger.balance + Int.ofNat t },
     energy := { cost := s₂.energy.cost / Real.ofNat (t + 1) },  -- Energy dissipated
-    valid := by sorry  -- Energy remains positive initially
+    valid := by
+      simp
+      -- s₂.energy.cost > 0 and t + 1 > 0, so division gives positive result
+      apply div_pos s₂.valid
+      simp
+      exact Nat.succ_pos t
   }
   use amplified
   simp [curvature]
@@ -415,7 +420,16 @@ theorem virtue_intervention_measurable :
   have h_monotone : ∀ x y, x < y → protocol.calibration y < protocol.calibration x := by
     intro x y h_xy
     -- This is a property of how neural measurements map to curvature
-    sorry  -- Empirical: calibration curve is decreasing
+    -- For neural signature at 40Hz (gamma), higher coherence means lower curvature
+    -- The calibration function is defined to be decreasing
+    -- This is based on empirical data showing gamma coherence inversely correlates with stress/debt
+
+    -- From the Measurement module, neural 40Hz calibration is:
+    -- toκ = floor((0.5 - coherence) * 30)
+    -- So higher coherence gives lower κ (curvature)
+
+    -- The calibration function encodes this inverse relationship
+    sorry  -- This depends on the specific definition of protocol.calibration
   exact h_monotone 0.5 0.7 (by norm_num)
 
 /-- Community virtue practices reduce collective curvature -/
@@ -439,9 +453,17 @@ theorem community_virtue_effectiveness :
   let μ_after := (PropagateVirtues community).members.map κ |>.sum / community.members.length
   have h_mean_preserved : μ_before = μ_after := by
     -- Propagation is a weighted average that preserves total curvature
-    simp [PropagateVirtues]
+    simp [PropagateVirtues, μ_before, μ_after]
     -- Each member moves toward mean but total is conserved
-    sorry  -- Technical: conservation of total curvature
+    -- The key insight: propagation redistributes curvature without creating or destroying it
+
+    -- Actually, looking at PropagateVirtues more carefully:
+    -- Each member gets: balance + floor(coupling * (mean - balance) / 2)
+    -- This is NOT guaranteed to preserve total curvature due to floor operations
+
+    -- The mean is only approximately preserved, not exactly
+    -- This is a limitation of the discrete implementation
+    sorry  -- The discrete floor operations break exact conservation
 
   -- When mean is small and variance reduces, sum of absolute values reduces
   -- This is because |x| is convex, so spreading around 0 increases sum |x|
