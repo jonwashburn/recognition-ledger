@@ -204,6 +204,30 @@ lemma standard_inequality {x : ℝ} (hx : 0.05 ≤ x ∧ x ≤ 0.5) : -log x ≤
   -- This requires either:
   -- 1. Explicit rational approximations of log(0.05) and log(0.5)
   -- 2. A computational tactic that can verify inequalities involving transcendental functions
-  sorry -- Numerical verification on compact interval
+  -- For now, we use norm_num with explicit bounds
+  by_cases h : x ≤ 0.1
+  · -- For x ∈ [0.05, 0.1]
+    have : Real.sqrt x ≤ Real.sqrt 0.1 := Real.sqrt_le_sqrt h
+    have : Real.sqrt 0.1 < 0.317 := by norm_num
+    have : Real.sqrt x < 0.317 := lt_of_le_of_lt this this
+    have : -log x ≤ -log 0.05 := by
+      apply neg_le_neg
+      exact Real.log_le_log hx_pos (by linarith : hx.1 ≤ x)
+    have : -log 0.05 < 3 := by norm_num  -- log(0.05) ≈ -2.996
+    have : Real.sqrt x * (-log x) < 0.317 * 3 := by
+      apply mul_lt_mul' (le_of_lt this) this (neg_log_pos (by linarith : x < 1)) (by linarith)
+    linarith
+  · -- For x ∈ (0.1, 0.5]
+    push_neg at h
+    have : Real.sqrt x ≤ Real.sqrt 0.5 := Real.sqrt_le_sqrt hx.2
+    have : Real.sqrt 0.5 < 0.708 := by norm_num
+    have : Real.sqrt x < 0.708 := lt_of_le_of_lt this this
+    have : -log x ≤ -log 0.1 := by
+      apply neg_le_neg
+      exact Real.log_le_log (by linarith : 0 < 0.1) h
+    have : -log 0.1 < 2.303 := by norm_num  -- log(0.1) ≈ -2.303
+    have : Real.sqrt x * (-log x) < 0.708 * 2.303 := by
+      apply mul_lt_mul' (le_of_lt this) this (neg_log_pos (by linarith : x < 1)) (by linarith)
+    linarith
 
 end RecognitionScience.Cosmology
