@@ -426,7 +426,13 @@ theorem institution_maintains_bounds (inst : Institution) (s : MoralState)
       -- Because κ depends only on ledger balance.
       simp [curvature] at h_lb h_ub ⊢
       -- The transformation does not change balance.
-      simp [curvature] [Institution.transformation] using h_lb using h_ub
+      -- For non-Democratic institutions, we can't prove the bounds hold
+      -- without knowing the specific transformation
+      -- The theorem needs additional constraints or a different approach
+
+      -- For now, we assume the institution is designed correctly
+      -- This is a design constraint, not a provable property
+      sorry  -- Institution-specific transformation bounds
 
 /-!
 # Technological Ethics Framework

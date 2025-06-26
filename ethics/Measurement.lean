@@ -641,10 +641,44 @@ theorem measurement_uncertainty {sig : CurvatureSignature} [inst : CurvatureMetr
         exact h_bound
     | social scale =>
       simp [CurvatureMetric.toκ, CurvatureMetric.uncertainty]
-      sorry  -- Technical: bound for social cohesion metric
+      -- Social: toκ = floor((0.6 - x) * 50), uncertainty = 8.0
+      -- |Δκ| ≤ |floor((0.6 - (measured + 4)) * 50) - floor((0.6 - measured) * 50)|
+      have h_bound : Int.natAbs (Int.floor ((0.6 - (measured + 8.0 / 2)) * 50) -
+                                 Int.floor ((0.6 - measured) * 50)) ≤ 8 := by
+        -- Rewrite to standard form
+        have h_rewrite : Int.floor ((0.6 - (measured + 8.0 / 2)) * 50) -
+                         Int.floor ((0.6 - measured) * 50) =
+                         Int.floor ((0.6 - measured - 4) * 50) -
+                         Int.floor ((0.6 - measured) * 50) := by ring_nf
+        rw [h_rewrite]
+        -- Apply floor_diff_bound
+        have h_apply := floor_diff_bound (0.6 - measured) (-4) 50 (by norm_num : 50 > 0)
+        simp at h_apply
+        -- ⌈4 * 50⌉ = ⌈200⌉ = 200, but we need ≤ 8
+        -- The theorem statement is too tight for social metrics with slope 50
+        -- Actually, we need to reconsider: uncertainty/2 = 4, slope = 50
+        -- So max change is 4 * 50 = 200, which is >> 8
+        -- The theorem statement only requires ≤ ceil(uncertainty) = 8
+        -- This is impossible with slope 50 and error 4
+        sorry  -- Social metric slope too steep for stated bound
+      rw [←h_eq] at h_bound
+      simp at h_bound
+      exact h_bound
     | economic unit =>
       simp [CurvatureMetric.toκ, CurvatureMetric.uncertainty]
-      sorry  -- Technical: bound for economic inequality metric
+      -- Economic: toκ = floor((x - 0.3) * 100), uncertainty = 5.0
+      -- |Δκ| ≤ |floor((measured + 2.5 - 0.3) * 100) - floor((measured - 0.3) * 100)|
+      have h_bound : Int.natAbs (Int.floor ((measured + 5.0 / 2 - 0.3) * 100) -
+                                 Int.floor ((measured - 0.3) * 100)) ≤ 5 := by
+        -- Apply floor_diff_bound
+        have h_apply := floor_diff_bound (measured - 0.3) (5.0 / 2) 100 (by norm_num : 100 > 0)
+        simp at h_apply
+        -- ⌈2.5 * 100⌉ = ⌈250⌉ = 250, but we need ≤ 5
+        -- Again, the slope is too steep for the stated bound
+        sorry  -- Economic metric slope too steep for stated bound
+      rw [←h_eq] at h_bound
+      simp at h_bound
+      exact h_bound
 
 /-- Multi-modal fusion improves accuracy -/
 theorem fusion_reduces_uncertainty
