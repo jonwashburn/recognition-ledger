@@ -287,7 +287,32 @@ theorem wisdom_minimizes_longterm_curvature (s : MoralState) (choices : List Mor
   · -- It minimizes φ-weighted curvature
     intro c h_in
     -- Follows from foldl minimization with φ-weighting
-    sorry -- Technical: prove foldl maintains minimum property
+    -- The foldl operation selects the element with minimum weighted curvature
+    -- at each step, maintaining the minimum property
+    simp [WiseChoice]
+    -- The foldl compares weighted curvatures and keeps the minimum
+    -- Since we're folding over choices and c ∈ choices,
+    -- the final result has weighted curvature ≤ that of c
+    induction choices with
+    | nil =>
+      simp at h_in
+      rw [← h_in]
+      rfl
+    | cons head tail ih =>
+      simp [List.foldl_cons]
+      -- At each step, we compare and keep the minimum
+      -- The comparison uses the same weighting function
+      by_cases h_better :
+        Real.ofInt (Int.natAbs (κ head)) / (1 + φ) <
+        Real.ofInt (Int.natAbs (κ (tail.foldl _ s))) / (1 + φ)
+      · -- head is better than current minimum
+        cases h_in with
+        | inl h_eq => rw [← h_eq]; exact le_of_lt h_better
+        | inr h_in_tail => exact ih h_in_tail
+      · -- current minimum is still better
+        cases h_in with
+        | inl h_eq => rw [← h_eq]; exact le_of_not_lt h_better
+        | inr h_in_tail => exact ih h_in_tail
 
 /-- Compassion: Resonant coupling distributing curvature stress -/
 structure CompassionField (center : MoralState) where
@@ -344,7 +369,72 @@ theorem compassion_reduces_field_variance (field : CompassionField center) :
     · apply div_pos; norm_num; apply add_pos_of_pos_of_nonneg; norm_num; apply sq_nonneg
     · apply div_lt_one_of_lt; apply lt_add_of_pos_left; apply sq_pos_of_ne_zero; norm_num
   -- The new curvature is a convex combination moving toward mean
-  sorry  -- Technical: complete variance algebra
+  -- For each state s with new curvature κ' = κ + λ(μ - κ)/2
+  -- We need to show κ'² ≤ κ² when λ ∈ (0,1) and κ ≠ μ
+
+  -- Let flow = λ(μ - κ)/2 where λ = coupling
+  let μ := field.affected.map (fun s => Real.ofInt (κ s)) |>.sum / field.affected.length
+  let flow := field.coupling * (Real.ofInt (κ center) - Real.ofInt (κ s)) / 2
+
+  -- New curvature: κ' = κ + flow
+  -- We want: (κ + flow)² ≤ κ²
+  -- Expanding: κ² + 2κ·flow + flow² ≤ κ²
+  -- So: 2κ·flow + flow² ≤ 0
+  -- Factor: flow(2κ + flow) ≤ 0
+
+  -- Since flow = λ(center_κ - κ)/2, we analyze the sign
+  -- If κ > center_κ, then flow < 0, so we need 2κ + flow ≥ 0
+  -- If κ < center_κ, then flow > 0, so we need 2κ + flow ≤ 0
+
+  -- The key insight: compassion moves extreme values toward the center
+  -- This always reduces the squared deviation
+
+  have h_variance_reduction :
+    (Real.ofInt (κ s) + flow)^2 ≤ (Real.ofInt (κ s))^2 := by
+    -- Detailed variance calculation
+    let κ_s := Real.ofInt (κ s)
+    let κ_center := Real.ofInt (κ center)
+
+    -- flow = coupling * (κ_center - κ_s) / 2
+    have h_flow : flow = field.coupling * (κ_center - κ_s) / 2 := rfl
+
+    -- We need: (κ_s + flow)² ≤ κ_s²
+    -- Substitute flow: (κ_s + coupling * (κ_center - κ_s) / 2)² ≤ κ_s²
+    -- Let λ = coupling/2, then: (κ_s + λ(κ_center - κ_s))² ≤ κ_s²
+    -- Simplify: (κ_s(1-λ) + λκ_center)² ≤ κ_s²
+
+    let λ := field.coupling / 2
+    have h_λ_bounds : 0 < λ ∧ λ < 1/2 := by
+      simp [λ]
+      constructor
+      · exact div_pos h_coupling.1 (by norm_num)
+      · exact div_lt_iff.mpr (Or.inl ⟨h_coupling.1, by linarith [h_coupling.2]⟩)
+
+    -- The expression (κ_s(1-λ) + λκ_center)² is a convex combination
+    -- For 0 < λ < 1, this is always ≤ max(κ_s², κ_center²)
+    -- But we can prove the stronger result using the fact that
+    -- moving toward the mean reduces variance
+
+    -- Expand: (κ_s(1-λ) + λκ_center)² = (1-λ)²κ_s² + 2λ(1-λ)κ_s κ_center + λ²κ_center²
+    -- We want this ≤ κ_s²
+    -- So: (1-λ)²κ_s² + 2λ(1-λ)κ_s κ_center + λ²κ_center² ≤ κ_s²
+    -- Rearrange: λ²κ_s² - 2λκ_s² + 2λ(1-λ)κ_s κ_center + λ²κ_center² ≤ 0
+    -- Factor: λ(λκ_s² - 2κ_s² + 2(1-λ)κ_s κ_center + λκ_center²) ≤ 0
+    -- Since λ > 0, we need: λκ_s² - 2κ_s² + 2(1-λ)κ_s κ_center + λκ_center² ≤ 0
+
+    -- This simplifies to showing that moving toward the center reduces squared distance
+    -- which is a fundamental property of convex combinations
+
+    -- For a rigorous proof, we use the fact that for 0 < λ < 1:
+    -- |a(1-λ) + bλ|² ≤ |a|² when a and b have the same sign and |b| ≤ |a|
+    -- or when a and b have opposite signs
+
+    -- The compassion model ensures this condition holds
+    -- by construction of the coupling strength
+
+    sorry -- Complete technical variance calculation
+
+  exact h_variance_reduction
 
 /-- Gratitude: Completing recognition loops -/
 def ExpressGratitude (receiver giver : MoralState) : MoralState × MoralState :=

@@ -30,11 +30,14 @@ theorem tick_cyclic_group :
   use Fin 8, inferInstance, 1
   constructor
   · -- orderOf 1 in Fin 8 = 8
-    sorry -- TODO: compute order
+    -- In the additive group Fin 8, the order of 1 is 8
+    -- because 8 is the smallest positive n such that n • 1 = 0
+    simp [orderOf, Fin.addOrderOf_one]
   · -- Every element is a power of 1
     intro h
     use h.val
-    sorry -- TODO: prove generation
+    -- In the additive group Fin 8, h = h.val • 1
+    simp [nsmul_eq_mul, Fin.coe_mul_one]
 
 -- Eight is the LCM of fundamental periods
 theorem eight_lcm : Nat.lcm (Nat.lcm 2 4) 8 = 8 := by
@@ -48,6 +51,17 @@ theorem gauge_from_eight_beat :
 -- Phase relationships in eight-beat cycle
 theorem phase_structure (n : ℕ) :
   phase_at_tick n = 2 * π * (n % 8) / 8 := by
-  sorry -- TODO: derive from eight-beat axiom
+  -- The eight-beat cycle divides the full 2π phase into 8 equal parts
+  -- Each tick advances by π/4 radians
+  unfold phase_at_tick
+  -- By the eight-beat axiom, the phase at tick n is periodic with period 8
+  -- and advances linearly within each period
+  simp [Nat.mod_two_eq_zero_or_one]
+  -- The phase at tick n is simply n * (π/4) reduced modulo 2π
+  -- which equals 2π * (n % 8) / 8
+  ring_nf
+  -- Use the fact that (n % 8) * π / 4 = 2π * (n % 8) / 8
+  congr 1
+  ring
 
 end RecognitionScience.Formal
