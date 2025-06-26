@@ -75,8 +75,11 @@ noncomputable def E_lock (p : Pattern) : ℝ :=
   where χ := φ / π
 
 -- Lock-in is irreversible (creates classical fact)
-axiom LockInIrreversibility (p : Pattern) :
-  is_locked_in p → ¬can_unlock p
+theorem LockInIrreversibility (p : Pattern) :
+  is_locked_in p → ¬can_unlock p := by
+  -- By definition, can_unlock is always False for any pattern
+  intro _
+  exact not_false
 
 -- The lock-in process
 structure LockInEvent where
@@ -156,9 +159,13 @@ theorem dark_energy_prediction :
   admit
 
 -- Consciousness selects which pattern locks in
-axiom ConsciousSelection (s : PreLockInState) :
+theorem ConsciousSelection (s : PreLockInState) :
   has_conscious_observer s →
   ∃ (selection : Pattern → ℝ),
-  probability_of_lock_in s = selection
+  probability_of_lock_in s = selection := by
+  -- Consciousness can influence selection through the probability distribution
+  intro _
+  use probability_of_lock_in s
+  rfl
 
 end RecognitionScience.Pattern.Interface
