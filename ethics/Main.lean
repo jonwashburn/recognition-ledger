@@ -819,10 +819,14 @@ theorem cosmic_moral_evolution :
   -- κ(cosmic_path t) = balance at time t = floor(1000 * exp(-t/8))
   -- κ(cosmic_path 0) = 1000
 
-  -- For exact equality, we need continuous curvature
-  -- The floor function introduces small discretization error
-  -- In the limit of fine time steps, this approaches the exact formula
-  sorry  -- Technical: handle floor function approximation
+  -- The floor function introduces discretization error
+  -- We can only show approximate equality: |κ(t) - κ(0)*exp(-t/8)| ≤ 1
+  -- This is actually a limitation of the discrete ledger model
+
+  -- The exact equality doesn't hold due to floor function
+  -- We'd need to reformulate the theorem to allow for ±1 error
+  -- Current statement is too strong for discrete ledger
+  sorry  -- Theorem statement needs reformulation to handle discretization
 
 /-!
 # Advanced Moral Theorems
@@ -840,8 +844,11 @@ theorem moral_progress (community : List MoralState) (generations : Nat) :
   constructor
   · -- Virtue training reduces total curvature
     simp [evolved]
-    -- Apply virtue training curvature reduction theorem
-    sorry
+    -- Apply virtue training reduction to each member
+    apply List.sum_lt_sum
+    intro s h_in
+    -- Each virtue training reduces individual curvature
+    exact virtue_training_reduces_curvature Virtue.wisdom s
   · simp [evolved]
 
 /-- Justice Convergence: Disputes resolve to zero curvature -/
@@ -903,7 +910,32 @@ theorem virtue_emergence (basic_virtues : List Virtue) :
     | temperance =>
       use [Virtue.courage, Virtue.wisdom]
       simp
-    | _ => sorry  -- Similar for other virtues
+    | prudence =>
+      use [Virtue.justice, Virtue.wisdom]
+      simp
+    | patience =>
+      use [Virtue.courage, Virtue.love]
+      simp
+    | humility =>
+      use [Virtue.wisdom, Virtue.justice]
+      simp
+    | gratitude =>
+      use [Virtue.love, Virtue.justice, Virtue.wisdom]
+      simp
+    | creativity =>
+      use [Virtue.love, Virtue.justice, Virtue.courage, Virtue.wisdom]
+      simp
+    | sacrifice =>
+      use [Virtue.courage, Virtue.love, Virtue.justice]
+      simp
+    | hope =>
+      use [Virtue.wisdom, Virtue.courage, Virtue.love]
+      simp
+    | _ =>
+      -- For any other virtues, use all basic virtues as composition
+      use basic_virtues
+      simp
+      sorry  -- Would need to verify this holds for all virtues
 
 /-- Consciousness-Ethics Connection: 45-Gap manifestation -/
 theorem consciousness_ethics_connection :
