@@ -184,13 +184,19 @@ lemma fib_40 : fib 40 = 102334155 := by
 
 -- φ^50 bounds (for top quark)
 lemma fib_49 : fib 49 = 7778742049 := by
-  -- For very large Fibonacci numbers, we can use the closed form
-  -- or compute via matrix exponentiation, but for now we'll accept
-  -- these as computational facts that could be verified
-  admit -- This is a computational fact that could be verified
+  -- For very large Fibonacci numbers, we compute step by step
+  -- fib 49 = fib 48 + fib 47
+  have h48 : fib 48 = 4807526976 := by rfl
+  have h47 : fib 47 = 2971215073 := by rfl
+  simp [fib, h48, h47]
+  norm_num
 
 lemma fib_50 : fib 50 = 12586269025 := by
-  admit -- This is a computational fact that could be verified
+  -- fib 50 = fib 49 + fib 48
+  have h49 : fib 49 = 7778742049 := fib_49
+  have h48 : fib 48 = 4807526976 := by rfl
+  simp [fib, h49, h48]
+  norm_num
 
 -- φ^25 ≈ 121393 (for up quark)
 lemma phi_25_approx : abs (φ^25 - 121393) < 100 := by
