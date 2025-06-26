@@ -1,0 +1,29 @@
+
+=== RECOGNITION SCIENCE GRAVITY PROOF COMPLETION REPORT ===
+Generated: 2025-06-21 15:41:57
+Duration: 0:33:38.306620
+
+SUMMARY
+-------
+Total sorries found: 190
+Sorries resolved: 6
+Success rate: 3.2%
+Failed attempts: 97
+Build status: success
+
+FILES MODIFIED
+--------------
+- Dimension.lean
+- InfoStrain.lean
+- Pressure.lean
+- MetaPrinciple.lean
+- NumericalVerification.lean
+
+CATEGORY BREAKDOWN
+------------------
+existence         0/ 15 (  0.0%)
+field_equation    0/  1 (  0.0%)
+general           0/ 38 (  0.0%)
+inequality        2/ 59 (  3.4%)
+numerical         4/ 65 (  6.2%)
+pde               0/  6 (  0.0%)

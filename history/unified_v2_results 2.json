@@ -1,0 +1,13 @@
+{
+  "version": "unified_v2",
+  "galaxy": "NGC3198_test",
+  "chi2_per_n": 0.033062640939706636,
+  "timestamp": "2025-06-19T16:45:40.960435",
+  "parameters": {
+    "beta": -0.08359213500126181,
+    "beta_scale": 1.5,
+    "mu_scale": 1.7989074399478675,
+    "coupling_scale": 1.1117859405028423,
+    "lambda_eff_um": 50.800000000000004
+  }
+}

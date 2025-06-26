@@ -13,6 +13,7 @@ import Mathlib.Topology.MetricSpace.HausdorffDistance
 import Mathlib.Analysis.Distribution.SchwartzSpace
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
+import NavierStokesLedger.Constants
 
 /-!
 # Basic Definitions for Navier-Stokes
@@ -115,8 +116,7 @@ structure FluidConstants where
   ν : ℝ  -- kinematic viscosity
   ν_pos : 0 < ν
 
-/-- Golden ratio from Recognition Science -/
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
+-- Golden ratio φ is now imported from Constants.lean
 
 /-- Golden ratio inverse value -/
 lemma golden_inv_val : φ⁻¹ = (Real.sqrt 5 - 1) / 2 := by
@@ -219,9 +219,7 @@ theorem measure_ball_scaling {r : ℝ} (hr : 0 < r) :
   simp [Real.volume_ball]
   norm_num
 
-/-- Sobolev constant in 3D -/
-noncomputable def C_sobolev : ℝ :=
-  1  -- Placeholder value
+-- Sobolev constant C_sobolev is now imported from Constants.lean
 
 theorem sobolev_3d_embedding :
   ∀ u : NavierStokesLedger.VectorField, NavierStokesLedger.VectorField.sobolevNorm u 1 ≠ ⊤ →

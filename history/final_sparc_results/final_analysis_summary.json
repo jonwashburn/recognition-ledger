@@ -1,0 +1,101 @@
+{
+  "total_galaxies": 171,
+  "successful_fits": 29,
+  "mean_chi2_reduced": 78.23013428500165,
+  "median_chi2_reduced": 40.2323785097008,
+  "std_chi2_reduced": 105.79151187235105,
+  "frac_below_1": 0.0,
+  "frac_below_2": 0.0,
+  "frac_below_5": 0.06896551724137931,
+  "best_fits": [
+    {
+      "name": "NGC5005",
+      "chi2_reduced": 2.9279307092952873
+    },
+    {
+      "name": "UGC11914",
+      "chi2_reduced": 3.1030608483122992
+    },
+    {
+      "name": "UGC06786",
+      "chi2_reduced": 6.658469473574844
+    },
+    {
+      "name": "NGC0891",
+      "chi2_reduced": 7.922338196519934
+    },
+    {
+      "name": "UGC03205",
+      "chi2_reduced": 10.815614215998318
+    },
+    {
+      "name": "UGC08699",
+      "chi2_reduced": 11.208761368530869
+    },
+    {
+      "name": "NGC6946",
+      "chi2_reduced": 15.986060762866067
+    },
+    {
+      "name": "UGC02953",
+      "chi2_reduced": 19.562428346530126
+    },
+    {
+      "name": "UGC06973",
+      "chi2_reduced": 20.28973889380713
+    },
+    {
+      "name": "UGC06787",
+      "chi2_reduced": 20.831018225782266
+    }
+  ],
+  "worst_fits": [
+    {
+      "name": "NGC4217",
+      "chi2_reduced": 489.6218104701845
+    },
+    {
+      "name": "UGC06614",
+      "chi2_reduced": 293.2755371306405
+    },
+    {
+      "name": "UGC09133",
+      "chi2_reduced": 203.04248191032167
+    },
+    {
+      "name": "UGC03580",
+      "chi2_reduced": 200.1866096423869
+    },
+    {
+      "name": "IC4202",
+      "chi2_reduced": 140.6989504692684
+    },
+    {
+      "name": "UGC02916",
+      "chi2_reduced": 130.21014376732396
+    },
+    {
+      "name": "NGC6195",
+      "chi2_reduced": 96.26678730760125
+    },
+    {
+      "name": "UGC02487",
+      "chi2_reduced": 94.27553783792717
+    },
+    {
+      "name": "NGC5033",
+      "chi2_reduced": 80.40485768278019
+    },
+    {
+      "name": "NGC4013",
+      "chi2_reduced": 76.61688764055913
+    }
+  ],
+  "global_parameters": {
+    "lambda_eff": 5.0770081644429014e-05,
+    "beta_scale": 1.4919447024236827,
+    "mu_scale": 1.6435276509090575,
+    "coupling_scale": 1.3257015084019799
+  },
+  "timestamp": "2025-06-19T15:17:01.988777"
+}

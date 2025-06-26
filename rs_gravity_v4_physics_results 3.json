@@ -1,0 +1,20 @@
+{
+  "version": "v4_physics",
+  "galaxy": "NGC3198_v4",
+  "timestamp": "2025-06-19T17:35:47.131011",
+  "chi2_per_n": 0.06616375060710322,
+  "physics_improvements": {
+    "exact_info_field": true,
+    "velocity_tensor": true,
+    "flowing_beta": true,
+    "xi_lagrangian": true
+  },
+  "parameters": {
+    "beta_0": -0.08314631028125509,
+    "epsilon_1": 0.1,
+    "epsilon_2": 0.05,
+    "mu_0": 12033715076983.314,
+    "lambda_c": 9.847088516851351e-28,
+    "alpha_grad": 1500000.0
+  }
+}

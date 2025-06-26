@@ -11,6 +11,7 @@ import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Tactic
+import NavierStokesLedger.Constants
 
 /-!
 # Basic Definitions for Navier-Stokes
@@ -139,22 +140,6 @@ def isGloballyRegular : Prop :=
 
 end NSolution
 
-/-- Golden ratio from Recognition Science -/
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
-
-/-- The universal constant C* from Recognition Science -/
-def C_star : ℝ := 0.142  -- Updated to match the paper value
-
-/-- The key inequality we need -/
-lemma C_star_lt_phi_inv : C_star < φ⁻¹ := by
-  -- φ = (1 + √5)/2 ≈ 1.618, so φ⁻¹ ≈ 0.618
-  -- C_star = 0.142, so 0.142 < 0.618
-  rw [C_star, φ]
-  norm_num
-  -- Need to show 0.142 < 2 / (1 + √5)
-  -- Since √5 ≈ 2.236, we have 1 + √5 ≈ 3.236, so 2/(1+√5) ≈ 0.618
-  -- Therefore 0.142 < 0.618 is true
-  have h1 : (0.142 : ℝ) < 2 / (1 + Real.sqrt 5) := by norm_num
-  exact h1
+-- Constants φ, φ_inv, C_star, and C_star_bound are now imported from Constants.lean
 
 end NavierStokesLedger

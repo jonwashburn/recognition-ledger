@@ -1,0 +1,107 @@
+{
+  "total_galaxies": 171,
+  "successful_fits": 171,
+  "success_rate": 1.0,
+  "chi2_statistics": {
+    "mean": 38.756884464778594,
+    "median": 22.077370487858307,
+    "std": 55.423370712489145,
+    "min": 0.8225657620561657,
+    "max": 489.6218104701845
+  },
+  "quality_fractions": {
+    "excellent_below_1": 0.005847953216374269,
+    "good_below_2": 0.023391812865497075,
+    "acceptable_below_5": 0.10526315789473684,
+    "below_10": 0.27485380116959063
+  },
+  "best_fits": [
+    {
+      "name": "UGC05918",
+      "chi2_reduced": 0.8225657620561657
+    },
+    {
+      "name": "UGC09992",
+      "chi2_reduced": 1.4354143036545284
+    },
+    {
+      "name": "UGC07261",
+      "chi2_reduced": 1.4384793542907393
+    },
+    {
+      "name": "UGC07866",
+      "chi2_reduced": 1.5067030998840198
+    },
+    {
+      "name": "NGC4183",
+      "chi2_reduced": 2.2940877853602912
+    },
+    {
+      "name": "UGC12632",
+      "chi2_reduced": 2.407394181051978
+    },
+    {
+      "name": "D564-8",
+      "chi2_reduced": 2.4617683535203625
+    },
+    {
+      "name": "NGC5005",
+      "chi2_reduced": 2.9279307092952873
+    },
+    {
+      "name": "UGC11914",
+      "chi2_reduced": 3.1030608483122992
+    },
+    {
+      "name": "NGC0247",
+      "chi2_reduced": 3.6852266475991082
+    },
+    {
+      "name": "F583-4",
+      "chi2_reduced": 3.864145222811539
+    },
+    {
+      "name": "UGC10310",
+      "chi2_reduced": 3.9766297766387235
+    },
+    {
+      "name": "NGC4051",
+      "chi2_reduced": 4.0410703801369845
+    },
+    {
+      "name": "UGCA281",
+      "chi2_reduced": 4.097778270859112
+    },
+    {
+      "name": "UGC06930",
+      "chi2_reduced": 4.31377359834832
+    },
+    {
+      "name": "UGC04483",
+      "chi2_reduced": 4.669188711304189
+    },
+    {
+      "name": "UGC07559",
+      "chi2_reduced": 4.773219683178204
+    },
+    {
+      "name": "NGC4559",
+      "chi2_reduced": 4.822979969335907
+    },
+    {
+      "name": "NGC0300",
+      "chi2_reduced": 5.311318442290306
+    },
+    {
+      "name": "KK98-251",
+      "chi2_reduced": 5.3796141035830916
+    }
+  ],
+  "global_parameters": {
+    "lambda_eff": 5.0770081644429014e-05,
+    "beta_scale": 1.4919447024236827,
+    "mu_scale": 1.6435276509090575,
+    "coupling_scale": 1.3257015084019799
+  },
+  "timestamp": "2025-06-19T15:21:31.053903"
+}

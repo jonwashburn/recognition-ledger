@@ -1,0 +1,51 @@
+PEER REVIEW REPORT
+Title: Gravity as Cosmic Ledger Balancing – From Information Debt to Spacetime Curvature
+Author: Jonathan Washburn
+Reviewer: Anonymous
+Date: \today
+
+SUMMARY
+The manuscript proposes that gravity arises from information-processing constraints encoded in a Light-Native Assembly Language (LNAL). It extends earlier ledger-gravity ideas with a voxel-based processing architecture, derives Einstein's equations from four axioms, predicts a running Newton constant at nanometer scales, and offers far-reaching cosmological and technological implications.
+
+STRENGTHS
+1. Ambitious unification of gravity, information theory, and computation.
+2. Clear axiomatic structure leading to Einstein equations.
+3. Concrete experimental proposals (torsion balance, atom interferometry).
+4. Quantitative cosmological estimates that match observed dark-matter and dark-energy densities.
+5. Bold technological roadmap stimulating interdisciplinary discussion.
+
+MAJOR CONCERNS
+1. **Signal-to-Noise Mismatch**
+   • Table 1 quotes ∆F ≈ 1.7×10⁻³⁵ N at 1 nm, yet thermal noise is 2×10⁻¹⁶ N √Hz – twelve orders of magnitude larger.  The claimed SNR ≈ 5 appears mis-computed (should be ~10⁻¹⁹).  Re-evaluate feasibility or propose noise-reduction strategies.
+
+2. **Casimir & van der Waals Subtraction**
+   • Casimir force at 1 nm is >10²³ times larger than the predicted gravitational enhancement.  The manuscript must detail differential-modulation or material-change techniques that cancel Casimir/vdW to ≤10⁻²⁴ precision – currently absent.
+
+3. **Atom-Interferometer Geometry**
+   • A 1-kg lead cube positioned 1–10 nm from an atomic cloud is physically impossible: gravity test mass cannot approach within nanometers without destroying the trap.  Consider using nanofabricated masses (<10⁻¹⁵ kg) inside hollow-core fibres or on atom chips.
+
+4. **Composite Graviton Section**
+   • The BRAID definition (Eq. 24) ignores gauge constraints and photon indistinguishability.  Provide an explicit symmetrised two-photon wave-function and show how the quadrupole radiation pattern emerges.
+
+5. **Cosmological Section**
+   • Dark-energy density derivation uses τ₀→0 approximation after earlier setting τ₀ = 7.33 fs.  Clarify limiting procedure or keep τ₀ finite.
+
+6. **Technological Applications**
+   • Claims of propellantless propulsion and consciousness transfer are highly speculative.  Recommend moving to an Outlook subsection flagged as conjectural.
+
+MINOR ISSUES
+• Equation numbering restarts in each section – adopt a global counter.
+• Use \mu m not μm in math mode for consistency.
+• Define all symbols on first use (e.g., k in atom-interferometer phase formula).
+• Figure captions are missing; insert schematic diagrams of experimental setups.
+
+RECOMMENDATIONS FOR REVISION
+A. Re-compute all force estimates with full numerical detail; include a sensitivity table.
+B. Provide a realistic Casimir-background cancellation protocol.
+C. Replace 1-kg test mass with on-chip nanomasses; update phase-shift estimates.
+D. Expand composite-graviton derivation with group-theory language (SU(2) helicity basis).
+E. Move speculative devices to an appendix; tighten abstract to <200 words.
+F. Add comparison with entropic-gravity and emergent-space models in Discussion.
+
+CONCLUSION
+The paper is visionary and potentially groundbreaking but requires substantial quantitative correction and clearer separation of established results from speculation.  Addressing the experimental feasibility issues is paramount for acceptance in a top-tier journal. 

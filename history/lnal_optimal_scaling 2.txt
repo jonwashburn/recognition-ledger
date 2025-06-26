@@ -1,0 +1,2 @@
+Optimal mass scaling factor: 1.010883
+Resulting chi2/N: 1588.647135

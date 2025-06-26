@@ -1,0 +1,23 @@
+{
+  "total_galaxies": 171,
+  "successful_fits": 171,
+  "mean_chi2_reduced": 80.02052254124838,
+  "median_chi2_reduced": 44.52508455593,
+  "std_chi2_reduced": 121.30399504376291,
+  "best_fit": {
+    "name": "UGC05918",
+    "chi2_reduced": 2.143983764692725
+  },
+  "worst_fit": {
+    "name": "NGC4217",
+    "chi2_reduced": 1253.9269250472996
+  },
+  "parameters_used": {
+    "lambda_eff": 3.9999999999999996e-05,
+    "h_scale": 6.172e+18,
+    "beta_scale": 0.8,
+    "mu_scale": 0.5,
+    "coupling_scale": 0.5
+  },
+  "timestamp": "2025-06-19T14:57:38.657984"
+}

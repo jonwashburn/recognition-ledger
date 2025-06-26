@@ -1,0 +1,16 @@
+{
+  "description": "RS Gravity v9 Pressure-Based Parameters",
+  "key_insight": "Gravity from P = J_in - J_out, not density",
+  "parameters": {
+    "lambda_eff": 6e-05,
+    "l1": 2.99342e+19,
+    "l2": 7.498980000000001e+20,
+    "pressure_coupling": 1.0,
+    "lock_in_rate": 1000000.0,
+    "eight_beat_amplitude": 0.01,
+    "bits_per_complexity": 1e+23,
+    "info_temperature": 300,
+    "light_pressure_scale": 0.1,
+    "opcode_density_scale": 0.01
+  }
+}

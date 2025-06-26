@@ -1,0 +1,12 @@
+{
+  "separation_nm": 5.0,
+  "G_enhancement": 2.1535925220495593,
+  "sphere_radius_nm": 2.5,
+  "sphere_mass_kg": 1.2631820461308962e-21,
+  "force_difference_N": 4.914168409887637e-36,
+  "deflection_angle_rad": 1.601769868533057e-29,
+  "SNR": 3.684332280710112e-23,
+  "total_error_percent": 8.351849663706107e+25,
+  "temperature_K": 4.2,
+  "integration_time_s": 7.366860016329612e+46
+}

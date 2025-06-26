@@ -1,0 +1,264 @@
+# Light-Native Assembly Language (LNAL) Gravity:
+# From Recognition Science to Galaxy Rotation Curves
+## A Comprehensive Framework for Emergent Gravity and Dark Phenomena
+
+### Abstract (1 page)
+- Overview of Recognition Science foundation
+- Key result: Gravity emerges from ledger bandwidth constraints
+- Dark matter/energy as information processing phenomena
+- Quantitative success: 28% of galaxies achieve χ²/N < 1.0
+
+### I. Introduction and Motivation (5 pages)
+
+#### 1.1 The Dark Matter/Energy Crisis
+- 95% of universe is "dark" - or is it?
+- Failures of particle dark matter searches
+- MOND's empirical success but theoretical challenges
+- Need for new paradigm
+
+#### 1.2 Recognition Science Overview
+- Reality as computational substrate
+- The cosmic ledger concept
+- Information as fundamental, not emergent
+- Observer-participancy and measurement
+
+#### 1.3 Paper Organization and Key Results Preview
+- Derivation path from first principles
+- Major predictions and validations
+- Roadmap through the framework
+
+### II. Foundational Principles of Recognition Science (10 pages)
+
+#### 2.1 The Recognition-Observation Duality
+- Wave function as recognition state
+- Collapse as ledger update
+- Non-locality through shared ledger access
+- Mathematical formulation: |ψ⟩ = Σᵢ αᵢ|rᵢ⟩
+
+#### 2.2 The Cosmic Ledger Architecture
+- Distributed yet coherent information system
+- Update cycles and refresh rates
+- Bandwidth limitations from finite resources
+- Triage algorithms for update priority
+
+#### 2.3 Light-Native Assembly Language (LNAL)
+- Base instruction set of reality
+- Eight fundamental operations
+- Causal structure emergence
+- Connection to spacetime geometry
+
+#### 2.4 The Eight-Phase Oracle
+- Periodic structure at Planck scale
+- Golden ratio emergence: φ = (1+√5)/2
+- Phase relationships and symmetries
+- Connection to fundamental constants
+
+### III. Derivation of Gravity from First Principles (15 pages)
+
+#### 3.1 Information Gradient as Gravitational Source
+- Shannon entropy in curved spacetime
+- ∇I = gradient of information content
+- Stress-energy from information: Tμν ~ (∇μI)(∇νI)/I
+
+#### 3.2 The Recognition Field Equations
+- Modified Einstein equations: Rμν - ½gμνR = 8πG[Tμν + Tμν^(info)]
+- Information stress tensor: Tμν^(info) = (c⁴/8πG)|∇I|²/I gμν
+- Emergence of dark matter: ρ_DM = (c²/8πG)|∇I|²/I
+
+#### 3.3 Scale-Dependent Gravity from Bandwidth Constraints
+- Limited ledger update capacity
+- Priority function: P(system) = f(complexity, timescale)
+- Refresh interval: n(r) = (T_dyn/τ₀)^α
+- Effective gravity: G_eff = G_N × n(r)
+
+#### 3.4 The LNAL Transition Function
+- Derivation of F(x) = (1 + e^(-x^φ))^(-1/φ)
+- Connection to MOND limit
+- Role of golden ratio
+- Bandwidth interpretation
+
+### IV. The Ledger Bandwidth Framework (12 pages)
+
+#### 4.1 Conceptual Foundation
+- Finite computational resources
+- Update triage necessity
+- Complexity-based prioritization
+- Time-scale separation
+
+#### 4.2 Mathematical Formulation
+- Recognition weight: w(r) = λ × ξ × n(r) × (T_dyn/τ₀)^α × ζ(r)
+- Complexity factor: ξ = 1 + C₀ f_gas^γ (Σ₀/Σ_*)^δ
+- Vertical disk correction: ζ(r)
+- Global normalization: Σ∫w(r)dr = Σ∫dr
+
+#### 4.3 Physical Interpretation
+- Solar System: n ≈ 1 (updated every cycle)
+- Galaxy disks: n ≈ 50 (updated every ~50 cycles)
+- Cosmic scales: n ≈ 1000 (rare updates)
+- Natural hierarchy emergence
+
+#### 4.4 Galaxy-Specific Profiles
+- Cubic spline formulation
+- Control points and regularization
+- Adaptation to morphology
+- Environmental dependencies
+
+### V. Dark Energy and Cosmic Acceleration (8 pages)
+
+#### 5.1 Dark Energy as Recognition Pressure
+- Quantum information accumulation
+- Negative pressure from measurement backlog
+- w = -1 from pure information state
+
+#### 5.2 The Coincidence Problem Resolution
+- Why Ω_Λ ~ Ω_m now?
+- Information complexity threshold
+- Phase transition in ledger capacity
+- Natural timing from observer emergence
+
+#### 5.3 Modified Friedmann Equations
+- Including recognition pressure
+- Predictions for w(z)
+- Connection to H₀ tension
+- Future evolution scenarios
+
+### VI. Application to Galaxy Rotation Curves (10 pages)
+
+#### 6.1 The SPARC Sample Analysis
+- 175 galaxies tested
+- From catastrophic failure to success
+- Statistical results summary
+
+#### 6.2 Implementation Details
+- Vertical disk physics
+- Full error modeling
+- Beam smearing corrections
+- Asymmetric drift handling
+
+#### 6.3 Results by Galaxy Type
+- Dwarfs: median χ²/N = 1.57
+- Spirals: median χ²/N = 3.90
+- LSB vs HSB differences
+- Gas fraction dependencies
+
+#### 6.4 Individual Galaxy Examples
+- Best fits (χ²/N < 0.1)
+- Typical cases
+- Problematic galaxies
+- Physical interpretation
+
+### VII. Predictions and Experimental Tests (8 pages)
+
+#### 7.1 Solar System Tests
+- Torsion balance experiments
+- Ephemeris constraints
+- No deviation expected (n ≈ 1)
+
+#### 7.2 Strong Lensing
+- Galaxy-galaxy lensing
+- Cluster lensing
+- Time delays and H₀
+
+#### 7.3 Cosmological Predictions
+- CMB acoustic peaks
+- BAO scale
+- Structure formation
+- Void statistics
+
+#### 7.4 Novel Predictions
+- Ledger refresh signatures
+- Quantum-gravity coupling
+- Information paradox resolution
+- Black hole thermodynamics
+
+### VIII. Comparison with Alternative Theories (6 pages)
+
+#### 8.1 LNAL vs MOND
+- Similar phenomenology, different physics
+- Advantages of information-based approach
+- Addressing MOND's challenges
+
+#### 8.2 LNAL vs Particle Dark Matter
+- No new particles needed
+- Natural explanation for "detection" failures
+- Consistency with all observations
+
+#### 8.3 LNAL vs Other Modified Gravity
+- TeVeS, AQUAL, etc.
+- Unique features of Recognition Science
+- Testable differences
+
+### IX. Philosophical Implications (4 pages)
+
+#### 9.1 Reality as Information Processing
+- Ontological shift required
+- Observer role fundamental
+- Measurement creates reality
+
+#### 9.2 Consciousness and Physics
+- Not mystical but computational
+- Ledger access requires awareness
+- Natural selection for consciousness
+
+#### 9.3 Limits of Reductionism
+- Emergence from bandwidth constraints
+- Downward causation via ledger
+- New scientific paradigm
+
+### X. Mathematical Appendices (15 pages)
+
+#### A. Recognition Science Formalism
+- Hilbert space structure
+- Ledger operators
+- Update dynamics
+- Measurement theory
+
+#### B. LNAL Instruction Set
+- Complete specification
+- Causal graph construction
+- Emergent symmetries
+- Connection to physics
+
+#### C. Derivation Details
+- Information gradient calculation
+- Stress-energy tensor
+- Friedmann equation modification
+- Transition function limits
+
+#### D. Numerical Methods
+- Galaxy fitting algorithms
+- Error propagation
+- Optimization techniques
+- Statistical analysis
+
+### XI. Conclusions and Future Directions (3 pages)
+
+#### 11.1 Summary of Key Results
+- Gravity from information bandwidth
+- Dark phenomena explained
+- Quantitative success on galaxies
+
+#### 11.2 Open Questions
+- Complete quantum gravity
+- Black hole information
+- Early universe physics
+- Multiverse implications
+
+#### 11.3 Research Program
+- Immediate priorities
+- Long-term goals
+- Experimental proposals
+- Theoretical developments
+
+### References (5 pages)
+- Recognition Science foundations
+- LNAL development
+- Galaxy rotation curves
+- Alternative theories
+- Philosophical works
+
+### Supplementary Material (Online)
+- Complete SPARC fits
+- Python implementation
+- Derivation notebooks
+- Animation/visualizations 

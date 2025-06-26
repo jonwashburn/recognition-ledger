@@ -1,0 +1,23 @@
+{
+  "description": "Balanced RS Gravity v6 parameters",
+  "disk_params": {
+    "lambda_eff": 5.08e-05,
+    "beta_scale": 1.492,
+    "coupling_scale": 1.326,
+    "vel_grad_enhance": 2.0,
+    "screening_threshold": 1e-23
+  },
+  "dwarf_params": {
+    "lambda_eff": 0.0002,
+    "beta_scale": 0.3,
+    "coupling_scale": 0.15,
+    "vel_grad_enhance": 1.0,
+    "screening_threshold": 1e-25,
+    "anisotropy_boost": 1.5
+  },
+  "core_params": {
+    "beta_0": -0.05572809000084121,
+    "l1_kpc": 0.97,
+    "l2_kpc": 24.3
+  }
+}

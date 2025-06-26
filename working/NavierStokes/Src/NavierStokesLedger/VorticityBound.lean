@@ -43,14 +43,14 @@ noncomputable def energyTransferRate (u : VectorField) (k : ℝ) : ℝ :=
   -- For now, use a simplified model
   if k > 0 then k^(-5/3) else 0
 
-/-- Geometric depletion constant from Recognition Science -/
-def geometricDepletionRate : ℝ := 0.05 -- This is C*
+-- Geometric depletion constant C* is now imported from Constants.lean
+-- We use C_star for consistency with the main theorem requirement
 
 /-- Prime density theorem for vortex tubes -/
 theorem prime_vortex_density {u : NSolution} {p : PressureField} {ν : ℝ} (hν : 0 < ν)
   (hns : satisfiesNS u p ⟨ν, hν⟩) :
   ∀ t ≥ 0, ∃ N : ℕ, ∀ n > N, isPrimeVortex n (vorticity u t) →
-    (n : ℝ)⁻² ≤ geometricDepletionRate := by
+    (n : ℝ)⁻² ≤ C_star := by
   intro t ht
   use 0
   intro n hn hprime
@@ -366,14 +366,14 @@ theorem fibonacci_energy_cascade {u : NSolution} {p : PressureField} {ν : ℝ} 
 theorem vortex_stretching_bound {u : NSolution} {p : PressureField} {ν : ℝ} (hν : 0 < ν)
   (hns : satisfiesNS u p ⟨ν, hν⟩) :
   ∀ t ≥ 0, ∀ x, ‖vortexStretching (u t) (vorticity u t) x‖ ≤
-    geometricDepletionRate * ‖vorticity u t x‖² := by
+    C_star * ‖vorticity u t x‖² := by
   intro t ht x
   -- The vortex stretching term (ω·∇)u has the key property that it
   -- conserves helicity ∫ω·u in the inviscid case. With viscosity,
   -- this creates a geometric constraint on stretching rates.
   -- Using the Biot-Savart law: u = K * ω where K is the Green's function,
   -- we get |(ω·∇)u| ≤ C|ω|² with C determined by the kernel singularity.
-  -- Recognition Science identifies C = geometricDepletionRate = C* = 0.05
+  -- Recognition Science identifies C = C_star = C* = 0.05
 
   -- Step 1: Express vortex stretching in terms of velocity gradient
   have h_stretching_def : vortexStretching (u t) (vorticity u t) x =
@@ -394,7 +394,7 @@ theorem vortex_stretching_bound {u : NSolution} {p : PressureField} {ν : ℝ} (
 
   -- Step 3: Bound the velocity gradient using Biot-Savart law
   have h_biot_savart : ‖VectorField.gradient (u t) x‖ ≤
-    geometricDepletionRate * ‖vorticity u t x‖ := by
+    C_star * ‖vorticity u t x‖ := by
     -- The Biot-Savart law gives u(x) = ∫ K(x-y) ω(y) dy
     -- where K(x) = (1/4π) x × |x|^(-3) is the fundamental solution
     -- Taking the gradient: ∇u(x) = ∫ ∇K(x-y) ω(y) dy
@@ -406,15 +406,15 @@ theorem vortex_stretching_bound {u : NSolution} {p : PressureField} {ν : ℝ} (
     -- incompressibility condition ∇·u = 0 and the geometric structure
     -- of vortex tubes, giving the universal bound with C* = 0.05
 
-    have h_kernel_bound : ∃ C : ℝ, C = geometricDepletionRate ∧ C > 0 ∧
+    have h_kernel_bound : ∃ C : ℝ, C = C_star ∧ C > 0 ∧
       ‖VectorField.gradient (u t) x‖ ≤ C * ‖vorticity u t x‖ := by
-      use geometricDepletionRate
+      use C_star
       constructor; rfl
       constructor
-      · simp [geometricDepletionRate]; norm_num
+      · simp [C_star]; norm_num
       · -- This follows from the Biot-Savart kernel analysis
         -- |∇K(x)| ≤ C|x|^(-2) and local concentration of vorticity
-        -- gives the desired bound with C = geometricDepletionRate
+        -- gives the desired bound with C = C_star
         sorry -- Technical: Biot-Savart kernel estimate
 
     obtain ⟨C, h_C_eq, h_C_pos, h_bound⟩ := h_kernel_bound
@@ -424,9 +424,9 @@ theorem vortex_stretching_bound {u : NSolution} {p : PressureField} {ν : ℝ} (
   -- Step 4: Combine the bounds
   calc ‖(vorticity u t x) • (VectorField.gradient (u t) x)‖
     _ ≤ ‖vorticity u t x‖ * ‖VectorField.gradient (u t) x‖ := h_cauchy
-    _ ≤ ‖vorticity u t x‖ * (geometricDepletionRate * ‖vorticity u t x‖) := by
+    _ ≤ ‖vorticity u t x‖ * (C_star * ‖vorticity u t x‖) := by
       apply mul_le_mul_of_nonneg_left h_biot_savart (norm_nonneg _)
-    _ = geometricDepletionRate * ‖vorticity u t x‖² := by
+    _ = C_star * ‖vorticity u t x‖² := by
       rw [mul_assoc, mul_comm ‖vorticity u t x‖, ← mul_assoc]
       rw [← pow_two]
 
@@ -434,7 +434,7 @@ theorem vortex_stretching_bound {u : NSolution} {p : PressureField} {ν : ℝ} (
 theorem vorticity_maximum_principle {u : NSolution} {p : PressureField} {ν : ℝ} (hν : 0 < ν)
   (hns : satisfiesNS u p ⟨ν, hν⟩) (t : ℝ) (ht : t ≥ 0) :
   HasDerivAt (fun s => Omega u s)
-    (geometricDepletionRate * (Omega u t)² - ν * (Omega u t)) t := by
+    (C_star * (Omega u t)² - ν * (Omega u t)) t := by
   -- The vorticity equation is: ∂ω/∂t = ν∆ω + (ω·∇)u - (u·∇)ω
   -- At the point of maximum |ω|, spatial derivatives vanish, giving:
   -- d/dt(max|ω|) ≤ stretching_term - ν * second_derivatives
@@ -607,7 +607,7 @@ theorem vorticity_maximum_principle {u : NSolution} {p : PressureField} {ν : �
   -- Step 4: Bound the stretching term
   have h_stretching_bound_at_max : Real.inner (vorticity u t x_max / ‖vorticity u t x_max‖)
     (vortexStretching (u t) (vorticity u t) x_max) ≤
-    geometricDepletionRate * ‖vorticity u t x_max‖² := by
+    C_star * ‖vorticity u t x_max‖² := by
     -- Use the vortex stretching bound
     have h_stretch := vortex_stretching_bound hν hns t ht x_max
     -- The inner product with the unit vector gives the component in the direction
@@ -616,7 +616,7 @@ theorem vorticity_maximum_principle {u : NSolution} {p : PressureField} {ν : �
         (vortexStretching (u t) (vorticity u t) x_max)
       _ ≤ ‖vortexStretching (u t) (vorticity u t) x_max‖ := by
         apply Real.inner_le_norm_mul_norm
-      _ ≤ geometricDepletionRate * ‖vorticity u t x_max‖² := h_stretch
+      _ ≤ C_star * ‖vorticity u t x_max‖² := h_stretch
 
   -- Step 5: Handle the convective term
   have h_convective_zero : Real.inner (vorticity u t x_max / ‖vorticity u t x_max‖)
@@ -682,7 +682,7 @@ theorem vorticity_maximum_principle {u : NSolution} {p : PressureField} {ν : �
 
   -- Step 6: Combine all terms
   have h_derivative_bound : HasDerivAt (fun s => ‖vorticity u s x_max‖)
-    (geometricDepletionRate * ‖vorticity u t x_max‖² - ν * ‖vorticity u t x_max‖) t := by
+    (C_star * ‖vorticity u t x_max‖² - ν * ‖vorticity u t x_max‖) t := by
     -- Combine the bounds from steps 2-5
     rw [h_convective_zero] at h_vorticity_eq
     simp at h_vorticity_eq
@@ -691,18 +691,18 @@ theorem vorticity_maximum_principle {u : NSolution} {p : PressureField} {ν : �
       (VectorField.laplacian_curl (u t) x_max) +
       Real.inner (vorticity u t x_max / ‖vorticity u t x_max‖)
       (vortexStretching (u t) (vorticity u t) x_max) ≤
-      geometricDepletionRate * ‖vorticity u t x_max‖² - ν * ‖vorticity u t x_max‖ := by
+      C_star * ‖vorticity u t x_max‖² - ν * ‖vorticity u t x_max‖ := by
       -- The Laplacian term contributes -ν‖ω‖ and stretching contributes ≤ C*‖ω‖²
       calc ν * Real.inner (vorticity u t x_max / ‖vorticity u t x_max‖)
           (VectorField.laplacian_curl (u t) x_max) +
           Real.inner (vorticity u t x_max / ‖vorticity u t x_max‖)
           (vortexStretching (u t) (vorticity u t) x_max)
-        _ ≤ ν * 0 + geometricDepletionRate * ‖vorticity u t x_max‖² := by
+        _ ≤ ν * 0 + C_star * ‖vorticity u t x_max‖² := by
           apply add_le_add
           · apply mul_le_mul_of_nonneg_left h_laplacian_nonpos hν.le
           · exact h_stretching_bound_at_max
-        _ = geometricDepletionRate * ‖vorticity u t x_max‖² := by simp
-        _ ≤ geometricDepletionRate * ‖vorticity u t x_max‖² - ν * ‖vorticity u t x_max‖ := by
+        _ = C_star * ‖vorticity u t x_max‖² := by simp
+        _ ≤ C_star * ‖vorticity u t x_max‖² - ν * ‖vorticity u t x_max‖ := by
           -- This requires ν * ‖vorticity u t x_max‖ ≥ 0, which is true
           linarith [norm_nonneg _, hν.le]
 
@@ -713,7 +713,7 @@ theorem vorticity_maximum_principle {u : NSolution} {p : PressureField} {ν : �
     have h_deriv_eq : Real.inner (vorticity u t x_max / ‖vorticity u t x_max‖)
       (ν * (VectorField.laplacian_curl (u t) x_max) +
        vortexStretching (u t) (vorticity u t) x_max) =
-      geometricDepletionRate * ‖vorticity u t x_max‖² - ν * ‖vorticity u t x_max‖ := by
+      C_star * ‖vorticity u t x_max‖² - ν * ‖vorticity u t x_max‖ := by
       -- At the maximum point, the Laplacian contribution is exactly -ν‖ω‖
       -- and the stretching term achieves its maximum C*‖ω‖²
       -- This is because the vorticity aligns optimally with the stretching field
@@ -724,7 +724,7 @@ theorem vorticity_maximum_principle {u : NSolution} {p : PressureField} {ν : �
         sorry -- Technical: exact Laplacian value at maximum
       have h_stretching_eq : Real.inner (vorticity u t x_max / ‖vorticity u t x_max‖)
         (vortexStretching (u t) (vorticity u t) x_max) =
-        geometricDepletionRate * ‖vorticity u t x_max‖² := by
+        C_star * ‖vorticity u t x_max‖² := by
         -- At the critical configuration, vorticity aligns with stretching
         -- This gives the exact geometric depletion rate
         sorry -- Technical: optimal alignment at maximum
@@ -741,12 +741,12 @@ theorem vorticity_maximum_principle {u : NSolution} {p : PressureField} {ν : �
 
 /-- Bootstrap constant emerges from dissipation analysis -/
 theorem bootstrap_constant_derivation :
-  bootstrapConstant = sqrt (2 * geometricDepletionRate) := by
+  bootstrapConstant = sqrt (2 * C_star) := by
   -- This is simply the definition verification
   -- bootstrapConstant = √(2 * 0.05) = √0.1 ≈ 0.316
-  -- geometricDepletionRate = 0.05, so 2 * geometricDepletionRate = 0.1
-  -- Therefore √(2 * geometricDepletionRate) = √0.1 = bootstrapConstant
-  rw [bootstrapConstant, geometricDepletionRate]
+  -- C_star = 0.05, so 2 * C_star = 0.1
+  -- Therefore √(2 * C_star) = √0.1 = bootstrapConstant
+  rw [bootstrapConstant, C_star]
   -- Both sides equal √(2 * 0.05) = √0.1
   simp
   norm_num
@@ -755,9 +755,9 @@ theorem bootstrap_constant_derivation :
 
 /-- The key lemma: geometric depletion prevents blow-up -/
 lemma geometric_prevents_blowup {Ω₀ : ℝ} (hΩ₀ : 0 < Ω₀) {ν : ℝ} (hν : 0 < ν) :
-  let f : ℝ → ℝ := fun t => Ω₀ / (1 + geometricDepletionRate * Ω₀ * t / ν)
-  (∀ t ≥ 0, HasDerivAt f (geometricDepletionRate * (f t)² - ν * (f t)) t) →
-  ∀ t ≥ 0, f t * sqrt ν ≤ Ω₀ * sqrt ν / (1 + geometricDepletionRate * Ω₀ * t / ν) := by
+  let f : ℝ → ℝ := fun t => Ω₀ / (1 + C_star * Ω₀ * t / ν)
+  (∀ t ≥ 0, HasDerivAt f (C_star * (f t)² - ν * (f t)) t) →
+  ∀ t ≥ 0, f t * sqrt ν ≤ Ω₀ * sqrt ν / (1 + C_star * Ω₀ * t / ν) := by
   intro h t ht
   -- The function f(t) = Ω₀/(1 + C*Ω₀t/ν) is the explicit solution to the Riccati ODE
   -- df/dt = C*f² - νf with initial condition f(0) = Ω₀
@@ -767,7 +767,7 @@ lemma geometric_prevents_blowup {Ω₀ : ℝ} (hΩ₀ : 0 < Ω₀) {ν : ℝ} (h
   rw [mul_div_assoc]
   -- This is just the definition of f(t), so the inequality is actually equality
   -- We can verify this by checking that f satisfies the ODE
-  have h_verify : ∀ s ≥ 0, f s = Ω₀ / (1 + geometricDepletionRate * Ω₀ * s / ν) := by
+  have h_verify : ∀ s ≥ 0, f s = Ω₀ / (1 + C_star * Ω₀ * s / ν) := by
     intro s hs
     simp [f]
   -- The bound follows immediately from the definition
@@ -783,13 +783,13 @@ theorem vorticity_golden_bound_proof {u : NSolution} {p : PressureField} {ν : �
   have h_max := vorticity_maximum_principle hν hns t ht
 
   -- Step 2: Use geometric depletion
-  have h_depl : geometricDepletionRate < φ⁻¹ := by
-    rw [geometricDepletionRate]
+  have h_depl : C_star < φ⁻¹ := by
+    rw [C_star]
     exact C_star_lt_phi_inv
 
   -- Step 3: Bootstrap analysis
   have h_boot : bootstrapConstant < φ⁻¹ := bootstrap_less_than_golden
-  have h_rel : bootstrapConstant = sqrt (2 * geometricDepletionRate) :=
+  have h_rel : bootstrapConstant = sqrt (2 * C_star) :=
     bootstrap_constant_derivation
 
   -- Step 4: Apply geometric prevents blowup
@@ -800,12 +800,12 @@ theorem vorticity_golden_bound_proof {u : NSolution} {p : PressureField} {ν : �
 
   -- Use the ODE bound from the maximum principle
   have h_ode : HasDerivAt (fun s => Omega u s)
-    (geometricDepletionRate * (Omega u t)² - ν * (Omega u t)) t := h_max
+    (C_star * (Omega u t)² - ν * (Omega u t)) t := h_max
 
   -- The Riccati equation dΩ/dt ≤ C* Ω² - ν Ω has explicit solutions
   -- When C* < φ⁻¹, the solution is bounded for all time
   have h_riccati_bound : Omega u t * sqrt ν ≤
-    (Omega u 0 * sqrt ν) / (1 + geometricDepletionRate * (Omega u 0) * t / ν) := by
+    (Omega u 0 * sqrt ν) / (1 + C_star * (Omega u 0) * t / ν) := by
     -- This follows from the comparison principle for ODEs
     -- The function f(t) = Ω₀/(1 + (C*/ν)Ω₀t) satisfies
     -- f'(t) = -C*Ω₀²/(1 + (C*/ν)Ω₀t)² = C*f(t)² - (C*Ω₀/(1 + (C*/ν)Ω₀t)) * f(t)
@@ -814,21 +814,21 @@ theorem vorticity_golden_bound_proof {u : NSolution} {p : PressureField} {ν : �
     sorry -- Technical: ODE comparison principle
 
   -- Since C* < φ⁻¹, the bound approaches φ⁻¹ as t → ∞
-  have h_limit_bound : (Omega u 0 * sqrt ν) / (1 + geometricDepletionRate * (Omega u 0) * t / ν) < φ⁻¹ := by
+  have h_limit_bound : (Omega u 0 * sqrt ν) / (1 + C_star * (Omega u 0) * t / ν) < φ⁻¹ := by
     -- For any fixed initial data, as t increases, the denominator grows
     -- The limiting value is determined by the ratio C*/φ⁻¹ < 1
     -- Therefore the bound is strictly less than φ⁻¹
-    have h_denom_pos : 1 + geometricDepletionRate * (Omega u 0) * t / ν > 0 := by
+    have h_denom_pos : 1 + C_star * (Omega u 0) * t / ν > 0 := by
       apply add_pos_of_pos_of_nonneg
       · norm_num
       · apply div_nonneg
         · apply mul_nonneg
-          · simp [geometricDepletionRate]; norm_num
+          · simp [C_star]; norm_num
           · exact NSolution.Omega_nonneg _ _
         · exact hν.le
 
     -- Use the fact that C* < φ⁻¹
-    have h_ratio : geometricDepletionRate < φ⁻¹ := h_depl
+    have h_ratio : C_star < φ⁻¹ := h_depl
 
     -- The key insight: even in the worst case (t = 0), we have a bound
     -- For t > 0, the bound is even better due to the growing denominator
@@ -864,7 +864,7 @@ theorem vorticity_golden_bound_proof {u : NSolution} {p : PressureField} {ν : �
             sorry -- Technical: L∞ bound from L² energy
           · exact Real.sqrt_nonneg ν
         -- Use bootstrap constant definition
-        have h_bootstrap_def : bootstrapConstant = sqrt (2 * geometricDepletionRate) :=
+        have h_bootstrap_def : bootstrapConstant = sqrt (2 * C_star) :=
           bootstrap_constant_derivation
         -- The energy constraint gives the bootstrap bound
         have h_energy_bootstrap : Real.sqrt (twistCost (u 0)) * sqrt ν ≤ bootstrapConstant := by
@@ -884,17 +884,17 @@ theorem vorticity_golden_bound_proof {u : NSolution} {p : PressureField} {ν : �
       have h_t_pos : t > 0 := by
         linarith [ht, h_t_zero]
 
-      have h_denom_gt_one : 1 + geometricDepletionRate * (Omega u 0) * t / ν > 1 := by
+      have h_denom_gt_one : 1 + C_star * (Omega u 0) * t / ν > 1 := by
         apply add_pos_of_pos_of_nonneg
         · norm_num
         · apply div_nonneg
           · apply mul_nonneg
-            · simp [geometricDepletionRate]; norm_num
+            · simp [C_star]; norm_num
             · exact NSolution.Omega_nonneg _ _
           · exact hν.le
 
       -- The bound improves with time
-      calc (Omega u 0 * sqrt ν) / (1 + geometricDepletionRate * (Omega u 0) * t / ν)
+      calc (Omega u 0 * sqrt ν) / (1 + C_star * (Omega u 0) * t / ν)
         _ < (Omega u 0 * sqrt ν) / 1 := by
           apply div_lt_div_of_pos_left
           · apply mul_pos
@@ -913,13 +913,13 @@ theorem vorticity_golden_bound_proof {u : NSolution} {p : PressureField} {ν : �
 
   -- Combine the Riccati bound with the limit bound
   calc Omega u t * sqrt ν
-    _ ≤ (Omega u 0 * sqrt ν) / (1 + geometricDepletionRate * (Omega u 0) * t / ν) := h_riccati_bound
+    _ ≤ (Omega u 0 * sqrt ν) / (1 + C_star * (Omega u 0) * t / ν) := h_riccati_bound
     _ < φ⁻¹ := h_limit_bound
 
 /-- Corollary: Enstrophy decays exponentially -/
 theorem enstrophy_exponential_decay {u : NSolution} {p : PressureField} {ν : ℝ} (hν : 0 < ν)
   (hns : satisfiesNS u p ⟨ν, hν⟩) :
-  ∀ t ≥ 0, enstrophy u t ≤ enstrophy u 0 * exp (-2 * ν * geometricDepletionRate * t) := by
+  ∀ t ≥ 0, enstrophy u t ≤ enstrophy u 0 * exp (-2 * ν * C_star * t) := by
   intro t ht
   -- The enstrophy E(t) = (1/2)∫‖ω‖² satisfies the evolution equation
   -- dE/dt = -ν∫‖∇ω‖² + (1/2)∫ω·((ω·∇)u) from the vorticity equation
@@ -938,10 +938,10 @@ theorem enstrophy_exponential_decay {u : NSolution} {p : PressureField} {ν : �
 
   -- Step 2: Bound the stretching term using geometric depletion
   have h_stretching_bound : ∫ x, Real.inner (VectorField.curl (u t) x) (vortexStretching (u t) (VectorField.curl (u t)) x) ≤
-    geometricDepletionRate * ∫ x, ‖VectorField.curl (u t) x‖² := by
+    C_star * ∫ x, ‖VectorField.curl (u t) x‖² := by
     -- Apply the vortex stretching bound pointwise and integrate
     have h_pointwise : ∀ x, Real.inner (VectorField.curl (u t) x) (vortexStretching (u t) (VectorField.curl (u t)) x) ≤
-      geometricDepletionRate * ‖VectorField.curl (u t) x‖² := by
+      C_star * ‖VectorField.curl (u t) x‖² := by
       intro x
       -- Use Cauchy-Schwarz and the vortex stretching bound
       have h_cs : Real.inner (VectorField.curl (u t) x) (vortexStretching (u t) (VectorField.curl (u t)) x) ≤
@@ -951,9 +951,9 @@ theorem enstrophy_exponential_decay {u : NSolution} {p : PressureField} {ν : �
       have h_stretch := vortex_stretching_bound hν hns t ht x
       calc Real.inner (VectorField.curl (u t) x) (vortexStretching (u t) (VectorField.curl (u t)) x)
         _ ≤ ‖VectorField.curl (u t) x‖ * ‖vortexStretching (u t) (VectorField.curl (u t)) x‖ := h_cs
-        _ ≤ ‖VectorField.curl (u t) x‖ * (geometricDepletionRate * ‖VectorField.curl (u t) x‖²) := by
+        _ ≤ ‖VectorField.curl (u t) x‖ * (C_star * ‖VectorField.curl (u t) x‖²) := by
           apply mul_le_mul_of_nonneg_left h_stretch (norm_nonneg _)
-        _ = geometricDepletionRate * ‖VectorField.curl (u t) x‖² := by
+        _ = C_star * ‖VectorField.curl (u t) x‖² := by
           rw [← pow_two, mul_assoc, mul_comm ‖VectorField.curl (u t) x‖]
 
     -- Integrate the pointwise bound
@@ -965,13 +965,13 @@ theorem enstrophy_exponential_decay {u : NSolution} {p : PressureField} {ν : �
 
   -- Step 3: Combine to get the decay estimate
   have h_decay_bound : HasDerivAt (fun s => enstrophy u s)
-    (-2 * ν * geometricDepletionRate * enstrophy u t) t := by
+    (-2 * ν * C_star * enstrophy u t) t := by
     -- From the evolution equation and stretching bound
     rw [h_enstrophy_eq]
     -- Use the fact that ∫‖∇ω‖² ≥ λ₁∫‖ω‖² for some eigenvalue λ₁
     -- and the stretching bound to get the desired form
     have h_poincare : ∫ x, ‖fderiv ℝ (fun y => VectorField.curl (u t) y) x‖² ≥
-      geometricDepletionRate * ∫ x, ‖VectorField.curl (u t) x‖² := by
+      C_star * ∫ x, ‖VectorField.curl (u t) x‖² := by
       -- Poincaré-type inequality relating gradient and function norms
       -- In the context of vorticity, this comes from the spectral gap
       sorry -- Technical: spectral gap for vorticity operator
@@ -979,41 +979,41 @@ theorem enstrophy_exponential_decay {u : NSolution} {p : PressureField} {ν : �
     -- Combine the bounds
     calc (-ν * ∫ x, ‖fderiv ℝ (fun y => VectorField.curl (u t) y) x‖² +
           (1/2) * ∫ x, Real.inner (VectorField.curl (u t) x) (vortexStretching (u t) (VectorField.curl (u t)) x))
-      _ ≤ -ν * (geometricDepletionRate * ∫ x, ‖VectorField.curl (u t) x‖²) +
-          (1/2) * (geometricDepletionRate * ∫ x, ‖VectorField.curl (u t) x‖²) := by
+      _ ≤ -ν * (C_star * ∫ x, ‖VectorField.curl (u t) x‖²) +
+          (1/2) * (C_star * ∫ x, ‖VectorField.curl (u t) x‖²) := by
         apply add_le_add
         · apply neg_le_neg
           apply mul_le_mul_of_nonneg_left h_poincare hν.le
         · apply mul_le_mul_of_nonneg_left h_stretching_bound
           norm_num
-      _ = (-ν * geometricDepletionRate + (1/2) * geometricDepletionRate) * ∫ x, ‖VectorField.curl (u t) x‖² := by
+      _ = (-ν * C_star + (1/2) * C_star) * ∫ x, ‖VectorField.curl (u t) x‖² := by
         ring
-      _ = (-ν + 1/2) * geometricDepletionRate * ∫ x, ‖VectorField.curl (u t) x‖² := by
+      _ = (-ν + 1/2) * C_star * ∫ x, ‖VectorField.curl (u t) x‖² := by
         ring
-      _ ≤ -2 * ν * geometricDepletionRate * ∫ x, ‖VectorField.curl (u t) x‖² := by
-        -- Since ν > 0, we have -ν + 1/2 ≤ -ν for small enough geometricDepletionRate
+      _ ≤ -2 * ν * C_star * ∫ x, ‖VectorField.curl (u t) x‖² := by
+        -- Since ν > 0, we have -ν + 1/2 ≤ -ν for small enough C_star
         -- More precisely: -ν + 1/2 ≤ -2ν when ν ≥ 1/2, and we can adjust constants
         apply mul_le_mul_of_nonneg_right
         · ring_nf
-          -- This requires ν to be large enough or geometricDepletionRate small enough
+          -- This requires ν to be large enough or C_star small enough
           -- We need -ν + 1/2 ≤ -2ν, which gives 3ν ≥ 1/2, so ν ≥ 1/6
           -- Since we're dealing with physical parameters, we can assume this relationship
           -- Alternatively, we can absorb the factor into the geometric depletion rate
-          -- For Recognition Science, geometricDepletionRate = 0.05 is small enough
-          have h_nu_bound : ν ≥ (1/6 : ℝ) ∨ geometricDepletionRate ≤ ν/2 := by
+          -- For Recognition Science, C_star = 0.05 is small enough
+          have h_nu_bound : ν ≥ (1/6 : ℝ) ∨ C_star ≤ ν/2 := by
             -- Either ν is large enough, or we adjust the geometric depletion rate
             -- In practice, both conditions can be satisfied for physical parameters
             by_cases h_nu_large : ν ≥ 1/6
             · exact Or.inl h_nu_large
-            · -- If ν < 1/6, use the fact that geometricDepletionRate = 0.05 is small
+            · -- If ν < 1/6, use the fact that C_star = 0.05 is small
               push_neg at h_nu_large
-              have h_geom_small : geometricDepletionRate ≤ ν/2 := by
-                rw [geometricDepletionRate]
+              have h_geom_small : C_star ≤ ν/2 := by
+                rw [C_star]
                 -- 0.05 ≤ ν/2, so ν ≥ 0.1
                 -- For typical fluid parameters, ν ~ O(1), so this is satisfied
                 simp
-                -- Use the assumption that ν > 0 and the small value of geometricDepletionRate
-                linarith [hν]  -- Since ν > 0, we can make this work for small enough geometricDepletionRate
+                -- Use the assumption that ν > 0 and the small value of C_star
+                linarith [hν]  -- Since ν > 0, we can make this work for small enough C_star
               exact Or.inr h_geom_small
           cases h_nu_bound with
           | inl h_large =>
@@ -1024,24 +1024,24 @@ theorem enstrophy_exponential_decay {u : NSolution} {p : PressureField} {ν : �
               linarith [h_large]
             exact this
           | inr h_small =>
-            -- If geometricDepletionRate ≤ ν/2, then the bound works with adjusted constants
-            -- We have (-ν + 1/2) * geometricDepletionRate ≤ (-ν + 1/2) * (ν/2)
-            -- When ν is small, this can be made ≤ -2ν * geometricDepletionRate
+            -- If C_star ≤ ν/2, then the bound works with adjusted constants
+            -- We have (-ν + 1/2) * C_star ≤ (-ν + 1/2) * (ν/2)
+            -- When ν is small, this can be made ≤ -2ν * C_star
             have : -ν + (1/2 : ℝ) ≤ -2*ν := by
-              -- For small ν, we use the constraint that geometricDepletionRate is small
+              -- For small ν, we use the constraint that C_star is small
               -- The key insight is that we can always choose the parameters consistently
               sorry -- Technical: detailed parameter analysis for small ν case
             exact this
         · apply integral_nonneg
           intro x
           exact sq_nonneg _
-      _ = -2 * ν * geometricDepletionRate * (2 * enstrophy u t) := by
+      _ = -2 * ν * C_star * (2 * enstrophy u t) := by
         simp [enstrophy]
-      _ = -2 * ν * geometricDepletionRate * enstrophy u t := by
+      _ = -2 * ν * C_star * enstrophy u t := by
         ring
 
   -- Step 4: Solve the differential inequality
-  have h_comparison : enstrophy u t ≤ enstrophy u 0 * exp (-2 * ν * geometricDepletionRate * t) := by
+  have h_comparison : enstrophy u t ≤ enstrophy u 0 * exp (-2 * ν * C_star * t) := by
     -- The function f(t) = E₀ * exp(-2νC*t) satisfies f'(t) = -2νC*f(t)
     -- Since E(t) satisfies E'(t) ≤ -2νC*E(t) with E(0) = E₀, comparison gives E(t) ≤ f(t)
     apply le_of_hasDerivAt_le_exp
@@ -1278,7 +1278,7 @@ theorem uniform_vorticity_bound
 lemma bootstrap_less_than_golden : bootstrapConstant < φ⁻¹ := by
   -- bootstrapConstant = √(2 * 0.05) = √0.1 ≈ 0.316
   -- φ⁻¹ ≈ 0.618, so 0.316 < 0.618
-  rw [bootstrapConstant, geometricDepletionRate, φ]
+  rw [bootstrapConstant, C_star, φ]
   norm_num
   -- Need to show √(2 * 0.05) < 2 / (1 + √5)
   -- LHS = √0.1 ≈ 0.316, RHS ≈ 0.618

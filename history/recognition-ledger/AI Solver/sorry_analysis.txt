@@ -1,0 +1,2427 @@
+# Detailed Sorry Analysis
+
+
+## INEQUALITY (34 sorries)
+
+### construct_solution (FieldEq.lean:52)
+```lean
+def construct_solution (boundary : ℝ → ℝ) (density : ℝ → ℝ) : FieldEquation :=
+  -- For the existence proof, we construct a specific solution
+  -- In the weak field limit where μ(u) ≈ u ≈ 0, the equation becomes linear
+  let P := fun x => boundary x * exp (-abs x / recognition_length_1)
+  let ρ := fun x => max 0 (density x)
+  {
+    pressure := P
+    baryon_density := ρ
+    field_constraint := by
+      intro x ρ_pos
+      -- In the construction, we choose P to satisfy the equation
+      -- This is valid for sufficiently smooth boundary and density
+      simp [mond_function, acceleration_scale, mu_zero_sq, lambda_p, screening_function]
+      -- The exponential decay ensures the equation is satisfied asymptotically
+      -- For a rigorous proof, we would need to verify the PDE is satisfied
+      -- But for existence, it suffices to show a solution can be constructed
+      sorry
+```
+
+### field_eq_solution (FieldEq.lean:67)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+```
+
+### field_eq_solution (FieldEq.lean:76)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+    · intro x
+      simp [construct_solution]
+      exact le_max_left _ _
+  · -- Uniqueness: suppose eq' also satisfies the conditions
+    intro eq' ⟨h_boundary', h_nonneg'⟩
+    -- The difference P - P' satisfies a homogeneous elliptic equation
+    -- With zero boundary conditions at infinity
+    -- By the maximum principle, P - P' = 0 everywhere
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:88)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:92)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+  have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
+    intro ρ hρ
+    -- For ρ > ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ 1
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:98)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+  have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
+    intro ρ hρ
+    -- For ρ > ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ 1
+    sorry
+  -- From the field equation with μ ≈ u ≈ 0:
+  -- -μ₀²P = -λₚρS ≈ -λₚρ
+  -- So P ≈ (λₚ/μ₀²)ρ
+  -- Taking Laplacian: ∇²P ≈ (λₚ/μ₀²)∇²ρ
+  -- With λₚ/μ₀² = 4πG by construction
+  sorry
+```
+
+### mond_regime (FieldEq.lean:119)
+```lean
+theorem mond_regime (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≫ 1 →
+    norm (fderiv ℝ eq.pressure x) ≈ sqrt (acceleration_scale * 4 * π * G * eq.baryon_density x) := by
+  intro h_strong
+  -- In deep MOND regime, μ(u) ≈ 1
+  -- The field equation becomes algebraic:
+  -- ∇²P - μ₀²P ≈ -λₚρS
+  -- For slowly varying fields, ∇²P ≪ μ₀²P, so:
+  -- P ≈ (λₚ/μ₀²)ρS
+  -- Taking gradient: |∇P| ≈ (λₚ/μ₀²)|∇(ρS)|
+  -- But we also have |∇P| = a₀u with u ≫ 1
+  -- Combining: a₀u ≈ (λₚ/μ₀²)|∇(ρS)|
+  -- For the square root relation, we need the full analysis
+  sorry
+```
+
+### pressure_bounded (Pressure.lean:98)
+```lean
+theorem pressure_bounded (P : RecognitionPressure) :
+    P.val ≤ planck_pressure := by
+  -- In Recognition Science, pressure is bounded by information density limits
+  -- The maximum occurs when all voxels are maximally packed with information
+  -- This gives P_max = ρ_Planck * c² ≈ 4.0e18 J/m³
+  --
+  -- Physical justification:
+  -- 1. Information density cannot exceed Planck scale (1 bit per Planck volume)
+  -- 2. Energy density E = information × k_B × T × ln(2) / volume
+  -- 3. At Planck scale: E_max = (1/l_P³) × k_B × T_P × ln(2) ≈ ρ_P × c²
+  -- 4. Recognition pressure P = energy density = ρ_P × c² ≈ 4×10¹⁸ J/m³
+  --
+  -- This is a fundamental limit from quantum gravity, not a derived result
+  -- We accept it as a physical axiom connecting RS to known physics
+  sorry
+```
+
+### strain_bounded (InfoStrain.lean:41)
+```lean
+theorem strain_bounded (strain : InformationStrain) : strain.val ≤ max_strain := by
+  -- Information strain is bounded by the maximum gradient possible
+  -- This follows from the finite speed of information propagation
+  --
+  -- Physical argument:
+  -- 1. Pressure gradients are limited by c/L where L is the smallest length scale
+  -- 2. Pressure values are bounded by Planck scale energy density
+  -- 3. Therefore strain = |∇P|/P ≤ (c/L_Planck)/(ρ_Planck c²) = 1/(L_Planck ρ_Planck c)
+  -- 4. This gives a huge but finite bound
+  --
+  -- For practical purposes, we use max_strain = 1000 as a conservative bound
+  -- that covers all astrophysical situations
+  sorry -- Accept as physical axiom
+```
+
+### mond_derivative_bound (InfoStrain.lean:100)
+```lean
+lemma mond_derivative_bound (u : ℝ) :
+    abs (deriv (fun x => x / sqrt (1 + x^2)) u) ≤ 1 := by
+  -- The derivative of μ(u) = u/√(1+u²) is:
+  -- μ'(u) = 1/√(1+u²) - u²/(1+u²)^(3/2) = (1+u²-u²)/(1+u²)^(3/2) = 1/(1+u²)^(3/2)
+  -- Since (1+u²)^(3/2) ≥ 1 for all u, we have |μ'(u)| ≤ 1
+  sorry -- Requires derivative computation
+```
+
+### unknown (InfoStrain.lean:128)
+```lean
+sorry -- Use mond_derivative_bound and mean value theorem
+    -- Apply Lipschitz property
+    let u := strain.val / acceleration_scale
+    let u' := strain'.val / acceleration_scale
+    have h1 : abs (mond_function u' - mond_function u) ≤ abs (u' - u) := h_mu_lipschitz u' u
+    have h2 : abs (u' - u) = abs (strain'.val - strain.val) / acceleration_scale := by
+      simp [abs_div]
+    -- Algebra to combine the bounds
+    rw [← mul_assoc, ← mul_assoc]
+    rw [abs_mul, abs_mul]
+    sorry -- Technical algebra
+```
+
+### experimental_falsifiability (MasterTheorem.lean:214)
+```lean
+theorem experimental_falsifiability :
+  -- Seven distinct, sharp predictions
+  ∃ predictions : List ExperimentalPrediction,
+    predictions.length = 7 ∧
+    -- Each prediction is falsifiable
+    (∀ pred ∈ predictions, falsifiable pred) ∧
+    -- No other theory predicts all seven
+    (∀ other_theory : PhysicsTheory,
+      other_theory ≠ RecognitionScience →
+      ∃ pred ∈ predictions, ¬(other_theory.predicts pred)) := by
+  use [gravity_oscillation_136_THz,
+       density_transition_1e24,
+       quantum_weight_difference,
+       hubble_tension_4_688_percent,
+       fifth_force_1_AU_range,
+       prime_crystal_anomalies,
+       biological_45_Hz_avoidance]
+  constructor
+  · simp
+  constructor
+  · intro pred hpred
+    -- Each prediction is specific and measurable
+    simp at hpred
+    cases hpred with
+    | head => exact gravity_oscillation_falsifiable
+    | tail h => cases h with
+      | head => exact density_transition_falsifiable
+      | tail h => cases h with
+        | head => exact quantum_weight_falsifiable
+        | tail h => cases h with
+          | head => exact hubble_tension_falsifiable
+          | tail h => cases h with
+            | head => exact fifth_force_falsifiable
+            | tail h => cases h with
+              | head => exact prime_crystal_falsifiable
+              | tail h => cases h with
+                | head => exact biological_45_Hz_falsifiable
+                | tail h => exact False.elim h
+  · intro other_theory h_diff
+    -- No other theory makes all seven predictions
+    -- This would require a detailed analysis of competing theories
+    -- For now, we note that the combination is unique to RS
+    sorry
+```
+
+### biological_prime_detection (ExperimentalPredictions.lean:221)
+```lean
+theorem biological_prime_detection :
+    -- Living systems optimize around gaps
+    ∃ (frequency_gap : ℝ × ℝ),
+    frequency_gap.1 = 42 ∧ frequency_gap.2 = 48 ∧
+    -- 45 Hz is avoided due to incomputability
+    ∀ biological_frequency : ℝ,
+    (42 < biological_frequency ∧ biological_frequency < 48) →
+    abs (biological_frequency - 45) > 1 := by
+  use (42, 48)
+  constructor
+  · rfl
+  constructor
+  · rfl
+  · intro biological_frequency h
+    -- Biology avoids the 45 Hz incomputability gap
+    -- This manifests as a 2 Hz exclusion zone around 45 Hz
+    by_contra h_close
+    push_neg at h_close
+    have : abs (biological_frequency - 45) ≤ 1 := h_close
+    interval_cases biological_frequency
+    -- This would require checking specific values
+    -- For now we accept that biology avoids this frequency
+    sorry
+```
+
+### elliptic_maximum_principle (AnalysisHelpers.lean:56)
+```lean
+theorem elliptic_maximum_principle {P : ℝ → ℝ} {μ : ℝ → ℝ}
+    (h_μ_pos : ∀ u, 0 < μ u) (h_elliptic : ∀ x, μ (abs (deriv P x)) * (deriv (deriv P) x) - P x ≥ 0) :
+    ∀ x y, P x ≤ P y ∨ P y ≤ P x := by
+  -- If L[P] ≥ 0 where L is elliptic, then P attains its maximum on the boundary
+  -- This gives uniqueness for the PDE with boundary conditions
+  sorry -- This requires the maximum principle
+```
+
+### weak_solution_existence (AnalysisHelpers.lean:68)
+```lean
+theorem weak_solution_existence (baryon_density : ℝ → ℝ) (boundary : ℝ → ℝ)
+    (h_density_nonneg : ∀ x, 0 ≤ baryon_density x)
+    (h_boundary_smooth : Continuous boundary) :
+    ∃ P : ℝ → ℝ,
+    -- P satisfies the field equation in weak sense
+    ∀ test : ℝ → ℝ,
+    -- ∫ μ(|∇P|)∇P·∇test + P·test = ∫ source·test
+    True := by
+  -- Use Galerkin approximation or variational methods
+  sorry -- This requires weak solution theory
+```
+
+### electron_mass_raw (ParticleMassesRevised 2.lean:50)
+```lean
+theorem electron_mass_raw :
+  abs (m_rung electron_rung - 0.266) < 0.001 := by
+  -- E_32 = 0.090 × φ^32 ≈ 2.66×10^8 eV = 266 MeV = 0.266 GeV
+  unfold m_rung E_rung electron_rung
+  simp [E_coh_eV]
+  -- We need to bound 0.090 × φ^32 / 10^9
+  -- φ^32 with φ ≈ 1.618
+  have h_lower : (1.6 : ℝ)^32 < φ^32 := by
+    apply pow_lt_pow_left
+    · norm_num
+    · exact phi_bounds.1
+  have h_upper : φ^32 < (1.7 : ℝ)^32 := by
+    apply pow_lt_pow_left
+    · norm_num
+    · exact phi_bounds.2
+  -- 1.6^32 ≈ 6.8×10^9, 1.7^32 ≈ 2.3×10^10
+  -- So 0.090 × φ^32 / 10^9 is between 0.090 × 6.8 = 0.612 and 0.090 × 23 = 2.07
+  -- This is too wide, but shows the order of magnitude is correct
+  -- For precise calculation, we use the known value φ^32 ≈ 2.956×10^9
+  -- giving 0.090 × 2.956 = 0.266 GeV
+  sorry -- Numerical approximation φ^32 ≈ 2.956×10^9
+```
+
+### electron_mass_calibrated (ParticleMassesRevised 2.lean:64)
+```lean
+theorem electron_mass_calibrated :
+  abs (m_rung electron_rung / electron_calibration - 0.000511) < 1e-6 := by
+  -- 0.266 GeV / 520 ≈ 0.000511 GeV ✓
+  unfold m_rung E_rung electron_rung electron_calibration
+  simp [E_coh_eV]
+  -- Using the approximation from above: 0.266 / 520 = 0.000511...
+  have h : abs (0.266 / 520 - 0.000511) < 1e-6 := by norm_num
+  -- The exact calculation requires the precise value of φ^32
+  -- but the approximation shows the calibration works
+  sorry -- Requires precise φ^32 calculation
+```
+
+### muon_mass_raw (ParticleMassesRevised 2.lean:76)
+```lean
+theorem muon_mass_raw :
+  abs (m_rung muon_rung - 0.159) < 0.01 := by
+  -- E_39 = 0.090 × φ^39 ≈ 1.59×10^8 eV = 159 MeV = 0.159 GeV
+  unfold m_rung E_rung muon_rung
+  simp [E_coh_eV]
+  -- φ^39 = φ^32 × φ^7 ≈ 2.956×10^9 × 29.0 ≈ 8.57×10^10
+  -- Wait, this gives 0.090 × 8.57 = 0.771 GeV, not 0.159 GeV
+  -- Let me recalculate: φ^39 vs φ^32
+  -- The discrepancy suggests an error in the rung assignments
+  sorry -- Need to verify the rung-to-mass correspondence
+```
+
+### muon_mass_discrepancy (ParticleMassesRevised 2.lean:97)
+```lean
+theorem muon_mass_discrepancy :
+  abs (m_rung muon_rung / electron_calibration - 0.1057) > 0.05 := by
+  -- Raw ladder gives different result than observed
+  -- The exact discrepancy depends on the precise φ^39 calculation
+  unfold m_rung E_rung muon_rung electron_calibration
+  simp [E_coh_eV]
+  -- Using rough estimates to show significant discrepancy exists
+  sorry -- Requires precise numerical calculation
+```
+
+### W_mass_order_of_magnitude (ParticleMassesRevised 2.lean:116)
+```lean
+theorem W_mass_order_of_magnitude :
+  m_rung W_rung > 100 ∧ m_rung W_rung < 200 := by
+  -- E_52 should be in the 100-200 GeV range
+  unfold m_rung E_rung W_rung
+  simp [E_coh_eV]
+  constructor
+  · -- Lower bound: φ^52 > (1.6)^52, so 0.090 × φ^52 / 10^9 > 0.090 × (1.6)^52 / 10^9
+    have h : (1.6 : ℝ)^52 > 1e12 := by norm_num -- Very rough estimate
+    have : φ^52 > (1.6 : ℝ)^52 := by
+      apply pow_lt_pow_left
+      · norm_num
+      · exact phi_bounds.1
+    -- This gives a lower bound but requires more precise calculation
+    sorry
+```
+
+### W_mass_order_of_magnitude (ParticleMassesRevised 2.lean:118)
+```lean
+theorem W_mass_order_of_magnitude :
+  m_rung W_rung > 100 ∧ m_rung W_rung < 200 := by
+  -- E_52 should be in the 100-200 GeV range
+  unfold m_rung E_rung W_rung
+  simp [E_coh_eV]
+  constructor
+  · -- Lower bound: φ^52 > (1.6)^52, so 0.090 × φ^52 / 10^9 > 0.090 × (1.6)^52 / 10^9
+    have h : (1.6 : ℝ)^52 > 1e12 := by norm_num -- Very rough estimate
+    have : φ^52 > (1.6 : ℝ)^52 := by
+      apply pow_lt_pow_left
+      · norm_num
+      · exact phi_bounds.1
+    -- This gives a lower bound but requires more precise calculation
+    sorry
+  · -- Upper bound: similar reasoning with 1.7^52
+    sorry
+```
+
+### Z_mass_order_of_magnitude (ParticleMassesRevised 2.lean:126)
+```lean
+theorem Z_mass_order_of_magnitude :
+  m_rung Z_rung > 100 ∧ m_rung Z_rung < 300 := by
+  -- E_53 should be in the 100-300 GeV range
+  unfold m_rung E_rung Z_rung
+  simp [E_coh_eV]
+  -- Similar to W boson calculation
+  sorry
+```
+
+### Higgs_mass_very_large (ParticleMassesRevised 2.lean:141)
+```lean
+theorem Higgs_mass_very_large :
+  m_rung Higgs_rung > 1000 := by
+  -- E_58 should be much larger than observed Higgs mass
+  unfold m_rung E_rung Higgs_rung
+  simp [E_coh_eV]
+  -- φ^58 is enormous, giving multi-TeV prediction
+  -- φ^58 = φ^52 × φ^6 >> φ^52, so if φ^52 ~ 100 GeV, then φ^58 ~ 100 × φ^6 ~ 100 × 18 ~ 1800 GeV
+  have h : φ^6 > 18 := by
+    -- φ^6 = (φ^3)^2 = (φ^2 × φ)^2 = ((φ + 1) × φ)^2 = (φ^2 + φ)^2
+    -- With φ ≈ 1.618, φ^2 ≈ 2.618, so φ^2 + φ ≈ 4.236, and (4.236)^2 ≈ 17.9
+    rw [φ]
+    norm_num
+  -- This shows the Higgs mass prediction is much too large
+  sorry
+```
+
+### phi_ladder_limitations (ParticleMassesRevised 2.lean:186)
+```lean
+theorem phi_ladder_limitations :
+  -- Electron calibration factor is large
+  electron_calibration > 500 ∧
+  -- Muon ratio discrepancy
+  abs (φ^7 - 206.8) > 100 ∧
+  -- Higgs mass prediction is too large
+  m_rung Higgs_rung / 125.3 > 50 := by
+  constructor
+  · norm_num [electron_calibration]
+  constructor
+  · -- φ^7 ≈ 29, so |29 - 206.8| = 177.8 > 100
+    have : φ^7 < 30 := by
+      calc φ^7 < (1.7 : ℝ)^7 := by
+        apply pow_lt_pow_left
+        · norm_num
+        · exact phi_bounds.2
+      _ < 30 := by norm_num
+    linarith
+  · -- Rough estimate: Higgs prediction >> 125.3 GeV
+    unfold m_rung E_rung Higgs_rung
+    simp [E_coh_eV]
+    -- This requires showing 0.090 × φ^58 / (10^9 × 125.3) > 50
+    -- Equivalently: φ^58 > 50 × 125.3 × 10^9 / 0.090 ≈ 6.96 × 10^13
+    -- Since φ > 1.6 and 1.6^58 is enormous, this should be true
+    sorry
+```
+
+### electron_mass_correct (NumericalVerification 2.lean:92)
+```lean
+theorem electron_mass_correct :
+  -- From source_code.txt: electron at rung 32
+  -- m_e = 0.090 × φ^32 eV = 0.090 × 2.96×10^9 eV ≈ 266 MeV
+  -- But observed is 0.511 MeV, so we need calibration
+  -- The paper uses E_e = E_coh × φ^32 / 520 to get exact electron mass
+  abs (0.090 * φ^32 / 520 - 0.000511e9) < 1e6 := by
+  -- φ^32 ≈ 2.96×10^9
+  -- 0.090 × 2.96×10^9 / 520 ≈ 512,308 eV ≈ 0.512 MeV
+  -- This matches the observed 0.511 MeV
+  sorry -- Numerical verification
+```
+
+### muon_mass_discrepancy (NumericalVerification 2.lean:131)
+```lean
+theorem muon_mass_discrepancy :
+  -- From source_code.txt: muon should be at rung 37
+  -- But paper actually uses rung 39 to get closer
+  -- Even so, prediction fails by factor ~19
+  abs (m_muon_EW * 1000 - 105.7) / 105.7 > 0.1 := by
+  -- With rung 39: m_μ = 0.090 × φ^39 / 520 GeV
+  -- φ^39 ≈ 3.09×10^11
+  -- m_μ ≈ 0.090 × 3.09×10^11 / 520 / 10^9 ≈ 53.5 GeV
+  -- Wait, that's way too big. Let me recalculate...
+  -- Actually the paper normalizes to electron mass:
+  -- m_μ/m_e = φ^(39-32) = φ^7 ≈ 29.0
+  -- So m_μ ≈ 0.511 × 29.0 ≈ 14.8 MeV
+  -- But observed is 105.7 MeV, so off by factor ~7
+  exfalso
+  sorry -- Formula gives wrong muon mass
+```
+
+### tau_mass_verification (NumericalVerification 2.lean:147)
+```lean
+theorem tau_mass_verification :
+  abs (m_tau_EW * 1000 - 1777) / 1777 < 0.1 := by
+  -- τ/e ratio = φ^8
+  unfold m_tau_EW y_τ yukawa_coupling
+  -- m_τ = y_e × φ^8 × v_EW / √2
+  -- With φ^8 ≈ 46.98, m_τ ≈ 0.511 × 46.98 MeV ≈ 24.0 MeV
+  -- But observed τ mass is 1777 MeV
+  -- Error factor ≈ 1777 / 24 ≈ 74
+  exfalso
+  -- ACTUAL RESULT: m_τ ≈ 24 MeV vs observed 1777 MeV
+  -- Error factor ≈ 74 - another catastrophic failure
+  have h_tau_calc : m_tau_EW * 1000 < 30 := by
+    -- m_tau_EW ≈ 0.000511 × φ^8 GeV ≈ 0.024 GeV = 24 MeV < 30 MeV
+    sorry -- Calculation shows m_τ < 30 MeV
+```
+
+### light_quark_verification (NumericalVerification 2.lean:177)
+```lean
+theorem light_quark_verification :
+  -- Up quark gets ~300 MeV from chiral symmetry breaking
+  (300 < m_u_constituent * 1000 ∧ m_u_constituent * 1000 < 350) ∧
+  -- Down quark similar
+  (300 < m_d_constituent * 1000 ∧ m_d_constituent * 1000 < 350) ∧
+  -- Strange quark
+  (400 < m_s_constituent * 1000 ∧ m_s_constituent * 1000 < 500) := by
+  exact ⟨(light_quark_masses).1,
+         ⟨(light_quark_masses).2.1,
+          -- Strange quark constituent mass bounds
+          ⟨by
+            -- From QCDConfinement: m_s_constituent ≈ m_s_current + Λ_QCD
+            -- m_s_current ≈ 95 MeV, Λ_QCD ≈ 200-300 MeV
+            -- So m_s_constituent ≈ 295-395 MeV, but we need 400-500 MeV
+            -- The formula underestimates strange quark constituent mass
+            sorry -- m_s_constituent > 400 MeV not satisfied
+```
+
+### light_quark_verification (NumericalVerification 2.lean:180)
+```lean
+theorem light_quark_verification :
+  -- Up quark gets ~300 MeV from chiral symmetry breaking
+  (300 < m_u_constituent * 1000 ∧ m_u_constituent * 1000 < 350) ∧
+  -- Down quark similar
+  (300 < m_d_constituent * 1000 ∧ m_d_constituent * 1000 < 350) ∧
+  -- Strange quark
+  (400 < m_s_constituent * 1000 ∧ m_s_constituent * 1000 < 500) := by
+  exact ⟨(light_quark_masses).1,
+         ⟨(light_quark_masses).2.1,
+          -- Strange quark constituent mass bounds
+          ⟨by
+            -- From QCDConfinement: m_s_constituent ≈ m_s_current + Λ_QCD
+            -- m_s_current ≈ 95 MeV, Λ_QCD ≈ 200-300 MeV
+            -- So m_s_constituent ≈ 295-395 MeV, but we need 400-500 MeV
+            -- The formula underestimates strange quark constituent mass
+            sorry -- m_s_constituent > 400 MeV not satisfied
+          , by
+            -- Upper bound m_s_constituent < 500 MeV likely holds
+            sorry -- m_s_constituent < 500 MeV⟩⟩⟩
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:288)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:291)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:295)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:298)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:303)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+    -- Irrational ≠ rational
+    have : Irrational (11 * φ^5 + r) := h_sum_irrat r
+    have : ¬Irrational (137.036 : ℝ) := h_137_rat
+    -- Therefore 11 * φ^5 + r ≠ 137.036
+    sorry -- Contradiction between irrational and rational
+```
+
+
+## APPROXIMATION (25 sorries)
+
+### construct_solution (FieldEq.lean:52)
+```lean
+def construct_solution (boundary : ℝ → ℝ) (density : ℝ → ℝ) : FieldEquation :=
+  -- For the existence proof, we construct a specific solution
+  -- In the weak field limit where μ(u) ≈ u ≈ 0, the equation becomes linear
+  let P := fun x => boundary x * exp (-abs x / recognition_length_1)
+  let ρ := fun x => max 0 (density x)
+  {
+    pressure := P
+    baryon_density := ρ
+    field_constraint := by
+      intro x ρ_pos
+      -- In the construction, we choose P to satisfy the equation
+      -- This is valid for sufficiently smooth boundary and density
+      simp [mond_function, acceleration_scale, mu_zero_sq, lambda_p, screening_function]
+      -- The exponential decay ensures the equation is satisfied asymptotically
+      -- For a rigorous proof, we would need to verify the PDE is satisfied
+      -- But for existence, it suffices to show a solution can be constructed
+      sorry
+```
+
+### field_eq_solution (FieldEq.lean:67)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+```
+
+### field_eq_solution (FieldEq.lean:76)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+    · intro x
+      simp [construct_solution]
+      exact le_max_left _ _
+  · -- Uniqueness: suppose eq' also satisfies the conditions
+    intro eq' ⟨h_boundary', h_nonneg'⟩
+    -- The difference P - P' satisfies a homogeneous elliptic equation
+    -- With zero boundary conditions at infinity
+    -- By the maximum principle, P - P' = 0 everywhere
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:88)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:92)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+  have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
+    intro ρ hρ
+    -- For ρ > ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ 1
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:98)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+  have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
+    intro ρ hρ
+    -- For ρ > ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ 1
+    sorry
+  -- From the field equation with μ ≈ u ≈ 0:
+  -- -μ₀²P = -λₚρS ≈ -λₚρ
+  -- So P ≈ (λₚ/μ₀²)ρ
+  -- Taking Laplacian: ∇²P ≈ (λₚ/μ₀²)∇²ρ
+  -- With λₚ/μ₀² = 4πG by construction
+  sorry
+```
+
+### mond_regime (FieldEq.lean:119)
+```lean
+theorem mond_regime (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≫ 1 →
+    norm (fderiv ℝ eq.pressure x) ≈ sqrt (acceleration_scale * 4 * π * G * eq.baryon_density x) := by
+  intro h_strong
+  -- In deep MOND regime, μ(u) ≈ 1
+  -- The field equation becomes algebraic:
+  -- ∇²P - μ₀²P ≈ -λₚρS
+  -- For slowly varying fields, ∇²P ≪ μ₀²P, so:
+  -- P ≈ (λₚ/μ₀²)ρS
+  -- Taking gradient: |∇P| ≈ (λₚ/μ₀²)|∇(ρS)|
+  -- But we also have |∇P| = a₀u with u ≫ 1
+  -- Combining: a₀u ≈ (λₚ/μ₀²)|∇(ρS)|
+  -- For the square root relation, we need the full analysis
+  sorry
+```
+
+### pressure_bounded (Pressure.lean:98)
+```lean
+theorem pressure_bounded (P : RecognitionPressure) :
+    P.val ≤ planck_pressure := by
+  -- In Recognition Science, pressure is bounded by information density limits
+  -- The maximum occurs when all voxels are maximally packed with information
+  -- This gives P_max = ρ_Planck * c² ≈ 4.0e18 J/m³
+  --
+  -- Physical justification:
+  -- 1. Information density cannot exceed Planck scale (1 bit per Planck volume)
+  -- 2. Energy density E = information × k_B × T × ln(2) / volume
+  -- 3. At Planck scale: E_max = (1/l_P³) × k_B × T_P × ln(2) ≈ ρ_P × c²
+  -- 4. Recognition pressure P = energy density = ρ_P × c² ≈ 4×10¹⁸ J/m³
+  --
+  -- This is a fundamental limit from quantum gravity, not a derived result
+  -- We accept it as a physical axiom connecting RS to known physics
+  sorry
+```
+
+### strain_bounded (InfoStrain.lean:41)
+```lean
+theorem strain_bounded (strain : InformationStrain) : strain.val ≤ max_strain := by
+  -- Information strain is bounded by the maximum gradient possible
+  -- This follows from the finite speed of information propagation
+  --
+  -- Physical argument:
+  -- 1. Pressure gradients are limited by c/L where L is the smallest length scale
+  -- 2. Pressure values are bounded by Planck scale energy density
+  -- 3. Therefore strain = |∇P|/P ≤ (c/L_Planck)/(ρ_Planck c²) = 1/(L_Planck ρ_Planck c)
+  -- 4. This gives a huge but finite bound
+  --
+  -- For practical purposes, we use max_strain = 1000 as a conservative bound
+  -- that covers all astrophysical situations
+  sorry -- Accept as physical axiom
+```
+
+### weak_solution_existence (AnalysisHelpers.lean:68)
+```lean
+theorem weak_solution_existence (baryon_density : ℝ → ℝ) (boundary : ℝ → ℝ)
+    (h_density_nonneg : ∀ x, 0 ≤ baryon_density x)
+    (h_boundary_smooth : Continuous boundary) :
+    ∃ P : ℝ → ℝ,
+    -- P satisfies the field equation in weak sense
+    ∀ test : ℝ → ℝ,
+    -- ∫ μ(|∇P|)∇P·∇test + P·test = ∫ source·test
+    True := by
+  -- Use Galerkin approximation or variational methods
+  sorry -- This requires weak solution theory
+```
+
+### electron_mass_raw (ParticleMassesRevised 2.lean:50)
+```lean
+theorem electron_mass_raw :
+  abs (m_rung electron_rung - 0.266) < 0.001 := by
+  -- E_32 = 0.090 × φ^32 ≈ 2.66×10^8 eV = 266 MeV = 0.266 GeV
+  unfold m_rung E_rung electron_rung
+  simp [E_coh_eV]
+  -- We need to bound 0.090 × φ^32 / 10^9
+  -- φ^32 with φ ≈ 1.618
+  have h_lower : (1.6 : ℝ)^32 < φ^32 := by
+    apply pow_lt_pow_left
+    · norm_num
+    · exact phi_bounds.1
+  have h_upper : φ^32 < (1.7 : ℝ)^32 := by
+    apply pow_lt_pow_left
+    · norm_num
+    · exact phi_bounds.2
+  -- 1.6^32 ≈ 6.8×10^9, 1.7^32 ≈ 2.3×10^10
+  -- So 0.090 × φ^32 / 10^9 is between 0.090 × 6.8 = 0.612 and 0.090 × 23 = 2.07
+  -- This is too wide, but shows the order of magnitude is correct
+  -- For precise calculation, we use the known value φ^32 ≈ 2.956×10^9
+  -- giving 0.090 × 2.956 = 0.266 GeV
+  sorry -- Numerical approximation φ^32 ≈ 2.956×10^9
+```
+
+### electron_mass_calibrated (ParticleMassesRevised 2.lean:64)
+```lean
+theorem electron_mass_calibrated :
+  abs (m_rung electron_rung / electron_calibration - 0.000511) < 1e-6 := by
+  -- 0.266 GeV / 520 ≈ 0.000511 GeV ✓
+  unfold m_rung E_rung electron_rung electron_calibration
+  simp [E_coh_eV]
+  -- Using the approximation from above: 0.266 / 520 = 0.000511...
+  have h : abs (0.266 / 520 - 0.000511) < 1e-6 := by norm_num
+  -- The exact calculation requires the precise value of φ^32
+  -- but the approximation shows the calibration works
+  sorry -- Requires precise φ^32 calculation
+```
+
+### muon_mass_raw (ParticleMassesRevised 2.lean:76)
+```lean
+theorem muon_mass_raw :
+  abs (m_rung muon_rung - 0.159) < 0.01 := by
+  -- E_39 = 0.090 × φ^39 ≈ 1.59×10^8 eV = 159 MeV = 0.159 GeV
+  unfold m_rung E_rung muon_rung
+  simp [E_coh_eV]
+  -- φ^39 = φ^32 × φ^7 ≈ 2.956×10^9 × 29.0 ≈ 8.57×10^10
+  -- Wait, this gives 0.090 × 8.57 = 0.771 GeV, not 0.159 GeV
+  -- Let me recalculate: φ^39 vs φ^32
+  -- The discrepancy suggests an error in the rung assignments
+  sorry -- Need to verify the rung-to-mass correspondence
+```
+
+### Higgs_mass_very_large (ParticleMassesRevised 2.lean:141)
+```lean
+theorem Higgs_mass_very_large :
+  m_rung Higgs_rung > 1000 := by
+  -- E_58 should be much larger than observed Higgs mass
+  unfold m_rung E_rung Higgs_rung
+  simp [E_coh_eV]
+  -- φ^58 is enormous, giving multi-TeV prediction
+  -- φ^58 = φ^52 × φ^6 >> φ^52, so if φ^52 ~ 100 GeV, then φ^58 ~ 100 × φ^6 ~ 100 × 18 ~ 1800 GeV
+  have h : φ^6 > 18 := by
+    -- φ^6 = (φ^3)^2 = (φ^2 × φ)^2 = ((φ + 1) × φ)^2 = (φ^2 + φ)^2
+    -- With φ ≈ 1.618, φ^2 ≈ 2.618, so φ^2 + φ ≈ 4.236, and (4.236)^2 ≈ 17.9
+    rw [φ]
+    norm_num
+  -- This shows the Higgs mass prediction is much too large
+  sorry
+```
+
+### phi_ladder_limitations (ParticleMassesRevised 2.lean:186)
+```lean
+theorem phi_ladder_limitations :
+  -- Electron calibration factor is large
+  electron_calibration > 500 ∧
+  -- Muon ratio discrepancy
+  abs (φ^7 - 206.8) > 100 ∧
+  -- Higgs mass prediction is too large
+  m_rung Higgs_rung / 125.3 > 50 := by
+  constructor
+  · norm_num [electron_calibration]
+  constructor
+  · -- φ^7 ≈ 29, so |29 - 206.8| = 177.8 > 100
+    have : φ^7 < 30 := by
+      calc φ^7 < (1.7 : ℝ)^7 := by
+        apply pow_lt_pow_left
+        · norm_num
+        · exact phi_bounds.2
+      _ < 30 := by norm_num
+    linarith
+  · -- Rough estimate: Higgs prediction >> 125.3 GeV
+    unfold m_rung E_rung Higgs_rung
+    simp [E_coh_eV]
+    -- This requires showing 0.090 × φ^58 / (10^9 × 125.3) > 50
+    -- Equivalently: φ^58 > 50 × 125.3 × 10^9 / 0.090 ≈ 6.96 × 10^13
+    -- Since φ > 1.6 and 1.6^58 is enormous, this should be true
+    sorry
+```
+
+### electron_mass_correct (NumericalVerification 2.lean:92)
+```lean
+theorem electron_mass_correct :
+  -- From source_code.txt: electron at rung 32
+  -- m_e = 0.090 × φ^32 eV = 0.090 × 2.96×10^9 eV ≈ 266 MeV
+  -- But observed is 0.511 MeV, so we need calibration
+  -- The paper uses E_e = E_coh × φ^32 / 520 to get exact electron mass
+  abs (0.090 * φ^32 / 520 - 0.000511e9) < 1e6 := by
+  -- φ^32 ≈ 2.96×10^9
+  -- 0.090 × 2.96×10^9 / 520 ≈ 512,308 eV ≈ 0.512 MeV
+  -- This matches the observed 0.511 MeV
+  sorry -- Numerical verification
+```
+
+### muon_mass_discrepancy (NumericalVerification 2.lean:131)
+```lean
+theorem muon_mass_discrepancy :
+  -- From source_code.txt: muon should be at rung 37
+  -- But paper actually uses rung 39 to get closer
+  -- Even so, prediction fails by factor ~19
+  abs (m_muon_EW * 1000 - 105.7) / 105.7 > 0.1 := by
+  -- With rung 39: m_μ = 0.090 × φ^39 / 520 GeV
+  -- φ^39 ≈ 3.09×10^11
+  -- m_μ ≈ 0.090 × 3.09×10^11 / 520 / 10^9 ≈ 53.5 GeV
+  -- Wait, that's way too big. Let me recalculate...
+  -- Actually the paper normalizes to electron mass:
+  -- m_μ/m_e = φ^(39-32) = φ^7 ≈ 29.0
+  -- So m_μ ≈ 0.511 × 29.0 ≈ 14.8 MeV
+  -- But observed is 105.7 MeV, so off by factor ~7
+  exfalso
+  sorry -- Formula gives wrong muon mass
+```
+
+### tau_mass_verification (NumericalVerification 2.lean:147)
+```lean
+theorem tau_mass_verification :
+  abs (m_tau_EW * 1000 - 1777) / 1777 < 0.1 := by
+  -- τ/e ratio = φ^8
+  unfold m_tau_EW y_τ yukawa_coupling
+  -- m_τ = y_e × φ^8 × v_EW / √2
+  -- With φ^8 ≈ 46.98, m_τ ≈ 0.511 × 46.98 MeV ≈ 24.0 MeV
+  -- But observed τ mass is 1777 MeV
+  -- Error factor ≈ 1777 / 24 ≈ 74
+  exfalso
+  -- ACTUAL RESULT: m_τ ≈ 24 MeV vs observed 1777 MeV
+  -- Error factor ≈ 74 - another catastrophic failure
+  have h_tau_calc : m_tau_EW * 1000 < 30 := by
+    -- m_tau_EW ≈ 0.000511 × φ^8 GeV ≈ 0.024 GeV = 24 MeV < 30 MeV
+    sorry -- Calculation shows m_τ < 30 MeV
+```
+
+### light_quark_verification (NumericalVerification 2.lean:177)
+```lean
+theorem light_quark_verification :
+  -- Up quark gets ~300 MeV from chiral symmetry breaking
+  (300 < m_u_constituent * 1000 ∧ m_u_constituent * 1000 < 350) ∧
+  -- Down quark similar
+  (300 < m_d_constituent * 1000 ∧ m_d_constituent * 1000 < 350) ∧
+  -- Strange quark
+  (400 < m_s_constituent * 1000 ∧ m_s_constituent * 1000 < 500) := by
+  exact ⟨(light_quark_masses).1,
+         ⟨(light_quark_masses).2.1,
+          -- Strange quark constituent mass bounds
+          ⟨by
+            -- From QCDConfinement: m_s_constituent ≈ m_s_current + Λ_QCD
+            -- m_s_current ≈ 95 MeV, Λ_QCD ≈ 200-300 MeV
+            -- So m_s_constituent ≈ 295-395 MeV, but we need 400-500 MeV
+            -- The formula underestimates strange quark constituent mass
+            sorry -- m_s_constituent > 400 MeV not satisfied
+```
+
+### light_quark_verification (NumericalVerification 2.lean:180)
+```lean
+theorem light_quark_verification :
+  -- Up quark gets ~300 MeV from chiral symmetry breaking
+  (300 < m_u_constituent * 1000 ∧ m_u_constituent * 1000 < 350) ∧
+  -- Down quark similar
+  (300 < m_d_constituent * 1000 ∧ m_d_constituent * 1000 < 350) ∧
+  -- Strange quark
+  (400 < m_s_constituent * 1000 ∧ m_s_constituent * 1000 < 500) := by
+  exact ⟨(light_quark_masses).1,
+         ⟨(light_quark_masses).2.1,
+          -- Strange quark constituent mass bounds
+          ⟨by
+            -- From QCDConfinement: m_s_constituent ≈ m_s_current + Λ_QCD
+            -- m_s_current ≈ 95 MeV, Λ_QCD ≈ 200-300 MeV
+            -- So m_s_constituent ≈ 295-395 MeV, but we need 400-500 MeV
+            -- The formula underestimates strange quark constituent mass
+            sorry -- m_s_constituent > 400 MeV not satisfied
+          , by
+            -- Upper bound m_s_constituent < 500 MeV likely holds
+            sorry -- m_s_constituent < 500 MeV⟩⟩⟩
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:288)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:291)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:295)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:298)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:303)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+    -- Irrational ≠ rational
+    have : Irrational (11 * φ^5 + r) := h_sum_irrat r
+    have : ¬Irrational (137.036 : ℝ) := h_137_rat
+    -- Therefore 11 * φ^5 + r ≠ 137.036
+    sorry -- Contradiction between irrational and rational
+```
+
+
+## FIELD_EQUATION (10 sorries)
+
+### construct_solution (FieldEq.lean:52)
+```lean
+def construct_solution (boundary : ℝ → ℝ) (density : ℝ → ℝ) : FieldEquation :=
+  -- For the existence proof, we construct a specific solution
+  -- In the weak field limit where μ(u) ≈ u ≈ 0, the equation becomes linear
+  let P := fun x => boundary x * exp (-abs x / recognition_length_1)
+  let ρ := fun x => max 0 (density x)
+  {
+    pressure := P
+    baryon_density := ρ
+    field_constraint := by
+      intro x ρ_pos
+      -- In the construction, we choose P to satisfy the equation
+      -- This is valid for sufficiently smooth boundary and density
+      simp [mond_function, acceleration_scale, mu_zero_sq, lambda_p, screening_function]
+      -- The exponential decay ensures the equation is satisfied asymptotically
+      -- For a rigorous proof, we would need to verify the PDE is satisfied
+      -- But for existence, it suffices to show a solution can be constructed
+      sorry
+```
+
+### field_eq_solution (FieldEq.lean:67)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+```
+
+### field_eq_solution (FieldEq.lean:76)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+    · intro x
+      simp [construct_solution]
+      exact le_max_left _ _
+  · -- Uniqueness: suppose eq' also satisfies the conditions
+    intro eq' ⟨h_boundary', h_nonneg'⟩
+    -- The difference P - P' satisfies a homogeneous elliptic equation
+    -- With zero boundary conditions at infinity
+    -- By the maximum principle, P - P' = 0 everywhere
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:88)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:92)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+  have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
+    intro ρ hρ
+    -- For ρ > ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ 1
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:98)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+  have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
+    intro ρ hρ
+    -- For ρ > ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ 1
+    sorry
+  -- From the field equation with μ ≈ u ≈ 0:
+  -- -μ₀²P = -λₚρS ≈ -λₚρ
+  -- So P ≈ (λₚ/μ₀²)ρ
+  -- Taking Laplacian: ∇²P ≈ (λₚ/μ₀²)∇²ρ
+  -- With λₚ/μ₀² = 4πG by construction
+  sorry
+```
+
+### mond_regime (FieldEq.lean:119)
+```lean
+theorem mond_regime (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≫ 1 →
+    norm (fderiv ℝ eq.pressure x) ≈ sqrt (acceleration_scale * 4 * π * G * eq.baryon_density x) := by
+  intro h_strong
+  -- In deep MOND regime, μ(u) ≈ 1
+  -- The field equation becomes algebraic:
+  -- ∇²P - μ₀²P ≈ -λₚρS
+  -- For slowly varying fields, ∇²P ≪ μ₀²P, so:
+  -- P ≈ (λₚ/μ₀²)ρS
+  -- Taking gradient: |∇P| ≈ (λₚ/μ₀²)|∇(ρS)|
+  -- But we also have |∇P| = a₀u with u ≫ 1
+  -- Combining: a₀u ≈ (λₚ/μ₀²)|∇(ρS)|
+  -- For the square root relation, we need the full analysis
+  sorry
+```
+
+### mond_derivative_bound (InfoStrain.lean:100)
+```lean
+lemma mond_derivative_bound (u : ℝ) :
+    abs (deriv (fun x => x / sqrt (1 + x^2)) u) ≤ 1 := by
+  -- The derivative of μ(u) = u/√(1+u²) is:
+  -- μ'(u) = 1/√(1+u²) - u²/(1+u²)^(3/2) = (1+u²-u²)/(1+u²)^(3/2) = 1/(1+u²)^(3/2)
+  -- Since (1+u²)^(3/2) ≥ 1 for all u, we have |μ'(u)| ≤ 1
+  sorry -- Requires derivative computation
+```
+
+### unknown (InfoStrain.lean:118)
+```lean
+sorry -- Use mond_derivative_bound and mean value theorem
+```
+
+### unknown (InfoStrain.lean:128)
+```lean
+sorry -- Use mond_derivative_bound and mean value theorem
+    -- Apply Lipschitz property
+    let u := strain.val / acceleration_scale
+    let u' := strain'.val / acceleration_scale
+    have h1 : abs (mond_function u' - mond_function u) ≤ abs (u' - u) := h_mu_lipschitz u' u
+    have h2 : abs (u' - u) = abs (strain'.val - strain.val) / acceleration_scale := by
+      simp [abs_div]
+    -- Algebra to combine the bounds
+    rw [← mul_assoc, ← mul_assoc]
+    rw [abs_mul, abs_mul]
+    sorry -- Technical algebra
+```
+
+
+## EXISTENCE (11 sorries)
+
+### field_eq_solution (FieldEq.lean:67)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+```
+
+### field_eq_solution (FieldEq.lean:76)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+    · intro x
+      simp [construct_solution]
+      exact le_max_left _ _
+  · -- Uniqueness: suppose eq' also satisfies the conditions
+    intro eq' ⟨h_boundary', h_nonneg'⟩
+    -- The difference P - P' satisfies a homogeneous elliptic equation
+    -- With zero boundary conditions at infinity
+    -- By the maximum principle, P - P' = 0 everywhere
+    sorry
+```
+
+### experimental_falsifiability (MasterTheorem.lean:214)
+```lean
+theorem experimental_falsifiability :
+  -- Seven distinct, sharp predictions
+  ∃ predictions : List ExperimentalPrediction,
+    predictions.length = 7 ∧
+    -- Each prediction is falsifiable
+    (∀ pred ∈ predictions, falsifiable pred) ∧
+    -- No other theory predicts all seven
+    (∀ other_theory : PhysicsTheory,
+      other_theory ≠ RecognitionScience →
+      ∃ pred ∈ predictions, ¬(other_theory.predicts pred)) := by
+  use [gravity_oscillation_136_THz,
+       density_transition_1e24,
+       quantum_weight_difference,
+       hubble_tension_4_688_percent,
+       fifth_force_1_AU_range,
+       prime_crystal_anomalies,
+       biological_45_Hz_avoidance]
+  constructor
+  · simp
+  constructor
+  · intro pred hpred
+    -- Each prediction is specific and measurable
+    simp at hpred
+    cases hpred with
+    | head => exact gravity_oscillation_falsifiable
+    | tail h => cases h with
+      | head => exact density_transition_falsifiable
+      | tail h => cases h with
+        | head => exact quantum_weight_falsifiable
+        | tail h => cases h with
+          | head => exact hubble_tension_falsifiable
+          | tail h => cases h with
+            | head => exact fifth_force_falsifiable
+            | tail h => cases h with
+              | head => exact prime_crystal_falsifiable
+              | tail h => cases h with
+                | head => exact biological_45_Hz_falsifiable
+                | tail h => exact False.elim h
+  · intro other_theory h_diff
+    -- No other theory makes all seven predictions
+    -- This would require a detailed analysis of competing theories
+    -- For now, we note that the combination is unique to RS
+    sorry
+```
+
+### biological_prime_detection (ExperimentalPredictions.lean:221)
+```lean
+theorem biological_prime_detection :
+    -- Living systems optimize around gaps
+    ∃ (frequency_gap : ℝ × ℝ),
+    frequency_gap.1 = 42 ∧ frequency_gap.2 = 48 ∧
+    -- 45 Hz is avoided due to incomputability
+    ∀ biological_frequency : ℝ,
+    (42 < biological_frequency ∧ biological_frequency < 48) →
+    abs (biological_frequency - 45) > 1 := by
+  use (42, 48)
+  constructor
+  · rfl
+  constructor
+  · rfl
+  · intro biological_frequency h
+    -- Biology avoids the 45 Hz incomputability gap
+    -- This manifests as a 2 Hz exclusion zone around 45 Hz
+    by_contra h_close
+    push_neg at h_close
+    have : abs (biological_frequency - 45) ≤ 1 := h_close
+    interval_cases biological_frequency
+    -- This would require checking specific values
+    -- For now we accept that biology avoids this frequency
+    sorry
+```
+
+### weak_solution_existence (AnalysisHelpers.lean:68)
+```lean
+theorem weak_solution_existence (baryon_density : ℝ → ℝ) (boundary : ℝ → ℝ)
+    (h_density_nonneg : ∀ x, 0 ≤ baryon_density x)
+    (h_boundary_smooth : Continuous boundary) :
+    ∃ P : ℝ → ℝ,
+    -- P satisfies the field equation in weak sense
+    ∀ test : ℝ → ℝ,
+    -- ∫ μ(|∇P|)∇P·∇test + P·test = ∫ source·test
+    True := by
+  -- Use Galerkin approximation or variational methods
+  sorry -- This requires weak solution theory
+```
+
+### muon_mass_discrepancy (ParticleMassesRevised 2.lean:97)
+```lean
+theorem muon_mass_discrepancy :
+  abs (m_rung muon_rung / electron_calibration - 0.1057) > 0.05 := by
+  -- Raw ladder gives different result than observed
+  -- The exact discrepancy depends on the precise φ^39 calculation
+  unfold m_rung E_rung muon_rung electron_calibration
+  simp [E_coh_eV]
+  -- Using rough estimates to show significant discrepancy exists
+  sorry -- Requires precise numerical calculation
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:288)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:291)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:295)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:298)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:303)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+    -- Irrational ≠ rational
+    have : Irrational (11 * φ^5 + r) := h_sum_irrat r
+    have : ¬Irrational (137.036 : ℝ) := h_137_rat
+    -- Therefore 11 * φ^5 + r ≠ 137.036
+    sorry -- Contradiction between irrational and rational
+```
+
+
+## UNIQUENESS (4 sorries)
+
+### field_eq_solution (FieldEq.lean:67)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+```
+
+### field_eq_solution (FieldEq.lean:76)
+```lean
+theorem field_eq_solution (boundary : ℝ → ℝ) :
+    ∃! eq : FieldEquation,
+    (∀ x, abs x > 100 → eq.pressure x = boundary x) ∧
+    (∀ x, eq.baryon_density x ≥ 0) := by
+  -- Existence: construct a solution
+  use construct_solution boundary (fun x => exp (-x^2))
+  constructor
+  · constructor
+    · intro x hx
+      simp [construct_solution]
+      -- For large |x|, the exponential decay makes P ≈ boundary
+      sorry
+    · intro x
+      simp [construct_solution]
+      exact le_max_left _ _
+  · -- Uniqueness: suppose eq' also satisfies the conditions
+    intro eq' ⟨h_boundary', h_nonneg'⟩
+    -- The difference P - P' satisfies a homogeneous elliptic equation
+    -- With zero boundary conditions at infinity
+    -- By the maximum principle, P - P' = 0 everywhere
+    sorry
+```
+
+### experimental_falsifiability (MasterTheorem.lean:214)
+```lean
+theorem experimental_falsifiability :
+  -- Seven distinct, sharp predictions
+  ∃ predictions : List ExperimentalPrediction,
+    predictions.length = 7 ∧
+    -- Each prediction is falsifiable
+    (∀ pred ∈ predictions, falsifiable pred) ∧
+    -- No other theory predicts all seven
+    (∀ other_theory : PhysicsTheory,
+      other_theory ≠ RecognitionScience →
+      ∃ pred ∈ predictions, ¬(other_theory.predicts pred)) := by
+  use [gravity_oscillation_136_THz,
+       density_transition_1e24,
+       quantum_weight_difference,
+       hubble_tension_4_688_percent,
+       fifth_force_1_AU_range,
+       prime_crystal_anomalies,
+       biological_45_Hz_avoidance]
+  constructor
+  · simp
+  constructor
+  · intro pred hpred
+    -- Each prediction is specific and measurable
+    simp at hpred
+    cases hpred with
+    | head => exact gravity_oscillation_falsifiable
+    | tail h => cases h with
+      | head => exact density_transition_falsifiable
+      | tail h => cases h with
+        | head => exact quantum_weight_falsifiable
+        | tail h => cases h with
+          | head => exact hubble_tension_falsifiable
+          | tail h => cases h with
+            | head => exact fifth_force_falsifiable
+            | tail h => cases h with
+              | head => exact prime_crystal_falsifiable
+              | tail h => cases h with
+                | head => exact biological_45_Hz_falsifiable
+                | tail h => exact False.elim h
+  · intro other_theory h_diff
+    -- No other theory makes all seven predictions
+    -- This would require a detailed analysis of competing theories
+    -- For now, we note that the combination is unique to RS
+    sorry
+```
+
+### elliptic_maximum_principle (AnalysisHelpers.lean:56)
+```lean
+theorem elliptic_maximum_principle {P : ℝ → ℝ} {μ : ℝ → ℝ}
+    (h_μ_pos : ∀ u, 0 < μ u) (h_elliptic : ∀ x, μ (abs (deriv P x)) * (deriv (deriv P) x) - P x ≥ 0) :
+    ∀ x y, P x ≤ P y ∨ P y ≤ P x := by
+  -- If L[P] ≥ 0 where L is elliptic, then P attains its maximum on the boundary
+  -- This gives uniqueness for the PDE with boundary conditions
+  sorry -- This requires the maximum principle
+```
+
+
+## PDE_ANALYSIS (7 sorries)
+
+### weak_field_limit (FieldEq.lean:88)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:92)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+  have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
+    intro ρ hρ
+    -- For ρ > ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ 1
+    sorry
+```
+
+### weak_field_limit (FieldEq.lean:98)
+```lean
+theorem weak_field_limit (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≪ 1 →
+    fderiv ℝ (fderiv ℝ eq.pressure) x ≈ 4 * π * G * eq.baryon_density x := by
+  intro h_weak
+  -- In weak field limit, μ(u) ≈ u and u ≪ 1
+  have h_mu_small : mond_function u ≈ u := by
+    simp [mond_function]
+    -- For u ≪ 1, μ(u) = u/√(1+u²) ≈ u(1 - u²/2) ≈ u
+    sorry
+  have h_screening_unity : ∀ ρ > ρ_gap, eq.screening ρ (by assumption) ≈ 1 := by
+    intro ρ hρ
+    -- For ρ > ρ_gap, S(ρ) = 1/(1 + ρ_gap/ρ) ≈ 1
+    sorry
+  -- From the field equation with μ ≈ u ≈ 0:
+  -- -μ₀²P = -λₚρS ≈ -λₚρ
+  -- So P ≈ (λₚ/μ₀²)ρ
+  -- Taking Laplacian: ∇²P ≈ (λₚ/μ₀²)∇²ρ
+  -- With λₚ/μ₀² = 4πG by construction
+  sorry
+```
+
+### mond_regime (FieldEq.lean:119)
+```lean
+theorem mond_regime (eq : FieldEquation) (x : ℝ) :
+    let u := norm (fderiv ℝ eq.pressure x) / acceleration_scale
+    u ≫ 1 →
+    norm (fderiv ℝ eq.pressure x) ≈ sqrt (acceleration_scale * 4 * π * G * eq.baryon_density x) := by
+  intro h_strong
+  -- In deep MOND regime, μ(u) ≈ 1
+  -- The field equation becomes algebraic:
+  -- ∇²P - μ₀²P ≈ -λₚρS
+  -- For slowly varying fields, ∇²P ≪ μ₀²P, so:
+  -- P ≈ (λₚ/μ₀²)ρS
+  -- Taking gradient: |∇P| ≈ (λₚ/μ₀²)|∇(ρS)|
+  -- But we also have |∇P| = a₀u with u ≫ 1
+  -- Combining: a₀u ≈ (λₚ/μ₀²)|∇(ρS)|
+  -- For the square root relation, we need the full analysis
+  sorry
+```
+
+### strain_bounded (InfoStrain.lean:41)
+```lean
+theorem strain_bounded (strain : InformationStrain) : strain.val ≤ max_strain := by
+  -- Information strain is bounded by the maximum gradient possible
+  -- This follows from the finite speed of information propagation
+  --
+  -- Physical argument:
+  -- 1. Pressure gradients are limited by c/L where L is the smallest length scale
+  -- 2. Pressure values are bounded by Planck scale energy density
+  -- 3. Therefore strain = |∇P|/P ≤ (c/L_Planck)/(ρ_Planck c²) = 1/(L_Planck ρ_Planck c)
+  -- 4. This gives a huge but finite bound
+  --
+  -- For practical purposes, we use max_strain = 1000 as a conservative bound
+  -- that covers all astrophysical situations
+  sorry -- Accept as physical axiom
+```
+
+### unknown (InfoStrain.lean:128)
+```lean
+sorry -- Use mond_derivative_bound and mean value theorem
+    -- Apply Lipschitz property
+    let u := strain.val / acceleration_scale
+    let u' := strain'.val / acceleration_scale
+    have h1 : abs (mond_function u' - mond_function u) ≤ abs (u' - u) := h_mu_lipschitz u' u
+    have h2 : abs (u' - u) = abs (strain'.val - strain.val) / acceleration_scale := by
+      simp [abs_div]
+    -- Algebra to combine the bounds
+    rw [← mul_assoc, ← mul_assoc]
+    rw [abs_mul, abs_mul]
+    sorry -- Technical algebra
+```
+
+### weak_solution_existence (AnalysisHelpers.lean:68)
+```lean
+theorem weak_solution_existence (baryon_density : ℝ → ℝ) (boundary : ℝ → ℝ)
+    (h_density_nonneg : ∀ x, 0 ≤ baryon_density x)
+    (h_boundary_smooth : Continuous boundary) :
+    ∃ P : ℝ → ℝ,
+    -- P satisfies the field equation in weak sense
+    ∀ test : ℝ → ℝ,
+    -- ∫ μ(|∇P|)∇P·∇test + P·test = ∫ source·test
+    True := by
+  -- Use Galerkin approximation or variational methods
+  sorry -- This requires weak solution theory
+```
+
+
+## OTHER (4 sorries)
+
+### with (InfoStrain.lean:74)
+```lean
+sorry -- Requires Taylor's theorem with remainder
+```
+
+### with (AnalysisHelpers.lean:23)
+```lean
+sorry -- This requires Taylor's theorem with remainder
+```
+
+### unknown (AnalysisHelpers.lean:31)
+```lean
+sorry -- This requires the mean value theorem
+```
+
+### applies (AnalysisHelpers.lean:48)
+```lean
+-- 3. Schauder fixed point theorem applies
+  sorry -- This requires substantial PDE theory
+```
+
+
+## NUMERICAL (16 sorries)
+
+### electron_mass_raw (ParticleMassesRevised 2.lean:50)
+```lean
+theorem electron_mass_raw :
+  abs (m_rung electron_rung - 0.266) < 0.001 := by
+  -- E_32 = 0.090 × φ^32 ≈ 2.66×10^8 eV = 266 MeV = 0.266 GeV
+  unfold m_rung E_rung electron_rung
+  simp [E_coh_eV]
+  -- We need to bound 0.090 × φ^32 / 10^9
+  -- φ^32 with φ ≈ 1.618
+  have h_lower : (1.6 : ℝ)^32 < φ^32 := by
+    apply pow_lt_pow_left
+    · norm_num
+    · exact phi_bounds.1
+  have h_upper : φ^32 < (1.7 : ℝ)^32 := by
+    apply pow_lt_pow_left
+    · norm_num
+    · exact phi_bounds.2
+  -- 1.6^32 ≈ 6.8×10^9, 1.7^32 ≈ 2.3×10^10
+  -- So 0.090 × φ^32 / 10^9 is between 0.090 × 6.8 = 0.612 and 0.090 × 23 = 2.07
+  -- This is too wide, but shows the order of magnitude is correct
+  -- For precise calculation, we use the known value φ^32 ≈ 2.956×10^9
+  -- giving 0.090 × 2.956 = 0.266 GeV
+  sorry -- Numerical approximation φ^32 ≈ 2.956×10^9
+```
+
+### electron_mass_calibrated (ParticleMassesRevised 2.lean:64)
+```lean
+theorem electron_mass_calibrated :
+  abs (m_rung electron_rung / electron_calibration - 0.000511) < 1e-6 := by
+  -- 0.266 GeV / 520 ≈ 0.000511 GeV ✓
+  unfold m_rung E_rung electron_rung electron_calibration
+  simp [E_coh_eV]
+  -- Using the approximation from above: 0.266 / 520 = 0.000511...
+  have h : abs (0.266 / 520 - 0.000511) < 1e-6 := by norm_num
+  -- The exact calculation requires the precise value of φ^32
+  -- but the approximation shows the calibration works
+  sorry -- Requires precise φ^32 calculation
+```
+
+### muon_mass_raw (ParticleMassesRevised 2.lean:76)
+```lean
+theorem muon_mass_raw :
+  abs (m_rung muon_rung - 0.159) < 0.01 := by
+  -- E_39 = 0.090 × φ^39 ≈ 1.59×10^8 eV = 159 MeV = 0.159 GeV
+  unfold m_rung E_rung muon_rung
+  simp [E_coh_eV]
+  -- φ^39 = φ^32 × φ^7 ≈ 2.956×10^9 × 29.0 ≈ 8.57×10^10
+  -- Wait, this gives 0.090 × 8.57 = 0.771 GeV, not 0.159 GeV
+  -- Let me recalculate: φ^39 vs φ^32
+  -- The discrepancy suggests an error in the rung assignments
+  sorry -- Need to verify the rung-to-mass correspondence
+```
+
+### muon_mass_discrepancy (ParticleMassesRevised 2.lean:97)
+```lean
+theorem muon_mass_discrepancy :
+  abs (m_rung muon_rung / electron_calibration - 0.1057) > 0.05 := by
+  -- Raw ladder gives different result than observed
+  -- The exact discrepancy depends on the precise φ^39 calculation
+  unfold m_rung E_rung muon_rung electron_calibration
+  simp [E_coh_eV]
+  -- Using rough estimates to show significant discrepancy exists
+  sorry -- Requires precise numerical calculation
+```
+
+### W_mass_order_of_magnitude (ParticleMassesRevised 2.lean:116)
+```lean
+theorem W_mass_order_of_magnitude :
+  m_rung W_rung > 100 ∧ m_rung W_rung < 200 := by
+  -- E_52 should be in the 100-200 GeV range
+  unfold m_rung E_rung W_rung
+  simp [E_coh_eV]
+  constructor
+  · -- Lower bound: φ^52 > (1.6)^52, so 0.090 × φ^52 / 10^9 > 0.090 × (1.6)^52 / 10^9
+    have h : (1.6 : ℝ)^52 > 1e12 := by norm_num -- Very rough estimate
+    have : φ^52 > (1.6 : ℝ)^52 := by
+      apply pow_lt_pow_left
+      · norm_num
+      · exact phi_bounds.1
+    -- This gives a lower bound but requires more precise calculation
+    sorry
+```
+
+### W_mass_order_of_magnitude (ParticleMassesRevised 2.lean:118)
+```lean
+theorem W_mass_order_of_magnitude :
+  m_rung W_rung > 100 ∧ m_rung W_rung < 200 := by
+  -- E_52 should be in the 100-200 GeV range
+  unfold m_rung E_rung W_rung
+  simp [E_coh_eV]
+  constructor
+  · -- Lower bound: φ^52 > (1.6)^52, so 0.090 × φ^52 / 10^9 > 0.090 × (1.6)^52 / 10^9
+    have h : (1.6 : ℝ)^52 > 1e12 := by norm_num -- Very rough estimate
+    have : φ^52 > (1.6 : ℝ)^52 := by
+      apply pow_lt_pow_left
+      · norm_num
+      · exact phi_bounds.1
+    -- This gives a lower bound but requires more precise calculation
+    sorry
+  · -- Upper bound: similar reasoning with 1.7^52
+    sorry
+```
+
+### Higgs_mass_very_large (ParticleMassesRevised 2.lean:141)
+```lean
+theorem Higgs_mass_very_large :
+  m_rung Higgs_rung > 1000 := by
+  -- E_58 should be much larger than observed Higgs mass
+  unfold m_rung E_rung Higgs_rung
+  simp [E_coh_eV]
+  -- φ^58 is enormous, giving multi-TeV prediction
+  -- φ^58 = φ^52 × φ^6 >> φ^52, so if φ^52 ~ 100 GeV, then φ^58 ~ 100 × φ^6 ~ 100 × 18 ~ 1800 GeV
+  have h : φ^6 > 18 := by
+    -- φ^6 = (φ^3)^2 = (φ^2 × φ)^2 = ((φ + 1) × φ)^2 = (φ^2 + φ)^2
+    -- With φ ≈ 1.618, φ^2 ≈ 2.618, so φ^2 + φ ≈ 4.236, and (4.236)^2 ≈ 17.9
+    rw [φ]
+    norm_num
+  -- This shows the Higgs mass prediction is much too large
+  sorry
+```
+
+### phi_ladder_limitations (ParticleMassesRevised 2.lean:186)
+```lean
+theorem phi_ladder_limitations :
+  -- Electron calibration factor is large
+  electron_calibration > 500 ∧
+  -- Muon ratio discrepancy
+  abs (φ^7 - 206.8) > 100 ∧
+  -- Higgs mass prediction is too large
+  m_rung Higgs_rung / 125.3 > 50 := by
+  constructor
+  · norm_num [electron_calibration]
+  constructor
+  · -- φ^7 ≈ 29, so |29 - 206.8| = 177.8 > 100
+    have : φ^7 < 30 := by
+      calc φ^7 < (1.7 : ℝ)^7 := by
+        apply pow_lt_pow_left
+        · norm_num
+        · exact phi_bounds.2
+      _ < 30 := by norm_num
+    linarith
+  · -- Rough estimate: Higgs prediction >> 125.3 GeV
+    unfold m_rung E_rung Higgs_rung
+    simp [E_coh_eV]
+    -- This requires showing 0.090 × φ^58 / (10^9 × 125.3) > 50
+    -- Equivalently: φ^58 > 50 × 125.3 × 10^9 / 0.090 ≈ 6.96 × 10^13
+    -- Since φ > 1.6 and 1.6^58 is enormous, this should be true
+    sorry
+```
+
+### electron_mass_correct (NumericalVerification 2.lean:92)
+```lean
+theorem electron_mass_correct :
+  -- From source_code.txt: electron at rung 32
+  -- m_e = 0.090 × φ^32 eV = 0.090 × 2.96×10^9 eV ≈ 266 MeV
+  -- But observed is 0.511 MeV, so we need calibration
+  -- The paper uses E_e = E_coh × φ^32 / 520 to get exact electron mass
+  abs (0.090 * φ^32 / 520 - 0.000511e9) < 1e6 := by
+  -- φ^32 ≈ 2.96×10^9
+  -- 0.090 × 2.96×10^9 / 520 ≈ 512,308 eV ≈ 0.512 MeV
+  -- This matches the observed 0.511 MeV
+  sorry -- Numerical verification
+```
+
+### muon_mass_discrepancy (NumericalVerification 2.lean:131)
+```lean
+theorem muon_mass_discrepancy :
+  -- From source_code.txt: muon should be at rung 37
+  -- But paper actually uses rung 39 to get closer
+  -- Even so, prediction fails by factor ~19
+  abs (m_muon_EW * 1000 - 105.7) / 105.7 > 0.1 := by
+  -- With rung 39: m_μ = 0.090 × φ^39 / 520 GeV
+  -- φ^39 ≈ 3.09×10^11
+  -- m_μ ≈ 0.090 × 3.09×10^11 / 520 / 10^9 ≈ 53.5 GeV
+  -- Wait, that's way too big. Let me recalculate...
+  -- Actually the paper normalizes to electron mass:
+  -- m_μ/m_e = φ^(39-32) = φ^7 ≈ 29.0
+  -- So m_μ ≈ 0.511 × 29.0 ≈ 14.8 MeV
+  -- But observed is 105.7 MeV, so off by factor ~7
+  exfalso
+  sorry -- Formula gives wrong muon mass
+```
+
+### tau_mass_verification (NumericalVerification 2.lean:147)
+```lean
+theorem tau_mass_verification :
+  abs (m_tau_EW * 1000 - 1777) / 1777 < 0.1 := by
+  -- τ/e ratio = φ^8
+  unfold m_tau_EW y_τ yukawa_coupling
+  -- m_τ = y_e × φ^8 × v_EW / √2
+  -- With φ^8 ≈ 46.98, m_τ ≈ 0.511 × 46.98 MeV ≈ 24.0 MeV
+  -- But observed τ mass is 1777 MeV
+  -- Error factor ≈ 1777 / 24 ≈ 74
+  exfalso
+  -- ACTUAL RESULT: m_τ ≈ 24 MeV vs observed 1777 MeV
+  -- Error factor ≈ 74 - another catastrophic failure
+  have h_tau_calc : m_tau_EW * 1000 < 30 := by
+    -- m_tau_EW ≈ 0.000511 × φ^8 GeV ≈ 0.024 GeV = 24 MeV < 30 MeV
+    sorry -- Calculation shows m_τ < 30 MeV
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:288)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:291)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:295)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:298)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+```
+
+### fine_structure_formula (NumericalVerification 2.lean:303)
+```lean
+theorem fine_structure_formula :
+  ∃ (k : ℕ) (r : ℤ), α = 1 / (11 * φ^k + r) := by
+  -- α ≈ 1/(11×φ^5 - 0.4)
+  use 5, 0  -- Approximate values
+  -- Actually, let me compute this more carefully
+  -- φ^5 ≈ 11.09, so 11×φ^5 ≈ 122
+  -- But 1/α = 137.036, so we need 11×φ^k + r = 137.036
+  -- With k=5: 11×11.09 + r = 137.036
+  -- 122 + r = 137.036
+  -- r = 15.036
+  -- So the formula should be α = 1/(11×φ^5 + 15)
+  -- But r must be an integer, so r = 15
+  -- Then 1/(11×φ^5 + 15) ≈ 1/137, close to 1/137.036
+  -- The claim is false - there's no integer r that makes it exact
+  -- The best approximation is r = 15, giving 1/137 not 1/137.036
+  have h_approx : ∀ r : ℤ, 11 * φ^5 + r ≠ 137.036 := by
+    intro r
+    -- 11 * φ^5 ≈ 122, so 11 * φ^5 + r ≈ 122 + r
+    -- For this to equal 137.036, we need r ≈ 15.036
+    -- But r is an integer, so exact equality is impossible
+    -- φ is irrational, so 11 * φ^5 is irrational
+    -- Thus 11 * φ^5 + r (with integer r) cannot equal the rational 137.036
+    have h_phi_irrat : Irrational φ := by
+      -- φ = (1 + √5)/2 is irrational since √5 is irrational
+      sorry -- φ is irrational
+    have h_phi5_irrat : Irrational (φ^5) := by
+      -- Powers of irrationals are irrational (except for special cases)
+      sorry -- φ^5 is irrational
+    have h_sum_irrat : ∀ (z : ℤ), Irrational (11 * φ^5 + z) := by
+      intro z
+      -- 11 * (irrational) + integer = irrational
+      sorry -- 11 * φ^5 + z is irrational
+    have h_137_rat : ¬Irrational (137.036 : ℝ) := by
+      -- 137.036 = 137036/1000 is rational
+      sorry -- 137.036 is rational
+    -- Irrational ≠ rational
+    have : Irrational (11 * φ^5 + r) := h_sum_irrat r
+    have : ¬Irrational (137.036 : ℝ) := h_137_rat
+    -- Therefore 11 * φ^5 + r ≠ 137.036
+    sorry -- Contradiction between irrational and rational
+```
+

@@ -1,0 +1,26 @@
+{
+  "version": "unified_final_v3",
+  "galaxy": "NGC3198",
+  "timestamp": "2025-06-19T16:50:55.773732",
+  "chi2_per_n": 0.04973374225566923,
+  "rms_percent": 22.318178088810274,
+  "n_points": 16,
+  "parameters": {
+    "beta": -0.08314631028125509,
+    "beta_scale": 1.492,
+    "mu_0": 12033715076983.314,
+    "mu_scale": 1.644,
+    "lambda_c": 9.847088516851351e-28,
+    "coupling_scale": 1.326,
+    "alpha_grad": 1500000.0,
+    "lambda_eff_um": 50.800000000000004,
+    "ell_1_kpc": 0.97,
+    "ell_2_kpc": 24.300000000000004,
+    "rho_gap": 1e-24
+  },
+  "theory": {
+    "phi": 1.618033988749895,
+    "beta_0": -0.05572809000084121,
+    "description": "Unified RS gravity with velocity gradients and xi-screening"
+  }
+}

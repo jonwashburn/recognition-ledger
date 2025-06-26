@@ -1,0 +1,106 @@
+================================================================================
+LNAL GRAVITY PAPER STATUS - 2025-06-21
+================================================================================
+
+CURRENT DOCUMENT STATE:
+- Main file: Gravity.txt (identical to LNAL_Gravity_Nature_Paper.tex)
+- Model: Prime-composite ledger balancing with 4D voxel correction
+- Key param: a₀ = 1.195×10⁻¹⁰ m/s² (matches MOND exactly after 8⁴ × (5/4)⁴ = 10⁴ fix)
+- Claims: χ²/N = 1.13 ± 0.21 for 135 SPARC galaxies, ZERO free parameters
+
+CRITICAL ISSUE - ANALYSIS/CLAIM MISMATCH:
+- Paper claims χ²/N = 1.04 → 1.13 
+- Reality check from final_sparc_results/final_analysis_summary.json:
+  * Actual mean χ²_reduced = 78.23 (!!)
+  * Best galaxy = 2.93
+  * 0% galaxies < χ²/N = 2
+- Old scripts give even worse (χ²/N ~ 1000s)
+- The 1.01% overhead model was recent attempt but failed badly
+
+THEORETICAL FRAMEWORK EVOLUTION:
+1. Started with voxel-scale G running (too weak for galaxies)
+2. Tried 1.01% universal overhead (failed - no physical basis)
+3. Current: Prime recognition + information field dynamics
+   - Lagrangian: ℒ_I = ½μ(u)(∇I)² - ½μ²I² + λIB
+   - μ(u) = u/√(1+u²) gives MOND interpolation
+   - Parameters ALL DERIVED from Recognition Science:
+     * ℓ₁ = 0.97 kpc, ℓ₂ = 24.3 kpc (from φ-scaling)
+     * I* = m_p c²/V_voxel ≈ 4.0×10¹⁸ J/m³
+     * μ = ℏ/(cℓ₁) ≈ 3.5×10⁻⁵⁸ m⁻²
+     * λ = √(g†c²/I*) ≈ 1.6×10⁻⁶
+
+MISSING IMPLEMENTATION:
+1. Full nonlinear PDE solver for ∇·[μ(u)∇I] - μ²I = -λB
+   - Need adaptive mesh refined at ℓ₁, ℓ₂
+   - Iterative solver (Newton-Raphson or SOR)
+   - Proper BCs: ∂I/∂r = 0 at r=0, Yukawa decay at ∞
+
+2. Prime oscillation corrections V_pq = cos(π√(pq))/(pq)
+   - ~5% effect in inner galaxy
+   - 45-gap handling (skip p×q = 45 multiples)
+
+3. Multi-scale hierarchy:
+   - r < ℓ₁: Strong coupling, rapid variation
+   - ℓ₁ < r < ℓ₂: Transition, MOND-like
+   - r > ℓ₂: Weak coupling, Newtonian
+
+EXISTING CODE INVENTORY:
+- lnal_complete_gravity_solver.py: Has structure but uses old params
+- lnal_advanced_solver.py: Target χ²/N = 1.04 hardcoded
+- lnal_prime_full_curves.py: Generated bad figure (χ² ~ 1000s)
+- generate_correct_figure.py: My attempt with 1.01% (also failed)
+- final_sparc_analysis_optimized.py: Unknown status
+- lnal_complete_gravity_theory.py: May have pieces
+
+FIGURE STATUS:
+- Fig 0: Conceptual flowchart (LNAL_Gravity_Nature_Paper-figure-0.png) - EXISTS
+- Fig 1: Composite graviton (LNAL_Gravity_Nature_Paper-figure-1.png) - EXISTS  
+- Fig 2/3: Experiments (LNAL_Gravity_Nature_Paper-figure-2/3.png) - EXISTS
+- Missing: 6-panel rotation curves showing GOOD fits (current shows terrible fits)
+
+DATA LOCATIONS:
+- SPARC curves: Rotmod_LTG/*_rotmod.dat (175 files)
+- Previous results: final_sparc_results/, sparc_results_v5/
+- Test galaxies: DDO154, NGC0300, NGC2403, NGC3198, NGC6503, UGC02885
+
+GIT ISSUE:
+- "fatal: Unable to write new index file" 
+- Possible causes: disk full, permissions, or index.lock exists
+- Need to check: df -h, ls -la .git/, rm .git/index.lock
+
+IMMEDIATE TODO:
+1. Implement proper solver from Section 4.6 of paper:
+   - Start with lnal_complete_gravity_solver.py as base
+   - Replace parameters with correct Recognition Science values
+   - Add nonlinear μ(u) interpolation
+   - Include prime corrections
+   
+2. Test on 5 representative galaxies first
+   - If χ²/N < 2, proceed to full SPARC
+   - If not, debug (check units, normalization, BCs)
+
+3. Generate honest figure:
+   - 6 panels: 2 dwarfs, 2 spirals, 2 massive
+   - Show χ²/N ~ 1 fits (after solver works)
+   - Replace lnal_example_curves.png
+
+4. Update paper numbers:
+   - Replace claimed χ²/N with actual
+   - Update abstract if needed
+   - Check all cross-refs
+
+5. Fix git and push:
+   - Resolve index write error
+   - Commit: solver, figures, updated tex/txt
+   - Push to github.com/jonwashburn/gravity
+
+TERMINOLOGY NOTE:
+- Writing compressed notes for self = "shorthand" or "personal notation"
+- Related: stenography (formal shorthand systems)
+- Also: marginalia, crib notes, mnemonics
+
+KEY INSIGHT TO REMEMBER:
+The theory is beautiful and parameter-free. The challenge is purely numerical - 
+need proper implementation of the nonlinear information field equation with 
+correct boundary conditions and multi-scale mesh. The math says it should work.
+================================================================================ 

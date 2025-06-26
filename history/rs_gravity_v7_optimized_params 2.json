@@ -1,0 +1,86 @@
+{
+  "description": "RS Gravity v7 Optimized Parameters with \u03be-mode Screening",
+  "optimization_date": "2025-06-19T23:26:09.488657",
+  "total_chi2_per_n": 8.802603894657585,
+  "parameters": {
+    "beta_scale": 0.5,
+    "lambda_eff": 0.00011858098775320524,
+    "coupling_scale": 1.9698430448146482,
+    "l1": 2.99342e+19,
+    "l2": 7.498980000000001e+20,
+    "rho_gap": 1.4628562442206138e-24,
+    "screening_alpha": 1.910667770386817,
+    "screening_amp": 1.1445558136925131,
+    "alpha_grad_0": 2240802.142818792,
+    "vel_threshold": 37829.40623253087,
+    "dwarf_anisotropy": 1.0,
+    "udg_modifier": 0.6455183232907307
+  },
+  "parameter_changes": {
+    "beta_scale": {
+      "original": 1.492,
+      "optimized": 0.5,
+      "change_percent": -66.48793565683646
+    },
+    "lambda_eff": {
+      "original": 5.08e-05,
+      "optimized": 0.00011858098775320524,
+      "change_percent": 133.42714124646702
+    },
+    "coupling_scale": {
+      "original": 1.326,
+      "optimized": 1.9698430448146482,
+      "change_percent": 48.55528241437768
+    },
+    "l1": {
+      "original": 2.99342e+19,
+      "optimized": 2.99342e+19,
+      "change_percent": 0.0
+    },
+    "l2": {
+      "original": 7.498980000000001e+20,
+      "optimized": 7.498980000000001e+20,
+      "change_percent": 0.0
+    },
+    "rho_gap": {
+      "original": 1.1e-24,
+      "optimized": 1.4628562442206138e-24,
+      "change_percent": 32.98693129278307
+    },
+    "screening_alpha": {
+      "original": 1.0,
+      "optimized": 1.910667770386817,
+      "change_percent": 91.06677703868169
+    },
+    "screening_amp": {
+      "original": 1.0,
+      "optimized": 1.1445558136925131,
+      "change_percent": 14.455581369251313
+    },
+    "alpha_grad_0": {
+      "original": 1500000.0,
+      "optimized": 2240802.142818792,
+      "change_percent": 49.386809521252786
+    },
+    "vel_threshold": {
+      "original": 50000.0,
+      "optimized": 37829.40623253087,
+      "change_percent": -24.341187534938257
+    },
+    "dwarf_anisotropy": {
+      "original": 1.3,
+      "optimized": 1.0,
+      "change_percent": -23.076923076923084
+    },
+    "udg_modifier": {
+      "original": 0.8,
+      "optimized": 0.6455183232907307,
+      "change_percent": -19.310209588658665
+    }
+  },
+  "fit_statistics": {
+    "n_dwarfs": 8,
+    "n_udgs": 3,
+    "n_disks": 10
+  }
+}
