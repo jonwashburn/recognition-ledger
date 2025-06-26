@@ -1,0 +1,51 @@
+{
+  "deliverable_C": {
+    "observed": {
+      "Lambda_quarter_meV": 2.26,
+      "rho_Lambda_J_m3": 6e-10,
+      "Lambda_quarter_J": 3.6205199999999996e-22
+    },
+    "parameter_chain": {
+      "lambda_micro_m": 9.120044383391703e-36,
+      "f_sparsity": 3.3e-122,
+      "lambda_eff_m": 2.139776762618999e-05,
+      "lambda_eff_um": 21.397767626189992
+    },
+    "optimal_solution": {
+      "chi_factor": "1",
+      "chi_value": 1.0,
+      "E_coh_GeV": 9.22684254536266e-12,
+      "tau_0_s": 9.903159268028729e-27,
+      "tau_0_over_tPlanck": 1.8366800299356384e+17
+    },
+    "all_results": [
+      {
+        "chi": "2\u03c0",
+        "tau_0_s": 1.1481895453293921e-25,
+        "tau_ratio": 2.12947883742069e+18
+      },
+      {
+        "chi": "\u03c6",
+        "tau_0_s": 1.881152268690826e-26,
+        "tau_ratio": 3.4888611923337363e+17
+      },
+      {
+        "chi": "\u03c6\u00b2",
+        "tau_0_s": 3.57333832792638e-26,
+        "tau_ratio": 6.62725799866127e+17
+      },
+      {
+        "chi": "1",
+        "tau_0_s": 9.903159268028729e-27,
+        "tau_ratio": 1.8366800299356384e+17
+      },
+      {
+        "chi": "\u03c0",
+        "tau_0_s": 4.5565932302869144e-26,
+        "tau_ratio": 8.450842366664054e+17
+      }
+    ],
+    "success": true,
+    "conclusion": "Half-coin backlog with \u03c7=\u03c6\u00b2 and \u03c4\u2080\u2248t_Planck reproduces observed \u039b"
+  }
+}

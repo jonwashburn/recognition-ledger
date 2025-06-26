@@ -1,0 +1,17 @@
+{
+  "version": "v4_relativistic",
+  "timestamp": "2025-06-19T17:39:06.040884",
+  "features": {
+    "metric_perturbations": true,
+    "light_deflection": true,
+    "shapiro_delay": true,
+    "perihelion_advance": true,
+    "gravitational_redshift": true,
+    "cosmological_perturbations": true
+  },
+  "predictions": {
+    "mercury_advance_ratio": 1.001,
+    "gps_time_dilation_us_per_day": 45.8,
+    "structure_growth_enhancement": 1.1
+  }
+}

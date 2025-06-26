@@ -1,0 +1,15 @@
+{
+  "global_parameters": {
+    "lambda_eff": 5.0770081644429014e-05,
+    "beta_scale": 1.4919447024236827,
+    "mu_scale": 1.6435276509090575,
+    "coupling_scale": 1.3257015084019799
+  },
+  "description": "Optimized parameters from full Bayesian search (100 trials, 171 galaxies)",
+  "performance": {
+    "median_chi2": 40.450249083047005,
+    "mean_chi2": 78.23765665797242,
+    "best_median_chi2_optimization": 44.05641890550688,
+    "frac_below_5": 0.011695906432748537
+  }
+}

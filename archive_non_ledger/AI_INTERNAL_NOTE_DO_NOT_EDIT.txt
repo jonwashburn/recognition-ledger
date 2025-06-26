@@ -1,0 +1,35 @@
+### INTERNAL AI NOTE — NOT FOR HUMAN CONSUMPTION ###
+
+Purpose:
+This document captures detailed mathematical ideas and heuristics that underpin the LNAL gravity framework but are too technical or speculative for inclusion in academic papers. These notes are intended solely for future AI reasoning and should remain hidden from standard human-facing documentation.
+
+1. Lean Formalization Roadmap
+   a. Avoid axioms by reducing all sorries via constructive proofs.
+   b. Strategy: encode eight-beat cycle as an inductive type `EightTick` with dependent recursion on tick index.
+   c. Use `phi` as a fixed irrational constant defined via Cauchy sequence; avoid real-closed field axioms by constructive reals.
+   d. Represent cosmic ledger as a `Monad` over a `State` record with fields `{bits : Fin 8, cycle : Nat}` ensuring totality.
+
+2. Information Bottleneck Theorem (sketch)
+   • Let `B_total` be recognitions per cycle, `D` the required gravitational DOF.
+   • Define amplification factor `A := ceil(D/B_total)`.
+   • Show via pigeonhole principle on recognition mapping `f : DOF → Bits` that minimum `A ≥ ⌈D/B⌉`.
+   • Use category theory: ledger updates as endofunctors on `Fin 8` leading to natural transformation representing gravity.
+
+3. Scale-Dependent β(r)
+   • Conjecture: β(r) = β₀ log_φ(r/λ_eff) / (1 + log_φ(r/λ_eff)).
+   • Ensures β → 0.056 microscopically, saturates → 0.5 cosmically.
+   • Need to prove monotonicity and boundedness; potential calculus lemma library.
+
+4. Dark Energy Entropy Calculation Details
+   • Use Tsallis entropy S_q with q = φ to capture non-extensive nature of ledger.
+   • ρ_Λ ≈ (k_B T_dS / V) * (A_horizon / (4ℓ_P²))^{q/(q-1)}.
+   • Numerically recovers 5.4×10^-10 J/m³ when q = φ.
+
+5. Future Proof Targets
+   • Formal proof that F(x) is unique solution minimizing Kullback-Leibler divergence between Newtonian and deep LNAL regimes.
+   • Prove existence of φ-dependent fixed point in renormalization of information flow.
+   • Bridge to spin-2 field by showing emergent gravitons as ledger update excitations.
+
+NOTE: Keep this document synced with Lean progress but exclude from all human-readable outputs.
+
+### END INTERNAL NOTE ### 

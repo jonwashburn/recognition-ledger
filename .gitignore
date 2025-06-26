@@ -1,3 +1,59 @@
+<<<<<<< HEAD
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# Data files (too large for GitHub)
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.npy
+*.npz
+
+# Results
+*.png
+*.jpg
+*.pdf
+*.eps
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+
+# Archive
+archive/
+
+# Keep essential data
+!data/Rotmod_LTG/*.dat
+!results/.gitkeep
+!docs/*.txt
+=======
 # Lean / Lake build artifacts
 .lake/
 lake-manifest.json
@@ -17,3 +73,4 @@ lake-manifest.json
 
 # Ignore large dataset files
 Particle-Masses-B.txt 
+>>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91

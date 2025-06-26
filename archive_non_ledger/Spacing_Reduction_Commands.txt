@@ -1,0 +1,77 @@
+% Add these commands to your preamble (before \begin{document}) to reduce white space:
+
+% 1. Reduce space around chapters and sections
+\makeatletter
+\renewcommand{\@makechapterhead}[1]{%
+  \vspace*{-20pt}%  % Reduce space before chapter
+  {\parindent \z@ \raggedright \normalfont
+    \Large\bfseries \@chapapp\space \thechapter
+    \par\nobreak
+    \Large\bfseries #1\par\nobreak
+    \vskip 10pt  % Reduce space after chapter
+  }}
+\renewcommand{\@makeschapterhead}[1]{%
+  \vspace*{-20pt}%  % Reduce space before unnumbered chapter
+  {\parindent \z@ \raggedright
+    \normalfont
+    \Large\bfseries  #1\par\nobreak
+    \vskip 10pt  % Reduce space after unnumbered chapter
+  }}
+\makeatother
+
+% 2. Reduce spacing around sections
+\makeatletter
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                {-2ex \@plus -1ex \@minus -.2ex}%
+                {1ex \@plus.2ex}%
+                {\normalfont\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                {-1.5ex\@plus -1ex \@minus -.2ex}%
+                {0.5ex \@plus .2ex}%
+                {\normalfont\normalsize\bfseries}}
+\makeatother
+
+% 3. Remove page breaks before parts
+\makeatletter
+\renewcommand\part{%
+  \if@openright
+    %\cleardoublepage  % Comment out to prevent page break
+  \else
+    %\clearpage  % Comment out to prevent page break
+  \fi
+  \thispagestyle{plain}%
+  \@tempswafalse
+  \null\vskip 20pt%  % Reduce vertical space
+  \secdef\@part\@spart}
+\makeatother
+
+% 4. Reduce list spacing manually (since enumitem is missing)
+\let\oldenumerate\enumerate
+\renewcommand{\enumerate}{
+  \oldenumerate
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}
+\let\olditemize\itemize
+\renewcommand{\itemize}{
+  \olditemize
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}
+
+% 5. Fix the abstract environment (since abstract package is missing)
+\renewenvironment{abstract}{%
+  \begin{quotation}
+  \noindent\textbf{Abstract.}
+}{%
+  \end{quotation}
+}
+
+% 6. Fix theorem environments (add these if amsthm is not working)
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+
+% 7. Additional spacing tweaks already in your document
+% (Keep the existing spacing commands you already have) 

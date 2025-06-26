@@ -1,0 +1,29 @@
+{
+  "cosmic_budget_derivation": {
+    "holographic_bound": {
+      "N_max": 2.2326671970762787e+122,
+      "N_active": 7.3678017503517195,
+      "sparsity": 3.3e-122
+    },
+    "matter_content": {
+      "N_baryons": 2.6875474816803843e+78,
+      "N_degrees_of_freedom": 1.6125284890082305e+79
+    },
+    "recognition_bandwidth": {
+      "B_total_per_cycle": 58.942414002813756,
+      "cycle_time_years": 115440115440.11545
+    },
+    "hierarchical_reduction": {
+      "total_reduction": 6.718868704200961e+75,
+      "effective_demand": 400.0
+    },
+    "results": {
+      "G_enhancement_derived": 6.786284660497703,
+      "G_enhancement_needed": 6.2,
+      "dark_energy_halfcoin": 9.318410420447183e-132,
+      "dark_energy_entropy": 5.39298574608435e-10,
+      "dark_energy_observed": 6e-10
+    },
+    "conclusion": "Cosmic information budget naturally gives G_eff \u2248 6\u00d7G_Newton"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "description": "RS Gravity v8 Unified Ledger Parameters",
+  "includes": [
+    "Living light field",
+    "Information density",
+    "Pattern layer selection",
+    "Quantum corrections",
+    "Consciousness effects",
+    "Plus all v7 components"
+  ],
+  "parameters": {
+    "beta_scale": 0.5,
+    "lambda_eff": 0.0001186,
+    "coupling_scale": 1.97,
+    "l1": 2.99342e+19,
+    "l2": 7.49898e+20,
+    "rho_gap": 1.46e-24,
+    "screening_alpha": 1.91,
+    "screening_amp": 1.145,
+    "light_coupling": 0.5150362148004839,
+    "photon_pressure_scale": 1.0,
+    "lnal_opcode_strength": 6.675735974999999e-08,
+    "info_mass_scale": 4.608537561721117e-38,
+    "info_coupling": 1.0,
+    "pattern_selection_width": 0.1,
+    "quantum_correction_scale": 0.9977443634191412,
+    "entanglement_range": 0.006,
+    "decoherence_rate": 136734070392855.95,
+    "observer_coupling": 0.01,
+    "self_reference_scale": 2.618033988749895
+  }
+}

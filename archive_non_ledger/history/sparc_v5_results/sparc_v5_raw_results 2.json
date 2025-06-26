@@ -1,0 +1,702 @@
+[
+  {
+    "galaxy": "CamB",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "D512-2",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "D564-8",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "D631-7",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "DDO064",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "DDO154",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "DDO161",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "DDO168",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "DDO170",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "ESO079-G014",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "ESO116-G012",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "ESO444-G084",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "ESO563-G021",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F561-1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F563-1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F563-V1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F563-V2",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F565-V2",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F567-2",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F568-1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F568-3",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F568-V1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F571-8",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F571-V1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F574-1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F574-2",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F579-V1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F583-1",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "F583-4",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "IC2574",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "IC4202",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "KK98-251",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC0024",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC0055",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC0100",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC0247",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC0289",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC0300",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC0801",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC0891",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC1003",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC1090",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC1705",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2366",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2403",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2683",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2841",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2903",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2915",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2955",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2976",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC2998",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3109",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3198",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3521",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3726",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3741",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3769",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3877",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3893",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3917",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3949",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3953",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3972",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC3992",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4010",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4013",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4051",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4068",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4085",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4088",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4100",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4138",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4157",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4183",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4214",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4217",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4389",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC4559",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC5005",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC5033",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC5055",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC5371",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC5585",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC5907",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC5985",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC6015",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC6195",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC6503",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC6674",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC6789",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC6946",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC7331",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC7793",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "NGC7814",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "PGC51017",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC00128",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC00191",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC00634",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC00731",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC00891",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC01230",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC01281",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC02023",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC02259",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC02455",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC02487",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC02885",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC02916",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC02953",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC03205",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC03546",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC03580",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC04278",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC04305",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC04325",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC04483",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC04499",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05005",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05253",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05414",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05716",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05721",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05750",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05764",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05829",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05918",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05986",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC05999",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06399",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06446",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06614",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06628",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06667",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06786",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06787",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06818",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06917",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06923",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06930",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06973",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC06983",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07089",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07125",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07151",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07232",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07261",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07323",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07399",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07524",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07559",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07577",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07603",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07608",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07690",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC07866",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC08286",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC08490",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC08550",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC08699",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC08837",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC09037",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC09133",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC09992",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC10310",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC11455",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC11557",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC11820",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC11914",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC12506",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC12632",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGC12732",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGCA281",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGCA442",
+    "status": "too_few_points"
+  },
+  {
+    "galaxy": "UGCA444",
+    "status": "too_few_points"
+  }
+]

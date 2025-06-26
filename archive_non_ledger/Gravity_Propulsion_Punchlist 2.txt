@@ -1,0 +1,33 @@
+Ledger / Bandwidth Foundations
+Rewrite the axioms section as a mathematical appendix that converts each prose axiom into explicit formal objects and statements.  Introduce a clear definition of the ledger state, then phrase the eight principles as numbered definitions, lemmas and corollaries (e.g. "Definition 1 (Ledger State)", "Lemma 2 (Eight-beat closure ⇒ Unitary Evolution)").  This lets later chapters cite the axioms unambiguously.
+
+Within the same appendix derive, not assume, the dimensionless factor that modulates the Planck power in Eq. (1).  The argument should flow from the sparse-occupancy fraction already introduced when defining the effective recognition length; show explicitly how that occupancy factor fixes both the cosmic power budget and λ_eff, eliminating any appearance of arbitrariness.
+
+Finally, replace the Shannon–Hartley bound by the correct Holevo bound for a qudit channel with binary-symmetric noise.  Carry the resulting π / ln2 uplift through the maximisation in §field and show that it alters numerical ceilings by less than one standard deviation, thereby justifying continued use of the simpler expression elsewhere.
+
+Information-Cost of Superposition
+Re-derive Eq. (4) with a state-dependent precision metric such as the quantum Fisher information so that low-amplitude coherences contribute less cost.  Track the resulting participation-ratio factor through to the collapse criterion; emphasise that high-entropy superpositions should survive marginally longer and propose a mesoscopic interferometer as a concrete test.  Provide a ledger-level justification, rather than aesthetic convenience, for choosing the temperature parameter T = 1 / ln2 in Eq. (11).
+
+Recognition-Weight Field in Curved Space
+Introduce the four-current J^μ of information flow before writing the coupling λ φ J^μ ∂_μ φ.  Declare its conservation law ∇_μ J^μ = 0 and verify that the full action remains coordinate invariant.  Follow with an explicit check that the modified Einstein equations satisfy the contracted Bianchi identity, preserving energy-momentum conservation.  Close the section by deriving the post-Newtonian parameter γ and showing that it respects the Cassini bound; if deviations arise, reference the high-bandwidth suppression mechanism.
+
+Thrust-Without-Reaction Mechanism
+Add a dedicated paragraph titled "Global Momentum Conservation" that constructs the Noether current for the full action S = S_EH + S_φ + S_drive.  Demonstrate analytically that momentum exchanged with the recognition-weight field is carried away by long-wavelength ledgerons, then estimate the corresponding power loss and confirm it remains below one percent of the drive power at design Δw.
+
+Power–Thrust Derivation
+Create a single annotated table that lists numerical values for every symbol in Eq. (13) and walks the reader to the 28 kW figure on a hand calculator.  Insert a short sentence defining the geometric factor η_geom in Eq. (14) and cite approximate values for spherical and cylindrical cavities to guide later optimisation studies.
+
+Empirical Fits to Galaxy Data
+Rename duplicated rotation-curve figures and adjust all \\label tags to avoid collisions.  Publish the full parameter covariance matrix as a supplemental CSV file, then perform a k-fold test where outer-disk velocities are predicted from inner-disk fits; report the resulting predictive accuracy and contrast it with MOND's typical failure mode.
+
+Proposed Experiments and Milestones
+Transform each milestone in the Strategic Partner Brief into a one-line falsifiable key-performance indicator.  Present the KPI, its pass threshold and the measurement tool so that progress can be judged without interpretation.
+
+Low-Hanging Mathematical Improvements
+Insert a short proof that the ledger optimisation is convex for 0 < α < 2.  Replace the heuristic gas-fraction proxy by the Kolmogorov entropy of the gas turbulence field and show empirically that C₀ f_gas^γ tracks that entropy.  In the a₀ derivation, derive the exponent N from cosmological parameters instead of inserting 138 by hand.
+
+Document Flow and Tone
+Move the Executive Overview to its own page, place the graphic timeline beneath it, and delete philosophical digressions now covered in the Partner Brief.  Audit every footnote to ensure it cites peer-reviewed sources, especially for interferometer sensitivities and SRF cavity parameters.
+
+Next Research Tasks
+Draft and circulate a momentum-conservation white paper; run a GRPN Bayesian fit for the five global parameters with a hyper-prior on α; prototype the 1 mN drive coil in COMSOL including thermal and Lorentz forces; formalise the eight axioms in Lean 4 to lock logical dependencies; and commission replication of the cavity-modulation experiment on a passive torsion balance so that the entire propulsion concept rests on externally verified data. 

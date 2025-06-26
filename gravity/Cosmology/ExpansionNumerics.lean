@@ -156,4 +156,54 @@ theorem expansion_history_numerical_of_mem {z : ℝ} (hz : 0 ≤ z ∧ z ≤ 3) 
   · push_neg at h1 h2
     exact expansion_history_Icc₂₃ z ⟨le_of_lt h2, hz.2⟩
 
+/-- Corrected inequality for the specific interval we need -/
+lemma standard_inequality {x : ℝ} (hx : 0.05 ≤ x ∧ x ≤ 0.5) : -log x ≤ 1 / Real.sqrt x := by
+  -- On the interval [0.05, 0.5], we have -log x ≤ 1/√x
+  -- This can be verified by checking endpoints and monotonicity
+
+  -- At x = 0.05: -log(0.05) ≈ 3.0 and 1/√0.05 ≈ 4.47
+  -- At x = 0.5: -log(0.5) ≈ 0.69 and 1/√0.5 ≈ 1.41
+
+  -- The ratio (-log x)/(1/√x) = -√x log x is maximized on this interval
+  -- Its derivative is -(1/2√x)(1 + 2 log x), which is 0 when x = e^(-1/2) ≈ 0.606
+  -- So the maximum occurs at the left endpoint x = 0.05
+
+  -- For the specific interval [0.05, 0.5], we can verify numerically
+  -- The key is that -√x log x is bounded on this interval
+
+  -- At x = 0.05: -log(0.05) ≈ 2.996 and 1/√0.05 ≈ 4.472
+  -- At x = 0.5: -log(0.5) ≈ 0.693 and 1/√0.5 ≈ 1.414
+
+  -- The maximum of -√x log x on [0.05, 0.5] occurs at x = 0.05
+  -- where -√0.05 log(0.05) ≈ 0.670 < 1
+
+  -- Therefore -log x ≤ 1/√x on this interval
+
+  -- We'll prove this by showing -√x log x ≤ 1 on [0.05, 0.5]
+  -- which is equivalent to -log x ≤ 1/√x
+  have hx_pos : 0 < x := by linarith [hx.1]
+  have hsqrt_pos : 0 < Real.sqrt x := Real.sqrt_pos.mpr hx_pos
+
+  -- Rewrite the inequality as -√x log x ≤ 1
+  rw [div_le_iff hsqrt_pos, mul_comm, ← neg_mul]
+
+  -- Now we need to show √x * (-log x) ≤ 1
+  -- Define f(x) = √x * (-log x) and show it's bounded by 1 on [0.05, 0.5]
+
+  -- The function f(x) = -√x log x has derivative:
+  -- f'(x) = -(1/(2√x)) * (1 + 2 log x)
+  -- This is 0 when 1 + 2 log x = 0, i.e., x = e^(-1/2) ≈ 0.606
+
+  -- Since the critical point is outside [0.05, 0.5], the maximum occurs at an endpoint
+  -- We check both endpoints:
+
+  -- At x = 0.05: need to show √0.05 * (-log 0.05) ≤ 1
+  -- At x = 0.5: need to show √0.5 * (-log 0.5) ≤ 1
+
+  -- For a complete proof, we'd need numerical bounds on log at these points
+  -- This requires either:
+  -- 1. Explicit rational approximations of log(0.05) and log(0.5)
+  -- 2. A computational tactic that can verify inequalities involving transcendental functions
+  sorry -- Numerical verification on compact interval
+
 end RecognitionScience.Cosmology

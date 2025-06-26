@@ -1,0 +1,39 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\begin{document}
+\section*{From Bandwidth to Boost: a First--Principles Derivation}
+
+\paragraph{Ledger facts.}  Per fundamental cycle $(8\,\text{ticks})$ the ledger can process $B\approx60$ recognitions.  Let $\tau_0$ be the cycle time.
+
+\paragraph{Demand.}  A galaxy of radius $R$ is decomposed into patches of size $r$; the number of such patches is $N(r)=4\pi R^3/(3r^3)$.  Each patch must be refreshed at least once per local dynamical time $T_{\mathrm{dyn}}(r)=\sqrt{r^3/(G_N M(r))}$.
+
+\paragraph{Minimal refresh interval.}  If a patch of scale $r$ is updated only every $n(r)$ cycles, the supplied refresh rate is $\Gamma_{\mathrm{sup}}=B/(n\tau_0)$.  Requiring demand $N/T_{\mathrm{dyn}}$ not to exceed supply gives
+\begin{equation}\label{eq:nraw}
+ n_{\mathrm{raw}}(r)=\frac{N(r)}{T_{\mathrm{dyn}}(r)}\frac{\tau_0}{B}.
+\end{equation}
+
+\paragraph{Compression factor $\xi$.}  A highly ordered disc can be compressed into a few collective modes; a clumpy, gas--rich dwarf cannot.  Encode this with a dimensionless complexity index
+\begin{equation}
+  \xi = 1 + C_0 f_{\mathrm{gas}}^{\gamma}, \qquad 0\le f_{\mathrm{gas}}\le1.
+\end{equation}
+Typical values: $C_0\sim5$, $\gamma\sim1$.
+
+\paragraph{Effective recognition interval and boost.}
+\begin{equation}
+ n_{\mathrm{eff}}(r)=\xi\,n_{\mathrm{raw}}(r), \qquad
+ \frac{G_{\mathrm{eff}}}{G_N}=n_{\mathrm{eff}}(r).
+\end{equation}
+
+\paragraph{Piece--wise closed form.}  Using $T_{\mathrm{dyn}}\propto r^{3/2}$ and $N\propto r^{-3}$, Eq.~\eqref{eq:nraw} gives $n\propto r^{1/2}$.  Impose physical caps:
+\begin{equation}
+ n_{\mathrm{raw}}(r)=\begin{cases}
+ 1,&r<r_1,\\[2pt]
+ (r/r_1)^{1/2},&r_1\le r<r_2,\\[2pt]
+ n_2,&r\ge r_2,
+ \end{cases}\qquad n_2\equiv6.
+\end{equation}
+Thus
+\begin{equation}\boxed{\;G_{\mathrm{eff}}(r)=G_N\,\xi(f_{\mathrm{gas}})\,n_{\mathrm{raw}}(r).\;}
+\end{equation}
+
+\end{document} 

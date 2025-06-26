@@ -1,0 +1,30 @@
+{
+  "description": "3D Poisson solver with LNAL gravity",
+  "model": "Miyamoto-Nagai disks + Hernquist bulge",
+  "results": [
+    {
+      "galaxy": "NGC3198",
+      "chi2_reduced": 2752.203816623218,
+      "h_disk": 2.0,
+      "h_gas": 1.0
+    },
+    {
+      "galaxy": "NGC2403",
+      "chi2_reduced": 3941.266890784719,
+      "h_disk": 2.0,
+      "h_gas": 1.0
+    },
+    {
+      "galaxy": "NGC6503",
+      "chi2_reduced": 4845.104198244513,
+      "h_disk": 2.0,
+      "h_gas": 1.0
+    },
+    {
+      "galaxy": "DDO154",
+      "chi2_reduced": 42590.70427873844,
+      "h_disk": 2.0,
+      "h_gas": 1.0
+    }
+  ]
+}

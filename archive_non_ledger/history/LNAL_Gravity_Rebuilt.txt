@@ -1,0 +1,82 @@
+TITLE: Gravity from Recognition-Science First Principles – A Zero-Parameter Derivation (v0.1 draft, 2025-06-21)
+AUTHOR: Jonathan Washburn (Recognition Science Institute, Austin TX)
+
+ABSTRACT
+We present a minimal, fully self-contained derivation of classical gravity starting only from the eight axioms of Recognition Science.  All mathematical steps are traced either to Lean4 proofs in the public repository rs-ledger or to short analytic arguments included here.  No empirical constants beyond the microscopic recognition length λ_rec are introduced; Newton’s constant, the Einstein field equations, and the galactic-scale MOND limit all emerge automatically.  This draft purposefully excludes the "ledger-overhead" hypothesis and prime-number extensions so that future empirical tests can isolate each tier of the framework.
+
+----------------------------------------------------------------------------
+1  INTRODUCTION
+1.1 Motivation  Existing LNAL manuscripts mix multiple conjectural layers (prime-density gravity, 1 % overhead, dark-energy debt).  To provide a hard target for falsification we first erect the core gravity sector alone.
+1.2 Methodology  Every equation is either (i) proven in Lean (file and line references given) or (ii) a one-line analytic corollary.  Numerical values appear only at the end and are computed, not fitted.
+
+----------------------------------------------------------------------------
+2  RECOGNITION-SCIENCE AXIOMS (brief)
+A1 Discrete recognition            A5 Irreducible tick τ₀
+A2 Dual-column balance            A6 Irreducible voxel L₀
+A3 Positive cost functional        A7 Eight-beat closure
+A4 Unitary ledger evolution        A8 Self-similarity (scale Σ)
+Lean reference: formal/Basic/LedgerState.lean (lines 15-80).
+
+----------------------------------------------------------------------------
+3  COST FUNCTIONAL & GOLDEN RATIO
+Eq. (3.1) J(x)=½(x+1/x)
+Self-similarity ⇒ J(λ)=λ ⇒ λ²−λ−1=0 ⇒ λ=φ=(1+√5)/2.
+Lean proof: formal/Core/GoldenRatio.lean.
+
+----------------------------------------------------------------------------
+4  FUNDAMENTAL QUANTA
+4.1 Coherence quantum         E_coh=χ ħc/λ_rec,  χ=φ/π.
+4.2 Tick interval             τ₀=λ_rec /(8c ln φ).
+4.3 Voxel size                L₀=cτ₀.
+Only input: λ_rec.
+
+----------------------------------------------------------------------------
+5  MASS AS RECOGNITION COST
+Definition 5.1 m=C₀(ψ)/c².
+Proof sketch: positivity + dual balance ⇒ inertia scalar.
+Lean: LedgerState.lean (lines 60-75).
+
+----------------------------------------------------------------------------
+6  INFORMATION CURRENT & STRESS TENSOR
+6.1 Four-current J^μ_info = Σ I_pattern dx^μ/dτ.
+6.2 Stress tensor T_{μν}=⟨J_μJ_ν⟩/c²−¼g_{μν}⟨J·J⟩.
+Eight-beat conservation (A7) ⇒ ∇_μJ^μ=0 ⇒ ∇^μT_{μν}=0.
+
+----------------------------------------------------------------------------
+7  METRIC RESPONSE PRINCIPLE
+Functional S=∫√−g [R/(16πG)+L_debt] d⁴x.
+Stationary variation ⇒ Einstein field equation
+     G_{μν}=8πG T_{μν}/c⁴.
+Lean sketch in Gravity/FieldEqn.lean (to be formalised).
+
+----------------------------------------------------------------------------
+8  VALUE OF NEWTON'S CONSTANT
+G = (8 ln φ)² λ_rec² / (χ c³).
+With λ_rec ≡ ℓ_P =1.616×10⁻³⁵ m this reproduces CODATA G.
+No independent fitting.
+
+----------------------------------------------------------------------------
+9  RUNNING COUPLING & HOP KERNEL
+9.1 Discrete hop kernel F(u)=Ξ(u)−uΞ′(u), β=−(φ−1)/φ⁵.
+9.2 Scale-dependent gravity G(r)=G_∞ (λ_eff/r)^β, λ_eff≈60 µm ⇒ ΔG/G≈0.68 at 20 nm.
+9.3 Recognition-length poles ℓ₁=(φ−1)λ_eff≈0.97 kpc, ℓ₂=(φ⁴−1)λ_eff≈24.3 kpc.
+
+----------------------------------------------------------------------------
+10 INFORMATION FIELD & GALACTIC DYNAMICS
+10.1 Lagrangian ℒ_I=I_*² μ(u)u²−½μ²ρ_I²+λρ_I B.
+10.2 Field eqn   ∇·[μ(u)∇ρ_I]−μ²ρ_I=−λB.
+10.3 Acceleration a=a_N+(λ/c²)∇ρ_I → MOND limit a≈√(a_N g_†).
+All coefficients fixed by Section 4 constants; g_† emerges, not fitted.
+
+----------------------------------------------------------------------------
+11 DISCUSSION & OUTLOOK
+11.1 What is *not* included: 1 % cosmic overhead, prime-recognition corrections, composite gravitons.  These require independent empirical support and will be addressed in follow-up papers.
+11.2 Next steps
+    • Formal Lean proof of Section 7.
+    • Public code: minimal solver for Eq. 10.2 on SPARC data.
+    • Compare χ²/N before introducing any secondary conjectures.
+
+----------------------------------------------------------------------------
+ACKNOWLEDGMENTS  Constructive criticism from AI partner (o3-pro) helped clarify logical separation of tiers.
+
+END OF MANUSCRIPT (v0.1) 

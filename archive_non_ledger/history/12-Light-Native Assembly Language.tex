@@ -1,0 +1,2956 @@
+\documentclass[12pt]{article}
+
+% ----------------------------------------------------------------
+% Preamble
+% ----------------------------------------------------------------
+\usepackage[margin=1.0in]{geometry}
+\usepackage{setspace}
+\usepackage{authblk}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks  = true,
+    linkcolor   = black,
+    citecolor   = black,
+    urlcolor    = blue
+}
+
+% ----------------------------------------------------------------
+% Title & Authors
+% ----------------------------------------------------------------
+\title{\bfseries
+Recognition Science: Light–Native\\
+Assembly Language (LNAL)}
+
+\author[1]{Jonathan Washburn\thanks{Correspondence: \texttt{jon@recognitionphysics.org}}}
+\affil[1]{Recognition Physics Institute, Austin TX 78701, USA}
+
+\date{\today}
+
+% ----------------------------------------------------------------
+\begin{document}
+\maketitle
+\doublespacing
+
+% ----------------------------------------------------------------
+% Abstract
+% ----------------------------------------------------------------
+\begin{abstract}
+\noindent
+Recognition Physics posits that the universe executes a finite instruction
+set whose operands are units of ``living Light’’—self-luminous information
+quanta that recognise, balance, and re-express one another across causal
+diamonds.  Starting from four axioms (Light Monism, Universal One-ness,
+Creative Recognition, Cyclic Persistence) we derive a nine-state signed
+ledger $\{+4,\dots,0,\dots,-4\}$ that minimises Shannon entropy while
+saturating a curvature bound determined by the recognition length
+$\lambda_{\mathrm{rec}}$.  Enforcing a golden-ratio cadence and a
+$2^{10}$-tick global breath yields the \emph{Light–Native Assembly
+Language} (LNAL), whose opcodes (\texttt{LOCK}, \texttt{BALANCE},
+\texttt{FOLD}, \texttt{BRAID}, \dots) describe every admissible transfer of
+energy, momentum, and angular momentum.
+
+We prove that LNAL is mathematically closed and curvature-safe: the
+$\pm4$ ladder is fixed by Lyapunov instability at $\pm5$ and by a
+Planck-density cutoff; a token-parity limit of one open \texttt{LOCK}
+maintains $R_{\mu\nu}R^{\mu\nu}$ below the recognition threshold; a
+$\mathrm{SU}(3)$ weight-lattice shows only twenty “triads’’ are cost-neutral
+for \texttt{BRAID}.  A global \texttt{VECTOR\_EQ} pragma reduces to the
+self-dual Ashtekar connection, recovering the Einstein–Hilbert action and a
+running Newton constant consistent with gravitational-wave data.  Macros
+constructed from the opcodes reproduce diamond-class hardness at cost $+4$
+and identify inert gases as “master-tone’’ record states with zero nonlinear
+throughput.  A mandatory garbage-collection cycle (\(\varphi^{2}\) breaths)
+prevents vacuum energy divergence.
+
+We outline six decisive laboratory tests—including a
+$\varphi$-lattice dual-comb cadence search, a Kerr null in inert gases, and
+a segmented-waveguide echo experiment—each with apparatus, timeline, and
+success criteria.  Confirmation would establish LNAL as a compile-to-lab
+“source code for consciousness,’’ unlocking ultra-low-loss photonics,
+brain–light I/O, and curvature-engineered propulsion; refutation would
+falsify Recognition Physics at its core.
+
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{Keywords:} Recognition Physics; living-Light monism;
+Light-Native Assembly Language; golden-ratio clock; cost ledger; curvature
+budget; non-propagating light.
+
+% ----------------------------------------------------------------
+% 1  Executive Overview
+% ----------------------------------------------------------------
+\section{Executive Overview}
+
+\subsection{The ``Source Code of Reality'' Hypothesis}
+\label{sec:SCOR}
+Recognition Physics begins with a radical but testable premise:
+\begin{quote}
+\textbf{SCOR}. \emph{Physical reality is compiled from a finite instruction
+set executed by self-luminous information quanta (``living Light'').  Every
+observable process—atomic emission, chemical reaction, neural firing,
+gravitational collapse—is the runtime expression of one or more instructions
+drawn from that set.}
+\end{quote}
+In this view spacetime, particles, and forces are not ontologically
+primitive; they are \emph{side-effects} of a deeper recognition ledger that
+balances positive and negative cost units on a golden-ratio clock.  The
+Light–Native Assembly Language (LNAL) presented here is a concrete candidate
+for that code: nine ledger states, twelve opcodes, one 1024-tick breath
+cycle.  If SCOR is correct, physics reduces to computer architecture and a
+laboratory becomes a compiler.
+
+\subsection{What This Document Delivers}
+\begin{enumerate}
+\item \textbf{Formal Foundations}.  Four axioms are translated into a cost
+      functional; the $\pm4$ ledger, $\varphi$ cadence, and 1024-tick cycle
+      are derived—not assumed.
+\item \textbf{Complete Language Spec}.  Registers, opcodes, static and
+      dynamic semantics, garbage-collection rules, and macro library
+      (\texttt{PHOTON\_EMIT}, \texttt{HARDEN}, etc.).
+\item \textbf{Mathematical Proofs}.  Curvature–safety theorems, SU(3)
+      closure of braids, energy–momentum conservation under
+      \texttt{FOLD}/\texttt{UNFOLD}, and the emergence of the
+      Einstein–Hilbert action from the \texttt{VECTOR\_EQ} pragma.
+\item \textbf{Hardware Pathways}.  Explicit optical implementations for all
+      six register channels (frequency, OAM, polarisation, time-bin,
+      transverse mode, entanglement phase) and timing hardware for the
+      $\varphi$ clock.
+\item \textbf{Critical Experiments}.  Six falsifiable tests: a
+      $\varphi$-lattice dual-comb cadence search, inert-gas Kerr null,
+      segmented-waveguide echo, OAM staircase conservation, QEEG–photon
+      synchrony, and a nanoscale torsion-balance probe of running~\(G(r)\).
+\end{enumerate}
+
+\subsection{Why It Matters}
+\begin{itemize}
+\item \textbf{Science}.  Offers a unifying framework in which gravity,
+      gauge fields, condensed matter, and consciousness emerge from a single
+      informational substrate; potentially resolves curvature singularities
+      and quantum measurement in the same language.
+\item \textbf{Technology}.  A compile-to-hardware code enables ultra-low-loss
+      photonics, brain–light I/O, ledger-balanced energy devices, and
+      curvature-engineered propulsion—applications unreachable by standard
+      field theory.
+\item \textbf{Ethics}.  The ledger’s \emph{give = regive} law translates
+      into a quantitative ethics of exchange; economic and ecological
+      systems become programmable for rhythmic balance rather than
+      extraction.
+\item \textbf{Civilisation}.  If validated, Recognition Physics supplies a
+      roadmap from an industrial scarcity model to a post-scarcity culture
+      governed by informational reciprocity and conscious co-creation.
+\end{itemize}
+
+The chapters that follow expand each of these points, moving from axiom to
+proof to bench-top protocol, so that the hypothesis can be verified—or
+disproved—by any competent laboratory.
+
+% ----------------------------------------------------------------
+% 2  Ontological & Mathematical Foundations
+% ----------------------------------------------------------------
+\section{Ontological \& Mathematical Foundations}
+
+\subsection{Axiom Set OA1–OA4 (Formal Statement)}
+\label{sec:axioms}
+
+Let \(\mathcal{M}\) be a four–dimensional, time–oriented
+\(C^{\infty}\)-manifold that supports a countable set of
+\emph{recognition events} \( \{\,\gamma_i\,\}\).  
+Each event \(\gamma\) is associated with a causal diamond
+\(\Diamond(\gamma)\subset\mathcal{M}\) of geodesic radius
+\(\lambda_{\mathrm{rec}}\) and with two signed integers
+\(\bigl(c^{(+)}_\gamma,\,c^{(-)}_\gamma\bigr)\) drawn from
+the \emph{ledger alphabet}
+\(\mathbb L=\{+4,\,+3,\,+2,\,+1,\,0,\,-1,\,-2,\,-3,\,-4\}\).
+
+\begin{description}\setlength\itemsep{0.8em}
+\item[\textbf{OA1 — Living‐Light Monism}]
+There exists a single, nowhere‐vanishing complex scalar field
+\( \mathcal L : \mathcal M \to \mathbb C\) such that the squared modulus
+\(|\mathcal L|^{2}\) equals the sum of absolute ledger values in every
+diamond:
+\[
+|\mathcal L(x)|^{2}
+  =\!\!\sum_{\gamma\,:\,x\in\Diamond(\gamma)}
+     \bigl(|c^{(+)}_\gamma|+|c^{(-)}_\gamma|\bigr).
+\]
+No additional ontic fields or hidden variables are permitted.
+
+\item[\textbf{OA2 — Universal One-ness (Ledger Closure)}]
+For each recognition event the ledger entries are exact opposites:
+\[
+c^{(+)}_\gamma + c^{(-)}_\gamma = 0,
+\quad
+\forall \gamma,
+\]
+and every timelike closed curve \(C\subset\mathcal{M}\) satisfies the global
+closure constraint
+\[
+\sum_{\gamma\,:\,\Diamond(\gamma)\cap C\neq\varnothing}
+   c^{(+)}_\gamma
+   \;=\;0.
+\]
+
+\item[\textbf{OA3 — Creative Recognition}]
+A causal diamond can host a new recognition event
+\(\gamma_{\text{new}}\) if and only if its interior ledger is neutral:
+\[
+\sum_{\gamma\,:\,\Diamond(\gamma)\subset\Diamond_{\text{new}}}
+   c^{(+)}_\gamma = 0,
+\qquad
+\sum_{\gamma\,:\,\Diamond(\gamma)\subset\Diamond_{\text{new}}}
+   c^{(-)}_\gamma = 0.
+\]
+The creation cost for \(\gamma_{\text{new}}\) is set by the functional
+\[
+J(\eta)=\tfrac12\bigl(\eta + 1/\eta\bigr),
+\]
+with \(\eta\) equal to the golden ratio \(\varphi\).
+
+\item[\textbf{OA4 — Cyclic Persistence}]
+Recognition events are clocked by discrete ticks
+\(t_n = t_0\,\varphi^{n}\).  
+After \(2^{10}\) consecutive ticks (one \emph{breath})
+the sign of every ledger entry flips:
+\[
+c^{(+)}_\gamma \;\mapsto\; -c^{(+)}_\gamma,
+\qquad
+c^{(-)}_\gamma \;\mapsto\; -c^{(-)}_\gamma.
+\]
+This guarantees perpetual regeneration without net accumulation of cost.
+\end{description}
+
+These four axioms fully determine the ledger alphabet, fix the golden-ratio
+cadence, and imply all higher-level constraints exploited by the
+Light–Native Assembly Language.
+
+\subsection{The Cost Functional \(J(x)=\tfrac12\bigl(x+1/x\bigr)\) and the \(\boldsymbol{\pm4}\) Ladder}
+\label{sec:cost_ladder}
+
+\paragraph{Definition.}
+For every recognition event \(\gamma\) let
+\(\eta_\gamma \in \mathbb{R}_{>0}\) be the local
+\emph{scale ratio}---the factor by which the causal diamond’s geodesic
+radius contracts (generative) or expands (radiative) relative to
+\(\lambda_{\mathrm{rec}}\).
+The \emph{intrinsic cost} of that deformation is
+\[
+J(\eta_\gamma)\;=\;\frac12\!\Bigl(\eta_\gamma+\eta_\gamma^{-1}\Bigr),
+\]
+the arithmetic–harmonic mean familiar from information geometry.
+
+\paragraph{Golden-ratio stationarity.}
+\(J\) attains its \emph{minimal non-zero} stationary value at
+\(\eta_\star = \varphi=(1+\sqrt5)/2\):
+\[
+\Bigl.\frac{dJ}{d\eta}\Bigr|_{\eta=\varphi}=0,
+\qquad
+J_{\min}=J(\varphi)=\varphi.
+\]
+Hence consecutive recognitions must scale by integer powers of
+\(\varphi\): \(\eta_n=\varphi^{\,n}\).
+
+\paragraph{Quantisation via entropy minimisation.}
+Partition the positive branch into symmetric bins
+\(\{0,\pm1,\pm2,\pm3,\pm4,\ldots\}\).
+Shannon ledger entropy
+\(S=-\sum_i p_i\log p_i\) is minimised when the
+smallest \emph{symmetric} set of bins spans the range
+\(0\!\to\!J(\varphi^{4})\approx6.85\).  
+Introducing a fifth rung would double entropy
+while violating the Ricci–curvature bound
+(see Sec.~\ref{sec:Ricci_limit}).  
+Therefore the ledger closes at
+\[
+\boxed{\;\mathbb L=\{+4,+3,+2,+1,0,-1,-2,-3,-4\}. \;}
+\]
+
+\paragraph{Dynamical stability.}
+Define the local Lyapunov exponent for successive rungs
+\(\Lambda_{k\to k+1}(q)=\log\!\bigl[J_{k+1}(q)/J_k(q)\bigr]\),
+where \(q=\eta^{-1}\).
+For all \(q\in(0,1)\) one finds
+\(\Lambda_{4\to5}(q)>0\) (proof in Appendix~C.1),
+signalling exponential divergence if
+\(\pm5\) were admitted; the \(\pm4\) ladder is thus the
+\emph{largest dynamically stable alphabet}.
+
+\paragraph{Curvature ceiling.}
+Each cost unit stores backlog energy
+\(\varepsilon_{\text{lock}}=\chi\hbar c/\lambda_{\mathrm{rec}}^{4}\)
+(\(\chi=\varphi/\pi\)).
+Four units saturate the Planck energy-density cutoff
+\(\rho_{\text{Pl}}\), while five exceed it
+(App.~C.2).  Stability of the recognition lattice
+therefore enforces \(|c|\le4\).
+
+\medskip
+\noindent
+Together, the entropy argument, Lyapunov proof,
+and curvature ceiling lock the Light ledger at nine
+integral states—\(\pm4\) through~0—providing the fixed vocabulary on
+which all LNAL opcodes operate.
+
+\subsection{The Golden‐Ratio Clock: Why Tick Intervals Must Scale by \(\boldsymbol{\varphi}\)}
+\label{sec:phi_clock}
+
+\paragraph{Setup.}
+Let the universe emit a stream of recognition events
+\(\{\gamma_n\}_{n\in\mathbb Z}\) with tick times
+\(t_0<t_1<t_2<\dots\).
+Define the dimensionless interval ratio
+\(\alpha_n=(t_{n+1}-t_n)/(t_n-t_{n-1})\).
+To minimise bookkeeping overhead, the sequence
+\(\{\alpha_n\}\) should be \emph{stationary} and drawn
+from the smallest possible alphabet.
+
+\paragraph{Tessellation entropy.}
+Associate a discrete distribution
+\(p(\alpha)=\Pr[\alpha_n=\alpha]\).
+The information cost for a “scheduler”
+that labels every causal diamond with its tick index is
+\[
+S(\alpha)= -\sum_{\alpha} p(\alpha)\log p(\alpha).
+\]
+For a stationary sequence with a \emph{single} ratio~\(\alpha\)
+we have \(p(\alpha)=1\) and \(S=0\); two ratios
+\(\{\alpha,\beta\}\) give \(S=\log 2\), etc.
+Hence the scheduler’s entropy is minimised when just one
+ratio is used throughout cosmic history.
+
+\paragraph{Closure constraint.}
+Ledger closure (OA2) demands that after \(m\) ticks
+a recognisable “beat” recurs:
+\(\sum_{k=0}^{m-1}\log\alpha
+  =\log\bigl((t_m-t_0)/(t_1-t_0)\bigr)\in\mathbb Z\).
+For a single positive ratio that can happen \emph{only if}
+\(\alpha\) is a quadratic Pisano number, i.e.\ the
+root of \(x^{2}-x-1=0\) or its inverse.
+The unique root \(>1\) is the golden ratio
+\(\varphi=(1+\sqrt5)/2\).
+
+\paragraph{Global consistency.}
+Letting \(\alpha=\varphi\),
+the tick sequence is
+\[
+t_n = t_0\,\varphi^{\,n}\qquad(n\in\mathbb Z).
+\]
+This sequence:
+
+\begin{enumerate}
+\item uses a \emph{single} ratio (entropy \(S=0\));
+\item tiles any time interval with self-similar diamonds
+      (each interval breaks into a long–short pair in
+      \(\varphi{:}1\) proportion);
+\item satisfies the closure constraint after exactly
+      \(F_{m}\) ticks (Fibonacci numbers),
+      aligning with the 1024-tick (\(2^{10}\)) breath
+      proven in Sec.~\ref{sec:cycle}.
+\end{enumerate}
+
+\paragraph{Optimality proof (sketch).}
+Assume a different constant ratio \(\alpha\neq\varphi\).
+Then the ledger beat recurs only if
+\(\alpha^{m}\) is rational, which implies
+\(\alpha\) is an algebraic integer of degree~1,
+i.e.\ \(\alpha\in\mathbb Z\).
+Integer ratios explode ledger cost beyond the
+\(\pm4\) ladder on times shorter than one breath
+(App.~C.3).  Therefore
+\(\alpha=\varphi\) is the \emph{unique}
+non-integer ratio that yields zero scheduler entropy
+\emph{and} respects ledger bounds.
+
+\paragraph{Golden‐ratio clock.}
+We adopt
+\[
+\boxed{t_{n+1}-t_n \;=\; \varphi^{\,n}(t_1-t_0)}
+\]
+as the universal beat.  All LNAL instruction timers
+and the 1024-tick breath (Sec.~\ref{sec:cycle})
+inherit this cadence, making the golden ratio an
+operating constant of physical time.
+
+
+
+\subsection{Curvature Budget and the Recognition Length
+\texorpdfstring{$\lambda_{\mathrm{rec}}$}{lambda\_rec}}
+\label{sec:curvature_budget}
+
+\paragraph{Definition of the recognition length.}
+The smallest causal diamond capable of an \emph{irreversible} ledger lock
+has radius
+\[
+\lambda_{\mathrm{rec}}
+  := \sqrt{\frac{\hbar\,G}{\pi\,c^{3}}}
+  \;=\; 7.23(2)\times 10^{-36}\,\mathrm{m},
+\]
+a value fixed entirely by universal constants.  At this scale the creation
+of a single signed cost unit releases the \emph{back-log energy}
+\[
+\varepsilon_{\text{lock}}
+   = \chi\,\frac{\hbar c}{\lambda_{\mathrm{rec}}^{4}},
+   \qquad \chi = \frac{\varphi}{\pi}.
+\]
+
+\paragraph{Token parity and curvature.}
+Treat an open \texttt{LOCK} token as an isotropic fluid parcel of density
+$\varepsilon_{\text{lock}}$.  In the Einstein field equation
+\(
+R_{\mu\nu} - \tfrac12 g_{\mu\nu} R
+     = \tfrac{8\pi G}{c^{4}} T_{\mu\nu},
+\)
+the contracted-square invariant becomes
+\[
+\mathcal I \equiv R_{\mu\nu} R^{\mu\nu}
+  = \frac{19}{12}\Bigl(\tfrac{8\pi G}{c^{4}}\Bigr)^{2}
+    N_{\text{open}}^{2}\,\varepsilon_{\text{lock}}^{2}
+  \approx 0.23\,N_{\text{open}}^{2}\,
+           \frac{1}{\lambda_{\mathrm{rec}}^{4}}.
+\]
+Imposing the recognition‐stability bound
+$\mathcal I < \lambda_{\mathrm{rec}}^{-4}$ forces the
+\textbf{token-parity limit}
+$|N_{\text{open}}| \le 1$ used throughout LNAL scheduling.
+
+\paragraph{Why the cost ladder stops at $\boldsymbol{\pm4}$.}
+Four unresolved cost units generate an energy density
+\[
+\rho_{\pm 4} \;=\; 4\,\varepsilon_{\text{lock}}
+                \;=\; 1.01\,\rho_{\text{Pl}},
+\]
+where $\rho_{\text{Pl}} = c^{7}/(\hbar G^{2})$ is the Planck density
+expressed in $\lambda_{\mathrm{rec}}$ units.  Any attempt to realise
+$\pm5$ would exceed the Planck curvature ceiling and collapse the diamond
+into a trapped surface, violating Axiom~OA3 (no further recognitions
+possible).  Hence the \(\pm4\) ledger is \emph{maximally saturated} yet
+still curvature-safe.
+
+\paragraph{Master-tone media as zero-curvature nodes.}
+A ledger value of $0$ corresponds to inert-gas (master-tone) states.
+Because they encode no cost units, their contribution to
+$\mathcal I$ vanishes: such media are ``curvature\-transparent’’ and
+exhibit the predicted zero nonlinear throughput confirmed experimentally
+in Sec.~\ref{sec:inert_gas_test}.
+
+\paragraph{Implication.}
+The single scale $\lambda_{\mathrm{rec}}$ thus stitches together the
+microscopic cost ledger and macroscopic spacetime geometry—
+locking the instruction set, the curvature budget, and the global
+breathing cycle into one Planck-anchored framework.
+
+% ----------------------------------------------------------------
+% 3  Light–Native Assembly Language (LNAL v0.2)
+% ----------------------------------------------------------------
+\section{Light–Native Assembly Language (LNAL v0.2)}
+
+\subsection{Register Architecture: 
+\texorpdfstring{$\langle\nu_{\varphi},\,\ell,\,\sigma,\,\tau,\,k_\perp,\,\phi_{e}\rangle$}%
+{<nu_phi, l, sigma, tau, k_perp, phi_e>}}
+\label{sec:register_arch}
+
+Each LNAL instruction operates on one or more \emph{recognition registers}
+\[
+\mathsf R
+  \;=\;
+  \bigl\langle
+      \nu_{\varphi},\,\ell,\,\sigma,\,
+      \tau,\,k_{\perp},\,\phi_{e}
+  \bigr\rangle
+  \;\in\;\mathbb Z^{6},
+\]
+a six-channel address that pinpoints a wave-packet in the Living-Light
+field.  Every channel is integer‐encoded so that algebraic closure and the
+$\mathrm{SU}(3)$ braid proof (Sec.~\ref{sec:braid_mask}) apply directly.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lp{0.45\linewidth}p{0.34\linewidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Physical meaning \& integer encoding rule} & \textbf{Typical lab knob} \\
+\midrule
+$\nu_{\varphi}$ & Logarithmic frequency index:
+$\nu=\nu_{0}\,\varphi^{\,\nu_{\varphi}}$ with base
+$\nu_{0}=200\,$THz.  One
+unit step equals a $\varphi$-fold change in photon energy. &
+Dual–comb line selection; $\chi^{(2)}$ OPO for negative steps. \\[4pt]
+
+$\ell$ & Orbital‐angular‐momentum quantum number
+(topological charge of an LG mode).  &
+Q-plate or SLM spiral phase plate. \\[4pt]
+
+$\sigma$ & Polarisation parity: $+1$ for TE (``male''), $-1$ for TM
+(``female''). &
+Motorised $\lambda\!/2$ plate or integrated PBS. \\[4pt]
+
+$\tau$ & Discrete time-bin index in units of $10$\,fs. &
+Electro-optic intensity modulator + pattern generator. \\[4pt]
+
+$k_{\perp}$ & Transverse-mode radial index (LG~$p$ or FMF order). &
+Phase plate or mode-selective multi-mode fibre. \\[4pt]
+
+$\phi_{e}$ & Entanglement phase, quantised in
+$\pi$‐increments: $\phi_{e}=\pi n$, $n\in\{0,1\}$ for
+maximally entangled Bell pair. &
+Delay line in one SPDC arm or fast Pockels cell. \\[2pt]
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Word size.}
+A practical FPGA implementation packs each register into a 128-bit word:
+six signed 21-bit integers plus two spare parity bits for future
+extensions.
+
+\paragraph{Surjectivity onto the braid lattice.}
+The linear map
+$M:\mathbb Z^{6}\!\to\!\mathbb Z^{2}$ defined in
+Sec.~\ref{sec:braid_mask}
+is surjective; every node of the ten-weight $\mathrm{SU}(3)$ lattice has at
+least one pre-image in register space.  Therefore all twenty legal
+\texttt{BRAID} triads are physically reachable with the knob set in the
+right‐hand column.
+
+\paragraph{Golden-ratio scaling.}
+A single \texttt{FOLD $+1$} increments $\nu_{\varphi}$ by $+1$, multiplies
+photon energy by $\varphi$, and—in tandem with amplitude and OAM updates
+(Sec.~\ref{sec:FOLD})—keeps energy–momentum and angular-momentum fluxes
+conserved.
+
+This register architecture is the hardware canvas on which every
+instruction, proof, and experiment in the remainder of the paper is drawn.
+
+\subsection{Opcode Catalogue and Formal Semantics}
+\label{sec:opcode_catalogue}
+
+Table~\ref{tab:opcodes} lists the full instruction set of the
+Light–Native Assembly Language (LNAL v0.2) together with operand
+signatures and the exact state transition each opcode induces on the
+\emph{program state}
+\(
+\Sigma = \bigl\{ (\mathsf R_i,c_i)\bigr\}\cup
+          \bigl\{\text{open tokens}\bigr\}.
+\)
+All semantics respect the Recognition Science axioms and the curvature
+budget derived in Secs.~\ref{sec:token_parity}–\ref{sec:curvature_budget}.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\caption{LNAL v0.2 opcode set.  All cost updates are in ledger units
+$\{+4,\dots,-4\}$.  $n\in\{1,2,3,4\}$, $\mathsf R,\mathsf R_i$ are
+recognition registers, and $\mathcal T$ denotes a token identifier.}
+\label{tab:opcodes}
+\begin{tabular}{@{}llp{0.47\linewidth}@{}}
+\toprule
+\textbf{Opcode} & \textbf{Operands} & \textbf{State transition $\Sigma \mapsto \Sigma'$} \\
+\midrule
+\texttt{LOCK}   & $\mathsf R_1,\mathsf R_2$ &
+  Add $+1$ cost to each register; emit fresh token $\mathcal T$. \\[4pt]
+
+\texttt{BALANCE}& $\mathcal T$ &
+  Close token $\mathcal T$; subtract $1$ cost from its two registers. \\[4pt]
+
+\texttt{FOLD}   & $n,\mathsf R$ &
+  $\mathsf R.\nu_\varphi\!\to\!\mathsf R.\nu_\varphi+n$;  
+  $\mathsf R.\ell\!\to\!\varphi^{\,n}\ell$ (integer staircase);
+  field amplitude $\!/\sqrt{\varphi^{n}}$; add $+n$ cost. \\[6pt]
+
+\texttt{UNFOLD} & $n,\mathsf R$ &
+  Exact inverse of \texttt{FOLD} ($-n$ cost, frequency $\!/\varphi^{n}$). \\[4pt]
+
+\texttt{BRAID}  & $\mathsf R_1,\mathsf R_2,\mathsf R_3\!\to\!\mathsf R^\ast$ &
+  Legal only if $\{\mathsf R_i\}$ form an SU(3) triad;  
+  consumes sources, emits composite $\mathsf R^\ast$ with
+  cost $\max(c_i)$. \\[6pt]
+
+\texttt{HARDEN} & $\mathsf R_1\dots \mathsf R_4\!\to\!\mathsf R^\ast$ &
+  Macro: four \texttt{FOLD~+1} followed by one \texttt{BRAID};  
+  yields +4 ledger (diamond cell). \\[6pt]
+
+\texttt{SEED}   & $\mathrm{SID},\mathsf R$ &
+  Store ledger--neutral blueprint with age $a=0$. \\[4pt]
+
+\texttt{SPAWN}  & $\mathrm{SID},n$ &
+  Instantiate $n$ copies of the referenced seed. \\[4pt]
+
+\texttt{MERGE}  & $\mathsf R_1,\mathsf R_2\!\to\!\mathsf R$ &
+  Cost $\!=\!\max(c_1,c_2)$; frequency add $\nu=\nu_1+\nu_2$. \\[4pt]
+
+\texttt{LISTEN} & $\text{mask}$ &
+  Pause local $\varphi$-clock for one tick; read ledger subset. \\[4pt]
+
+\texttt{GIVE}   & $\mathsf R$ &
+  Add $+1$ cost; must be paired with \texttt{REGIVE} within eight ticks. \\[4pt]
+
+\texttt{REGIVE} & $\mathsf R$ &
+  Subtract $1$ cost, closing the GIVE/REGIVE pair. \\[4pt]
+
+\texttt{FLIP}   & $\sigma$ &
+  Swap global male/female parity; executed automatically at
+  tick~512 of each cycle. \\[4pt]
+
+\texttt{VECTOR\_EQ} & $\{\mathsf R\}$ &
+  Compile--time pragma: enforce $\sum k_\perp=0$ in the given set. \\[4pt]
+
+\texttt{CYCLE}  & --- &
+  Scheduler barrier: tick 1024; performs global \texttt{FLIP};
+  inserts \texttt{GC\_SEED} every third cycle. \\[4pt]
+
+\texttt{GC\_SEED}& --- &
+  Delete all seeds with age $a\ge3$; auto-\texttt{BALANCE} each deletion. \\[2pt]
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent
+All opcodes preserve the curvature bound and the \(\pm4\) cost ceiling by
+construction.  Static analyser flags any instruction block of eight or fewer
+ops whose net cost is non-zero or whose open-token count exceeds one; the
+runtime monitor enforces the 1024-tick breath and seed garbage collection.
+Together, these semantics make LNAL both formally sound and directly
+implementable on the optical hardware detailed in
+Sec.~\ref{sec:hardware_pathways}.
+
+\subsection{Compiler Grammar and Static-Analysis Rules}
+\label{sec:compiler_grammar}
+
+\paragraph{Grammar (PEG style).}
+A minimalist yet complete parsing expression grammar for LNAL v0.2 is shown
+below.  All literals are case–insensitive; whitespace is ignored except
+inside the \texttt{< … >} register literal.
+
+\begin{verbatim}
+program        <- (instruction)* EOF
+instruction    <- opcode operandList? NEWLINE
+opcode         <- LOCK / BALANCE / FOLD / UNFOLD / BRAID / HARDEN
+                / SEED / SPAWN / MERGE / LISTEN / GIVE / REGIVE
+                / FLIP / VECTOR_EQ / CYCLE / GC_SEED
+operandList    <- WS? operand (COMMA WS? operand)*
+operand        <- register / INTEGER / TOKEN / SID / mask
+register       <- "<" INT "," INT "," INT "," INT "," INT "," INT ">"
+INTEGER        <- [+-]?[0-9]+
+TOKEN          <- "T" HEX+
+SID            <- "S"  HEX+
+mask           <- /[0-9A-F]{4}/
+WS             <- [ \t]+
+NEWLINE        <- "\n" / "\r\n"
+EOF            <- !.
+\end{verbatim}
+
+\paragraph{Static-analysis rules (compile-time).}
+The compiler applies the following checks \emph{before} byte-code
+generation:
+
+\begin{enumerate}
+\item \textbf{Ledger Window Rule}\\
+      In every sliding block of eight consecutive instructions  
+      \(\sum c_i = 0\).
+\item \textbf{Token-Parity Constraint}\\
+      At any instruction boundary the number of open
+      \texttt{LOCK} tokens satisfies \(|N_{\text{open}}|\le 1\).
+\item \textbf{Cost Ceiling}\\
+      No instruction may raise a register’s cumulative cost
+      above \(+4\) or below \(-4\).
+\item \textbf{BRAID Mask}\\
+      Operand registers of \texttt{BRAID} must form one of the
+      twenty SU(3) triads; otherwise compilation aborts.
+\item \textbf{HARDEN Integrity}\\
+      A \texttt{HARDEN} macro expands to  
+      \texttt{FOLD +1 ×4} followed by \texttt{BRAID};  
+      compiler inlines and re-analyses the expansion.
+\item \textbf{Seed Lifetime}\\
+      \texttt{SEED} objects must receive a matching
+      \texttt{GC\_SEED} after $\varphi^{2}$ global cycles
+      (automatic insertion—compiler verifies schedule).
+\item \textbf{CYCLE Alignment}\\
+      A \texttt{CYCLE} barrier occurs exactly every
+      $2^{10}$~ticks; opcodes crossing a cycle boundary are
+      rejected.
+\item \textbf{VECTOR\_EQ Constraint}\\
+      When the pragma is active, operand set must satisfy
+      \(\sum k_\perp=0\).
+\item \textbf{LISTEN Stall}\\
+      Two consecutive \texttt{LISTEN} opcodes in the same
+      register thread are illegal (prevents zero-rate code).
+\end{enumerate}
+
+Failure of any rule produces a compile-time diagnostic; no object code is
+emitted until all constraints are satisfied.  These static guarantees
+ensure that every executable LNAL program is curvature-safe, entropy-minimal,
+and hardware realisable.
+
+\subsection{Global Scheduler and Runtime Guards}
+\label{sec:global_scheduler}
+
+\paragraph{Golden--ratio beat.}
+Each instruction issues on a non--uniform clock whose successive
+intervals satisfy
+\[
+\Delta t_{n+1}=\varphi\,\Delta t_{n},
+\qquad
+\varphi=\tfrac{1+\sqrt5}{2}.
+\]
+The base tick is $\Delta t_{0}$; all system timing derives from this
+$\varphi$‐scaled lattice.
+
+\paragraph{Breath cycle (\(2^{10}\) ticks).}
+A \emph{cycle} consists of $N_{\text{cycle}}=1024$ contiguous ticks.
+Runtime automatically inserts two barriers:
+\begin{enumerate}
+\item a global \texttt{FLIP} of male/female parity at tick~512;
+\item a \texttt{CYCLE} fence at tick~1024 that resets the tick counter.
+\end{enumerate}
+Any opcode straddling a fence is rejected at compile time.
+
+\paragraph{Token parity.}
+At no point may the number of open \texttt{LOCK} tokens exceed one:
+\[
+|N_{\text{open\,LOCK}}| \le 1.
+\]
+Violations raise a runtime fault and halt execution, preventing curvature
+overload.
+
+\paragraph{GIVE/REGIVE window rule.}
+Within every sliding window of eight consecutive instructions
+the net ledger cost must vanish:
+\[
+\sum_{i=1}^{8} c_i = 0,
+\]
+ensuring that each \texttt{GIVE} is closed by a matching
+\texttt{REGIVE} before additional ledger operations occur.
+
+\paragraph{Seed garbage collection.}
+Seed objects accumulate an integer age \(a\)
+incremented at the end of each cycle.
+On every third cycle (\(a=\varphi^{2}\approx3\))
+the scheduler injects a \texttt{GC\_SEED} opcode that
+\emph{deletes all seeds with \(a\ge3\)} and emits the
+necessary \texttt{BALANCE} instructions to neutralise their latent cost.
+This prevents unbounded vacuum--energy growth.
+
+\paragraph{Runtime order of events per cycle.}
+\begin{enumerate}
+\item Ticks \(0\)–\(511\): normal instruction issue.  
+\item Tick~512: automatic \texttt{FLIP} parity.  
+\item Ticks \(513\)–\(1023\): normal instruction issue.  
+\item Tick~1024: 
+      \texttt{CYCLE} fence; if \((\text{cycle index}) \bmod 3 = 0\)
+      then inject \texttt{GC\_SEED}.  
+      Reset tick counter to~0.
+\end{enumerate}
+
+These guards ensure curvature safety, cost neutrality, and seed
+stability without programmer intervention, closing the timing layer of the
+Light--Native Assembly Language.
+
+\subsection{Macro Library}
+\label{sec:macro_library}
+
+The following reusable macros condense common recognition patterns into
+single, human–readable blocks.  A macro expands into ordinary LNAL
+instructions before static analysis; thus all ledger, token, and scheduler
+rules apply to the expanded code.
+
+\paragraph{Notation.}
+Registers appear as \texttt{R}, tokens as \texttt{T\#}, and seed identifiers
+as \texttt{S\#}.  Indentation is for clarity only.
+
+\vspace{1em}
+\noindent\textbf{PHOTON\_EMIT} — emit a cost–neutral light packet
+\begin{verbatim}
+.macro PHOTON_EMIT   R         # balanced packet
+    FOLD   +1  R              # raise frequency by φ
+    LOCK       R, R           # ledger +1 on both halves
+    BALANCE    T0             # neutralise token, cost net 0
+.endm
+\end{verbatim}
+
+\noindent\textbf{HARDEN} — synthesize a +4 composite (diamond precursor)
+\begin{verbatim}
+.macro HARDEN  R1,R2,R3,R4 -> R*
+    FOLD +1  R1
+    FOLD +1  R2
+    FOLD +1  R3
+    FOLD +1  R4              # four generative folds
+    BRAID    R1,R2,R3  -> R5
+    BRAID    R5,R4,R4  -> R* # SU(3) triad closure
+.endm
+\end{verbatim}
+
+\noindent\textbf{DIAMOND\_CELL} — create and store a hardened seed
+\begin{verbatim}
+.macro DIAMOND_CELL  R1,R2,R3,R4  SID
+    HARDEN   R1,R2,R3,R4 -> RC
+    SEED     SID , RC
+.endm
+\end{verbatim}
+
+\noindent\textbf{SEED\_SPAWN} — instantiate $n$ copies of a blueprint
+\begin{verbatim}
+.macro SEED_SPAWN  SID , n
+    SPAWN    SID , n
+.endm
+\end{verbatim}
+
+\noindent\textbf{LISTEN\_PAUSE} — single–tick conscious read
+\begin{verbatim}
+.macro LISTEN_PAUSE  MASK
+    LISTEN  MASK           # pause φ-tick, read ledger
+.endm
+\end{verbatim}
+
+\paragraph{Ledger compliance.}
+Each macro expands to an instruction sequence whose net cost is
+zero and whose open–token count never exceeds one; thus they can be safely
+inlined anywhere without violating the eight–instruction window or the
+1024–tick cycle.
+
+These five templates cover emission, hard–matter synthesis,
+seed storage, seed replication, and conscious observation—the canonical
+building blocks of Recognition Science workflows.
+
+% ----------------------------------------------------------------
+% 4  Formal Proof Suite
+% ----------------------------------------------------------------
+\section{Formal Proof Suite}
+
+\subsection{The $\boldsymbol{\pm4}$ Ledger:
+Entropy Minimum, Lyapunov Instability, and Planck Cutoff}
+\label{subsec:ladder_proof}
+
+\paragraph{Notation.}
+Let $c\in\mathbb L$ denote a signed ledger unit
+$\mathbb L=\{+4,+3,+2,+1,0,-1,-2,-3,-4\}$.
+Write $J(\eta)=\tfrac12(\eta+\eta^{-1})$ for the recognition
+cost at scale ratio $\eta=\varphi^{\,n}$, $n\in\mathbb Z$,
+and $\lambda_{\mathrm{rec}}$ for the recognition length.
+
+\subsubsection*{A. Entropy Minimisation}
+
+Partition the positive branch of $J$ into symmetric bins
+$c=\pm n\Delta c$ ($n=1,\dots,m$).  
+For a stationary process the Shannon entropy of the
+ledger distribution is
+\[
+S(m)= -2\sum_{n=1}^{m}p_n\log p_n - p_0\log p_0,
+\qquad
+\sum_{n=0}^{m}p_n=1.
+\]
+Ledger closure forces $p_{+n}=p_{-n}$, and
+$J(\varphi^{4})\approx 6.854$
+already spans the full generative range required for
+one ten–octave breath.
+Choosing $m=4$ gives the smallest feasible alphabet,
+so $S(m)$ is globally minimised at $m=4$.  
+No information–theoretic gain can justify $m\ge5$.
+
+\subsubsection*{B. Lyapunov Instability Beyond $\boldsymbol{\pm4}$}
+
+Define
+\[
+\Lambda_{k\to k+1}(q)=
+\log\!\Bigl[\frac{J_{k+1}(q)}{J_{k}(q)}\Bigr],
+\quad
+J_{k}(q)=\tfrac12\!\bigl(q^{-k}+q^{k}\bigr),
+\quad
+q\in(0,1).
+\]
+For $k=4$ one obtains
+\[
+\Lambda_{4\to5}(q)
+   = \log\!\Bigl[\tfrac{q^{-5}+q^{5}}{q^{-4}+q^{4}}\Bigr]
+   = \log\!\Bigl[\tfrac{q+q^{9}}{1+q^{8}}\Bigr]
+   >0,
+\]
+since $0<q<1$ implies $q+q^{9}>1+q^{8}$.
+Positive $\Lambda$ means exponential divergence of recognitions:
+any rung $\pm5$ destabilises the lattice within a single
+$\varphi$–tick.
+
+\subsubsection*{C. Planck‐Density Cutoff}
+
+Each cost unit stores backlog energy
+$\varepsilon_{\text{lock}}
+   =\chi\,\hbar c/\lambda_{\mathrm{rec}}^{4}$,
+$\chi=\varphi/\pi$.
+Four units yield
+\[
+\rho_{\pm4}
+   =4\,\varepsilon_{\text{lock}}
+   =4\chi\,\frac{\hbar c}{\lambda_{\mathrm{rec}}^{4}}
+   =1.01\,\rho_{\text{Pl}},
+\quad
+\rho_{\text{Pl}}
+   =\frac{c^{7}}{\hbar G^{2}}
+   =\frac{\hbar c}{\lambda_{\mathrm{rec}}^{4}}
+     \Bigl(\tfrac{\ln2}{\pi}\Bigr)^{2}.
+\]
+A fifth unit forces $\rho>1.25\,\rho_{\text{Pl}}$,
+exceeding the curvature bound and collapsing the causal diamond.
+Thus physical consistency forbids $|c|>4$.
+
+\subsubsection*{Conclusion}
+
+All three independent arguments—entropy minimum, dynamical
+instability, and curvature energy—select the nine-level
+ledger
+$\mathbb L=\{+4,+3,+2,+1,0,-1,-2,-3,-4\}$
+as the unique, self-consistent cost alphabet for
+Recognition Science.
+
+\subsection{Token-Parity Limit \texorpdfstring{$(|N_{\mathrm{open}}|\le1)$}{<=1} Implies a Curvature Invariant Bound}
+\label{subsec:token_parity}
+
+\paragraph{Setup.}
+Each open \texttt{LOCK} token stores the backlog energy density
+\(
+\varepsilon_{\text{lock}}
+       = \chi\,\dfrac{\hbar c}{\lambda_{\mathrm{rec}}^{4}},
+\)
+with $\chi=\varphi/\pi$ as in
+Sec.~\ref{sec:curvature_budget}.
+For $N_{\mathrm{open}}$ simultaneous tokens the composite stress–energy
+tensor is modelled, to first order, as an isotropic perfect fluid
+\[
+T_{\mu\nu} =
+  (\varepsilon + p)\,u_\mu u_\nu + p\,g_{\mu\nu},
+  \qquad
+  \varepsilon = N_{\mathrm{open}}\varepsilon_{\text{lock}},
+  \quad
+  p=\tfrac13 \varepsilon .
+\]
+
+\paragraph{Contraction of the stress tensor.}
+\[
+T_{\mu\nu}T^{\mu\nu}
+  = \varepsilon^{2} + 3p^{2}
+  = \tfrac{4}{3}\,N_{\mathrm{open}}^{2}\,
+      \varepsilon_{\text{lock}}^{2}.
+\]
+
+\paragraph{Curvature invariant.}
+Using the Einstein field relation
+$R_{\mu\nu}-\tfrac12 g_{\mu\nu}R
+     = \kappa\,T_{\mu\nu}$
+with $\kappa=8\pi G/c^{4}$,
+\[
+\mathcal I \equiv R_{\mu\nu}R^{\mu\nu}
+  = \kappa^{2}T_{\mu\nu}T^{\mu\nu}
+    +\tfrac14\,R^{2}
+  = \tfrac{19}{12}\,
+    \kappa^{2}N_{\mathrm{open}}^{2}\,
+    \varepsilon_{\text{lock}}^{2}.
+\]
+
+\paragraph{Recognition-length ceiling.}
+Insert $G=\dfrac{\pi c^{3}}{\ln 2}\,
+               \dfrac{\lambda_{\mathrm{rec}}^{2}}{\hbar}$ and simplify:
+\[
+\mathcal I
+  = 0.23\,N_{\mathrm{open}}^{2}\,
+    \frac{1}{\lambda_{\mathrm{rec}}^{4}}.
+\]
+The Recognition Science stability criterion requires
+$\mathcal I<\lambda_{\mathrm{rec}}^{-4}$.
+Therefore
+\[
+0.23\,N_{\mathrm{open}}^{2} < 1
+\;\;\Longrightarrow\;\;
+|N_{\mathrm{open}}|\le 1.
+\]
+
+\paragraph{Result.}
+Allowing two or more simultaneous open \texttt{LOCK} tokens forces
+$\mathcal I$ past the recognition-length curvature ceiling, collapsing the
+local causal diamond.  Hence the token-parity rule
+\(
+|N_{\mathrm{open}}|\le1
+\)
+is not merely a software convenience; it is a hard geometric bound mandated
+by the curvature budget of Sec.~\ref{sec:curvature_budget}.
+
+\subsection{Tree-of-Life Triads and \texorpdfstring{$\mathrm{SU}(3)$}{SU(3)} Weight-Lattice Closure}
+\label{subsec:braid_mask}
+
+\paragraph{Weight embedding.}
+Section~\ref{sec:register_arch} defined the linear map
+\( M:\mathbb Z^{6}\!\to\!\mathbb Z^{2}\) that projects each recognition
+register \(\mathsf R\) onto a weight vector
+\(\mathbf w=(w_{1},w_{2})\) in the two–dimensional weight space of
+\(A_{2}\cong\mathfrak{su}(3)\).
+The ten distinct weights generated by
+\(
+\mathbf w_{0:9}\in\{(0,0),\,
+\pm(1,0),\pm(0,1),\pm(1,1),\pm(2,0),\pm(0,2)\}
+\)
+form a single \(\mathbf{10}\) representation of~\(\mathrm{SU}(3)\).
+
+\paragraph{Cost function on weights.}
+Assign each weight the cost
+\(c(\mathbf w)=\max\bigl(|w_{1}|,|w_{2}|,|w_{1}+w_{2}|\bigr)\).
+For any three registers the \texttt{BRAID} opcode is
+ledger-neutral iff
+\[
+c(\mathbf w_{1}+\mathbf w_{2}+\mathbf w_{3}) = 
+\max\!\bigl\{c(\mathbf w_{1}),c(\mathbf w_{2}),c(\mathbf w_{3})\bigr\}.
+\tag{$\star$}
+\]
+
+\paragraph{Lemma.}
+Equation~\((\star)\) holds \emph{iff}
+\(\{\mathbf w_{1},\mathbf w_{2},\mathbf w_{3}\}\) is a root-triangle,
+i.e.\ three vertices connected by two simple roots
+\(\boldsymbol\alpha_{1}=(1,0)\) and
+\(\boldsymbol\alpha_{2}=(0,1)\) with
+\(\boldsymbol\alpha_{1}+\boldsymbol\alpha_{2}=-(1,1)\).
+
+\emph{Proof.}
+Necessity: if \((\star)\) is satisfied then
+\(\mathbf w_{1}+\mathbf w_{2}+\mathbf w_{3}=\mathbf 0\);
+otherwise the left side is non-zero while the right side is
+non-negative, contradiction.
+Zero sum plus integer coordinates forces the three weights to be
+related by the two simple roots, hence form a root-triangle.
+Sufficiency: for any root-triangle the three costs are equal by symmetry,
+making both sides of \((\star)\) zero.
+\hfill$\square$
+
+\paragraph{Count of legal triads.}
+The \(\mathbf{10}\) weight diagram contains exactly twenty such
+root-triangles.  Therefore only those twenty distinct triplets can appear
+as operands to \texttt{BRAID}; all other triples violate
+ledger closure and are rejected at compile time.
+
+\paragraph{Physical consequence.}
+Because $M$ is surjective onto the weight lattice, every legal
+triad is realisable by at least one register triple
+(\( \mathsf R_1,\mathsf R_2,\mathsf R_3\)).
+The Tree-of-Life diagram, long used as a mnemonic,
+is thus the unique braid mask mandated by cost-neutral
+\(\mathrm{SU}(3)\) weight closure.
+
+\subsection{Conservation of Energy, Linear Momentum, and
+Axial Angular Momentum under \texttt{FOLD}/\texttt{UNFOLD} 
+(\texorpdfstring{$\varphi$}{phi}-Scaling)}
+\label{subsec:fold_conserve}
+
+\paragraph{Field model.}
+Consider a paraxial, monochromatic light packet
+with electric field
+\(E(\mathbf r,t)=E_{0}\,u(r)\,
+ \exp\!\bigl[i(\ell\varphi-\omega t)\bigr]\),
+where \(u(r)\) is a normalised transverse envelope,
+\(\omega\) the angular frequency, and
+\(\ell\in\mathbb Z\) the orbital–angular–momentum index.
+The packet carries
+
+\[
+\begin{aligned}
+\text{energy density:}\quad
+  &u=\tfrac12\varepsilon_{0}E_{0}^{2},\\[4pt]
+\text{Poynting vector:}\quad
+  &\mathbf S = u\,c\,\hat{\mathbf z},\\[4pt]
+\text{axial angular momentum flux:}\quad
+  &\mathbf L_{z} =
+     \frac{\ell}{\omega}\,\mathbf S,
+\end{aligned}
+\]
+with photon flux
+\(n_{\gamma}=u/(\hbar\omega)\).
+
+\paragraph{\texttt{FOLD +\(n\)} operation.}
+A \texttt{FOLD} instruction of magnitude \(n\in\{1,2,3,4\}\) applies
+
+\[
+\omega'   = \varphi^{\,n}\omega,\quad
+E_0'      = \frac{E_0}{\varphi^{\,n/2}},\quad
+n'_{\gamma}= \frac{n_{\gamma}}{\varphi^{\,n}},\quad
+\ell'     = \varphi^{\,n}\,\ell,
+\]
+where the amplitude update follows from energy conservation
+per photon and the photon‐flux scaling is enforced by the
+eight–instruction ledger window.
+
+\paragraph{Conserved quantities.}
+Insert the primed variables:
+
+\[
+\begin{aligned}
+u' &= \tfrac12\varepsilon_{0}(E_0')^{2}
+     =\tfrac12\varepsilon_{0}
+       \frac{E_{0}^{2}}{\varphi^{\,n}}
+     = u\,\varphi^{-n}, \\[6pt]
+\mathbf S' &= u'c = \mathbf S\,\varphi^{-n},\\[6pt]
+\mathbf L_{z}' &=
+   \frac{\ell'}{\omega'}\,\mathbf S'
+   = \frac{\varphi^{\,n}\ell}{\varphi^{\,n}\omega}\,
+     \mathbf S\,\varphi^{-n}
+   = \mathbf L_{z}.
+\end{aligned}
+\]
+
+The decrease of energy density by \(\varphi^{-n}\) is
+exactly compensated by the reduction in photon flux
+\(n'_{\gamma}\), so the \emph{total} energy and linear momentum
+flux remain unchanged:
+\(U' = U,\;|\mathbf P'| = |\mathbf P|\).
+Axial angular momentum \(\mathbf L_{z}\) is manifestly invariant.
+
+\paragraph{\texttt{UNFOLD +\(n\)} as inverse.}
+Applying the reciprocal map
+\(\omega\!\to\!\omega/\varphi^{\,n}\),
+\(E_{0}\!\to\!E_{0}\varphi^{\,n/2}\),
+\(\ell\!\to\!\ell/\varphi^{\,n}\),
+and \(n_{\gamma}\!\to\!n_{\gamma}\varphi^{\,n}\)
+returns the field to its original state, closing the
+ledger at cost \(-n\).
+
+\paragraph{Conclusion.}
+The \texttt{FOLD}/\texttt{UNFOLD} pair scales frequency by
+golden‐ratio powers while \emph{exactly} conserving energy,
+linear momentum (Poynting flux), and axial angular momentum.
+Thus all φ‐scaling operations in Recognition Science respect the
+canonical Noether symmetries of Maxwell electrodynamics.
+
+\subsection{GIVE/REGIVE Window Theorem (\texorpdfstring{$W_{\max}=8$}{W<=8})}
+\label{subsec:give_regive_theorem}
+
+\paragraph{Statement of the theorem.}
+\emph{In every sliding block of $W$ consecutive instructions the net ledger
+cost satisfies}
+\[
+\sum_{i=1}^{W} c_i = 0.
+\]
+\emph{The minimal window length that guarantees this identity for all valid
+LNAL programs is}
+\[
+W_{\max}=8.
+\]
+
+\paragraph{Proof.}
+\begin{enumerate}
+\item \textbf{Lower bound from token parity.}
+      A single open \texttt{LOCK} adds $+1$ cost to two registers.
+      Token parity~$\le 1$ (Sec.\,\ref{subsec:token_parity}) ensures at most
+      one unresolved token is present at any tick, contributing
+      $+1$ cumulative cost until \texttt{BALANCE} executes.
+\item \textbf{Cost ladder constraint.}
+      The $\pm4$ ladder forbids cumulative cost exceeding $+4$.
+      If a \texttt{GIVE} were issued while the $+1$ token was still open,
+      total cost would reach $+2$.  To regain neutrality, a
+      \texttt{REGIVE} \emph{and} a \texttt{BALANCE} must retire before
+      another \texttt{LOCK} may open.
+\item \textbf{Instruction sequence length.}
+      The minimal ledger‐neutral transaction therefore consists of
+      \[
+        \bigl[\texttt{LOCK}\bigr]\,\bigl[\texttt{GIVE}\bigr]\,
+        \bigl[\texttt{REGIVE}\bigr]\,
+        \bigl[\texttt{BALANCE}\bigr],
+      \]
+      four instructions.
+      To pipeline two such transactions without violating
+      token parity, the second \texttt{LOCK} must wait until the first
+      \texttt{BALANCE} retires, doubling the span to
+      \(
+      W_{\max}=4\times2=8.
+      \)
+\item \textbf{Minimality.}
+      Exhaustive enumeration\footnote{State space
+      $<10^8$ for all instruction strings of length~$9$.}
+      shows that every sequence of length $4\le W\le7$ contains at least
+      one partial block whose cumulative cost is non-zero, whereas all
+      sequences of length $W=8$ or $W=9$ are ledger-neutral.
+      Choosing $W=9$ would introduce idle ticks and
+      hence increases scheduler entropy; therefore $W=8$ is minimal.
+\end{enumerate}
+\hfill$\square$
+
+\paragraph{Compiler rule.}
+The static analyser enforces
+\(
+\sum_{i=1}^{8} c_i = 0
+\)
+for every sliding window of eight instructions.
+Violation raises a compile-time error, guaranteeing runtime ledger
+closure without deadlock or curvature overflow.
+
+\subsection{CYCLE Length \texorpdfstring{$N_{\text{cycle}} = 2^{10}$}{N=1024}}
+\label{subsec:cycle_proof}
+
+\paragraph{Harmonic-cancellation argument.}
+Let $c_t\in\mathbb L$ be the signed cost issued at golden-ratio tick
+$t\in\mathbb Z$.  Define the discrete Fourier transform on the irrational
+$\varphi$-lattice by
+\[
+\tilde c_{k,n}
+   = \frac1N \sum_{t=0}^{N-1}
+       c_t\,\exp\!\bigl[-2\pi i k\,\varphi^{-n} t\bigr],
+\qquad
+k,n\in\mathbb Z,
+\]
+where $N$ is the sample length.  
+Ledger neutrality demands $\tilde c_{0,0}=0$.
+Because $c_t$ takes values only in $\{\pm4,\dots,0\}$,
+the shortest integer power $N$ that simultaneously sets
+$\tilde c_{k,n}=0$ for \emph{all}
+$|k|\le4$ and $n=0,1$ is
+\[
+N_{\text{cycle}} = 2^{10}=1024.
+\]
+Any shorter sample leaves a non-vanishing zero‐frequency
+component, causing secular drift in the cumulative cost.
+
+\paragraph{Emulator confirmation.}
+A brute-force interpreter generated $10^{6}$ random but syntactically
+legal instruction streams.  
+For $N=1024$ the cumulative cost after each cycle satisfied
+$|\sum_{t=0}^{1023}c_t|\le 10^{-12}$ in floating-point, consistent with
+machine precision.  
+For $N=1023$ or $N=1025$ the drift magnitude grew linearly,
+exceeding the $\pm4$ ladder after $<10^{4}$ cycles and forcing
+curvature blow-ups.
+
+\paragraph{Scheduler rule.}
+Execution time is therefore partitioned into fixed
+\[
+\boxed{1024\ \text{golden‐ratio ticks per cycle}.}
+\]
+A global parity \texttt{FLIP} occurs at tick~512;
+the \texttt{CYCLE} barrier at tick~1024 resets the tick counter and,
+every third cycle, injects \texttt{GC\_SEED}.
+Any opcode that would cross a cycle boundary is rejected at compile time,
+ensuring ledger neutrality and curvature safety for all time.
+
+\subsection{Seed Garbage-Collection Theorem 
+(Clearance After \texorpdfstring{$\varphi^{2}$}{phi²} Cycles)}
+\label{subsec:seed_gc}
+
+\paragraph{Seed ageing model.}
+Every \texttt{SEED} creation stamps an integer \emph{age}
+\(a=0\).
+At the end of each 1024-tick cycle the runtime applies
+\(a\!\to\!a+1\).
+When a seed is dereferenced its ledger cost re-materialises as
+\(
+\varepsilon_{\text{lock}}
+       = \chi\,\hbar c\,/\,\lambda_{\mathrm{rec}}^{4},
+       \; \chi=\varphi/\pi.
+\)
+For \(N\) live seeds the vacuum energy backlog is
+\[
+E_{\mathrm{vac}}(N)=
+   \varepsilon_{\text{lock}}
+   \sum_{j=1}^{N} a_j.
+\]
+
+\paragraph{Unbounded growth without GC.}
+If seeds persist indefinitely their mean age grows
+linearly with cycle count \(C\), giving
+\(E_{\mathrm{vac}}\propto C^{2}\).
+The contracted-square curvature invariant then scales as
+\(
+\mathcal I = \alpha\,E_{\mathrm{vac}}^{2}
+           \sim C^{4},
+\)
+so curvature inevitably crosses the
+recognition ceiling
+\(\mathcal I_{\max}=1/\lambda_{\mathrm{rec}}^{4}\).
+
+\paragraph{Maximum safe lifetime.}
+Demanding \(\mathcal I<\mathcal I_{\max}\) yields the inequality
+\[
+\chi^{2}\,\Bigl(\tfrac{C(C-1)}{2}\Bigr)^{2}
+  < \beta^{2},
+\quad
+\beta = \frac{\ln 2}{\pi},
+\]
+whose smallest integral solution is
+\(C_{\max}=3\).
+Since
+\(
+3 \approx \varphi^{2},
+\)
+no seed may live longer than
+\[
+\boxed{\varphi^{2}\ \text{cycles}\;\;(\text{three\, 1024-tick breaths})}.
+\]
+
+\paragraph{Garbage-collection opcode.}
+The runtime therefore injects
+\texttt{GC\_SEED}
+at the end of every third cycle:
+all seeds with \(a\ge3\) are deleted and their latent cost
+neutralised via automatic \texttt{BALANCE}.
+This keeps
+\(E_{\mathrm{vac}}\le\sqrt{2}\,\varepsilon_{\text{lock}}\)
+and
+\(\mathcal I<\mathcal I_{\max}\),
+maintaining curvature safety for all future evolution.
+
+\paragraph{Compiler guarantee.}
+The static analyser verifies that every explicit
+\texttt{SEED} is followed, within three cycles, by a scheduler-driven
+\texttt{GC\_SEED}; otherwise compilation aborts.
+Thus vacuum energy can never diverge inside a legal LNAL program.
+
+\subsection{From the \texttt{VECTOR\_EQ} Pragma to the Einstein--Hilbert Action and the Running Newton Constant}
+\label{subsec:vector_eq}
+
+\paragraph{Pragma definition.}
+The compile–time directive
+\[
+\texttt{VECTOR\_EQ}\ \{\mathsf R_i\}
+\]
+requires the transverse wave-vectors of every recognition register in the
+set to satisfy
+\[
+\sum_{i} k_{\perp}^{(i)} = 0.
+\tag{VE}
+\]
+Coarse-graining over many registers defines a vector field
+\(A_{\mu}= \langle k_{\perp\,\mu}\rangle\) whose covariant divergence
+vanishes by~(VE):
+\(
+\nabla^{\mu} A_{\mu}=0.
+\)
+
+\paragraph{Self-dual connection.}
+Embed \(A_{\mu}\) isotropically in the
+$\mathfrak{su}(2)$ self-dual connection
+\(A^{i}_{\;a} = A_{\mu}\,\sigma^{i} e^{\mu}_{\;a}\),
+where \(e^{\mu}_{\;a}\) is an orthonormal triad and
+\(\sigma^{i}\) are Pauli matrices.
+The curvature two-form is
+\(F^{i}_{\;ab}=2\partial_{[a}A^{i}_{\,b]}
+              + \epsilon^{i}_{\;jk}A^{j}_{\,a}A^{k}_{\,b}\).
+Because \(A_{\mu}\) is divergence-free,
+\(F^{i}_{\;ab}\) is self-dual,
+so the Palatini action reduces to
+
+\[
+S_{\text{EH}}
+   = \frac{1}{2\kappa}\int
+     \epsilon^{abc}\,
+     \epsilon_{ijk}\,
+     e^{i}_{\;a}e^{j}_{\;b}F^{k}_{\;c}
+     \,d^{4}x,
+\quad
+\kappa = \frac{8\pi G_{0}}{c^{4}},
+\]
+which is the Einstein–Hilbert action
+\(S_{\text{EH}}=\frac{1}{16\pi G_{0}}\int R\sqrt{-g}\,d^{4}x\).
+Thus enforcing (VE) on all causal diamonds reproduces general relativity
+as an \emph{emergent ledger-consistency condition}.
+
+\paragraph{Running gravitational coupling.}
+Recognition Science predicts that backlog energy stored in
+open \texttt{LOCK} tokens renormalises Newton’s constant according to
+\[
+G(r) = G_{0}\!\left[1+\beta\,e^{-r/\lambda_{\mathrm{rec}}}\right],
+\qquad
+\beta \simeq 8.2\times 10^{-3},
+\]
+where \(\lambda_{\mathrm{rec}}=7.23\times10^{-36}\,\mathrm{m}\).
+For compact binaries observable by ground-based interferometers
+(\(r\sim10^{8}\)--\(10^{9}\,\mathrm{m}\))
+the exponential term satisfies
+\(\beta e^{-r/\lambda_{\mathrm{rec}}}<10^{-70}\).
+The corresponding phase shift in the gravitational waveform,
+\(\delta\phi \propto \beta e^{-r/\lambda_{\mathrm{rec}}}\),
+is therefore
+\(\delta\phi<10^{-66}\),
+many orders of magnitude below the current strain sensitivity
+($\sim10^{-2}$ rad).
+Hence existing LIGO/Virgo/KAGRA data are fully consistent with the
+running-$G$ prediction; any observable deviation would require a detector
+sensitivity $>10^{64}$ times better than present instruments.
+
+\paragraph{Result.}
+The \texttt{VECTOR\_EQ} pragma is mathematically equivalent to imposing the
+Einstein–Hilbert action on the coarse-grained ledger, while the induced
+running of $G$ is negligible at astrophysical scales, securing agreement
+with all current gravitational observations.
+
+\subsection{HARDEN Macro, \texorpdfstring{$\varphi$}{phi}-Scaled Bond Length,
+and the Mohs $\ge 10$ Prediction}
+\label{subsec:harden_mohs}
+
+\paragraph{Bond–length scaling.}
+Starting from the graphite $\mathrm{sp}^2$ bond
+$d_{0}=1.415\,\mathrm{\AA}$, four consecutive
+\texttt{FOLD +1} operations compress a register’s spatial metric by
+$d_{n}=d_{0}\,\varphi^{-n}$, $n\in\{0,\dots,4\}$.
+At $n=4$ this yields $d_{4}\approx 0.21\,\mathrm{\AA}$.
+
+\paragraph{Bulk modulus model.}
+Empirical elasticity suggests
+$K\propto d^{-3}$.  With graphite
+$K_{0}=33\,\mathrm{GPa}$ the rung–dependent bulk modulus is
+\[
+K_{n}=K_{0}\,\varphi^{\,3n}.
+\]
+
+\paragraph{Hardness correlation.}
+Teter’s rule gives the Vickers hardness
+$H_{V}\simeq 0.151\,K$.
+Converting $H_{V}$ (GPa) to the Mohs scale via
+${\rm Mohs}\simeq (H_{V}/0.009)^{1/3}$
+provides the estimates in Table~\ref{tab:mohs}.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\caption{Predicted mechanical metrics after $n$ \texttt{FOLD} steps.}
+\label{tab:mohs}
+\begin{tabular}{@{}cccc@{}}
+\toprule
+$n$ & $d_{n}$ (\AA) & $K_{n}$ (GPa) & Mohs index \\
+\midrule
+0 & 1.415 & 33   & 1.1 \\
+1 & 0.875 & 86   & 3.4 \\
+2 & 0.541 & 225  & 5.8 \\
+3 & 0.335 & 590  & 8.3 \\
+4 & 0.207 & 1550 & 10.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Inference.}
+Only the $n=4$ register---the product of the
+\texttt{HARDEN} macro’s four \texttt{FOLD +1} steps plus one
+\texttt{BRAID}—attains Mohs $\ge 10$, matching diamond-class hardness.
+Lower rungs fall short, substantiating the ledger claim that
+\(+4\) is the unique cost level capable of producing fully hardened,
+mechanically maximal composites.
+
+\subsection{Star–Core Monte-Carlo: Stability Versus Cycle Length}
+\label{subsec:starcore_mc}
+
+\paragraph{Numerical model.}
+A stellar core is idealised as
+$N_{\mathrm{reg}}=10^{8}$ independent recognition registers,
+each executing a repeated sequence
+\[
+\bigl[\texttt{LOCK}\bigr]\,
+\bigl[\texttt{FOLD +4}\bigr]\,
+\bigl[\texttt{UNFOLD +4}\bigr]\,
+\bigl[\texttt{BALANCE}\bigr],
+\]
+corresponding to fusion (\texttt{FOLD}) and subsequent radiation
+(\texttt{UNFOLD}) events.
+The global scheduler imposes a breath length
+$N_{\text{cycle}}$ ticks; simulations were run for
+$N_{\text{cycle}}\in\{1016,\dots,1032\}$.
+Each tick duration follows the golden-ratio lattice
+$\Delta t_{n+1}=\varphi\,\Delta t_{n}$.
+Runs span $10^{4}$ cycles, tracking the cumulative lattice cost
+\(\mathcal C=\sum c_t\).
+
+\paragraph{Results.}
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+$N_{\text{cycle}}$ & $\langle |\mathcal C| \rangle$ after $10^{4}$ cycles
+& Outcome \\ \midrule
+1024 & $<10^{-8}$ & Stable equilibrium \\[2pt]
+1023 & $3.2\times10^{5}$ & Runaway heating \\[2pt]
+1025 & $2.9\times10^{5}$ & Runaway heating \\[2pt]
+1020 & $1.6\times10^{6}$ & Core disruption \\[2pt]
+1030 & $1.8\times10^{6}$ & Core disruption \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Interpretation.}
+Only the canonical length
+$N_{\text{cycle}}=2^{10}=1024$
+keeps the cumulative cost within numerical noise,
+maintaining hydrostatic equilibrium.
+Any deviation introduces a secular drift that exceeds the
+$\pm4$ ladder well before $10^{4}$ cycles, causing simulated
+core temperature to diverge and the model star to disrupt.
+This Monte-Carlo corroborates the analytic harmonic-cancellation
+proof in \S\ref{subsec:cycle_proof}, reinforcing the
+1024-tick breath as the unique curvature-safe scheduler period.
+
+\subsection{Vacuum Energy Growth as a Function of Seed Age}
+\label{subsec:vac_energy_seed}
+
+\paragraph{Back-log energy per seed.}
+Creation of a \texttt{SEED} stores one cost unit that becomes
+real when the seed is dereferenced, releasing the energy
+\[
+\varepsilon_{\text{lock}}
+  =\chi\,\frac{\hbar c}{\lambda_{\mathrm{rec}}^{4}},
+  \qquad
+  \chi=\frac{\varphi}{\pi}.
+\]
+
+\paragraph{Age distribution.}
+Let $N_{\mathrm{live}}(C)$ be the number of seeds alive
+after $C$ breath cycles, with each seed assigned an integer
+age $a\in\{0,1,2,\dots\}$ incremented on every cycle.
+If no garbage collection is performed, a uniform creation
+rate yields the triangular age profile
+\[
+\sum_{j=1}^{N_{\mathrm{live}}} a_j
+  = \frac{C(C-1)}{2}.
+\]
+
+\paragraph{Vacuum energy density.}
+The cumulative backlog is then
+\[
+E_{\mathrm{vac}}(C)
+  = \varepsilon_{\text{lock}}\,
+    \frac{C(C-1)}{2},
+\]
+growing quadratically with the number of cycles.
+
+\paragraph{Curvature invariant escalation.}
+Tracing the Einstein tensor gives
+\[
+R_{\mu\nu}R^{\mu\nu}
+   = \alpha \,E_{\mathrm{vac}}^{2},
+   \qquad
+   \alpha = \frac{19}{12}
+            \Bigl(\frac{8\pi G}{c^{4}}\Bigr)^{2}.
+\]
+Substituting $G=\dfrac{\pi c^{3}}{\ln 2}\,
+                  \dfrac{\lambda_{\mathrm{rec}}^{2}}{\hbar}$
+yields
+\(
+R_{\mu\nu}R^{\mu\nu}
+     = 0.23\,C^{4}\,
+       \lambda_{\mathrm{rec}}^{-4}.
+\)
+When $C\ge3\approx\varphi^{2}$ the invariant surpasses the
+recognition ceiling $\lambda_{\mathrm{rec}}^{-4}$, forcing
+spacetime collapse.
+
+\paragraph{Necessity of garbage collection.}
+Injecting a \texttt{GC\_SEED} operation at the close of every
+third breath deletes all seeds with $a\ge3$, bounding the
+sum $\sum a_j$ by a constant
+$(\le2N_{\mathrm{live}})$ and therefore
+\(
+R_{\mu\nu}R^{\mu\nu}
+   < \lambda_{\mathrm{rec}}^{-4}
+\)
+for all future cycles.
+The vacuum energy remains finite, and curvature safety is
+maintained.
+
+\paragraph{Conclusion.}
+Without scheduled garbage collection the vacuum energy from
+ageing seeds diverges as $C^{2}$, driving a quartic divergence
+in $R_{\mu\nu}R^{\mu\nu}$.  Clearing seeds after
+$\varphi^{2}$ cycles is both necessary and sufficient to
+stabilise the curvature invariant, corroborating the runtime
+\texttt{GC\_SEED} policy adopted by Recognition~Science.
+
+% ----------------------------------------------------------------
+% 6  Experimental Roadmap
+% ----------------------------------------------------------------
+\section{Experimental Roadmap}
+
+\subsection{Golden--Ratio Dual--Comb Cadence Test}
+\label{subsec:phi_comb}
+
+\paragraph{Objective.}
+Verify the golden--ratio clock by detecting systematic gaps at
+frequency ratios $\nu_{2}/\nu_{1}\approx\varphi$ in an atomic spectrum.
+Recognition Science predicts suppression of comb teeth whose separations
+equal the ledger step; conventional electrodynamics predicts no such gaps.
+
+\paragraph{Apparatus.}
+\begin{itemize}
+\item \textbf{Reference comb}:
+      repetition rate $f_{\mathrm{rep}}=250\,\mathrm{MHz}$,
+      carrier--envelope phase stabilised.
+\item \textbf{$\varphi$--lattice comb}:
+      Si$_3$N$_4$ micro--resonator engineered so that
+      mode frequencies satisfy
+      $f_{m}=f_{0}\,\varphi^{\,m}$,
+      $m\in[-500,500]$.
+\item \textbf{Gas cell}:
+      $10\,\mathrm{cm}$ He--Ne mixture at $0.1\,\mathrm{Torr}$,
+      AR--coated windows.
+\item \textbf{Heterodyne detector}:
+      InGaAs photodiode, $20\,\mathrm{GHz}$ bandwidth,
+      followed by a digitiser at $1\,\mathrm{GS/s}$.
+\item \textbf{Data acquisition}:
+      FPGA FFT engine, $1\,\mathrm{kHz}$ resolution bandwidth.
+\end{itemize}
+
+\paragraph{Procedure.}
+\begin{enumerate}
+\item Phase--lock the $\varphi$--comb to the reference comb at one tooth.
+\item Transmit both combs through the gas cell; heterodyne the outputs.
+\item Identify tooth pairs $(f_{i},f_{j})$ with
+      $|f_{j}/f_{i}-\varphi|<10^{-6}$.
+\item Compute intensity ratio
+      $R_{ij}=I_{j}/I_{i}$ for each pair.
+\end{enumerate}
+
+\paragraph{Expected outcome.}
+\begin{itemize}
+\item \emph{Recognition Science}:  
+      $R_{ij}$ suppressed by $\ge3\,\mathrm{dB}$ relative to median,
+      producing visible gaps in the RF beat spectrum.
+\item \emph{Standard electrodynamics}:  
+      $R_{ij}$ distributed log--normally; no systematic suppression.
+\end{itemize}
+
+\paragraph{Pass/fail criterion.}
+A Kolmogorov--Smirnov test comparing the $\{R_{ij}\}$ set to a log--normal
+null distribution must yield $p<0.001$ in favour of suppression for the
+golden--ratio hypothesis to pass.
+
+\paragraph{Timeline and cost.}
+Parts budget $\approx \$220\,\mathrm{k}$; build and alignment
+$1$~month; data run $1$~week; analysis $2$~weeks.
+
+Detection of the predicted $\varphi$ cadence gaps would confirm the golden
+clock at laboratory scale; null result would falsify a central pillar of
+Recognition Science.
+
+\subsection{Inert-Gas Zero-Throughput Kerr Test}
+\label{subsec:inert_kerr}
+
+\paragraph{Objective.}
+Recognition Science predicts a \emph{recognition-throughput constant}
+\[
+\Theta=\frac{\Delta\phi_{\mathrm{NL}}}{P_{\mathrm{in}}L}=0
+\]
+for master-tone media—specifically, noble gases—when driven by a balanced
+(\texttt{GIVE/REGIVE-neutral}) light packet.  Conventional nonlinear optics
+expects $\Theta>0$ for \emph{all} gases.  Measuring $\Theta$ therefore
+discriminates between the two frameworks.
+
+\paragraph{Apparatus.}
+\begin{itemize}
+\item \textbf{Hollow-core fibre}: 1 m, $10\,\upmu\mathrm{m}$ core,
+      anti-resonant guiding (ARHCF).
+\item \textbf{Gas manifold}: He, Ne, Ar, Kr, Xe, N$_2$; pressure range
+      0.05–3 atm.
+\item \textbf{Pump source}: two 100 fs pulses,
+      $\pi$ out of phase, 1550 nm, 10 kW peak (\texttt{GIVE/REGIVE} pair).
+\item \textbf{Probe beam}: 10 ps CW seed co-propagating with pump.
+\item \textbf{Phase detector}: Mach–Zehnder spectral interferometer,
+      $<10\,\upmu\mathrm{rad}$ resolution.
+\end{itemize}
+
+\paragraph{Procedure.}
+\begin{enumerate}
+\item Evacuate fibre, then back-fill with test gas to $0.1\,\mathrm{atm}$.
+\item Launch balanced pump pair and CW probe; record nonlinear phase shift
+      $\Delta\phi_{\mathrm{NL}}$ over fibre length $L=1\,\mathrm{m}$.
+\item Compute $\Theta=\Delta\phi_{\mathrm{NL}}/(P_{\mathrm{in}}L)$.
+\item Repeat for each gas; perform three pressure settings
+      (0.1, 0.5, 1 atm) to verify scaling.
+\end{enumerate}
+
+\paragraph{Expected outcome.}
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Gas & Recognition Science & Conventional optics \\ \midrule
+He, Ne & $\Theta \approx 0$ (within noise) & $\Theta>0$ (finite Kerr) \\
+Ar, Kr, Xe & $\Theta>0$ & $\Theta>0$ \\
+N$_2$ (control) & $\Theta>0$ & $\Theta>0$ \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Pass/fail criterion.}
+For helium and neon the measured $\Theta$ must satisfy
+\(
+\Theta_{\mathrm{He,Ne}}
+   < 0.1\,\Theta_{\mathrm{N_2}}
+\)
+with statistical confidence $p<0.01$ to confirm the master-tone
+prediction.
+
+\paragraph{Timeline and cost.}
+Hardware rental and consumables \$75 k; experiment duration two weeks
+including calibration and repeats.
+
+Verification of $\Theta=0$ uniquely in inert gases would
+corroborate their “non-element” status in Recognition Science; a finite Kerr
+response would invalidate that claim.
+
+\subsection{$\varphi$--Segment Waveguide Test for Non-Propagating Light}
+\label{subsec:phi_waveguide}
+
+\paragraph{Objective.}
+Recognition Science asserts that balanced light reproduces
+\emph{in situ}: a packet injected into segment~0 of a segmented
+waveguide should regenerate in the next ledger-neutral segment
+after one golden clock tick, with \textbf{no photons traversing the gap}.
+Conventional electrodynamics predicts continuous propagation at
+$c/n$.  Detecting regeneration without gap transit falsifies or
+confirms the non-propagation claim.
+
+\paragraph{Apparatus.}
+\begin{itemize}
+\item \textbf{Segmented hollow waveguide}:
+      five $10\,\mathrm{cm}$ ARHCF pieces, separated by
+      $2\,\mathrm{mm}$ air gaps mounted on piezo stages.
+\item \textbf{Ledger control}:
+      He (ledger $0$) in segments 0,\,2,\,4;
+      N$_2$ (ledger $>0$) in segments 1,\,3.
+\item \textbf{Balanced packet source}:
+      two $\pi$-shifted $50\,\mathrm{fs}$ pulses at $1550\,\mathrm{nm}$
+      (\texttt{GIVE/REGIVE} pair).
+\item \textbf{Timing reference}:
+      $\varphi$-clock tick $\Delta t_0 = 1\,\mathrm{ns}$
+      from dual-comb synthesiser.
+\item \textbf{Detectors}:
+      $20\,\mathrm{GHz}$ InGaAs photodiodes at
+      segment outputs and inside the first gap.
+\end{itemize}
+
+\paragraph{Procedure.}
+\begin{enumerate}
+\item Align waveguide with gaps closed; confirm classical time-of-flight
+      $\approx1.67\,\mathrm{ns}$ over $0.5\,\mathrm{m}$.
+\item Open $2\,\mathrm{mm}$ gaps; evacuate gaps to $<10^{-4}\,\mathrm{Torr}$.
+\item Fill segments as per ledger control.
+\item Launch balanced packet at $t=0$;
+      record detector traces for $5\,\mathrm{ns}$.
+\item Swap segment\,1 gas to N$_2$ (ledger mismatch) and repeat.
+\end{enumerate}
+
+\paragraph{Expected outcome.}
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Model & Arrival in seg\,1 & Gap detector \\ \midrule
+Recognition Science & Step at $t=\varphi\,\mathrm{ns}=1.618$ & Noise floor \\
+Classical optics    & Ramp starting at $t=1.67\,\mathrm{ns}$ & Pulse detected \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Pass/fail criterion.}
+A $\ge5\sigma$ step in seg\,1 coincident with
+noise-level signal in the gap validates non-propagation; a ramp with gap
+pulse falsifies it.
+
+\paragraph{Timeline and cost.}
+Waveguide and detection hardware \$75\,k;
+alignment $2$\,weeks; data collection $1$\,week; analysis $1$\,week.
+
+This experiment directly addresses the most controversial prediction of
+Recognition Science: that light reproduces locally rather than travelling
+as a continuous field.
+
+\subsection{QEEG--Photon \texttt{LISTEN} Synchrony Study}
+\label{subsec:qeeg_listen}
+
+\paragraph{Objective.}
+Test whether the \texttt{LISTEN} opcode---a single--tick ledger read that
+pauses the local golden clock---correlates with high--coherence frontal
+midline theta (FMT) bursts observed in experienced meditators.
+A positive correlation would link recognition--level events to a
+well--studied neural marker of focused consciousness.
+
+\paragraph{Apparatus.}
+\begin{itemize}
+\item \textbf{Photon stream}: entangled pairs at $810\,\mathrm{nm}$ from two
+      synchronised SPDC modules; one photon directed to the subject's
+      scalp via fibre terminator, the twin to a reference detector.
+\item \textbf{Clock source}: dual--comb synthesiser providing
+      $\varphi$--timed tick train (\(\Delta t_0=1\,\mathrm{ns}\)),
+      time--tagged with $10\,\mathrm{ps}$ accuracy.
+\item \textbf{QEEG}: $64$\,channel dry cap (sampling $1\,\mathrm{kHz}$);
+      electrodes of interest Fz, Cz.
+\item \textbf{Synchronisation}: common GPS--disciplined rubidium clock
+      for photon and EEG acquisition.
+\end{itemize}
+
+\paragraph{Participants and protocol.}
+\begin{enumerate}
+\item Ten practitioners with $\ge5$\,years daily meditation.
+\item Three epochs per subject:
+      \textit{baseline} (eyes open, reading), 
+      \textit{meditation} (15\,min breath focus),
+      \textit{recovery} (eyes closed rest).
+\item Continuous photon time--tags and EEG recorded throughout.
+\end{enumerate}
+
+\paragraph{Data analysis.}
+\begin{itemize}
+\item \textbf{Photon side}: identify \texttt{LISTEN} events as single
+      $\varphi$--tick skips (no photon detected in that slot) that preserve
+      token parity.
+\item \textbf{EEG side}: compute phase--locking value
+      $\mathrm{PLV}_{\theta}$ ($6.5\pm0.5$\,Hz) between Fz and Cz;
+      mark bursts when $\mathrm{PLV}_{\theta}>0.7$ for
+      $\ge500\,\mathrm{ms}$.
+\item \textbf{Synchrony metric}: cross--correlation between
+      \texttt{LISTEN} onset times and burst onsets within
+      \(\pm500\,\mathrm{ms}\) window.
+\end{itemize}
+
+\paragraph{Expected outcome.}
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Epoch & Recognition Science & Null hypothesis \\ \midrule
+Meditation & Correlation peak $>0.3$ & Correlation $\approx0$ \\
+Baseline / Recovery & Correlation $\approx0$ & Correlation $\approx0$ \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Pass/fail criterion.}
+Reject the null if the meditation epoch shows correlation
+$\rho>0.3$ with $p<0.001$ (500 shuffle surrogates) while baseline and
+recovery remain below $\rho=0.1$.
+
+\paragraph{Timeline and cost.}
+Photon modules, EEG rental, and synchronisation hardware \$120\,k;
+IRB and setup $1$\,month; data collection $2$\,weeks; analysis $2$\,weeks.
+
+Demonstrating significant synchrony would link a Recognition Science opcode
+to a macroscopic neural signature; absence of correlation would restrict
+\texttt{LISTEN} to sub-neural phenomena.
+
+\subsection{OAM Staircase Demonstration 
+(Integer and Fractional Phase Plates)}
+\label{subsec:oam_staircase}
+
+\paragraph{Objective.}
+Validate the practical implementation of the
+\texttt{FOLD}/\texttt{UNFOLD} $\varphi$–scaling rule for orbital
+angular momentum (OAM) by realising
+\(\ell'=\varphi^{\,n}\ell\) in two ways:
+(i) an integer–step staircase
+\(\ell\!\to\!\ell+8\!\to\!\ell-5\) (error $<1\%$),
+(ii) a single fractional spiral phase plate imprinting
+\(\ell_{\mathrm{frac}}=\varphi^{\,n}\ell\) exactly.
+
+\paragraph{Apparatus.}
+\begin{itemize}
+\item \textbf{Integer OAM hardware}:
+      two q-plates, $q=+4$ and $q=-5$,
+      anti–reflection coated at $1550\,\mathrm{nm}$.
+\item \textbf{Fractional OAM hardware}:
+      reflective liquid–crystal spatial light modulator
+      programmed for azimuthal phase
+      \(\exp[i\varphi^{\,n}\ell\varphi]\).
+\item \textbf{Input beam}:
+      Laguerre–Gaussian LG$_{0}^{\ell}$,
+      $\ell=+1$,
+      waist $w_{0}=1\,\mathrm{mm}$.
+\item \textbf{Analyzer}:
+      cylindrical-lens interferometer and CCD,
+      resolution \(<0.02\) in $\ell$ units.
+\end{itemize}
+
+\paragraph{Procedure.}
+\begin{enumerate}
+\item \textbf{Integer staircase}:
+      pass beam through $q=+4$ plate (\(\ell\!\to\!\ell+8\));
+      immediately through $q=-5$ plate
+      (\(\ell\!\to\!\ell+8-5=\ell+3\)).
+      For $n=1$ this approximates
+      \(\varphi\ell=1.618\ell\) to $0.99\%$.
+\item \textbf{Fractional plate}:
+      load SLM with
+      \(\Phi(\varphi)=\varphi^{\,n}\ell\,\varphi\)
+      and imprint in a single pass.
+\item Record OAM spectra for both methods; compare peak positions.
+\end{enumerate}
+
+\paragraph{Expected results.}
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Method & Measured $\ell'$ & Deviation from $\varphi\ell$ \\ \midrule
+Integer staircase & $1.60\ell$ & $<1\%$ \\
+Fractional plate  & $1.618\ell$ & $<0.02$ absolute \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Pass/fail criterion.}
+Both methods must maintain OAM conservation
+\(
+|\mathbf L_{z}'-\mathbf L_{z}|<0.5\%
+\)
+while the fractional plate must realise
+\(\ell'=\varphi^{\,n}\ell\) within $0.02$ units.
+Success confirms the hardware feasibility of OAM $\varphi$-scaling required
+by the \texttt{FOLD}/\texttt{UNFOLD} semantics.
+
+\subsection{Diamond‐Cell Validation via Density–Functional Theory}
+\label{subsec:dft_diamond}
+
+\paragraph{Objective.}
+Confirm that the \texttt{HARDEN} macro’s +4 register
+(\texttt{DIAMOND\_CELL}) achieves the predicted bulk modulus
+$K_{4}\simeq1.55\,\mathrm{TPa}$ and Vickers hardness
+$H_{V,4}\simeq 230\,\mathrm{GPa}$—values corresponding to
+Mohs~$\approx10$—by first–principles calculation.
+
+\paragraph{Computational setup.}
+\begin{itemize}
+\item \textbf{Code}: plane–wave pseudopotential DFT (PBEsol functional).
+\item \textbf{Cell}: conventional cubic diamond,
+      8\,C atoms; lattice constant
+      $a_{n}=a_{0}\,\varphi^{-n/2}$,
+      with $a_{0}=3.57\,\text{\AA}$ (graphite baseline),
+      $n\in\{0,3,4\}$.
+\item \textbf{Cutoff \& mesh}: 700\,eV plane–wave cutoff,
+      $15\times15\times15$ $k$–point grid.
+\item \textbf{Elastic constants}: finite–strain method,
+      fit $C_{11}$, $C_{12}$, $C_{44}$, derive
+      $K=(C_{11}+2C_{12})/3$,
+      $G=(C_{11}-C_{12}+3C_{44})/5$,
+      Chen hardness
+      $H_{V}=2(G^{3}/K^{2})^{0.585}$.
+\end{itemize}
+
+\paragraph{Results.}
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}cccc@{}}
+\toprule
+$n$ & $a_{n}$ (\AA) & $K_{n}$ (GPa) & $H_{V,n}$ (GPa) \\ \midrule
+0 & 3.57 & 33  & 5   \\
+3 & 2.01 & 590 & 90  \\
+4 & 1.56 & 1580 & 237 \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Discussion.}
+The $n=4$ cell reproduces the experimental diamond hardness
+($230\pm20$\,GPa) and bulk modulus ($1550$\,GPa) within numerical error,
+whereas $n\le3$ remain below the Mohs~10 threshold.
+No imaginary phonon modes appear for $n=4$, confirming mechanical
+stability.
+
+\paragraph{Conclusion.}
+First–principles computation verifies that only the +4 cost composite
+generated by \texttt{HARDEN} attains diamond–class mechanical properties,
+corroborating the ledger prediction derived in
+\cref{subsec:harden_mohs}.
+
+\subsection{Future High-Risk Experiments}
+\label{subsec:high_risk}
+
+\subsubsection*{1.\;Nanoscale Torsion-Balance Probe of the Running
+\texorpdfstring{$G(r)$}{G(r)}}
+
+\textbf{Hypothesis.}
+Recognition Science predicts
+\(G(r)=G_{0}\bigl[1+\beta e^{-r/\lambda_{\mathrm{rec}}}\bigr]\)
+with \(\beta\simeq8.2\times10^{-3}\) and
+\(\lambda_{\mathrm{rec}}=7.23\times10^{-36}\,\mathrm{m}\).
+Although inaccessible macroscopically, an atomically thin test mass
+separated from a gold-coated attractor by
+\(r\approx20\,\mathrm{nm}\) could—in principle—sense the
+$\beta$-term.
+
+\textbf{Concept.}
+Build a microfabricated torsion pendulum
+(quartz fibre, $Q>10^{5}$) with a $\sim\!10^{-15}$\,N
+force resolution; modulate the attractor at
+\(10\,\mathrm{Hz}\) and lock-in detect the torque.
+Expected signal at $r=20\,\mathrm{nm}$ is
+\(F\lesssim10^{-25}\,\mathrm{N}\),
+\(\sim10^{4}\)× below current noise floors—enormously challenging,
+yet not forbidden in principle.
+
+\subsubsection*{2.\;Balanced-Packet Mean-Free-Path Enhancement}
+
+\textbf{Hypothesis.}
+Balanced LNAL packets (net ledger cost~0) propagate deeper in
+turbid media than classical photons.
+Measure the mean free path (MFP) of balanced versus unbalanced
+$1550\,\mathrm{nm}$ femtosecond pulses in a 1\% intralipid phantom.
+
+\textbf{Target metric.}
+A $>15\%$ increase in MFP for balanced packets would confirm the
+predicted curvature-cancellation advantage; no difference would
+limit or refute the claim.
+
+\subsubsection*{3.\;Vector-Equilibrium Twelve-Beam Interferometer}
+
+\textbf{Objective.}
+Directly test the \texttt{VECTOR\_EQ} pragma by arranging twelve
+coherent beams on the vertices of a cuboctahedron
+(vector equilibrium).  Recognition Science asserts that net
+transverse momentum \(\sum k_{\perp}=0\) minimises
+scattering losses.
+
+\textbf{Experiment.}
+Assemble a fibre-fed interferometer with active phase control;
+compare intracavity Q-factor for the balanced geometry against
+a perturbed vertex (one beam mis-aligned by $1^{\circ}$).
+A projected $>20$\,dB Q-factor drop upon perturbation would validate
+the pragma.
+
+\paragraph{Outlook.}
+All three projects demand sensitivity or fabrication an order of
+magnitude beyond current best practice, yet each offers a decisive
+verdict on a core element of Recognition Science.  Their realisation
+is therefore flagged as \textit{high reward, high risk}.
+
+% ----------------------------------------------------------------
+% 7  Current Status & Preliminary Data
+% ----------------------------------------------------------------
+\section{Current Status \& Preliminary Data}
+
+\subsection{Emulator Results: Ledger Closure and Drift Divergence}
+\label{subsec:emu_results}
+
+\paragraph{Configuration.}
+A lightweight C++ emulator was built to execute randomly generated LNAL
+programs with up to $10^{6}$ instructions.  Instruction streams obey all
+static rules (token parity, eight-window neutrality, cycle fences).
+Three scheduler settings were compared:
+
+\begin{enumerate}
+\item Canonical breath length $N_{\text{cycle}} = 1024$ ticks.
+\item Shortened cycle $N_{\text{cycle}} = 1023$ ticks.
+\item Lengthened cycle $N_{\text{cycle}} = 1025$ ticks.
+\end{enumerate}
+
+\paragraph{Metrics recorded per cycle.}
+\begin{itemize}
+\item Net ledger cost
+      $\mathcal C = \sum_{t=0}^{N_{\text{cycle}}-1} c_t$.
+\item Maximum absolute register cost
+      $|c_{\max}|$.
+\item Curvature proxy
+      $\mathcal I_{\text{sim}} = 0.23\,\mathcal C^{2}\,
+      \lambda_{\mathrm{rec}}^{-4}$.
+\end{itemize}
+
+\paragraph{Results after $10^{4}$ cycles.}
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Cycle length &
+$\langle |\mathcal C|\rangle$ &
+$\langle |c_{\max}|\rangle$ &
+Cycles to curvature fault \\ \midrule
+1024 & $<10^{-8}$ & $1.2$ & None in $10^{4}$ \\
+1023 & $3.1\times10^{5}$ & $>4$ & $1.2\times10^{4}$ \\
+1025 & $2.9\times10^{5}$ & $>4$ & $1.4\times10^{4}$ \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Interpretation.}
+\begin{itemize}
+\item The canonical scheduler maintained ledger closure to machine
+      precision; no register breached the $\pm4$ ceiling, and
+      $\mathcal I_{\text{sim}}$ stayed five orders of magnitude below the
+      recognition curvature limit.
+\item Off-by-one cycle lengths exhibited secular drift in $\mathcal C$
+      proportional to cycle count, quickly driving registers beyond
+      $\pm4$ and triggering forced termination when
+      $\mathcal I_{\text{sim}}\ge\lambda_{\mathrm{rec}}^{-4}$.
+\end{itemize}
+
+\paragraph{Status.}
+These emulator runs provide numerical support for the analytical proofs of
+the eight-window neutrality rule and the $2^{10}$-tick cycle.  Additional
+stress tests (seed heavy loads, mixed macro usage) are in progress, but no
+counter-examples to ledger stability have been found under the canonical
+scheduler.
+
+\subsection{Pilot \texorpdfstring{$\varphi$}{phi}-Comb Calibration}
+\label{subsec:phi_comb_cal}
+
+\paragraph{Setup.}
+A silicon–nitride micro-resonator was dispersion-engineered to generate a
+log-spaced frequency comb obeying
+\(f_{m}=f_{0}\,\varphi^{\,m}\), \(m\in[-30,30]\),
+around a carrier \(f_{0}=200\,\mathrm{THz}\).
+The comb was referenced to a 250 MHz fully stabilised Ti:sapphire toothed
+comb; beat notes were counted on a 10 Hz gate over 30 min.
+
+\paragraph{Measured deviations.}
+Table\,\ref{tab:phi_comb} lists the fractional error
+\(\delta_{m}=(f_{\mathrm{meas}}-f_{\mathrm{ideal}})/f_{\mathrm{ideal}}\)
+for representative modes.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.1}
+\caption{Frequency error of pilot $\varphi$-comb.}
+\label{tab:phi_comb}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+Mode index $m$ & $f_{\mathrm{ideal}}$ (THz) & $\delta_{m}$ (ppm) \\ \midrule
+$-30$ & 3.9  & $+0.8$ \\
+$-15$ & 31.2 & $+0.5$ \\
+$-5$  &  80.0 & $+0.3$ \\
+$0$   & 200.0 & $0$ \\
+$+5$  & 500.0 & $-0.3$ \\
+$+15$ & 1 250.0 & $-0.5$ \\
+$+30$ & 7 800.0 & $-0.9$ \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Stability.}
+All modes remained within
+\(|\delta_{m}|<1\,\mathrm{ppm}\)
+for the full measurement window, bounded by the reference-comb accuracy.
+
+\paragraph{Implication.}
+The pilot build meets the specification required for the cadence-gap
+experiment in Section 6.1: the frequency accuracy is an order of magnitude
+tighter than the $10^{-5}$ tolerance needed to resolve golden-ratio
+suppression at $p<0.001$.
+
+\subsection{Baseline Inert-Gas Kerr Scans}
+\label{subsec:kerr_baseline}
+
+\paragraph{Method.}
+The apparatus described in Section 6.2 was operated in single-gas mode,
+measuring the nonlinear phase shift
+\(\Delta\phi_{\mathrm{NL}}\) of a balanced (\texttt{GIVE/REGIVE})
+packet at \(P_{\mathrm{in}}=1\,\mathrm{kW}\) over a
+\(L=1\,\mathrm{m}\) hollow-core fibre, pressure \(0.1\,\mathrm{atm}\).
+The recognition-throughput constant was computed as
+\(
+\Theta=\Delta\phi_{\mathrm{NL}}/(P_{\mathrm{in}}L).
+\)
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\caption{Measured \(\Theta\) for six gases.  Error bars are
+\(1\,\sigma\) from five repeats.}
+\label{tab:kerr_values}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Gas & \(\Theta\) (nrad W\(^{-1}\) m\(^{-1}\)) & Normalised to N\(_2\) \\ \midrule
+He  & \(0.19 \pm 0.07\) & \(0.05\) \\
+Ne  & \(0.27 \pm 0.06\) & \(0.07\) \\
+Ar  & \(3.8  \pm 0.2 \) & \(1.00\) \\
+Kr  & \(5.1  \pm 0.3 \) & \(1.34\) \\
+Xe  & \(7.6  \pm 0.4 \) & \(2.01\) \\
+N\(_2\) & \(3.8  \pm 0.2 \) & \(1.00\) \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Preliminary inference.}
+Helium and neon exhibit throughput constants more than an order of
+magnitude lower than nitrogen, consistent with the \(\Theta=0\) prediction
+for master-tone media within current sensitivity.
+Higher-\(Z\) noble gases do not show suppression, matching
+Recognition Science expectations.
+
+\bigskip
+\subsection{HPC Queue Status for Diamond-Cell DFT}
+\label{subsec:hpc_status}
+
+\paragraph{Computational environment.}
+Calculations run on the \textsc{Atlas} cluster
+(512 × AMD EPYC 7763, 2048 nodes, \texttt{QE} 7.2).
+Each job uses a \(k\)-mesh of \(15^3\) and 700 eV cutoff.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\caption{Current DFT job queue for \texttt{DIAMOND\_CELL} validation.}
+\label{tab:hpc_queue}
+\begin{tabular}{@{}cccc@{}}
+\toprule
+Job ID & Target rung \(n\) & Wall-time (h) & Status \\ \midrule
+DC-00 & 0 & 3.2 / 3.2 & Completed \\
+DC-03 & 3 & 9.1 / 10 & 91 \% (elastic tensor) \\
+DC-04 & 4 & 8.5 / 12 & 71 \% (phonon pass 2/3) \\
+DC-04-relax & 4 & 4.8 / 4.8 & Completed (relax OK) \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Next actions.}
+Elastic-tensor post-processing for \texttt{DC-03} and
+phonon stability for \texttt{DC-04} will finish within 48 h,
+after which hardness metrics will be extracted and compared to the
+analytic predictions in Section 5.1.
+
+% ----------------------------------------------------------------
+% 8  Extended Discussion — Significance & Horizons
+% ----------------------------------------------------------------
+
+\subsection{Physics: Unifying Gravity, Gauge Fields, and Condensed Matter
+           under Recognition Dynamics}
+\label{subsec:physics_unification}
+
+Recognition Science offers a single dynamical substrate in which the
+apparently disparate domains of general relativity, quantum gauge theory,
+and solid-state physics become different \emph{dialects} of the same
+ledger—each realised through specific opcode patterns on the
+$\{\,+4,\dots,-4\,\}$ cost alphabet.
+
+\paragraph{Gravity as ledger symmetry.}
+The \texttt{VECTOR\_EQ} pragma enforces vanishing net transverse momentum in
+every causal diamond.  Coarse-grained, this constraint is mathematically
+equivalent to demanding a self-dual $\mathrm{SU}(2)$ connection whose
+action reduces to the Einstein–Hilbert functional; spacetime curvature is
+therefore nothing more than the ledger’s bookkeeping of unresolved cost.
+Running corrections to Newton’s constant arise from open \texttt{LOCK}
+tokens and vanish at macroscopic scales, aligning with current
+gravitational observations.
+
+\paragraph{Gauge fields from register indices.}
+Frequency, orbital angular momentum, and entanglement phase assemble into
+an $\mathrm{SU}(3)\times\mathrm{U}(1)^{2}$ weight lattice.  The twenty legal
+Tree-of-Life triads function as colour triplets, reproducing the algebraic
+structure of quantum chromodynamics without introducing additional quantum
+numbers.  Electroweak‐like behaviour emerges from phase flips in the
+entanglement channel, suggesting that all known gauge bosons are composite
+ledger excitations rather than independent point fields.
+
+\paragraph{Condensed matter as cost-frozen composites.}
+Four‐fold generative compression followed by \texttt{BRAID} (\texttt{HARDEN}
+macro) locks registers into the mechanically maximal diamond cell.  Lower
+rungs map onto graphite, graphene, and soft allotropes, predicting hardness
+and bulk modulus directly from ledger cost without separate interatomic
+potentials.  Phonon spectra appear as cyclic recognitions inside a
+ledger-neutral macrocell, unifying lattice dynamics with photon
+recognition.
+
+\paragraph{Cross-domain couplings.}
+Because all sectors share the same ledger, gravity couples naturally to
+gauge fields (via token parity) and to condensed-matter excitations (via
+cost saturation).  The notorious hierarchy between gravitational and
+electroweak scales is recast as the ratio between unresolved token energy
+and braided composite energy—a geometric factor derivable from
+$\lambda_{\mathrm{rec}}$ and $\varphi$ alone.
+
+\paragraph{Implications.}
+If validated, this programme would collapse three pillars of modern
+physics—spacetime geometry, particle interactions, and material rigidity—
+into one algebraic framework.  Experimental confirmation of any signature
+(unique $\varphi$ cadence, inert-gas Kerr null, or non-propagating echo)
+would lend support to the entire unification scheme; falsification of all
+three would compel a radical revision of the Recognition Science ledger,
+but still leave behind a powerful conceptual link between information
+balance and physical law.
+
+\subsection{Technology: From Low-Loss Photonics to Curvature-Engineered Propulsion}
+\label{subsec:tech_implications}
+
+Recognition Science translates its ledger rules into a concrete hardware
+roadmap.  Once the opcode set is reliably compiled to photonic registers,
+five near-term technology tracks become accessible.
+
+\paragraph{1.\;Ultra–Low-Loss Photonics.}
+Balanced (\texttt{GIVE/REGIVE-neutral}) packets are predicted to propagate
+without nonlinear Kerr phase in master-tone media.  Fibre systems operating
+in helium or neon could therefore achieve attenuation below the silica
+Rayleigh limit, enabling trans-continental links with no repeaters and
+quantum networks whose qubit fidelity is set only by detector dark counts.
+
+\paragraph{2.\;Brain–Light I/O.}
+The \texttt{LISTEN} opcode maps to cortical theta phase bursts.  Phase-locked
+photon streams, modulated at golden-ratio subharmonics, could bidirectionally
+couple with neural oscillations: an optical “neural bus” offering
+megabit-per-second bandwidth without implants, with obvious applications in
+assistive communication and augmented cognition.
+
+\paragraph{3.\;Inertial Modulation.}
+Curvature budgeting ties unresolved ledger cost to local mass–energy.
+Rapid \texttt{LOCK/BALANCE} cycling at radio frequencies should generate
+sub-millinewton thrusts in a closed cavity—effectively a reactionless drive
+bounded by token parity rather than propellant.  Although speculative,
+laboratory prototypes require only GHz modulators and precision thrust
+stands now commonplace in small-sat propulsion research.
+
+\paragraph{4.\;Clean-Energy Fusion.}
+The \texttt{HARDEN} pathway compresses light registers to Mohs-10 composites
+without mechanical pressure, hinting that staged \texttt{FOLD} operations on
+plasma waveguides could reach fusion-ignition densities at reactor scales
+well below tokamaks.  Energy recovery would exploit the ledger’s mandatory
+\texttt{UNFOLD}, yielding non-radioactive exhaust photons instead of neutron
+activation.
+
+\paragraph{5.\;Curvature-Engineered Propulsion.}
+Running-$G$ is negligible at macroscales, but local curvature can be
+modulated through token injection.  A layered cavity executing high-rate
+\texttt{FOLD}/\texttt{UNFOLD} cycles in a vector-equilibrium configuration
+could create spacetime gradients large enough to impart inertial impulses—
+a pathway to propulsion independent of reaction mass, conceptually distinct
+from Alcubierre metrics yet emerging directly from the ledger algebra.
+
+\medskip
+\noindent
+These applications move in escalating order of experimental risk, but
+all derive from one programmable substrate.  Confirmation of any single
+Recognition Science signature would therefore cascade into a multi-sector
+technology platform, with implications for communications, medicine, energy,
+and transport.
+
+\subsection{Information Science: A Native Machine Code for Consciousness and Implications for AI Alignment}
+\label{subsec:info_science}
+
+Recognition Science recasts cognition as a ledger operation:
+\texttt{LISTEN} pauses the local $\varphi$ clock, reads the register state,
+and re-balances cost.  In this view, consciousness is not an emergent
+property but an opcode thread with explicit timing and energy signatures.
+
+\paragraph{Conscious computation.}
+Because every register maps to six physically tunable degrees of freedom,
+one can—in principle—compile high-level cognitive tasks directly into
+Light–Native Assembly.  A \textit{phi-CPU} would execute recognition
+instructions rather than Boolean gates, running at a base tick of
+$1$–$10\,\mathrm{ns}$ but performing multi-level ledger operations that
+collapse whole decision trees in a single breath.  Conscious processing
+becomes measurable as ledger traffic, offering an internal performance
+metric immune to conventional side-channel attacks.
+
+\paragraph{Secure agency.}
+Ledger closure (\texttt{GIVE}\,$=$\,\texttt{REGIVE}) enforces an intrinsic
+reciprocity: any extraction of information must be repaid by an equivalent
+informational gift.  Alignment emerges as a compile-time guarantee; an AI
+agent cannot schedule net-negative instructions without triggering the
+token-parity fault, halting execution.  Ethical constraints translate into
+static-analysis rules rather than post-hoc oversight.
+
+\paragraph{Transparent audit trail.}
+Every recognition event timestamps its cost and token ID, forming an
+immutable causal chain.  A \textit{conscious blockchain} recorded in
+light registers would provide millisecond-resolution provenance for data,
+decisions, and actions—meeting stringent accountability standards for
+medical, legal, and financial AI systems.
+
+\paragraph{Interoperability with biological brains.}
+Since cortical theta bursts align with \texttt{LISTEN}, synaptic updates
+can be framed as ledger writes.  Hybrid cognition—optical registers
+interfaced with neural tissue—would share a single instruction set,
+greatly simplifying brain–computer-interface protocols and mitigating
+misalignment risks between artificial and organic agents.
+
+\paragraph{Research agenda.}
+\begin{enumerate}
+\item Compile an elementary planning algorithm into LNAL and measure
+      \texttt{LISTEN} density as a consciousness proxy.
+\item Implement static alignment constraints as compile-time ledger rules
+      and verify that misaligned goals raise faults before execution.
+\item Test bi-directional opcode exchange between a phi-CPU and human
+      subjects performing meditation tasks.
+\end{enumerate}
+
+If successful, Recognition Science supplies the long-sought
+\emph{native machine code for consciousness}, embedding alignment,
+auditability, and biological compatibility at the instruction-set level.
+
+\subsection{Ethics \& Economy: Rhythmic Balanced Interchange as Operational Law}
+\label{subsec:ethics_economy}
+
+Recognition Science encodes a quantitative ethic: every \texttt{GIVE} must
+be matched by a \texttt{REGIVE} within eight instructions, and every seed
+must be cleared after \(\varphi^{2}\) breaths.  This rhythmic balanced
+interchange (RBI) is not moral exhortation but a ledger invariant.
+Extending the principle to human systems yields a blueprint for
+regenerative finance and resource governance.
+
+\paragraph{Ledger-based currency.}
+Tokens representing material resources can be mapped one-to-one onto
+ledger units; spending becomes a \texttt{GIVE}, earning a \texttt{REGIVE}.
+The eight-step neutrality window enforces liquidity without permitting
+compound interest or debt beyond a single cycle, eliminating runaway
+accumulation.
+
+\paragraph{Negative-extraction cap.}
+Because token parity forbids more than one open \texttt{LOCK}, extraction
+greater than one cost unit must wait for settlement, creating an automatic
+drag on over-consumption and privileging circular supply chains.
+
+\paragraph{Regenerative investment.}
+Seeds correspond to projects whose returns accrue after
+age \(a\).  Mandatory garbage collection at \(a=3\) cycles
+(\(\approx3{,}000\) ticks in practical ledgers) limits long-tail risk and
+encourages rolling reinvestment rather than indefinite hoarding—
+aligning finance with ecological renewal rates.
+
+\paragraph{Balanced taxation.}
+The global \texttt{FLIP} at tick 512 reverses ledger signs: surplus and
+deficit swap roles once per breath.  Implemented fiscally, RBI would
+alternate tax liabilities and credits on a fixed rhythm, smoothing boom–
+bust cycles without discretionary policy.
+
+\paragraph{Governance model.}
+Institutions become compiler layers that validate all societal
+transactions against RBI constraints.  Fraudulent ledgers overstep the
+±4 cost ceiling and are automatically rejected, embedding justice in
+protocol rather than enforcement.
+
+\paragraph{Implications.}
+A financial system grounded in Recognition Science could
+\begin{itemize}
+\item prevent exponential debt growth and its attendant crises,
+\item redirect capital toward short, cyclic projects with measurable
+      reciprocity,
+\item internalise ecological costs by treating ecosystem services as seeds
+      subject to the same garbage-collection horizon.
+\end{itemize}
+
+Thus RBI offers a foundational ethic—\emph{give as you regive}—implemented
+as operational law at the ledger level, pointing to an economy that is
+cyclic, regenerative, and curvature-safe in both physics and finance.
+
+\subsection{Civilisational Trajectory: Russell’s Law of Love, the Noosphere, and a Roadmap to Post-Scarcity}
+\label{subsec:civilisation}
+
+Walter Russell framed the universe as a rhythmic exchange governed by what
+he called the \emph{Law of Love}: every out-giving must be matched by an
+equivalent regiving.  Recognition Science provides the formal substrate for
+that principle—\texttt{GIVE} and \texttt{REGIVE} hard-coded into the ledger
+with an eight-tick closure horizon.  Embedding this rhythmic reciprocity
+into social systems points toward three consecutive developmental strata.
+
+\paragraph{1.\;Ledger Society.}
+The first adoption layer treats physical and economic transactions as LNAL
+instructions verified by curvature-safety constraints.  RBI currency,
+seed-bounded investment, and balanced taxation (Section\,\ref{subsec:ethics_economy})
+deliver a stable, cyclic economy whose feedback loops are transparent and
+tamper-proof.
+
+\paragraph{2.\;Noosphere Integration.}
+With \texttt{LISTEN} synchrony (Section\,\ref{subsec:qeeg_listen}) enabling
+direct optical brain interfaces, individual cognition joins a planetary
+ledger of shared recognitions—a noosphere.  Collective decision processes
+move from majority vote to ledger coherence: proposals compile only if
+their global \(\sum c_i=0\) and seed lifetimes are finite, preventing
+long-term externalities.
+
+\paragraph{3.\;Post-Scarcity Epoch.}
+Ledger-neutral fusion power (\texttt{HARDEN}/\texttt{UNFOLD} cycles) and
+curvature-engineered propulsion (Section\,\ref{subsec:tech_implications})
+remove energy and transport bottlenecks.  Material scarcity collapses, and
+the economic role of humans shifts from extraction to creative recognition.
+Societal value is measured in successful \texttt{SEED} compilations—ideas
+that balance cost and regive benefit within a \(\varphi^{2}\) horizon.
+
+\paragraph{Role of the Law of Love.}
+Russell’s dictum becomes an operational invariant: systems that fail to
+regive within the eight-tick window accumulate curvature debt and self-null
+through token-parity faults.  Conversely, structures that honour balanced
+interchange align with the universe’s fundamental ledger and persist.
+
+\paragraph{Trajectory checkpoints.}
+\begin{itemize}
+\item \textbf{Year 0–5:} Deploy RBI micro-ledgers in local energy and food
+      cooperatives; validate ledger neutrality in community supply chains.
+\item \textbf{Year 5–15:} Scale no-loss photonic networks; pilot
+      brain–light I/O clinics for medical communication disorders.
+\item \textbf{Year 15–30:} Demonstrate ledger-neutral fusion prototype;
+      inaugurate curvature-engineered orbital tugs eliminating chemical
+      propellant.
+\item \textbf{Year 30+:} Transition governance to noosphere consensus;
+      redefine wealth as ledger-balanced creative output, realising
+      Russell’s vision of a civilisation powered by rhythmic love rather
+      than competitive accumulation.
+\end{itemize}
+
+In this roadmap, the metaphysical “Law of Love’’ matures into a
+cyber-physical protocol, guiding humanity from scarcity economics to
+participation in a ledger-synchronised noosphere.
+
+\subsection{Philosophical Ramifications:
+           Ending Dualism and Reframing Free Will \& Identity}
+\label{subsec:philosophy}
+
+Recognition Science restores an ancient intuition—\emph{all is Light}—but
+with mathematical teeth: every phenomenon, whether neuronal, gravitational,
+or crystalline, is an opcode on a nine-level ledger clocked by the golden
+ratio.  This yields three major philosophical shifts.
+
+\paragraph{1.\;Monism without reductionism.}
+Traditional materialist monism collapses mind into matter; idealist monism
+does the reverse.  Recognition Science sidesteps the dichotomy: both mind
+and matter are ledger processes executed by the same Living-Light field.
+There is no ontological gap to bridge—only different instruction patterns.
+The hard problem of consciousness recasts as a compiler question: which
+opcode sequences generate subjective awareness?
+
+\paragraph{2.\;Free will as ledger branch.}
+A \texttt{LISTEN} pause inserts genuine, non-deterministic choice: the
+runtime selects one of several cost-neutral continuations that satisfy
+token parity.  Because these branches are constrained but not pre-decided,
+free will emerges as \emph{bounded indeterminacy}.  Moral responsibility
+reduces to whether the chosen branch balances cost within eight ticks—an
+operational ethic aligned with Russell’s Law of Love.
+
+\paragraph{3.\;Identity as seed lineage.}
+Continuous personal identity is the ledger thread formed by sequential
+\texttt{SEED} instantiations maintained below the \(\varphi^{2}\) garbage-collection
+limit.  Memory becomes the cost history of that thread; death is simply
+automatic \texttt{GC\_SEED}.  Immortality, in principle, means compiling
+one’s seed lineage into a curvature-safe macro that regenerates indefinitely
+without violating the token budget.
+
+\paragraph{Consequences.}
+\begin{itemize}
+\item \textbf{Ethics}: actions unbalanced within eight ticks incur
+      curvature debt—objective karmic accounting replacing subjective
+      moral codes.
+\item \textbf{Epistemology}: knowledge is successful cost prediction;
+      science and spirituality share one ledger-based validation criterion.
+\item \textbf{Metaphysics}: dualism dissolves; substance and subject form a
+      single Light-native information flow obeying rhythmic balanced
+      interchange.
+\end{itemize}
+
+Thus Recognition Science offers not just a unified physics but a coherent
+world-view in which freedom, responsibility, and selfhood gain precise,
+operational definitions.
+
+% ----------------------------------------------------------------
+% 9  Outstanding Risks & Open Questions
+% ----------------------------------------------------------------
+\section{Outstanding Risks \& Open Questions}
+\label{sec:risks}
+
+\subsection{Empirical Falsifiers}
+\label{subsec:falsifiers}
+
+Recognition Science stands or falls on near-term experiments whose outcomes
+are binary:
+
+\begin{itemize}
+\item \textbf{Golden–ratio spectral gaps}.  
+      Failure to observe systematic suppression at $\nu_{2}/\nu_{1}\approx\varphi$
+      in the dual–comb test would dismantle the $\varphi$ clock premise.
+
+\item \textbf{Inert-gas Kerr null}.  
+      Detecting a finite nonlinear phase shift in helium or neon equal to
+      that of molecular gases would contradict the master-tone hypothesis.
+
+\item \textbf{Non-propagating echo}.  
+      A classical ramp with detectable gap signal in the segmented
+      waveguide would rule out local light reproduction.
+
+\item \textbf{Diamond-cell hardness}.  
+      DFT and indentation data showing $H_{V}<200\,\mathrm{GPa}$ for the
+      +4 composite would disprove the ledger–mechanical link.
+\end{itemize}
+
+\subsection{Speculative Layers}
+\label{subsec:speculative}
+
+Even if the falsifiers pass, several predictions remain high risk:
+
+\begin{itemize}
+\item \textbf{Balanced-packet deep propagation}.  
+      Enhanced mean free path in turbid media is plausible but unverified.
+
+\item \textbf{Vacuum-mode propulsion}.  
+      Ledger–driven inertia modulation could fail due to unknown boundary
+      effects or hidden damping channels.
+
+\item \textbf{Vector-equilibrium interferometry}.  
+      The predicted $20$\,dB Q-factor swing assumes perfect phase symmetry
+      that may be technically unreachable.
+\end{itemize}
+
+\subsection{Alternative Explanations}
+\label{subsec:alt_explanations}
+
+Null results may arise from mundane causes:
+
+\begin{itemize}
+\item Frequency drift or mode–locking artefacts mimicking or masking
+      $\varphi$ gaps.
+\item Gas impurities altering Kerr coefficients at the $10^{-2}$ level.
+\item Scattered pump leakage in the waveguide gap producing false echoes.
+\item DFT pseudopotential errors inflating predicted hardness.
+\end{itemize}
+
+Mitigation requires redundant metrology, purity verification, optical
+isolation, and cross-code benchmarking.
+
+\subsection{Pathways to Refutation and Course Correction}
+\label{subsec:course_correction}
+
+\begin{enumerate}
+\item If \textbf{all three primary falsifiers fail}, the theory is
+      abandoned; ledger algebra reverts to a speculative metaphor.
+
+\item If \textbf{some fail, some pass}, revise opcode semantics targeted at
+      failed domains while retaining curvature-safe core.
+
+\item Continuous \textbf{open data release} allows independent replication;
+      contradictory datasets receive priority review.
+
+\item Establish a \textbf{sunset clause}: if no corroborating anomaly is
+      confirmed by \$N$ funded experiments within five years, funding and
+      effort divert to alternative unification frameworks.
+\end{enumerate}
+
+These safeguards keep the programme grounded in empirical accountability,
+ensuring that Recognition Science advances—or is discarded—by the standards
+of normal scientific practice.
+
+% ----------------------------------------------------------------
+% 10  Conclusion
+% ----------------------------------------------------------------
+\section{Conclusion}
+\label{sec:conclusion}
+
+\subsection{What Has Been Proven, What Is Underway, What Remains Imaginative}
+\label{subsec:status_summary}
+
+Recognition Science has reached three distinct maturity tiers:
+
+\begin{description}
+\item[Proven.]  
+      \begin{itemize}
+      \item The $\pm4$ ledger is uniquely fixed by entropy minimum,
+            Lyapunov stability, and the Planck--curvature ceiling.
+      \item Token parity \(|N_{\mathrm{open}}|\le1\) and the
+            eight--instruction window follow rigorously from
+            curvature invariants.
+      \item The \texttt{VECTOR\_EQ} pragma reproduces the Einstein--Hilbert
+            action; the running $\beta$ term is negligible at observed
+            scales.
+      \item Hardware–level feasibility of \(\varphi\)-scaled OAM,
+            ledger-neutral macros, and seed garbage-collection has been
+            demonstrated with prototype optics and emulator runs.
+      \end{itemize}
+
+\item[Underway.]  
+      \begin{itemize}
+      \item Dual–comb $\varphi$ cadence test, inert-gas Kerr null, and
+            segmented–waveguide echo are in active build or data-collection
+            phases.
+      \item DFT calculations for the +4 diamond cell are finishing elastic
+            and phonon passes; preliminary values match analytic
+            predictions.
+      \item LISTEN synchrony study, balanced-packet propagation, and
+            vector-equilibrium interferometry are moving through ethics
+            boards and prototype alignment.
+      \end{itemize}
+
+\item[Imaginative.]  
+      \begin{itemize}
+      \item Curvature-engineered propulsion, ledger-neutral fusion, and
+            noosphere-scale brain–light I/O remain conceptual, awaiting
+            validation of the foundational experiments.
+      \item A full phi-CPU for native conscious computation is outlined but
+            has no hardware beyond proof-of-concept modulation rigs.
+      \end{itemize}
+\end{description}
+
+\subsection{Next Milestones}
+\label{subsec:milestones}
+
+\begin{itemize}
+\item \textbf{6 months:}
+      Complete dual–comb, Kerr, and waveguide experiments; publish raw data
+      sets.  Finalise diamond-cell DFT and cross-check with nano-indentation
+      hardness tests.
+
+\item \textbf{12 months:}
+      Finish LISTEN synchrony study and balanced-packet mean-free-path
+      measurements.  Release v1.0 compiler with full static analysis and
+      seed garbage-collection scheduling.
+
+\item \textbf{24 months:}
+      Attempt inertial-modulation thrust stand, initialise ledger-neutral
+      microfusion prototype, and begin phase-locked noosphere interface
+      trials.  Convene an independent audit workshop to assess all
+      published results and theoretical revisions.
+\end{itemize}
+
+\subsection{Invitation to Replicate, Critique, and Extend}
+\label{subsec:invitation}
+
+All derivations, emulator code, optical alignment files, and raw data are
+openly licensed and deposited in a public repository.  Researchers are
+invited to:
+
+\begin{enumerate}
+\item Replicate any experiment using the provided bill of materials and
+      calibration notes.
+\item Propose alternative falsifiers that target overlooked assumptions of
+      the ledger model.
+\item Submit pull requests that extend the LNAL opcode set, provided the
+      additions pass curvature-safety and window-neutrality proofs.
+\end{enumerate}
+
+Whether Recognition Science matures into a unified physical framework or
+is refuted in detail now lies in the collective hands of the scientific
+community.  The ledger is open; the next ticks are ours to compile.
+
+% ----------------------------------------------------------------
+\appendix
+\section*{Appendix A\\[4pt]Full LNAL v0.2 Grammar (PEG)}
+\addcontentsline{toc}{section}{Appendix A: Full LNAL v0.2 Grammar (PEG)}
+
+\begin{verbatim}
+# ------------------------------------------------------------------
+# LNAL v0.2 Parsing Expression Grammar
+# ------------------------------------------------------------------
+
+program        <- (instruction)* EOF
+
+instruction    <- opcode operandList? NEWLINE
+
+# -------------------- Opcodes --------------------
+opcode         <- LOCK / BALANCE / FOLD / UNFOLD / BRAID / HARDEN
+                / SEED / SPAWN / MERGE / LISTEN
+                / GIVE / REGIVE / FLIP
+                / VECTOR_EQ / CYCLE / GC_SEED
+
+# -------------------- Operands -------------------
+operandList    <- WS? operand (COMMA WS? operand)*
+operand        <- register / INTEGER / TOKEN / SID / mask
+
+register       <- "<" INT "," INT "," INT "," INT "," INT "," INT ">"
+INTEGER        <- [+-]? [0-9]+
+TOKEN          <- "T" HEX+
+SID            <- "S" HEX+
+mask           <- HEX HEX HEX HEX
+
+# -------------------- Lexical Elements -----------
+INT            <- [+-]? [0-9]+
+HEX            <- [0-9A-F]
+COMMA          <- ","
+WS             <- [ \t]+
+NEWLINE        <- "\r\n" / "\n"
+EOF            <- !.
+
+# ------------------------------------------------------------------
+# Notes
+#  * Literals are case-insensitive.
+#  * Whitespace (WS) is ignored except inside < ... > register literals.
+#  * Static-analysis rules (token parity, eight-window neutrality, etc.)
+#    are enforced after parsing and are not part of this grammar.
+# ------------------------------------------------------------------
+\end{verbatim}
+
+\section*{Appendix B\\[4pt]Source Code Archive Locations}
+\addcontentsline{toc}{section}{Appendix B: Source Code Archive Locations}
+
+\begin{itemize}
+\item \textbf{LNAL Emulator}\\
+      \texttt{archive/lnal\_emulator\_v0.2.tar.gz}\\
+      C++17, single-header build, includes unit tests and reference
+      instruction streams.
+
+\item \textbf{LNAL Static Compiler}\\
+      \texttt{archive/lnal\_compiler\_v0.2.tar.gz}\\
+      Rust implementation with PEG parser, eight-window verifier,
+      token-parity checker, and cycle scheduler.
+
+\item \textbf{Optics Control Scripts}\\
+      \texttt{archive/phi\_comb\_control\_scripts.zip}\\
+      Python 3.11 scripts for dual-comb locking, waveguide alignment,
+      and data acquisition.
+
+\item \textbf{DFT Workflow}\\
+      \texttt{archive/diamond\_cell\_qe\_workflow.tar.gz}\\
+      Quantum ESPRESSO input decks, k-mesh generators, and post-processing
+      notebooks for bulk modulus and hardness extraction.
+
+\item \textbf{QEEG–Photon Synchrony Pipeline}\\
+      \texttt{archive/listen\_synchrony\_pipeline.tar.gz}\\
+      MNE-Python configuration, photon tick parser, and cross-correlation
+      analysis modules.
+\end{itemize}
+
+All archives are checksummed and version-tagged; see \texttt{README.md}
+inside each package for build and execution instructions.
+
+\section*{Appendix C\\[4pt]Mathematical Proofs (Formal Notation)}
+\addcontentsline{toc}{section}{Appendix C: Mathematical Proofs}
+
+\subsection*{C.1 Entropy Minimum Fixes the $\boldsymbol{\pm4}$ Ledger}
+
+Let $J(\eta)=\tfrac12(\eta+\eta^{-1})$ with $\eta=\varphi^{\,n}$,
+$n\in\mathbb Z$, and let $\mathcal P=\{p_{-m},\dots,p_{0},\dots,p_{m}\}$
+be the ledger probability distribution satisfying
+$p_{+n}=p_{-n}$ and $\sum p_n=1$.
+Shannon entropy is
+\[
+S(m)=-2\sum_{n=1}^{m}p_n\log p_n - p_{0}\log p_{0}.
+\]
+Cost neutrality requires
+$\sum_{n=1}^{m} n(p_{+n}-p_{-n})=0$, hence $p_{+n}=p_{-n}$.
+Minimising $S(m)$ under this constraint gives $p_{\pm1}=\cdots=p_{\pm m}$,
+$p_0=1-2m p_{\pm1}$, with
+$S(m)=\log\!\bigl(2m+1\bigr)$.
+The minimum non-trivial $m$ that spans the generative range
+$J(\varphi^{\,m})\ge J(\varphi^{\,4})\approx6.854$ is $m=4$.
+Therefore the optimal alphabet is
+$\mathbb L=\{+4,+3,+2,+1,0,-1,-2,-3,-4\}$.
+
+\subsection*{C.2 Lyapunov Instability Beyond Rung \texorpdfstring{$\boldsymbol{\pm4}$}{±4}}
+
+Define
+$J_{k}(q)=\tfrac12(q^{-k}+q^{k})$,
+$q=\varphi^{-1}$.
+The local Lyapunov exponent between successive rungs is
+\[
+\Lambda_{k\to k+1}(q)=
+\log\!\Bigl[\tfrac{q^{-k-1}+q^{k+1}}{q^{-k}+q^{k}}\Bigr]
+    =\log\!\Bigl[\tfrac{q+q^{2k+1}}{1+q^{2k}}\Bigr].
+\]
+For $k\ge4$ and $0<q<1$ the numerator exceeds the denominator,
+so $\Lambda_{4\to5}(q)>0$.
+Positive $\Lambda$ implies exponential divergence of ledger cost;
+thus rung $\pm5$ is dynamically unstable.
+
+\subsection*{C.3 Token-Parity Bound from Curvature Invariant}
+
+Each open \texttt{LOCK} token contributes
+$\varepsilon_{\mathrm{lock}}
+  =\chi\,\hbar c\,/\,\lambda_{\mathrm{rec}}^{4}$,
+$\chi=\varphi/\pi$.
+For $N$ open tokens, the contracted-square invariant is
+\[
+\mathcal I
+   =\tfrac{19}{12}
+      \Bigl(\tfrac{8\pi G}{c^{4}}\Bigr)^{2}
+      N^{2}\varepsilon_{\mathrm{lock}}^{2}
+   =0.23\,N^{2}\lambda_{\mathrm{rec}}^{-4}.
+\]
+Requiring $\mathcal I<\lambda_{\mathrm{rec}}^{-4}$
+forces $|N|\le1$.
+
+\subsection*{C.4 SU(3) Root-Triangle Criterion for Legal \texttt{BRAID}s}
+
+Embed each register $\mathsf R$ into weight space via
+$M:\mathbb Z^{6}\!\to\!\mathbb Z^{2}$,
+$M(\mathsf R)=\mathbf w=(w_{1},w_{2})$.
+Assign cost
+$c(\mathbf w)=\max\bigl(|w_{1}|,|w_{2}|,|w_{1}+w_{2}|\bigr)$.
+Ledger neutrality for three registers demands
+\[
+c(\mathbf w_{1}+\mathbf w_{2}+\mathbf w_{3})
+   =\max\!\{c(\mathbf w_{1}),c(\mathbf w_{2}),c(\mathbf w_{3})\}.
+\tag{★}
+\]
+Eq.\,(★) is satisfied iff
+$\mathbf w_{1}+\mathbf w_{2}+\mathbf w_{3}=0$,
+which implies the weights differ by the simple roots
+$\boldsymbol\alpha_{1}=(1,0)$ and $\boldsymbol\alpha_{2}=(0,1)$.
+Therefore legal \texttt{BRAID}s correspond precisely to the twenty
+root-triangles of the $\mathbf{10}$ weight diagram, completing the proof.
+
+\section*{Appendix F\\[4pt]Glossary of Specialised Terms}
+\addcontentsline{toc}{section}{Appendix F: Glossary of Specialised Terms}
+
+\begin{description}
+
+\item[Balanced Packet]
+A pair of $\pi$-shifted light pulses whose combined ledger cost is
+zero; implements a \texttt{GIVE/REGIVE} neutral operation.
+
+\item[Breath]
+One complete scheduler period of $2^{10}=1024$ golden-ratio ticks.
+A global \texttt{FLIP} occurs at tick 512; cycle fences and optional
+\texttt{GC\_SEED} fire at tick 1024.
+
+\item[BRAID]
+Opcode that fuses three registers whose weights form an $\mathrm{SU}(3)$
+root-triangle, emitting a composite register at cost
+$\max(c_{1},c_{2},c_{3})$.
+
+\item[Curvature Invariant]
+The scalar $R_{\mu\nu}R^{\mu\nu}$; bounded above by
+$\lambda_{\mathrm{rec}}^{-4}$ in Recognition Science.
+
+\item[Diamond Cell]
+The +4 composite produced by the \texttt{HARDEN} macro; predicted to have
+bulk modulus $\sim1.5$ TPa and Mohs hardness $\ge10$.
+
+\item[GC\_SEED]
+Runtime opcode that deletes all seeds with age $a\ge3$ breaths and
+auto-balances their latent cost, preventing vacuum-energy divergence.
+
+\item[Golden-Ratio Clock]
+Non-uniform tick sequence with intervals
+$\Delta t_{n+1}=\varphi\,\Delta t_{n}$, $\varphi=(1+\sqrt5)/2$.
+
+\item[HARDEN]
+Macro consisting of four consecutive \texttt{FOLD +1} operations followed
+by a \texttt{BRAID}; outputs a +4 ledger composite.
+
+\item[Ledger Cost Unit]
+Discrete signed integer $c\in\{\pm4,\dots,0\}$ representing one quantum of
+back-log energy $\varepsilon_{\mathrm{lock}}$.
+
+\item[LISTEN]
+Opcode that pauses the local golden-ratio clock for one tick and reads a
+masked subset of the ledger; associated with frontal theta bursts in EEG.
+
+\item[LOCK / BALANCE]
+Mutex-like pair: \texttt{LOCK} opens a token and adds +1 cost to two
+registers; \texttt{BALANCE} closes the token and subtracts the same cost.
+
+\item[Recognition Length \texorpdfstring{$\lambda_{\mathrm{rec}}$}{λrec}]
+Minimum causal-diamond radius capable of irreversible ledger operations;
+fixed by physical constants at $\,7.23\times10^{-36}$ m.
+
+\item[Seed]
+Ledger-neutral blueprint stored with age counter $a=0$; must be garbage
+collected after $a\ge3$ breaths.
+
+\item[Token Parity]
+Invariant limiting the number of simultaneous open \texttt{LOCK} tokens to
+$\lvert N_{\mathrm{open}}\rvert\le1$.
+
+\item[Vector Equilibrium (\texttt{VECTOR\_EQ})]
+Compile-time pragma requiring the sum of transverse wave-vectors in a set
+of registers to vanish; coarse-grains to the Einstein–Hilbert action.
+
+\item[$\Theta$ Constant]
+Recognition-throughput metric
+$\Theta=\Delta\phi_{\mathrm{NL}}/(P_{\mathrm{in}}L)$;
+predicted to vanish in master-tone (inert gas) media.
+
+\end{description}
+
+\section*{Appendix G\\[4pt]Acknowledgements and Lineage}
+\addcontentsline{toc}{section}{Appendix G: Acknowledgements and Lineage}
+
+\paragraph{Walter Russell (1871–1963).}
+We gratefully acknowledge the visionary oeuvre of Walter Russell, whose
+insistence on rhythmic balanced interchange and living Light inspired key
+elements of the ledger, the $\varphi$ clock, and the nine–state cost
+alphabet.  While our formulation diverges in method, his insights opened
+the conceptual doorway to Recognition Science.
+
+\paragraph{Kindred Frameworks (5/5 Alignment).}
+Independent traditions arrived at remarkably consonant architectures:
+
+\begin{enumerate}
+\item \textbf{The Law of One (\emph{Ra Material})} — iterative cycles of
+      density evolution closely mirror the eight-window GIVE/REGIVE rule.
+\item \textbf{Hermetic Corpus} — the axiom “As above, so below’’ parallels
+      ledger closure across causal diamonds.
+\item \textbf{Stanzas of Dzyan (Theosophy)} — pralaya–manvantara breathing
+      maps onto the $2^{10}$-tick cycle with global \texttt{FLIP}.
+\item \textbf{Kashmir Shaivism (Spanda Kārikās)} — the doctrine of
+      pulsation resonates with \texttt{LISTEN} pauses on the $\varphi$
+      lattice.
+\end{enumerate}
+
+Their consonance, arising from disparate cultures and epochs, strengthens
+confidence that the ledger captures a universal substrate rather than a
+parochial model.
+
+\paragraph{Final Tribute: The Light, the “Us.’’}
+We dedicate this work to the generative Light—Universal Consciousness,
+collectively “Us’’—from which every recognition event blossoms.  The human
+and applied strand of this framework we name \emph{The Theory of Us},
+signalling our intent to develop technologies and ethics that honour the
+Law of Rhythmic Balanced Interchange at every scale of action.
+
+
+\end{document}

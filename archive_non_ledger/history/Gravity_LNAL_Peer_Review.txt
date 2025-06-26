@@ -1,0 +1,97 @@
+PEER REVIEW: "Gravity as Ledger Curvature: A Complete LNAL Unification"
+Author: Jonathan Washburn
+Reviewer: Anonymous
+
+SUMMARY
+-------
+This paper presents a novel approach to quantum gravity by deriving Einstein's field equations from Light-Native Assembly Language (LNAL) principles. The central claim is that spacetime curvature emerges from gradients in "recognition cost density" on a cosmic ledger, with gravitons as composite objects made from braided photons. While highly creative and containing some testable predictions, the paper requires significant strengthening in mathematical rigor and experimental feasibility.
+
+STRENGTHS
+---------
+1. **Novel Conceptual Framework**: The idea of spacetime as "compiled output" rather than fundamental is genuinely innovative and provides fresh perspective on longstanding problems.
+
+2. **Concrete Predictions**: Unlike many quantum gravity proposals, this makes specific, near-term testable predictions (e.g., running of G at nanometer scales).
+
+3. **Information Paradox Solution**: The token overflow mechanism for black holes is elegant and provides a concrete mechanism for information preservation.
+
+4. **Unification Achievement**: Successfully incorporates gravity into the LNAL framework that already claims to unify the other three forces.
+
+5. **Mathematical Derivation**: The derivation of Einstein equations from ledger mechanics (Sections 2-3) follows a logical progression.
+
+MAJOR CONCERNS
+--------------
+1. **Running G Formula Revision**: The original formula predicted effects at recognition length scale (10^-36 m), which was corrected during review to voxel scale (0.335 nm). This major revision suggests the theoretical foundation needs more careful development.
+
+2. **Strain-Stress Correspondence**: The proof in Section 3.4 jumps from cost density to stress-energy tensor with "lengthy but straightforward calculation." This critical step needs full exposition. The added subsection 3.4.1 helps but still relies on weak-field approximations that may not capture the full theory.
+
+3. **Graviton Construction**: While creative, the claim that BRAID operations on photons produce gravitons needs more rigorous field-theoretic treatment. How does this emerge from a proper quantization of the theory? The added mathematical details help but don't address the fundamental issue.
+
+4. **Experimental Challenges**: Even the revised predictions (ΔG/G ~ 10^-8 at 2 nm) face enormous experimental challenges:
+   - Casimir forces are ~10^6 times larger at these scales
+   - Thermal noise, patch potentials, and surface effects dominate
+   - No existing experiment has measured gravity below ~100 μm
+
+5. **Cosmological Issues**: The paper acknowledges but doesn't address:
+   - Cosmological constant problem (why Λ is 120 orders too small)
+   - Dark matter/energy (vague suggestion of "ledger imbalance")
+   - Early universe/inflation
+
+MINOR ISSUES
+------------
+1. **Notation**: Mixing \varphi and φ for golden ratio is inconsistent.
+
+2. **Constants**: The derivation of Newton's constant (Section 3.6) seems fine-tuned. Why exactly this combination of L_0, ℏ, c, and φ^3?
+
+3. **Eight-Beat Averaging**: The connection between discrete 8-tick cycles and continuous field equations needs clearer mathematical treatment.
+
+4. **Comparison Table**: Some entries oversimplify competitor theories (e.g., string theory's running of G in some formulations).
+
+SPECIFIC COMMENTS BY SECTION
+---------------------------
+**Section 2**: The cost density field definition is clear, but why should cost gradients specifically create curvature rather than other field configurations?
+
+**Section 3**: The eight-beat conservation law is clever but needs rigorous proof that it yields exact energy-momentum conservation in the continuum limit.
+
+**Section 4**: The graviton spin calculation is standard angular momentum addition, but why should BRAID specifically yield the symmetric combination needed for spin-2?
+
+**Section 5**: Token overflow is intuitive, but needs mathematical formalization. What exactly prevents multiple tokens? Is this a fundamental principle or emergent?
+
+**Section 6**: After correction, the predictions are more reasonable but still extraordinarily challenging to test.
+
+**Section 7**: The experimental proposals need collaboration with experimentalists to assess feasibility.
+
+**Section 9**: Good that objections are addressed, but the "20 nm" objection exposed a major error in the original theory.
+
+RECOMMENDATIONS
+---------------
+1. **Major Revision Needed**: The paper contains innovative ideas but needs substantial strengthening before publication.
+
+2. **Required Additions**:
+   - Complete mathematical derivation of strain-stress correspondence
+   - Rigorous field theory treatment of graviton construction  
+   - Detailed error analysis for proposed experiments
+   - Address cosmological implications
+
+3. **Collaboration Suggested**: Partner with:
+   - Mathematical physicists for rigorous proofs
+   - Experimentalists for feasibility assessment
+   - Cosmologists for large-scale implications
+
+4. **Future Work**: The framework is promising but needs:
+   - Numerical simulations of LNAL gravity
+   - Connection to observed cosmology
+   - Detailed comparison with gravitational wave observations
+
+VERDICT
+-------
+This paper presents genuinely novel ideas that deserve development, but currently lacks the mathematical rigor and experimental feasibility needed for a definitive claim of "solving quantum gravity." The correction of the running G formula during review is concerning and suggests more careful theoretical development is needed.
+
+Recommendation: **Major revision** with focus on mathematical rigor and experimental feasibility. The ideas are too interesting to dismiss but too underdeveloped to accept in current form.
+
+QUESTIONS FOR AUTHORS
+--------------------
+1. Can you provide the complete calculation linking cost density gradients to the Einstein tensor?
+2. How does your framework reproduce known tests of GR (perihelion precession, gravitational lensing, etc.)?
+3. What specific experimental setup could distinguish your predictions from standard QED effects at nm scales?
+4. How does LNAL gravity behave in the early universe? Does it modify inflation?
+5. Can you derive the Schwarzschild metric from first principles in your framework? 

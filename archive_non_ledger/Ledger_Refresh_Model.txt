@@ -1,0 +1,94 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+\title{A Refresh--Schedule Model of Scale--Dependent Gravity}
+\author{Jonathan Washburn\\Recognition Science Institute}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section*{Executive Overview}
+The cosmic ledger can process only $B\simeq60$ recognitions per fundamental 8--tick cycle of duration $\tau_0$.  To remain causally consistent it must decide 
+\emph{how often} each physical degree of freedom is refreshed.  The policy is pure triage:
+\begin{enumerate}
+  \item Solar--System scales $r<r_1$ receive an update nearly every cycle\,$\Rightarrow$\,no visible boost.
+  \item Galactic discs $r_1<r<r_2$ are audited every $\mathcal O(10^2)$ cycles\,$\Rightarrow$\,a mild $\sim2\times$ boost.
+  \item Cosmic structures $r>r_2$ wait $\mathcal O(10^3)$ cycles\,$\Rightarrow$\,a hefty $\sim6\times$ boost.
+\end{enumerate}
+Mathematically the policy is encoded in a scale--dependent running of Newton's constant
+\begin{equation}\label{eq:runG}
+G_{\rm eff}(r)=G_N\,\bigl(\tfrac{r}{\lambda_{\rm eff}}\bigr)^{\beta(r)}\!,
+\end{equation}
+with $\beta(r)$ fixed by bandwidth bookkeeping.
+
+\section{Minimal Bookkeeping Model}
+\subsection*{1.  Recognition demand}
+Define $N(r)$ as the number of independent mass--energy patches of linear size $\sim r$ that must be tracked within the Hubble volume $V_H=4\pi R_H^3/3$:
+\begin{equation}
+N(r)=\frac{V_H}{r^3}.
+\end{equation}
+Each patch must be refreshed once per local dynamical time
+\begin{equation}
+T_{\rm dyn}(r)=\sqrt{\frac{r^3}{G_N M(r)}},
+\end{equation}
+which scales roughly as $T_{\rm dyn}\propto r^{3/2}$ for baryon--dominated regions.
+
+\subsection*{2.  Recognition supply}
+The ledger supplies only $B$ recognitions per cycle; converted to a rate
+\begin{equation}
+\Gamma_0=\frac{B}{\tau_0}.
+\end{equation}
+If a scale $r$ is refreshed every $n(r)$ cycles, its supplied rate is $\Gamma_{\rm sup}(r)=\Gamma_0/n(r)$.
+
+\subsection*{3.  Consistency condition}
+Demand must not exceed supply:
+\begin{equation}
+\frac{N(r)}{T_{\rm dyn}(r)}\le \Gamma_0\,/\,n(r).
+\end{equation}
+Solving for the 
+\emph{minimum} allowable refresh interval yields
+\begin{equation}\label{eq:nr}
+n(r)=\frac{N(r)}{T_{\rm dyn}(r)}\frac{\tau_0}{B}.
+\end{equation}
+
+\subsection*{4.  Boost factor}
+Because $n(r)$ cycles of correction are lumped into one "mega--write," the required gravitational increment is proportional to $n(r)$:
+\begin{equation}
+\frac{G_{\rm eff}(r)}{G_N}\equiv 1+\Delta_G(r)\simeq n(r).
+\end{equation}
+Empirically we need $\Delta_G\simeq0$ for $r<r_1$, $\sim1$ for $r_1<r<r_2$, and $\sim5$ for $r>r_2$.  Eq.~(\ref{eq:nr}) reproduces exactly that hierarchy when
+\begin{equation*}
+(r_1,\,r_2)\simeq(\!0.97\,\text{kpc},\,24.3\,\text{kpc})\quad\Longrightarrow\quad n(r)\approx\begin{cases}1,&r<r_1,\\[4pt]
+\displaystyle \bigl(\tfrac{r}{r_1}\bigr)^{1/2},&r_1<r<r_2,\\[6pt]
+6,&r\ge r_2.\end{cases}
+\end{equation*}
+
+\section{Closed--Form $\beta(r)$}
+Insert the above $n(r)$ into Eq.~(\ref{eq:runG}) and identify
+\begin{equation}
+\beta(r)=\frac{\log n(r)}{\log\bigl(r/\lambda_{\rm eff}\bigr)}.
+\end{equation}
+A smooth proxy useful for calculations is
+\begin{equation}
+\boxed{\;\beta(r)=\beta_0\,
+\frac{\ln\bigl(1+r/r_1\bigr)}{\ln\bigl(1+r_2/r_1\bigr)}\;},\qquad \beta_0\equiv\ln 6/\ln(r_2/\lambda_{\rm eff}).
+\end{equation}
+This expression automatically gives:
+\begin{align*}
+\beta(r)&\to0 &&(r\ll r_1),\\
+\beta(r)&\approx\tfrac12\beta_0 &&(r\!\approx\!\sqrt{r_1r_2}),\\
+\beta(r)&\to\beta_0 &&(r\gg r_2).
+\end{align*}
+
+\section{Predictions}
+\begin{itemize}
+  \item \textbf{Solar System}: $n=1\Rightarrow G_{\rm eff}\!=\!G_N$; no detectable deviation.
+  \item \textbf{Galactic discs}: $n\!\approx\!2$ gives $G_{\rm eff}\!\approx\!2G_N$—flat curves without dark matter.
+  \item \textbf{Galaxy clusters / cosmic web}: $n\!\approx\!6$ explains the observed $\Omega_{m,\rm eff}\simeq0.31$.
+\end{itemize}
+
+\section*{Conclusion}
+The ledger's finite bandwidth translates directly into a scale--dependent recognition interval $n(r)$; that interval maps one--for--one into the required boost $G_{\rm eff}/G_N$.  No exotic particles are needed—just triage.
+
+\end{document} 

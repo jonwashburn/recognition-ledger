@@ -1,0 +1,8 @@
+category,test,predicted,observed,error_sigma,chi2
+astronomical,draco_velocity_dispersion,5.9,9.1,2.666666666666666,7.111111111111108
+astronomical,fornax_velocity_dispersion,7.2,11.7,4.999999999999999,24.99999999999999
+astronomical,sculptor_velocity_dispersion,6.5,9.2,1.9285714285714282,3.7193877551020393
+astronomical,pulsar_timing_deviation,0.056,0.0,56.0,3136.0
+astronomical,strong_lensing_shift,0.045,0.0,4.5,20.25
+sparc,median_chi2_per_N,1.0,22.1,4.220000000000001,17.808400000000006
+sparc,good_fits_fraction,0.5,0.105,7.9,62.410000000000004

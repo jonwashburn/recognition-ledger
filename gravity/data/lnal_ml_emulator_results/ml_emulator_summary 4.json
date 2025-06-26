@@ -1,0 +1,32 @@
+{
+  "description": "ML baryon emulator with LNAL gravity",
+  "train_galaxies": [
+    "NGC3198",
+    "NGC2403",
+    "NGC6503",
+    "NGC0300",
+    "NGC2841",
+    "NGC7814",
+    "UGC2885"
+  ],
+  "test_galaxies": [
+    "DDO154",
+    "NGC3109",
+    "NGC1560",
+    "IC2574"
+  ],
+  "results": [
+    {
+      "galaxy": "DDO154",
+      "chi2_reduced": 42616.98461644537
+    },
+    {
+      "galaxy": "NGC3109",
+      "chi2_reduced": 721.6007346843139
+    },
+    {
+      "galaxy": "IC2574",
+      "chi2_reduced": 9141.028205672621
+    }
+  ]
+}

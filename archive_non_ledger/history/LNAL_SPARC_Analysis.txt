@@ -1,0 +1,80 @@
+LNAL GRAVITY vs SPARC GALAXY ROTATION CURVES
+=============================================
+
+IMMEDIATE CHALLENGE
+-------------------
+The LNAL running-G formula: G(r) = G₀(1 + α_G L₀²/r² e^(-r/L₀))
+At galactic scales (r ~ kpc ~ 10¹⁹ m >> L₀ = 0.335 nm):
+- e^(-r/L₀) ≈ e^(-10²⁸) ≈ 0
+- Therefore G(r) ≈ G₀ (no modification)
+
+This means the voxel-scale running of G provides NO help explaining flat rotation curves!
+
+POTENTIAL SOLUTION: INFORMATION GRADIENTS
+-----------------------------------------
+The paper proposes dark matter emerges from information gradients:
+ρ_DM(x) = (c²/8πG) |∇I_cosmic(x)|²/I_cosmic(x)
+
+For this to explain SPARC data, we need:
+
+1. **Information Distribution Model**
+   Assume galactic information follows baryonic matter with modification:
+   I_galaxy(r) = I_baryon(r) × F(r)
+   
+   Where F(r) is an "information amplification factor" arising from:
+   - Pattern complexity of stellar/gas dynamics
+   - Quantum coherence maintenance costs
+   - Gravitational binding energy encoding
+
+2. **Predicted Rotation Curve**
+   The total mass would be:
+   M_total(r) = M_baryon(r) + M_info(r)
+   
+   Where M_info comes from integrating ρ_DM from information gradients.
+
+3. **Key Prediction**
+   Since information gradients depend on PATTERN COMPLEXITY, LNAL predicts:
+   - More structured galaxies (spirals) need more "dark matter"
+   - Smooth ellipticals need less
+   - Irregular/disturbed galaxies show deviations
+
+TESTABLE PREDICTIONS FOR SPARC
+------------------------------
+1. **Morphology Dependence**: Plot residuals vs galaxy type
+   - Spirals should show tightest fit
+   - Ellipticals more scatter
+   - Irregulars most scatter
+
+2. **Information Entropy Correlation**
+   Define: S_morph = morphological entropy (from image analysis)
+   Prediction: M_DM/M_baryon ∝ S_morph
+
+3. **Radial Acceleration Relation (RAR)**
+   McGaugh found: g_obs = g_bar/[1 - exp(-√(g_bar/g†))]
+   
+   LNAL interpretation: The scale g† = 1.2×10⁻¹⁰ m/s² corresponds to
+   where information gradient effects become significant.
+
+CALCULATION NEEDED
+------------------
+To properly test against SPARC, we need to:
+
+1. Derive F(r) from first principles using:
+   - Stellar density profiles
+   - Gas distribution
+   - Pattern maintenance costs
+
+2. Compute ρ_DM(r) for each galaxy
+
+3. Generate rotation curves and compare to data
+
+4. Look for systematic deviations based on galaxy properties
+
+PRELIMINARY ASSESSMENT
+----------------------
+Without the full calculation, LNAL faces challenges:
+- No natural explanation for universal g† scale
+- Information gradients need fine-tuning to match observations
+- Prediction of morphology-dependence is testable but risky
+
+The theory would need development of a specific galactic information model before meaningful SPARC comparison. 

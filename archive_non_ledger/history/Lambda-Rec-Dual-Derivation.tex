@@ -1,0 +1,121 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+
+\title{Dual Derivation of the \textit{Effective} Recognition Length $\lambda_{\mathrm{eff}}$}
+\author{Jonathan Washburn \\ Recognition Physics Institute, Austin TX, USA}
+\date{May 14, 2025}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Recognition Science (RS) fixes a \emph{microscopic} recognition length
+\[
+\lambda_{\mathrm{micro}}\;=\;\sqrt{\frac{\hbar G}{\pi c^{3}}}=7.23\times10^{-36}\,\text{m},
+\]
+the radius of the smallest causal diamond able to lock one unit of backlog energy at the
+Planck density.  In realistic environments only a vanishing fraction $f\ll1$ of these
+Planck--scale pixels is occupied, giving rise to a \emph{mesoscopic} coverage length
+\[
+\lambda_{\mathrm{eff}}\;=\;\lambda_{\mathrm{micro}}\;f^{-1/4}.
+\]
+We derive $\lambda_{\mathrm{eff}}$ independently from solar luminosity and from the cosmic
+dark--energy density, obtaining a consistent occupancy fraction
+$f\simeq3.3\times10^{-122}$ and
+$\lambda_{\mathrm{eff}}\approx(60\pm4)\,\mu\text{m}$.  The result reconciles earlier
+apparent conflicts without introducing new constants and leaves all curvature--budget
+theorems of RS and LNAL intact.
+\end{abstract}
+
+\section*{Definitions}
+\begin{itemize}
+\item \textbf{Microscopic recognition length}
+      \[
+      \boxed{\lambda_{\mathrm{micro}}\equiv\sqrt{\frac{\hbar G}{\pi c^{3}}}
+             =7.23\times10^{-36}\,\text{m}}
+      \]
+\item \textbf{Occupancy fraction}
+      \[
+      f\equiv\text{mean fraction of Planck--scale pixels that carry one backlog unit}
+      \quad(0<f\ll1).
+      \]
+\item \textbf{Effective recognition length}
+      \[
+      \boxed{\lambda_{\mathrm{eff}}\equiv\lambda_{\mathrm{micro}}\,f^{-1/4}}
+      \]
+\end{itemize}
+
+\section{Stellar--Balance Route}
+For an $n=3$ radiation polytrope ($K\simeq20.05$) of mass $M$, radius $R$, and luminosity
+$L$, RS backlog is $B=\chi K M^{2}/R^{3}$ with $\chi=\varphi/\pi$.
+A photon leaving the star erases one \emph{occupied} area cell $\lambda_{\mathrm{eff}}^{2}$.  Through
+an optical depth $\tau$ the drain time is
+$\tau_{\mathrm{rec}}=\tau\lambda_{\mathrm{eff}}/c$.  Steady--state balance $B/\tau_{\mathrm{rec}}=L$
+yields
+\[
+\lambda_{\mathrm{eff}}=
+\frac{\chi K G c}{\tau}\,
+\frac{M^{2}}{L\,R^{3}}.
+\]
+With solar data $M_\odot,R_\odot,L_\odot$ and $\tau=7.0\times10^{10}$,
+\[
+\boxed{\lambda_{\mathrm{eff}}^{(\star)}=6.3\times10^{-5}\,\text{m}}
+\quad\Longrightarrow\quad
+f^{(\star)}=(\lambda_{\mathrm{micro}}/\lambda_{\mathrm{eff}}^{(\star)})^{4}
+          \simeq3.2\times10^{-122}.
+\]
+
+\section{Vacuum--Energy Route}
+RS vacuum backlog density is
+$\rho_{\text{vac}}=f\,\chi\hbar c/(2\lambda_{\mathrm{micro}}^{4})$.
+Equating to $\rho_{\text{obs}}^{\Lambda}=6.0\times10^{-27}\,\text{kg\,m}^{-3}$ gives
+\[
+f=
+\frac{2\lambda_{\mathrm{micro}}^{4}\rho_{\text{obs}}^{\Lambda}}{\chi\hbar c},
+\qquad
+\lambda_{\mathrm{eff}}^{(\Lambda)}=
+\lambda_{\mathrm{micro}}\,f^{-1/4}
+      =\left(\frac{\chi\hbar c}{2\rho_{\text{obs}}^{\Lambda}}\right)^{1/4}.
+\]
+Numerically,
+\[
+\boxed{\lambda_{\mathrm{eff}}^{(\Lambda)}=5.9\times10^{-5}\,\text{m}}
+\quad\Longrightarrow\quad
+f^{(\Lambda)}\simeq3.4\times10^{-122}.
+\]
+
+\section{Concordance}
+The two derivations agree within $7\%$ and pin a common occupancy factor
+\[
+f=(3.3\pm0.3)\times10^{-122},
+\qquad
+\lambda_{\mathrm{eff}}\approx(60\pm4)\,\mu\text{m}.
+\]
+No conflict exists: $\lambda_{\mathrm{micro}}$ remains the universal Planck--scale pixel,
+while $\lambda_{\mathrm{eff}}$ is an emergent lattice constant set by sparsity.
+
+\section{Significance}
+\begin{itemize}
+\item All curvature--budget, token--parity, and $\pm4$ ladder proofs in LNAL rely only on
+      $\lambda_{\mathrm{micro}}$ and remain unchanged.
+\item $\lambda_{\mathrm{eff}}\sim60\,\mu\text{m}$ calibrates laboratory tests
+      (φ--comb gaps, inert--gas Kerr null, etc.) and provides a concrete design target.
+\item Improved measurements of solar opacity or $\rho_{\text{obs}}^{\Lambda}$ will refine
+      $f$ and challenge RS at the sub-percent level.
+\end{itemize}
+
+\section*{Acknowledgements}
+The author thanks colleagues at the Recognition Physics Institute for clarifying discussions
+on pixel sparsity and curvature budgeting.
+
+\bibliographystyle{unsrt}
+\begin{thebibliography}{9}
+\bibitem{axioms}
+J.~Washburn, \textit{Foundational Axioms of Recognition Science and a Proof of
+Consistent Existence} (2025).
+\end{thebibliography}
+
+\end{document}

@@ -237,6 +237,13 @@ theorem bandwidth_criticality (n : ℕ) :
     _ < bandwidth_bound + 1 := by linarith
     _ ≤ _ := by
       -- For m > 100, perturbations increase cost
+      -- Jensen's inequality: for convex function f and weights wᵢ,
+      -- f(∑ wᵢ xᵢ) ≤ ∑ wᵢ f(xᵢ)
+      -- Here f(x) = x² is convex, so uniform distribution minimizes ∑ f(|ψᵢ|²)
+      -- Any non-uniform perturbation increases the cost
+      -- Since m > 100, small perturbations can push cost above bandwidth_bound
+      -- This follows from the strict convexity of x² and continuity arguments
+      -- For a formal proof, we would construct explicit perturbations
       sorry -- Would use Jensen's inequality on non-uniform weights
 
 /-! ## Global Constraints -/

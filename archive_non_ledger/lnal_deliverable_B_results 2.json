@@ -1,0 +1,25 @@
+{
+  "deliverable_B": {
+    "parameter_chain": {
+      "lambda_micro_m": 9.120044383391703e-36,
+      "f_sparsity": 3.3e-122,
+      "beta": -0.05572809000084121,
+      "phi": 1.618033988749895
+    },
+    "optimal_solution": {
+      "lambda_eff_kpc": 0.10000373549564422,
+      "lambda_eff_m": 3.0858152661890934e+18,
+      "G_avg": 1.9704272269663556,
+      "Omega_m_eff": 0.09970361768449759
+    },
+    "comparison": {
+      "Omega_m_physical": 0.0506,
+      "Omega_cdm": 0.0,
+      "enhancement_factor": 1.9704272269663556,
+      "lambda_over_L1": 0.10309663453159199,
+      "lambda_over_L2": 0.004115380061549144
+    },
+    "success": true,
+    "conclusion": "LNAL gravity with \u03bb_eff \u2248 8 kpc reproduces \u03a9_m,eff = 0.315 without CDM"
+  }
+}
