@@ -938,7 +938,41 @@ theorem virtue_golden_ratio_harmonics (v : Virtue) (s : MoralState) :
             | n + 3 =>
               -- For n ≥ 3, use induction or direct calculation
               -- φ³ ≈ 4.236, φ⁴ ≈ 6.854, etc., growing faster than n
-              sorry  -- Would need stronger induction principle or real analysis lemmas
+              -- We can use the fact that φ^n = φ^(n-1) * φ > φ^(n-1) * 1.6
+              -- And by induction φ^(n-1) ≥ n-1 for n ≥ 3
+              -- So φ^n > 1.6 * (n-1) = 1.6n - 1.6
+              -- For n ≥ 3: 1.6n - 1.6 = 1.6(n-1) ≥ 1.6*2 = 3.2 > 3 ≥ n
+              -- Actually, let's be more careful:
+              -- For n = 3: φ³ = φ² * φ > 2.56 * 1.6 > 4 > 3
+              -- For n ≥ 4: φ^n = φ * φ^(n-1) > 1.6 * (n-1) by IH
+              -- Need 1.6(n-1) ≥ n, i.e., 1.6n - 1.6 ≥ n, i.e., 0.6n ≥ 1.6
+              -- This holds when n ≥ 1.6/0.6 = 2.67, so for n ≥ 3
+              calc Real.goldenRatio ^ (n + 3)
+                = Real.goldenRatio ^ 3 * Real.goldenRatio ^ n := by ring
+                _ > 4 * 1 := by
+                  apply mul_lt_mul'
+                  · -- φ³ > 4
+                    calc Real.goldenRatio ^ 3
+                      = Real.goldenRatio * Real.goldenRatio ^ 2 := by ring
+                      _ > 1.6 * 2.56 := by
+                        apply mul_lt_mul'
+                        · exact h_phi
+                        · -- We already showed φ² > 2.56
+                          calc Real.goldenRatio ^ 2
+                            = Real.goldenRatio * Real.goldenRatio := by ring
+                            _ > 1.6 * 1.6 := by
+                              apply mul_lt_mul' <;> linarith [h_phi]
+                            _ = 2.56 := by norm_num
+                        · norm_num
+                        · linarith [h_phi]
+                      _ = 4.096 := by norm_num
+                      _ > 4 := by norm_num
+                  · -- φ^n ≥ 1 (since φ > 1 and n ≥ 0)
+                    exact one_le_pow_of_one_le (le_of_lt h_phi) n
+                  · norm_num
+                  · exact Real.rpow_pos_of_pos (by linarith [h_phi]) n
+                _ = 4 * 1 := by ring
+                _ ≥ n + 3 := by omega
 
     -- Apply the bound
     by_cases h : n ≥ 2
