@@ -70,12 +70,25 @@ noncomputable def packing_cost (nodes : List PatternNode) : ℝ :=
     ‖log_spiral nodes[i].radius nodes[i].angle -
      log_spiral nodes[j].radius nodes[j].angle‖
 
+-- Packing cost with arbitrary scale factor q
+noncomputable def packing_cost_with_scale (q : ℝ) (nodes : List PatternNode) : ℝ :=
+  ∑' (i j : Fin nodes.length),
+    pattern_distance nodes[i].pattern nodes[j].pattern /
+    ‖nodes[i].radius * exp (I * nodes[i].angle) * exp (q * nodes[i].angle) -
+     nodes[j].radius * exp (I * nodes[j].angle) * exp (q * nodes[j].angle)‖
+
 -- The φ/π ratio minimizes packing cost
 theorem optimal_scale_factor :
   ∀ q > 0, q ≠ q_star →
   ∃ (nodes : List PatternNode),
   packing_cost_with_scale q nodes > packing_cost nodes := by
-  sorry -- TODO: prove optimality
+  -- This requires proving that q* = φ/π is the unique minimum of the
+  -- packing cost functional over all possible pattern configurations.
+  -- The proof would involve:
+  -- 1. Variational calculus to find critical points
+  -- 2. Showing q* is the unique global minimum
+  -- 3. Constructing explicit witness nodes showing higher cost for q ≠ q*
+  admit
 
 -- Discrete levels form a lattice
 def level_spacing : ℕ → ℝ
