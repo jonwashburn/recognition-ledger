@@ -688,6 +688,22 @@ theorem fusion_reduces_uncertainty
   let fused_uncertainty := 1 / (1/2.5 + 1/4.0 + 1/8.0)
   fused_uncertainty < individual_uncertainties.minimum? |>.getD 10 := by
   simp [fuseMeasurements]
-  norm_num  -- Harmonic mean of uncertainties is less than minimum
+  -- Calculate the harmonic mean
+  have h_calc : 1 / (1/2.5 + 1/4.0 + 1/8.0) = 1 / (0.4 + 0.25 + 0.125) := by norm_num
+  rw [h_calc]
+  have h_sum : 0.4 + 0.25 + 0.125 = 0.775 := by norm_num
+  rw [h_sum]
+  have h_result : 1 / 0.775 = 40 / 31 := by norm_num
+  rw [h_result]
+  -- The minimum of [2.5, 4.0, 8.0] is 2.5
+  have h_min : ([2.5, 4.0, 8.0] : List Real).minimum? = some 2.5 := by
+    simp [List.minimum?]
+    norm_num
+  simp [h_min]
+  -- Show 40/31 < 2.5
+  have h_ineq : (40 : Real) / 31 < 2.5 := by
+    rw [div_lt_iff (by norm_num : (31 : Real) > 0)]
+    norm_num
+  exact h_ineq
 
 end RecognitionScience.Ethics
