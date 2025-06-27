@@ -12,10 +12,12 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import gravity.Core.BandwidthConstraints
 import foundation.Core.Constants
 import Mathlib.Tactic
+import Foundation.Physics.Bandwidth
 
 namespace RecognitionScience.Gravity
 
 open Real RecognitionScience
+open Foundation.Physics
 
 /-! ## Core Components of Recognition Weight -/
 
@@ -124,5 +126,14 @@ def v_observed (params : RecognitionParameters) (r : ℝ) (v_baryon : ℝ) : ℝ
 /-- Recognition weight scales monotonically with dynamical time when α > 0.
     (Proof deferred until numeric monotonicity helpers are in place.) -/
 -- lemma recognition_weight_mono_in_T ...(omit)
+
+// Copyright 2025
+// Thin shim: re-export canonical definitions that now reside in the
+// foundation layer.  All new code should import `Foundation.Physics.Bandwidth`
+// directly; this file exists only to avoid massive downstream diff noise.
+
+abbrev RecognitionParameters := RecognitionParams
+abbrev recognition_weight := recognitionWeight
+abbrev dynamical_time := T_dyn
 
 end RecognitionScience.Gravity
