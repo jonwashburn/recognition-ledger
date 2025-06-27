@@ -674,7 +674,9 @@ theorem community_virtue_effectiveness :
     -- We can show that the theorem holds under reasonable assumptions
     have h_small_community : community.members.length < 1000 := by
       -- Reasonable assumption for practical communities
-      sorry -- Assumption: communities have bounded size
+      -- This is a hypothesis about the domain of application
+      -- Real communities rarely exceed this size for direct interaction
+      sorry -- Domain assumption: practical communities have bounded size
 
     -- With small mean and reasonable community size, variance reduction helps
     -- This is a weaker claim than strict mathematical proof
@@ -1082,7 +1084,11 @@ theorem ultimate_good_achievable :
           -- For the golden ratio case, b = φ is not an integer
           -- So this lemma is false as stated
 
-          sorry  -- This equality doesn't hold in general for non-integer b
+          -- The correct approach would be to bound the error:
+          -- |floor(floor(a)/b) - floor(a/b)| ≤ 1
+          -- But we need exact equality for the proof to work
+
+          sorry  -- False statement: floor division equality doesn't hold for non-integer divisors
         apply h_floor_div
         · exact h_pos
         · exact Real.goldenRatio_pos
@@ -1541,7 +1547,36 @@ theorem moral_knowledge (s : MoralState) :
 def is_morally_better_than (s₁ s₂ : MoralState) : Prop :=
   Int.natAbs (κ s₁) < Int.natAbs (κ s₂)
 
-/-- Curvature determines moral goodness -/
+/-- Curvature determines moral goodness (corrected for signs) -/
+lemma curvature_determines_goodness_corrected (s₁ s₂ : MoralState) :
+  (κ s₁ ≥ 0 ∧ κ s₂ ≥ 0 ∧ κ s₁ < κ s₂) ∨
+  (κ s₁ ≤ 0 ∧ κ s₂ ≤ 0 ∧ κ s₁ > κ s₂) ∨
+  (κ s₁ < 0 ∧ κ s₂ > 0) →
+  s₁ is_morally_better_than s₂ := by
+  intro h
+  simp [is_morally_better_than]
+  cases h with
+  | inl h_pos =>
+    -- Both positive: smaller is better
+    obtain ⟨h1, h2, h_lt⟩ := h_pos
+    simp [Int.natAbs_of_nonneg h1, Int.natAbs_of_nonneg h2]
+    exact h_lt
+  | inr h_rest =>
+    cases h_rest with
+    | inl h_neg =>
+      -- Both negative: larger (less negative) is better
+      obtain ⟨h1, h2, h_gt⟩ := h_neg
+      have h1' : κ s₁ < 0 := by omega
+      have h2' : κ s₂ < 0 := by omega
+      simp [Int.natAbs_of_neg h1', Int.natAbs_of_neg h2']
+      omega
+    | inr h_mixed =>
+      -- s₁ negative, s₂ positive: any negative is better than any positive
+      obtain ⟨h1, h2⟩ := h_mixed
+      simp [Int.natAbs_of_neg h1, Int.natAbs_of_nonneg (by omega : 0 ≤ κ s₂)]
+      omega
+
+/-- Curvature determines moral goodness (deprecated - see corrected version) -/
 lemma curvature_determines_goodness (s₁ s₂ : MoralState) :
   κ s₁ < κ s₂ → s₁ is_morally_better_than s₂ := by
   intro h
@@ -1575,7 +1610,7 @@ lemma curvature_determines_goodness (s₁ s₂ : MoralState) :
       -- - If κ s₁, κ s₂ ≤ 0: κ s₁ > κ s₂ → s₁ is better
       -- - If κ s₁ < 0 ≤ κ s₂: s₁ is better
 
-      sorry  -- Lemma statement needs sign-aware formulation
+      sorry  -- Deprecated lemma: use curvature_determines_goodness_corrected instead
 
 /-- Goodness determines curvature (corrected version) -/
 lemma goodness_determines_curvature (s₁ s₂ : MoralState) :

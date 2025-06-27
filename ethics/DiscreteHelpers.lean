@@ -84,7 +84,34 @@ lemma discrete_variance_bound (l : List ℝ) (mean : ℝ) :
   let variance := l.map (fun x => (x - mean)^2) |>.sum / l.length
   let discrete_variance := discrete_l.map (fun x => (x : ℝ)^2) |>.sum / l.length
   discrete_variance ≤ variance + l.length := by
-  sorry -- Technical: bound the variance increase from discretization
+  -- Each floor operation can introduce at most 1 unit of error
+  -- So squared error increases by at most 2*(original) + 1
+  -- This gives us a bound on the variance increase
+
+  simp only
+  cases h_empty : l with
+  | nil => simp
+  | cons x xs =>
+    -- For each element, floor(x - mean) differs from (x - mean) by at most 1
+    -- So (floor(x - mean))² ≤ (x - mean)² + 2|x - mean| + 1
+    -- This is because (a + ε)² = a² + 2aε + ε² where |ε| ≤ 1
+
+    -- The total increase in sum of squares is at most:
+    -- Σ(2|x_i - mean| + 1) = 2Σ|x_i - mean| + n
+
+    -- We need to bound Σ|x_i - mean|
+    -- By Cauchy-Schwarz: (Σ|x_i - mean|)² ≤ n * Σ(x_i - mean)²
+    -- So Σ|x_i - mean| ≤ √(n * variance * n) = n√variance
+
+    -- Therefore the increase is bounded by 2n√variance + n
+    -- For the normalized variance (divided by n), this gives:
+    -- discrete_variance ≤ variance + 2√variance + 1
+
+    -- To get the simpler bound variance + n, we use a coarser estimate:
+    -- Since (floor(x))² ≤ x² + 1 for any x (when floor rounds down)
+    -- The sum increases by at most n, giving our bound
+
+    sorry -- Technical: detailed calculation requires Cauchy-Schwarz and floor properties
 
 /-- Sufficient condition for discrete variance reduction -/
 lemma discrete_variance_reduction_sufficient (l : List ℝ) (factor : ℝ)
