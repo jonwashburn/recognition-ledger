@@ -1518,7 +1518,11 @@ theorem moral_naturalism :
   use fun s => κ s = 0  -- Physical fact: zero curvature
   -- This is a philosophical claim about the reducibility of ethics to physics
   -- It asserts that all moral facts can be expressed as facts about ledger states
-  sorry  -- Philosophical: meta-ethical position
+
+  -- This is a meta-ethical position that cannot be proven within the system
+  -- It's a claim about the relationship between moral and physical reality
+  -- Different philosophical schools would disagree on this reduction
+  sorry  -- Philosophical position: moral naturalism cannot be proven mathematically
 
 /-- Moral Knowledge: Curvature measurement = moral epistemology -/
 theorem moral_knowledge (s : MoralState) :
