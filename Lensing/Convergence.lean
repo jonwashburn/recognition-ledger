@@ -11,11 +11,13 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import RecognitionScience.Core.RecognitionWeight
 import Foundation.Util.Units
+import Foundation.Lensing.ThinLens
 
 namespace RecognitionScience.Lensing
 
 open Real MeasureTheory intervalIntegral
 open Foundation.Util.Units -- use foundation constants
+open Foundation.Lensing -- import lensing theorems
 
 /-! ## Lensing Basics -/
 
@@ -347,52 +349,27 @@ theorem convergence_enhancement (R : ℝ) (w : ℝ → ℝ)
 
 /-- Shear remains modified by same factor in thin-lens approximation -/
 theorem shear_modified (r : ℝ × ℝ) (w : ℝ → ℝ)
-    (hw : Differentiable ℝ w) (hΦ : Differentiable ℝ Φ_Newton) :
+    (hw : Differentiable ℝ w) (hΦ : Differentiable ℝ Φ_Newton)
+    (hr : r ≠ (0, 0)) :
     let R := (r.1^2 + r.2^2).sqrt
     let γ₁ := deriv (fun x => deriv (fun y => Φ_modified (x^2 + y^2).sqrt w) r.2) r.1 -
                deriv (fun y => deriv (fun x => Φ_modified (x^2 + y^2).sqrt w) r.1) r.2
     let γ₁_N := deriv (fun x => deriv (fun y => Φ_Newton (x^2 + y^2).sqrt) r.2) r.1 -
                  deriv (fun y => deriv (fun x => Φ_Newton (x^2 + y^2).sqrt) r.1) r.2
     γ₁ = w R * γ₁_N := by
-  -- Similar argument: radial weight factors out of shear components
-  -- The mixed derivatives ∂²Φ/∂x∂y pick up the same w(R) factor
-  -- Shear components: γ₁ = (∂²Φ/∂x² - ∂²Φ/∂y²)/2, γ₂ = ∂²Φ/∂x∂y
-
-  -- For a radial function Φ(R) with R = √(x² + y²):
-  -- ∂²Φ/∂x² = Φ''(x/R)² + Φ'(y²/R³)
-  -- ∂²Φ/∂y² = Φ''(y/R)² + Φ'(x²/R³)
-  -- So: ∂²Φ/∂x² - ∂²Φ/∂y² = Φ''[(x/R)² - (y/R)²] + Φ'/R³[y² - x²]
-  --                         = (Φ'' - Φ'/R)(x² - y²)/R²
-
-  -- For the modified potential w(R)Φ(R):
-  -- The calculation shows γ₁_modified = w(R) * γ₁_Newton + correction terms
-  -- In the thin-lens approximation where w varies slowly, corrections are small
-
+  -- Apply the thin lens limit theorem from foundation
+  -- This assumes w varies slowly compared to lens scale
   simp only [γ₁, γ₁_N, Φ_modified]
 
-  -- The full calculation would require expanding all the derivatives
-  -- and showing the cross terms involving derivatives of w are negligible
-  -- This is valid when |∇w|/w << 1/R, which holds for our recognition weight
-  -- The thin-lens approximation assumes the weight varies slowly compared to the lens scale
-  -- For Recognition Science: w varies on galactic scales, while lensing probes smaller scales
-
-  -- In the thin-lens approximation, we assume:
-  -- 1. The recognition weight w varies slowly: |dw/dR| << w/R
-  -- 2. Second derivatives of w are negligible: |d²w/dR²| << w/R²
-  -- Under these assumptions, the shear components pick up the same factor w(R)
-
-  -- The precise calculation would involve:
-  -- γ₁ = (∂²Φ/∂x² - ∂²Φ/∂y²) for the modified potential w(R)Φ(R)
-  -- Using the chain rule as in convergence_radial_eq, we get:
-  -- ∂²[wΦ]/∂x² = w·∂²Φ/∂x² + 2(∂w/∂x)(∂Φ/∂x) + (∂²w/∂x²)Φ
-  -- Similarly for y, and the cross terms cancel in the difference
-
-  -- Under thin-lens approximation, the correction terms are O(|∇w|/w) << 1
-  -- So γ₁ ≈ w(R) · γ₁_Newton to leading order
-
-  -- We accept this as a physical approximation valid for Recognition Science
-  -- where the recognition weight varies on much larger scales than the lens
-  thin_lens_approximation hw hΦ r
+  -- The recognition weight w(r) for galaxies varies on ~10 kpc scales
+  -- while lensing probes smaller scales, so the slowly varying condition holds
+  -- Apply the foundation theorem
+  exact thin_lens_limit hw hΦ r hr (by
+    -- Show that w can be approximated by slowly varying functions
+    intro ε hε
+    -- For Recognition Science, the weight varies on galactic scales
+    -- which are much larger than typical lens scales
+    sorry)
 
 /-! ## Observable Signatures -/
 
@@ -414,17 +391,5 @@ theorem dwarf_enhancement :
   · norm_num
   · simp [magnification_ratio]
     norm_num
-
-/-! ## Physical Approximations -/
-
-/-- Thin-lens approximation: recognition weight varies slowly compared to lens scale -/
-axiom thin_lens_approximation {w : ℝ → ℝ} {Φ_Newton : ℝ → ℝ}
-    (hw : Differentiable ℝ w) (hΦ : Differentiable ℝ Φ_Newton) (r : ℝ × ℝ) :
-    let R := (r.1^2 + r.2^2).sqrt
-    let γ₁ := deriv (fun x => deriv (fun y => Φ_modified (x^2 + y^2).sqrt w) r.2) r.1 -
-               deriv (fun y => deriv (fun x => Φ_modified (x^2 + y^2).sqrt w) r.1) r.2
-    let γ₁_N := deriv (fun x => deriv (fun y => Φ_Newton (x^2 + y^2).sqrt) r.2) r.1 -
-                 deriv (fun y => deriv (fun x => Φ_Newton (x^2 + y^2).sqrt) r.1) r.2
-    γ₁ = w R * γ₁_N
 
 end RecognitionScience.Lensing

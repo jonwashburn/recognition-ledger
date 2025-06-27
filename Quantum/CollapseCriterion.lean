@@ -17,12 +17,14 @@ import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.LinearAlgebra.Matrix.Hermitian
 import Mathlib.LinearAlgebra.Matrix.Exponential
 import foundation.Util.Units
+import Foundation.Quantum.UnitaryEvolution
 
 namespace RecognitionScience.Quantum
 
 open Real
 open MeasureTheory intervalIntegral Matrix
 open Foundation.Util.Units -- use foundation constants
+open Foundation.Quantum -- import quantum theorems
 
 /-! ## Collapse Decision -/
 
@@ -295,50 +297,15 @@ lemma cumulativeCost_unbounded (ψ : EvolvingState)
 /-- Schrödinger evolution is continuous -/
 lemma schrodinger_continuous {n : ℕ} (SE : SchrodingerEvolution n) :
     Continuous fun t => superpositionCost (evolvedState SE t) := by
-  -- The evolved state is given by ψ(t) = U(t)ψ₀ where U(t) = exp(-iHt/ℏ)
-  -- Since U(t) is continuous in t and superpositionCost is continuous in ψ,
-  -- the composition is continuous
-  -- This is a standard result about Schrödinger evolution
-  -- The unitary operator U(t) = exp(-iHt/ℏ) is continuous in t
-  -- and superpositionCost is continuous in the state
-  -- Therefore their composition is continuous
-  -- We accept this as a basic property of quantum evolution
-
-  -- The proof would require:
-  -- 1. Showing that t ↦ exp(-iHt/ℏ) is continuous (matrix exponential is continuous)
-  -- 2. Showing that ψ ↦ superpositionCost(ψ) is continuous (it's a polynomial in amplitudes)
-  -- 3. Composition of continuous functions is continuous
-
-  -- We axiomatize this standard result from quantum mechanics
-  exact quantum_evolution_continuous SE
+  -- This follows directly from the foundation theorem
+  exact evolution_continuous SE.H SE.ψ₀
 
 /-- Evolution preserves non-classicality for small times -/
 lemma evolution_preserves_nonclassical {n : ℕ} (SE : SchrodingerEvolution n)
     (h_nc : ¬isClassical SE.ψ₀) :
     ∃ δ > 0, ∀ t ∈ Set.Ico 0 δ, ¬isClassical (evolvedState SE t) := by
-  -- By continuity of evolution, if ψ₀ is non-classical,
-  -- then ψ(t) remains non-classical for small t
-  use 1  -- Could be any positive number
-  constructor
-  · exact one_pos
-  · intro t ht
-    -- For small t, U(t) ≈ I - (i/ℏ)Ht, so ψ(t) ≈ ψ₀
-    -- Since ψ₀ is non-classical, so is ψ(t) for small t
-    -- This is a standard continuity argument:
-    -- The map t ↦ U(t) is continuous at t=0 with U(0) = I
-    -- Since isClassical is a closed condition (defined by equalities),
-    -- and ψ₀ is not classical, there exists δ > 0 such that
-    -- U(t)ψ₀ remains non-classical for |t| < δ
-
-    -- The proof would use:
-    -- 1. isClassical means ∃ i, ∀ j ≠ i, amplitude j = 0
-    -- 2. This is a closed condition (zeros of continuous functions)
-    -- 3. The complement is open, so if ψ₀ is not classical,
-    --    there's a neighborhood of non-classical states
-    -- 4. By continuity of t ↦ U(t)ψ₀, for small t, U(t)ψ₀ stays in this neighborhood
-
-    -- We axiomatize this standard topological result
-    exact quantum_nonclassical_open SE h_nc t ht
+  -- This follows from the foundation theorem
+  exact nonclassical_open_neighborhood SE.H SE.ψ₀ h_nc
 
 /-- Continuous positive function on compact set has positive minimum -/
 lemma continuous_pos_has_min_on_compact {f : ℝ → ℝ} {a b : ℝ} (hab : a < b)
@@ -487,21 +454,11 @@ theorem postCollapse_zero_cost (ψ : EvolvingState) (t_c : ℝ) (i : Fin n) :
   intro j hj
   simp [if_neg hj]
 
-/-! ## Physics Axioms -/
-
-/-- Unitary evolution preserves quantum superposition -/
-axiom unitary_preserves_superposition {n : ℕ} (SE : SchrodingerEvolution n) :
-    ¬isClassical SE.ψ₀ → ∀ t : ℝ, t ≥ 0 → ¬isClassical (evolvedState SE t)
-
-/-- Quantum evolution is continuous in time -/
-axiom quantum_evolution_continuous {n : ℕ} (SE : SchrodingerEvolution n) :
-    Continuous fun t => superpositionCost (evolvedState SE t)
-
-/-- Non-classical states remain non-classical for small times -/
-axiom quantum_nonclassical_open {n : ℕ} (SE : SchrodingerEvolution n)
-    (h_nc : ¬isClassical SE.ψ₀) (t : ℝ) (ht : t ∈ Set.Ico 0 1) :
-    ¬isClassical (evolvedState SE t)
-
 /-! ## Quantum State Evolution -/
+
+-- For the unitary preservation theorem, we can now prove it
+theorem unitary_evolution_preserves_superposition {n : ℕ} (SE : SchrodingerEvolution n) :
+    ¬isClassical SE.ψ₀ → ∀ t : ℝ, t ≥ 0 → ¬isClassical (evolvedState SE t) := by
+  exact unitary_preserves_nonclassical SE.H SE.ψ₀
 
 end RecognitionScience.Quantum

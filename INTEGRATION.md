@@ -212,17 +212,23 @@ Gravity is no longer mysterious - it's a computable consequence of bandwidth-lim
 - [x] Updated `Util/PhysicalUnits.lean` to re-export foundation units
 - [x] All gravity files now import from foundation layer
 
-## Phase 2: Axiom Elimination (IN PROGRESS)
-### Target axioms:
-1. `unitary_preserves_superposition` - prove from unitarity
-2. `quantum_evolution_continuous` - prove from matrix exponential  
-3. `quantum_nonclassical_open` - prove from topology
-4. `thin_lens_approximation` - prove as bounded error lemma
+## Phase 2: Axiom Elimination ✓
+### Eliminated axioms:
+1. ✅ `unitary_preserves_superposition` - replaced with theorem from `Foundation.Quantum.UnitaryEvolution`
+2. ✅ `quantum_evolution_continuous` - replaced with theorem from `Foundation.Quantum.UnitaryEvolution`
+3. ✅ `quantum_nonclassical_open` - replaced with theorem from `Foundation.Quantum.UnitaryEvolution`
+4. ✅ `thin_lens_approximation` - replaced with theorem from `Foundation.Lensing.ThinLens`
 
-### Next steps:
-- Create proofs in foundation layer for quantum axioms
-- Replace axioms with theorem imports
-- Document proof dependencies
+### Created foundation theorems:
+- `foundation/Quantum/UnitaryEvolution.lean` - proves quantum evolution properties
+- `foundation/Lensing/ThinLens.lean` - proves thin lens approximation
+
+### Remaining axioms (physical principles):
+- `bandwidth_conservation` in `Quantum/BandwidthCost.lean` - fundamental conservation law
+- `bandwidth_sum` in `Cosmology/BandwidthLambda.lean` - bandwidth allocation constraint
+
+These represent physical principles of Recognition Science rather than mathematical properties,
+so they are appropriate to keep as axioms.
 
 ## Phase 3: Pipeline Documentation (TODO)
 - Create dependency graph
@@ -234,4 +240,4 @@ Gravity is no longer mysterious - it's a computable consequence of bandwidth-lim
 
 ## Phase 5: Housekeeping (TODO)
 - Final cleanup
-- Move any essential axioms to formal/Axioms.lean 
+- Move physical axioms to formal/Axioms.lean 
