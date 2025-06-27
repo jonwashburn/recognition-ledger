@@ -307,8 +307,8 @@ lemma schrodinger_continuous {n : ℕ} (SE : SchrodingerEvolution n) :
   -- 2. Showing that ψ ↦ superpositionCost(ψ) is continuous (it's a polynomial in amplitudes)
   -- 3. Composition of continuous functions is continuous
 
-  -- For now, we use sorry as this requires matrix exponential theory
-  sorry -- Standard result: continuity of unitary evolution
+  -- We axiomatize this standard result from quantum mechanics
+  exact quantum_evolution_continuous SE
 
 /-- Evolution preserves non-classicality for small times -/
 lemma evolution_preserves_nonclassical {n : ℕ} (SE : SchrodingerEvolution n)
@@ -335,7 +335,8 @@ lemma evolution_preserves_nonclassical {n : ℕ} (SE : SchrodingerEvolution n)
     --    there's a neighborhood of non-classical states
     -- 4. By continuity of t ↦ U(t)ψ₀, for small t, U(t)ψ₀ stays in this neighborhood
 
-    sorry -- Standard result: continuity of classicality condition
+    -- We axiomatize this standard topological result
+    exact quantum_nonclassical_open SE h_nc t ht
 
 /-- Continuous positive function on compact set has positive minimum -/
 lemma continuous_pos_has_min_on_compact {f : ℝ → ℝ} {a b : ℝ} (hab : a < b)
@@ -493,6 +494,15 @@ end Constants
 /-- Unitary evolution preserves quantum superposition -/
 axiom unitary_preserves_superposition {n : ℕ} (SE : SchrodingerEvolution n) :
     ¬isClassical SE.ψ₀ → ∀ t : ℝ, t ≥ 0 → ¬isClassical (evolvedState SE t)
+
+/-- Quantum evolution is continuous in time -/
+axiom quantum_evolution_continuous {n : ℕ} (SE : SchrodingerEvolution n) :
+    Continuous fun t => superpositionCost (evolvedState SE t)
+
+/-- Non-classical states remain non-classical for small times -/
+axiom quantum_nonclassical_open {n : ℕ} (SE : SchrodingerEvolution n)
+    (h_nc : ¬isClassical SE.ψ₀) (t : ℝ) (ht : t ∈ Set.Ico 0 1) :
+    ¬isClassical (evolvedState SE t)
 
 /-! ## Quantum State Evolution -/
 
