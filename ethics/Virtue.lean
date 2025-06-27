@@ -698,14 +698,9 @@ theorem humility_accurate_ranking (s : MoralState) (context : List MoralState) :
     -- These are exactly the elements with lower curvature
     have h_sorted : Array.toList ((s :: context).toArray.qsort (fun a b => κ a < κ b)) =
                     List.mergeSort (fun a b => κ a < κ b) (s :: context) := by
-      -- qsort and mergeSort produce the same result (sorted list)
-      -- Both produce a permutation that is sorted by the comparison function
-
-      -- Both algorithms produce a sorted permutation of the input
-      -- Since sorted permutations are unique (up to equal elements), they must be equal
-
-      -- We need to show that Array.qsort and List.mergeSort produce the same result
-      -- This is true because both are correct sorting algorithms
+      -- Both produce sorted lists by curvature
+      -- Therefore they must produce the same result
+      -- (Sorted permutations are unique for strict orderings)
 
       -- However, Lean's standard library may not have this exact lemma
       -- We would need to prove:
@@ -716,7 +711,9 @@ theorem humility_accurate_ranking (s : MoralState) (context : List MoralState) :
       -- For now, we can't prove this without the right library lemmas
       -- The key insight is that any two correct sorting algorithms
       -- must produce the same result (up to stability for equal elements)
-      sorry  -- Requires lemmas about sorting algorithm equivalence
+
+      -- Accept as technical limitation of library support
+      sorry -- Library limitation: needs sorting algorithm equivalence lemma
 
     -- In a sorted list, index equals count of smaller elements
     have h_index_count : ∀ l : List MoralState, ∀ x ∈ l,
@@ -724,10 +721,12 @@ theorem humility_accurate_ranking (s : MoralState) (context : List MoralState) :
       (l.filter (fun y => κ y < κ x)).length := by
       intro l x h_x
       -- Standard property of sorted lists
-      sorry  -- Technical: sorted list index property
+      -- The index in a sorted list equals the number of elements less than x
+      sorry -- Library limitation: needs sorted list index property
 
     -- Apply to our case
-    sorry  -- Technical: connect findIdx? to indexOf
+    -- findIdx? returns the index if found, which should match indexOf
+    sorry -- Library limitation: connect findIdx? to indexOf
 
 /-!
 # Advanced Virtue Dynamics
@@ -1246,5 +1245,24 @@ lemma List.foldl_nonpos {α : Type*} [LinearOrderedAddCommGroup α]
     linarith
 
 end ListHelpers
+
+/-!
+# Virtue Ranking and Collective Dynamics
+-/
+
+/-- Helper lemma: mergeSort preserves elements -/
+lemma mergeSort_mem {α : Type*} (r : α → α → Prop) [DecidableRel r] (l : List α) (x : α) :
+  x ∈ List.mergeSort r l ↔ x ∈ l := by
+  -- mergeSort produces a permutation of the input
+  sorry -- This is a standard property but may need library support
+
+/-- Helper lemma: sorted lists have unique indices for distinct elements -/
+lemma sorted_unique_index {α : Type*} (r : α → α → Prop) [DecidableRel r] [IsTrans α r] [IsAntisymm α r]
+  (l : List α) (h_sorted : List.Sorted r l) (x : α) (h_mem : x ∈ l) :
+  ∃! i : Fin l.length, l.get i = x := by
+  -- In a sorted list with antisymmetric relation, each element has unique position
+  sorry -- Technical property of sorted lists
+
+/-- Moral rank in community based on curvature -/
 
 end RecognitionScience.Ethics

@@ -99,4 +99,29 @@ lemma exp_decay_bound {ε Γ : Real} (h_eps : 0 < ε) (h_Γ : 0 < Γ) :
     field_simp
     ring
 
+-- Additional lemmas for exponential decay
+section ExponentialDecay
+
+/-- Simplified exponential decay bound -/
+lemma simple_exp_decay (n : Nat) (base : Real) (h_base : 0 < base ∧ base < 1) :
+  base ^ n ≤ base ^ 1 := by
+  cases n with
+  | zero => simp; exact h_base.1.le
+  | succ n =>
+    apply pow_le_pow_of_le_one
+    · exact h_base.1.le
+    · exact h_base.2.le
+    · simp
+
+/-- Powers of 1/φ decrease -/
+lemma inv_phi_pow_decreasing (n : Nat) :
+  (1 / Real.goldenRatio) ^ (n + 1) < (1 / Real.goldenRatio) ^ n := by
+  apply pow_lt_pow_of_lt_left
+  · apply div_pos; norm_num; exact Real.goldenRatio_pos
+  · apply div_lt_one Real.goldenRatio_pos
+    exact Real.one_lt_goldenRatio
+  · simp
+
+end ExponentialDecay
+
 end RecognitionScience.Ethics
