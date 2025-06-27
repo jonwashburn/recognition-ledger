@@ -16,11 +16,13 @@ import Mathlib.Topology.ContinuousFunction.Basic
 import Mathlib.Analysis.ODE.Gronwall
 import Mathlib.LinearAlgebra.Matrix.Hermitian
 import Mathlib.LinearAlgebra.Matrix.Exponential
+import foundation.Util.Units
 
 namespace RecognitionScience.Quantum
 
 open Real
 open MeasureTheory intervalIntegral Matrix
+open Foundation.Util.Units -- use foundation constants
 
 /-! ## Collapse Decision -/
 
@@ -35,16 +37,16 @@ theorem collapse_criterion {n : ℕ} (ε δp ΔE Δx : ℝ)
 
 /-- Physical constant inequality for typical quantum systems -/
 lemma quantum_scale_inequality (ΔE : ℝ) (hΔE : ΔE ≥ 1e-20) :
-    ΔE * Constants.τ₀.value / Constants.ℏ.value > 1 := by
+    ΔE * τ₀ / ℏ > 1 := by
   -- τ₀ = 7.33e-15 s, ℏ = 1.054e-34 J⋅s
   -- So τ₀/ℏ ≈ 7e19 J⁻¹
   -- For ΔE ≥ 1e-20 J (typical atomic scale),
   -- ΔE * τ₀/ℏ ≥ 1e-20 * 7e19 = 0.7 > 1
-  have h1 : Constants.τ₀.value / Constants.ℏ.value > 6e19 := by
-    unfold Constants.τ₀ Constants.ℏ
+  have h1 : τ₀ / ℏ > 6e19 := by
+    unfold τ₀ ℏ
     norm_num
-  calc ΔE * Constants.τ₀.value / Constants.ℏ.value
-    = ΔE * (Constants.τ₀.value / Constants.ℏ.value) := by ring
+  calc ΔE * τ₀ / ℏ
+    = ΔE * (τ₀ / ℏ) := by ring
     _ ≥ 1e-20 * 6e19 := mul_le_mul hΔE (le_of_lt h1) (by norm_num) (by norm_num)
     _ = 6e-1 := by norm_num
     _ > 1 := by norm_num
@@ -52,7 +54,7 @@ lemma quantum_scale_inequality (ΔE : ℝ) (hΔE : ΔE ≥ 1e-20) :
 /-- Scaling shows collapse becomes inevitable for large n -/
 theorem eventual_collapse (ε δp ΔE Δx : ℝ)
     (hε : 0 < ε ∧ ε < 1) (hδp : 0 < δp ∧ δp < 1)
-    (hΔE : ΔE ≥ 1e-20) (hΔx : Δx > Constants.ℓ_Planck.value) :
+    (hΔE : ΔE ≥ 1e-20) (hΔx : Δx > ℓ_Planck) :
     ∃ N : ℕ, ∀ n ≥ N, shouldCollapse n ε δp ΔE Δx := by
   -- Since coherent ~ n² and classical ~ log n,
   -- coherent eventually dominates
@@ -62,8 +64,8 @@ theorem eventual_collapse (ε δp ΔE Δx : ℝ)
 
   -- First, simplify the constants
   let C1 := Real.log (1/ε) / Real.log 2 +
-            Real.log (ΔE * Constants.τ₀.value / Constants.ℏ.value) / Real.log 2 +
-            Real.log (Δx / Constants.ℓ_Planck.value) / Real.log 2
+            Real.log (ΔE * τ₀ / ℏ) / Real.log 2 +
+            Real.log (Δx / ℓ_Planck) / Real.log 2
   let C2 := Real.log (1/δp) / Real.log 2
 
   -- Show C1 > 0
@@ -81,7 +83,7 @@ theorem eventual_collapse (ε δp ΔE Δx : ℝ)
       · exact log_pos one_lt_two
     · apply div_pos
       · apply log_pos
-        exact (div_gt_one_iff_gt Constants.ℓ_Planck.value).mpr hΔx
+        exact (div_gt_one_iff_gt ℓ_Planck).mpr hΔx
       · exact log_pos one_lt_two
 
   -- Key insight: log n ≤ n for all n ≥ 1
@@ -181,18 +183,18 @@ theorem measurement_causes_collapse {n : ℕ} (ε δp ΔE Δx strength : ℝ)
     rw [mul_comm]
     exact lt_mul_of_one_lt_left hΔE (by linarith : 1 < 1 + strength^2)
 
-  have h2 : log (boostedΔE * Constants.τ₀.value / Constants.ℏ.value) >
-            log (ΔE * Constants.τ₀.value / Constants.ℏ.value) := by
+  have h2 : log (boostedΔE * τ₀ / ℏ) >
+            log (ΔE * τ₀ / ℏ) := by
     apply log_lt_log
-    · apply div_pos (mul_pos hΔE Constants.τ₀.value) Constants.ℏ.value
-    · rw [div_lt_div_iff Constants.ℏ.value Constants.ℏ.value]
-      exact mul_lt_mul_of_pos_right h1 Constants.τ₀.value
+    · apply div_pos (mul_pos hΔE τ₀) ℏ
+    · rw [div_lt_div_iff ℏ ℏ]
+      exact mul_lt_mul_of_pos_right h1 τ₀
 
   -- The coherent cost increases while classical cost stays the same
-  calc n^2 * (log (1/ε) / log 2 + log (boostedΔE * Constants.τ₀.value / Constants.ℏ.value) / log 2 +
-              log (Δx / Constants.ℓ_Planck.value) / log 2)
-    > n^2 * (log (1/ε) / log 2 + log (ΔE * Constants.τ₀.value / Constants.ℏ.value) / log 2 +
-             log (Δx / Constants.ℓ_Planck.value) / log 2) := by
+  calc n^2 * (log (1/ε) / log 2 + log (boostedΔE * τ₀ / ℏ) / log 2 +
+              log (Δx / ℓ_Planck) / log 2)
+    > n^2 * (log (1/ε) / log 2 + log (ΔE * τ₀ / ℏ) / log 2 +
+             log (Δx / ℓ_Planck) / log 2) := by
       apply mul_lt_mul_of_pos_left
       · apply add_lt_add_of_lt_of_le (add_lt_add_of_le_of_lt (le_refl _) _) (le_refl _)
         exact div_lt_div_of_lt_left h2 (log_pos one_lt_two) (log_pos one_lt_two)
@@ -208,8 +210,8 @@ def decoherenceTime (n : ℕ) (ε : ℝ) (updateRate : ℝ) : ℝ :=
 /-- Decoherence time scaling relation -/
 lemma decoherence_time_scaling (n : ℕ) (ε : ℝ) (rate : ℝ)
     (hn : n > 0) (hε : ε > 0) (hrate : rate > 0) :
-    decoherenceTime n ε rate * n^2 * Constants.E_coh.value * rate =
-    Constants.ℏ.value / ε := by
+    decoherenceTime n ε rate * n^2 * E_coh * rate =
+    ℏ / ε := by
   unfold decoherenceTime
   field_simp
   ring
@@ -484,10 +486,6 @@ theorem postCollapse_zero_cost (ψ : EvolvingState) (t_c : ℝ) (i : Fin n) :
   use i
   intro j hj
   simp [if_neg hj]
-
-namespace Constants
-  def ℏ : Quantity ⟨2, 1, -1⟩ := ⟨1.054571817e-34⟩  -- J⋅s
-end Constants
 
 /-! ## Physics Axioms -/
 

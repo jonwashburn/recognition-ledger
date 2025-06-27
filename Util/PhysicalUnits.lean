@@ -2,101 +2,50 @@
   Physical Units and Constants
   ============================
 
-  Dimensional analysis support for physics in Lean.
-  Provides type-safe units and fundamental constants.
+  This file now re-exports foundation units for backward compatibility.
+  All new code should import Foundation.Util.Units directly.
 -/
 
-import Mathlib.Data.Real.Basic
+import Foundation.Util.Units
 
 namespace RecognitionScience.Units
 
--- Basic dimensions
-structure Dimension where
-  length : ℤ
-  mass : ℤ
-  time : ℤ
-  deriving DecidableEq
+-- Re-export foundation types and constants
+open Foundation.Util.Units
 
--- Quantity with dimension
-structure Quantity (d : Dimension) where
-  value : ℝ
-  deriving Inhabited
+-- Backward compatibility aliases
+abbrev Dimension := Foundation.Util.Units.Dimension
+abbrev Quantity := Foundation.Util.Units.Quantity
 
--- Arithmetic for dimensioned quantities
-instance : Add (Quantity d) where
-  add q₁ q₂ := ⟨q₁.value + q₂.value⟩
+-- Re-export dimensions
+def dimensionless := Foundation.Util.Units.dimensionless
+def length := Foundation.Util.Units.length
+def mass := Foundation.Util.Units.mass
+def time := Foundation.Util.Units.time
+def velocity := Foundation.Util.Units.velocity
+def acceleration := Foundation.Util.Units.acceleration
+def energy := Foundation.Util.Units.energy
+def power := Foundation.Util.Units.power
 
-instance : Sub (Quantity d) where
-  sub q₁ q₂ := ⟨q₁.value - q₂.value⟩
+-- Re-export unit constructors
+def meter := Foundation.Util.Units.meter
+def kilogram := Foundation.Util.Units.kilogram
+def second := Foundation.Util.Units.second
+def joule := Foundation.Util.Units.joule
+def watt := Foundation.Util.Units.watt
 
-instance : Mul (Quantity d₁) (Quantity d₂) where
-  mul q₁ q₂ := ⟨q₁.value * q₂.value⟩
-
--- Standard dimensions
-def dimensionless : Dimension := ⟨0, 0, 0⟩
-def length : Dimension := ⟨1, 0, 0⟩
-def mass : Dimension := ⟨0, 1, 0⟩
-def time : Dimension := ⟨0, 0, 1⟩
-def velocity : Dimension := ⟨1, 0, -1⟩
-def acceleration : Dimension := ⟨1, 0, -2⟩
-def energy : Dimension := ⟨2, 1, -2⟩
-def power : Dimension := ⟨2, 1, -3⟩
-
--- Unit constructors
-def meter (x : ℝ) : Quantity length := ⟨x⟩
-def kilogram (x : ℝ) : Quantity mass := ⟨x⟩
-def second (x : ℝ) : Quantity time := ⟨x⟩
-def joule (x : ℝ) : Quantity energy := ⟨x⟩
-def watt (x : ℝ) : Quantity power := ⟨x⟩
-
--- Fundamental constants
+-- Re-export constants
 namespace Constants
-
-def c : Quantity velocity := ⟨2.99792458e8⟩  -- m/s
-def G : ℝ := 6.67430e-11  -- m³/kg/s²
-def ℏ : Quantity ⟨2, 1, -1⟩ := ⟨1.054571817e-34⟩  -- J⋅s
-def k_B : ℝ := 1.380649e-23  -- J/K
-
--- Planck units
-def t_Planck : Quantity time := ⟨5.391247e-44⟩
-def ℓ_Planck : Quantity length := ⟨1.616255e-35⟩
-def m_Planck : Quantity mass := ⟨2.176434e-8⟩
-
--- Recognition Science constants
-def τ₀ : Quantity time := ⟨7.33e-15⟩  -- fundamental tick
-def E_coh : Quantity energy := ⟨1.44e-20⟩  -- coherence cost
-def φ : ℝ := (1 + Real.sqrt 5) / 2  -- golden ratio
-
+  def c := Foundation.Util.Units.c
+  def G := Foundation.Util.Units.G
+  def ℏ := Foundation.Util.Units.ℏ
+  def k_B := Foundation.Util.Units.k_B
+  def t_Planck := Foundation.Util.Units.t_Planck
+  def ℓ_Planck := Foundation.Util.Units.ℓ_Planck
+  def m_Planck := Foundation.Util.Units.m_Planck
+  def τ₀ := Foundation.Util.Units.τ₀
+  def E_coh := Foundation.Util.Units.E_coh
+  def φ := Foundation.Util.Units.φ
 end Constants
-
-lemma dimension_injective : Function.Injective dimension := by
-  intro q1 q2 h
-  -- h : dimension q1 = dimension q2
-  -- We need to show q1 = q2
-  cases q1 with
-  | mass =>
-    cases q2 with
-    | mass => rfl
-    | length => simp [dimension] at h
-    | time => simp [dimension] at h
-    | dimensionless => simp [dimension] at h
-  | length =>
-    cases q2 with
-    | mass => simp [dimension] at h
-    | length => rfl
-    | time => simp [dimension] at h
-    | dimensionless => simp [dimension] at h
-  | time =>
-    cases q2 with
-    | mass => simp [dimension] at h
-    | length => simp [dimension] at h
-    | time => rfl
-    | dimensionless => simp [dimension] at h
-  | dimensionless =>
-    cases q2 with
-    | mass => simp [dimension] at h
-    | length => simp [dimension] at h
-    | time => simp [dimension] at h
-    | dimensionless => rfl
 
 end RecognitionScience.Units
