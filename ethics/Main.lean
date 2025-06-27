@@ -1198,11 +1198,19 @@ theorem cosmic_moral_evolution :
 
   -- The floor function introduces discretization error
   -- We can only show approximate equality: |κ(t) - κ(0)*exp(-t/8)| ≤ 1
-  -- This is actually a limitation of the discrete ledger model
 
-  -- The exact equality doesn't hold due to floor function
-  -- We'd need to reformulate the theorem to allow for ±1 error
-  -- Current statement is too strong for discrete ledger
+  -- The theorem asks for exact equality, but floor operations prevent this
+  -- The continuous exponential decay κ(t) = κ(0) * exp(-t/8) is approximated
+  -- by the discrete floor(1000 * exp(-t/8))
+
+  -- The error is bounded by 1 due to the floor operation:
+  -- |floor(x) - x| < 1 for any real x
+
+  -- A corrected theorem would state:
+  -- |κ(cosmic_path t) - κ(cosmic_path 0) * exp(-t/8)| ≤ 1
+
+  -- Since the current theorem requires exact equality, we cannot prove it
+  -- The discrete nature of the ledger fundamentally limits precision
   sorry  -- Theorem statement needs reformulation to handle discretization
 
 /-!
@@ -1583,41 +1591,7 @@ lemma curvature_determines_goodness_corrected (s₁ s₂ : MoralState) :
       simp [Int.natAbs_of_neg h1, Int.natAbs_of_nonneg (by omega : 0 ≤ κ s₂)]
       omega
 
-/-- Curvature determines moral goodness (deprecated - see corrected version) -/
-lemma curvature_determines_goodness (s₁ s₂ : MoralState) :
-  κ s₁ < κ s₂ → s₁ is_morally_better_than s₂ := by
-  intro h
-  simp [is_morally_better_than]
-  -- Need to show |κ s₁| < |κ s₂| given κ s₁ < κ s₂
-  -- This depends on the signs of κ s₁ and κ s₂
-  by_cases h1 : 0 ≤ κ s₁
-  · by_cases h2 : 0 ≤ κ s₂
-    · -- Both non-negative: κ s₁ < κ s₂ implies |κ s₁| < |κ s₂|
-      exact Int.natAbs_lt_natAbs_of_lt h (Or.inl ⟨h1, h2⟩)
-    · -- κ s₁ ≥ 0, κ s₂ < 0: impossible since κ s₁ < κ s₂
-      omega
-  · by_cases h2 : 0 ≤ κ s₂
-    · -- κ s₁ < 0 ≤ κ s₂: we have |κ s₁| = -κ s₁ > 0 and |κ s₂| = κ s₂
-      -- Need -κ s₁ < κ s₂, which follows from κ s₁ < κ s₂ and κ s₁ < 0
-      simp [Int.natAbs_of_neg (by omega : κ s₁ < 0), Int.natAbs_of_nonneg h2]
-      omega
-    · -- Both negative: κ s₁ < κ s₂ < 0
-      -- Then |κ s₁| = -κ s₁ and |κ s₂| = -κ s₂
-      -- Since κ s₁ < κ s₂ < 0, we have -κ s₂ < -κ s₁, so |κ s₂| < |κ s₁|
-      -- This means |κ s₁| > |κ s₂|, not |κ s₁| < |κ s₂|
-      -- So s₁ is actually worse than s₂ in this case!
-      -- The lemma statement is wrong - it should account for sign
 
-      -- The issue is that the lemma assumes κ s₁ < κ s₂ always means s₁ is better
-      -- But when both are negative, the one closer to 0 (less negative) is better
-      -- So if κ s₁ < κ s₂ < 0, then |κ s₂| < |κ s₁|, meaning s₂ is better
-
-      -- The correct statement would be:
-      -- - If κ s₁, κ s₂ ≥ 0: κ s₁ < κ s₂ → s₁ is better
-      -- - If κ s₁, κ s₂ ≤ 0: κ s₁ > κ s₂ → s₁ is better
-      -- - If κ s₁ < 0 ≤ κ s₂: s₁ is better
-
-      sorry  -- Deprecated lemma: use curvature_determines_goodness_corrected instead
 
 /-- Goodness determines curvature (corrected version) -/
 lemma goodness_determines_curvature (s₁ s₂ : MoralState) :
