@@ -196,3 +196,42 @@ Gravity is no longer mysterious - it's a computable consequence of bandwidth-lim
 ---
 
 *"The universe keeps a ledger. Gravity is just one column in the cosmic books."* 
+
+# Gravity-Foundation Integration Progress
+
+## Phase 0: Reconnaissance ✓
+- Created `docs/foundation_API.md` - catalog of foundation layer
+- Created `docs/gravity_dependency_audit.md` - identified duplicates
+
+## Phase 1: Namespace Harmonization ✓
+- [x] Created `foundation/Physics/Bandwidth.lean` with canonical RecognitionWeight
+- [x] Updated `Core/RecognitionWeight.lean` to thin wrapper
+- [x] Removed duplicate Constants namespaces in:
+  - `Quantum/CollapseCriterion.lean` 
+  - `Lensing/Convergence.lean`
+- [x] Updated `Util/PhysicalUnits.lean` to re-export foundation units
+- [x] All gravity files now import from foundation layer
+
+## Phase 2: Axiom Elimination (IN PROGRESS)
+### Target axioms:
+1. `unitary_preserves_superposition` - prove from unitarity
+2. `quantum_evolution_continuous` - prove from matrix exponential  
+3. `quantum_nonclassical_open` - prove from topology
+4. `thin_lens_approximation` - prove as bounded error lemma
+
+### Next steps:
+- Create proofs in foundation layer for quantum axioms
+- Replace axioms with theorem imports
+- Document proof dependencies
+
+## Phase 3: Pipeline Documentation (TODO)
+- Create dependency graph
+- Link Lean theorems to LaTeX papers
+
+## Phase 4: CI & Badging (TODO)
+- Add sorry/axiom checker to CI
+- Create status badge
+
+## Phase 5: Housekeeping (TODO)
+- Final cleanup
+- Move any essential axioms to formal/Axioms.lean 
