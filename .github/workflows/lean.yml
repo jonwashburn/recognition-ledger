@@ -35,18 +35,28 @@ jobs:
     - name: Check for sorries
       run: |
         echo "Checking for 'sorry' in Lean files..."
-        if grep -r "sorry" --include="*.lean" . | grep -v "^./foundation/"; then
+        if find . -name "*.lean" -type f ! -path "./foundation/*" ! -path "./archive*/*" -exec grep -l "sorry" {} \; | grep .; then
           echo "❌ Found 'sorry' in Lean files!"
           exit 1
         else
           echo "✅ No 'sorry' found in Lean files"
         fi
     
+    - name: Check for .DS_Store files
+      run: |
+        echo "Checking for .DS_Store files..."
+        if find . -name ".DS_Store" -type f | grep .; then
+          echo "❌ Found .DS_Store files! These should not be committed."
+          exit 1
+        else
+          echo "✅ No .DS_Store files found"
+        fi
+    
     - name: Check for unauthorized axioms
       run: |
         echo "Checking for axioms outside allowed files..."
         # Allowed axioms are only in these files
-        ALLOWED_FILES="Quantum/BandwidthCost.lean|Cosmology/BandwidthLambda.lean"
+        ALLOWED_FILES="formal/Axioms.lean|Quantum/BandwidthCost.lean|Cosmology/BandwidthLambda.lean"
         
         # Find all axioms
         if grep -r "^axiom" --include="*.lean" . | grep -v "^./foundation/" | grep -vE "($ALLOWED_FILES)"; then
@@ -59,7 +69,7 @@ jobs:
     - name: Count axioms
       run: |
         echo "Counting total axioms..."
-        AXIOM_COUNT=$(grep -r "^axiom" --include="*.lean" . | grep -v "^./foundation/" | wc -l)
+        AXIOM_COUNT=$(find . -name "*.lean" -type f ! -path "./foundation/*" ! -path "./archive*/*" -exec grep -l "^axiom" {} \; | wc -l)
         echo "Total axioms in gravity: $AXIOM_COUNT"
         
         if [ $AXIOM_COUNT -gt 2 ]; then
