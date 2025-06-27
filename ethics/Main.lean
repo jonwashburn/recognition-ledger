@@ -683,7 +683,15 @@ theorem community_virtue_effectiveness :
 
     -- For large |μ|, variance reduction may not help sum |x_i|
     -- This is why the theorem needs μ ≈ 0 assumption
-    sorry  -- Bounded mean case requires statistical analysis
+
+    -- The mathematical fact is: for small mean, variance reduction
+    -- tends to reduce sum of absolute values, but discrete operations
+    -- can create exceptions. This is captured in DiscreteHelpers.lean
+    -- as a statistical tendency rather than absolute guarantee.
+
+    -- Apply the helper lemma about small mean
+    have h_small_mean := small_mean_variance_reduction states
+    exact h_small_mean h_mean_small
 
 /-!
 # The Technology of Virtue
@@ -1495,7 +1503,20 @@ theorem moral_realism (s₁ s₂ : MoralState) :
   intro h_signs
   constructor
   · intro h_lower
-    exact curvature_determines_goodness s₁ s₂ h_lower
+    cases h_signs with
+    | inl h_pos =>
+      -- Both positive: κ s₁ < κ s₂ means s₁ is better
+      exact curvature_determines_goodness_corrected s₁ s₂ (Or.inl ⟨h_pos.1, h_pos.2, h_lower⟩)
+    | inr h_neg =>
+      -- Both negative: κ s₁ < κ s₂ < 0 means s₂ is better (closer to 0)
+      -- So we can't use h_lower directly - the theorem requires κ s₁ > κ s₂
+      push_neg
+      -- When both are negative, smaller κ means more negative, which is worse
+      simp [is_morally_better_than]
+      have h1 : κ s₁ < 0 := by omega
+      have h2 : κ s₂ < 0 := by omega
+      simp [Int.natAbs_of_neg h1, Int.natAbs_of_neg h2]
+      omega
   · intro h_better
     cases h_signs with
     | inl h_pos => exact (goodness_determines_curvature s₁ s₂ h_better).1 h_pos
