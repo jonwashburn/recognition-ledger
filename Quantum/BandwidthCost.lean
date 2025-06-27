@@ -11,6 +11,7 @@ import Mathlib.Data.Finset.Basic
 import Mathlib.Analysis.Convex.Basic
 import Mathlib.Data.List.Basic
 import Mathlib.Analysis.Convex.Jensen
+import RecognitionScience.formal.Axioms
 
 namespace RecognitionScience.Quantum
 
@@ -269,7 +270,10 @@ theorem bandwidth_criticality (n : ℕ) :
 /-! ## Global Constraints -/
 
 /-- Total bandwidth is conserved -/
-axiom bandwidth_conservation (systems : List SystemConfig) (allocation : List ℝ) :
-    (systems.map fun ⟨n, ρ, rate, _, _, _⟩ => bandwidthUsage ρ rate).sum ≤ bandwidth_bound
+theorem bandwidth_conservation_applied (systems : List SystemConfig) (allocation : List ℝ) :
+    (systems.map fun ⟨n, ρ, rate, _, _, _⟩ => bandwidthUsage ρ rate).sum ≤ bandwidth_bound := by
+  -- This follows from the fundamental axiom
+  exact Axioms.bandwidth_conservation systems
+    (fun s => bandwidthUsage s.ρ s.rate) bandwidth_bound
 
 end RecognitionScience.Quantum

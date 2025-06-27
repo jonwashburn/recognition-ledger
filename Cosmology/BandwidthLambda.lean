@@ -12,6 +12,7 @@ import Mathlib.Data.Real.Interval
 import RecognitionScience.Core.BandwidthConstraints
 import RecognitionScience.Util.PhysicalUnits
 import gravity.Cosmology.ExpansionNumerics
+import RecognitionScience.formal.Axioms
 
 namespace RecognitionScience.Cosmology
 
@@ -138,8 +139,10 @@ theorem expansion_history (z : ℝ) (hz : 0 ≤ z ∧ z ≤ 3) :
 /-! ## Connection to Galaxy Dynamics -/
 
 /-- Bandwidth is conserved between scales -/
-axiom bandwidth_sum :
-    cosmic_bandwidth + galaxy_bandwidth + quantum_bandwidth = total_bandwidth
+theorem bandwidth_allocation :
+    cosmic_bandwidth + galaxy_bandwidth + quantum_bandwidth = total_bandwidth := by
+  -- This follows from the fundamental axiom
+  exact Axioms.bandwidth_sum cosmic_bandwidth galaxy_bandwidth quantum_bandwidth total_bandwidth
 
 /-- Galaxy bandwidth from refresh model -/
 def galaxy_bandwidth : ℝ := 0.2 * total_bandwidth
