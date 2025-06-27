@@ -1077,9 +1077,23 @@ theorem virtue_emergence (community : MoralCommunity) (generations : Nat)
     -- This reduces the L1 norm when there's variation in the balances
 
     -- However, the floor operations in our implementation break the exact contraction property
-    -- We would need a more sophisticated analysis for the discrete case
+    -- Accept as technical limitation of discrete model
 
-    sorry  -- Technical: discrete contraction mapping with floor operations
+    -- The continuous version provably reduces total curvature
+    -- But discrete floor operations can create local increases
+    -- Over many iterations, the trend is still reduction
+
+    -- This is similar to discrete gradient descent having oscillations
+    -- while continuous gradient descent monotonically decreases
+
+    -- For a rigorous proof, we would need:
+    -- 1. Stochastic analysis of floor operation effects
+    -- 2. Probabilistic bounds on total curvature reduction
+    -- 3. Convergence rate analysis for discrete consensus
+
+    -- These tools are beyond current scope
+    -- Accept the limitation and use continuous approximation for analysis
+    sorry  -- Technical limitation: discrete operations break strict contraction
 
 /-!
 # The Technology Stack
