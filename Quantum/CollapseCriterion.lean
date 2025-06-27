@@ -301,7 +301,14 @@ lemma schrodinger_continuous {n : ℕ} (SE : SchrodingerEvolution n) :
   -- and superpositionCost is continuous in the state
   -- Therefore their composition is continuous
   -- We accept this as a basic property of quantum evolution
-  admit -- Standard result: continuity of unitary evolution
+
+  -- The proof would require:
+  -- 1. Showing that t ↦ exp(-iHt/ℏ) is continuous (matrix exponential is continuous)
+  -- 2. Showing that ψ ↦ superpositionCost(ψ) is continuous (it's a polynomial in amplitudes)
+  -- 3. Composition of continuous functions is continuous
+
+  -- For now, we use sorry as this requires matrix exponential theory
+  sorry -- Standard result: continuity of unitary evolution
 
 /-- Evolution preserves non-classicality for small times -/
 lemma evolution_preserves_nonclassical {n : ℕ} (SE : SchrodingerEvolution n)
@@ -320,7 +327,15 @@ lemma evolution_preserves_nonclassical {n : ℕ} (SE : SchrodingerEvolution n)
     -- Since isClassical is a closed condition (defined by equalities),
     -- and ψ₀ is not classical, there exists δ > 0 such that
     -- U(t)ψ₀ remains non-classical for |t| < δ
-    admit -- Standard result: continuity of classicality condition
+
+    -- The proof would use:
+    -- 1. isClassical means ∃ i, ∀ j ≠ i, amplitude j = 0
+    -- 2. This is a closed condition (zeros of continuous functions)
+    -- 3. The complement is open, so if ψ₀ is not classical,
+    --    there's a neighborhood of non-classical states
+    -- 4. By continuity of t ↦ U(t)ψ₀, for small t, U(t)ψ₀ stays in this neighborhood
+
+    sorry -- Standard result: continuity of classicality condition
 
 /-- Continuous positive function on compact set has positive minimum -/
 lemma continuous_pos_has_min_on_compact {f : ℝ → ℝ} {a b : ℝ} (hab : a < b)

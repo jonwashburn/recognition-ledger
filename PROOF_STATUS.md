@@ -11,14 +11,13 @@ This document tracks the proof status of all theorems in the gravity module. We 
 - ✅ **Proven**: Complete proof with no sorries or admits
 - 🟡 **Commented**: Theorem statement exists but proof deferred (in comments)
 - 🔴 **Sorry**: Contains sorry (must be resolved)
-- ⚠️ **Admit**: Contains admit for well-known result
 - 📐 **Numeric**: Requires numerical computation tools
 
 ## Summary
 - **Total Theorems**: 50+ 
-- **Proven**: 44+ (88%+)
-- **Remaining Sorries**: 0 🎉
-- **Remaining Admits**: 6 (standard results)
+- **Proven**: 46+ (92%+)
+- **Remaining Sorries**: 4 (8%)
+- **Remaining Admits**: 0 🎉
 - **Files with Issues**: 2/18
 
 ## Completed Files (Sorry/Admit-Free)
@@ -26,87 +25,45 @@ This document tracks the proof status of all theorems in the gravity module. We 
 ✅ Core/TriagePrinciple.lean  
 ✅ Core/BandwidthConstraints.lean
 ✅ Util/PhysicalUnits.lean  
+✅ Util/Variational.lean  
+✅ Derivations/AccelerationScale.lean  
+✅ Quantum/BandwidthCost.lean  
+✅ Quantum/BornRule.lean  
 ✅ Cosmology/BandwidthLambda.lean  
 ✅ Cosmology/ExpansionNumerics.lean  
-✅ Quantum/BandwidthCost.lean  
-✅ Derivations/AccelerationScale.lean
-✅ Util/Variational.lean
-✅ Quantum/BornRule.lean 🆕
 
-## Files with Active Admits
+## Files with Remaining Sorries
 
-### ⚠️ Quantum/CollapseCriterion.lean  
-- `evolution_continuous` (line 303): **Admit** - Standard QM result
-- `classicality_continuous` (line 322): **Admit** - Standard result
+### Lensing/Convergence.lean (1 sorry)
+- 🔴 `shear_modified`: Thin-lens approximation requires bounds on derivatives of w
 
-### ⚠️ Lensing/Convergence.lean
-- `laplacian_radial` (line 86): **Admit** - Standard calculus
-- `mixed_partials` (line 209): **Admit** - Chain rule
-- `convergence_cartesian_eq_polar` (line 237): **Admit** - Coordinate transform
-- `thin_lens_approximation` (line 324): **Admit** - Standard optics
+### Quantum/CollapseCriterion.lean (2 sorries)
+- 🔴 `schrodinger_continuous`: Requires matrix exponential continuity theory
+- 🔴 `evolution_preserves_nonclassical`: Requires topological argument about open/closed sets
 
-## Major Achievements
+## Axioms Used
 
-### 2024-12-27
-- ✅ **Eliminated ALL sorries!** 
-- Completed KL divergence proof using elementary inequalities
-- Proved max_entropy_uniform without advanced convex analysis imports
-- Used log(x) ≤ x - 1 inequality to establish KL divergence non-negativity
-- BornRule.lean is now completely sorry-free
+### Quantum/CollapseCriterion.lean
+- ⚠️ `unitary_preserves_superposition`: Physical axiom that unitary evolution preserves superposition
 
-### Key Proof Techniques Used
-1. **KL Divergence**: Used log(x) ≤ x - 1 to prove D(p||q) ≥ 0
-2. **Entropy Maximization**: Normalized weights to apply uniform distribution lemma
-3. **Elementary Inequalities**: Avoided need for convex analysis imports
+## Recent Progress
+- ✅ Eliminated ALL admits from the codebase
+- ✅ Completed BornRule.lean with elementary proofs
+- ✅ Resolved chain rule calculations in Lensing/Convergence.lean
+- ✅ Replaced all admits with proper sorries or proofs
 
-## Remaining Work
+## Next Steps
+1. Prove thin-lens approximation in `shear_modified`
+2. Add matrix exponential theory for `schrodinger_continuous`
+3. Complete topological argument for `evolution_preserves_nonclassical`
+4. Consider whether physical axiom `unitary_preserves_superposition` can be derived
 
-### Standard Mathematical Results (6 admits)
-These are well-known results that could be proven but are accepted as domain knowledge:
-- Chain rule for mixed partial derivatives
-- Laplacian in polar coordinates
-- Continuity of unitary evolution
-- Thin lens approximation
-
-### Philosophy
-
-We distinguish between:
-- **Sorries**: Gaps in our reasoning (NONE REMAINING ✅)
-- **Admits**: Well-known results we could prove but choose not to
-- **Comments**: Deferred work (acceptable for now)
-
-The goal of zero sorries has been achieved! The remaining admits are all standard mathematical/physical results that would typically be imported from libraries.
-
-## Proof Strategies
-
-### For Convexity Lemmas (BornRule.lean)
-- Import Mathlib's convex analysis
-- Or: Prove second derivative test directly
-- Or: Use elementary inequalities
-
-### For Standard Results (CollapseCriterion.lean)
-- These are textbook results in QM
-- Could import from physics libraries
-- Or: Accept as domain knowledge
-
-### For Calculus (Convergence.lean)
-- Import Mathlib's multivariable calculus
-- Or: Prove chain rule instances directly
-- Most are mechanical calculations
-
-## Progress Notes
-
-### 2024-12-27
-- Implemented KL divergence approach for max_entropy_uniform
-- Added helper lemmas for convexity of x log x
-- Reduced total sorry count from ~10 to 2
-- All remaining issues are standard mathematical results
-
-### Next Steps
-1. Import convex analysis from Mathlib for BornRule lemmas
-2. Complete chain rule calculations in Convergence.lean
-3. Document which admits are acceptable as "standard results"
-4. Consider creating a StandardResults.lean file
+## Notes
+- The remaining sorries are for standard mathematical results that require:
+  - Matrix exponential continuity (standard in functional analysis)
+  - Topological properties of continuous functions
+  - Approximation theory for slowly varying functions
+- The one axiom is a fundamental physical postulate of quantum mechanics
 
 ## Philosophy
 
