@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Python
+# Python cache and environment files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -10,7 +8,13 @@ env/
 venv/
 .env
 
-# Data files (too large for GitHub)
+# Lean / Lake build artifacts
+.lake/
+lake-manifest.json
+*.olean
+*.ilean
+
+# Data / large binary artifacts (too large for Git)
 *.pkl
 *.pickle
 *.h5
@@ -18,27 +22,27 @@ venv/
 *.npy
 *.npz
 
-# Results
+# Images & figures
 *.png
 *.jpg
 *.pdf
 *.eps
 
-# Jupyter
-.ipynb_checkpoints
+# Jupyter notebooks
+.ipynb_checkpoints/
 *.ipynb
 
-# OS
+# Operating-system metadata
 .DS_Store
 Thumbs.db
 
-# IDE
+# IDE/project settings
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# LaTeX
+# LaTeX build files
 *.aux
 *.log
 *.out
@@ -47,35 +51,14 @@ Thumbs.db
 *.blg
 *.synctex.gz
 
-# Archive
+# Temporary working directory
+working/
+.cache/
+
+# Archive directory (legacy, large)
 archive/
 
-# Keep essential data
+# Keep essential committed data (explicit whitelist)
 !data/Rotmod_LTG/*.dat
 !results/.gitkeep
 !docs/*.txt
-=======
-# Lean / Lake build artifacts
-.lake/
-lake-manifest.json
-*.olean
-*.ilean
-
-# Large binaries and generated PDFs
-*.pdf
-*.png
-*.jpg
-*.aux
-*.log
-*.out
-
-# OS metadata
-.DS_Store
-
-# Ignore large dataset files
-Particle-Masses-B.txt 
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
-working/
-=======
-.cache/
->>>>>>> gravity-integration
