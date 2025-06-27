@@ -1,0 +1,19 @@
+name = "gravity"
+defaultTargets = ["Gravity"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+
+[[require]]
+name = "ledger"
+path = "../ledger"
+
+[[require]]
+name = "foundation"
+path = "../foundation"
+
+[[lean_lib]]
+name = "Gravity"
+roots = ["Core", "Derivations", "Validation"]
+globs = ["Gravity/*.lean", "Gravity/**/*.lean"] 

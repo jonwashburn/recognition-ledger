@@ -1,0 +1,25 @@
+{
+  "description": "LNAL forward model with observational effects",
+  "galaxies": [
+    {
+      "name": "NGC3198",
+      "chi2_reduced": 1561.3973815715974,
+      "success": true
+    },
+    {
+      "name": "NGC2403",
+      "chi2_reduced": 1511.627636812007,
+      "success": true
+    },
+    {
+      "name": "NGC6503",
+      "chi2_reduced": 2567.9328158555813,
+      "success": true
+    },
+    {
+      "name": "DDO154",
+      "chi2_reduced": 25959.275276433673,
+      "success": true
+    }
+  ]
+}

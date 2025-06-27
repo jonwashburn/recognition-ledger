@@ -304,29 +304,90 @@ def recognitionEntropy (w : Fin n → ℝ) : ℝ :=
 
 /-! ## Helper Lemmas for Entropy -/
 
-/-- The function x ↦ x log x is convex on [0, ∞) -/
-lemma convex_mul_log : ConvexOn ℝ (Set.Ici 0) (fun x => if x = 0 then 0 else x * log x) := by
-  -- This is a standard result in convex analysis
-  -- The second derivative is 1/x > 0 for x > 0
-  -- At x = 0, we use the convention 0 log 0 = 0
-  -- The proof requires showing:
-  -- 1. The function is continuous (with 0 log 0 = 0 convention)
-  -- 2. The second derivative is positive on (0, ∞)
-  sorry  -- This would require importing convex analysis lemmas
+/-- For positive weights, sum of w_i log w_i is minimized when weights are equal -/
+lemma sum_mul_log_ge_uniform {n : ℕ} {w : Fin n → ℝ} {S : Finset (Fin n)}
+    (hw_pos : ∀ i ∈ S, 0 < w i) (hw_sum : S.sum w = 1) (hS_nonempty : S.Nonempty) :
+    S.sum (fun i => w i * log (w i)) ≥ S.sum (fun i => w i * log (1 / S.card)) := by
+  -- This is equivalent to showing ∑ w_i log(w_i * S.card) ≥ 0
+  -- Which is the KL divergence from uniform distribution on S
 
-/-- Jensen's inequality for x log x -/
-lemma jensen_mul_log {n : ℕ} {w : Fin n → ℝ} {S : Finset (Fin n)}
-    (hw_pos : ∀ i ∈ S, 0 < w i) (hw_sum : 0 < S.sum w) :
-    S.sum (fun i => w i * log (w i)) ≥ (S.sum w) * log (S.sum w / S.card) := by
-  -- This follows from convexity of x log x and Jensen's inequality
-  -- For convex f and weights λᵢ with ∑λᵢ = 1:
-  -- f(∑λᵢxᵢ) ≤ ∑λᵢf(xᵢ)
-  -- Here we use λᵢ = 1/|S| and xᵢ = wᵢ
-  -- This gives: f(∑wᵢ/|S|) ≤ ∑f(wᵢ)/|S|
-  -- Rearranging: |S|·f(w_sum/|S|) ≤ ∑f(wᵢ)
-  -- With f(x) = x log x: (w_sum/|S|)·|S|·log(w_sum/|S|) ≤ ∑wᵢ log wᵢ
-  -- Simplifying: w_sum·log(w_sum/|S|) ≤ ∑wᵢ log wᵢ
-  sorry  -- This would follow from convex_mul_log and general Jensen's inequality
+  -- For a direct proof, we use that log is strictly concave
+  -- The key insight: ∑ w_i log w_i is minimized when all w_i are equal
+  -- This is because -x log x is strictly concave
+
+  -- When all weights are equal to 1/|S|, we get:
+  -- ∑ (1/|S|) log(1/|S|) = log(1/|S|)
+
+  -- For any other distribution, Jensen's inequality gives us a larger value
+  -- But we'll use a more elementary approach
+
+  -- First, note that ∑ w_i log(1/|S|) = log(1/|S|) since ∑ w_i = 1
+  have h_rhs : S.sum (fun i => w i * log (1 / S.card)) = log (1 / S.card) := by
+    simp [← Finset.mul_sum, hw_sum]
+
+  -- So we need to show: ∑ w_i log w_i ≥ log(1/|S|)
+  -- Equivalently: ∑ w_i log w_i - log(1/|S|) ≥ 0
+  -- Which is: ∑ w_i log w_i + log |S| ≥ 0
+  -- Or: ∑ w_i log(w_i * |S|) ≥ 0
+
+  -- This is the non-negativity of KL divergence D(w || uniform)
+  -- We'll prove this using the fact that log(x) ≤ x - 1 for all x > 0
+
+  -- Actually, let's use a different approach
+  -- We know that for any probability distribution p and q:
+  -- ∑ p_i log(p_i/q_i) ≥ 0 with equality iff p = q
+
+  -- In our case, p_i = w_i and q_i = 1/|S| (uniform on S)
+  -- So we need: ∑ w_i log(w_i / (1/|S|)) ≥ 0
+  -- Which is: ∑ w_i log(w_i * |S|) ≥ 0
+
+  -- We'll prove this using the inequality log(x) ≤ x - 1
+  have h_log_le : ∀ x > 0, log x ≤ x - 1 := fun x hx => log_le_sub_one_of_pos hx
+
+  -- Apply this with x = 1/(w_i * |S|)
+  -- We get: log(1/(w_i * |S|)) ≤ 1/(w_i * |S|) - 1
+  -- So: -log(w_i * |S|) ≤ 1/(w_i * |S|) - 1
+  -- Therefore: log(w_i * |S|) ≥ 1 - 1/(w_i * |S|)
+  -- Multiply by w_i: w_i log(w_i * |S|) ≥ w_i - 1/|S|
+
+  -- Sum over i: ∑ w_i log(w_i * |S|) ≥ ∑ w_i - ∑ 1/|S| = 1 - |S|/|S| = 0
+
+  -- Let's implement this more carefully
+  have h_kl : 0 ≤ S.sum (fun i => w i * log (w i * S.card)) := by
+    -- We'll show the sum is non-negative
+    -- Using -log(x) ≥ 1 - x for x > 0
+    have h_ineq : ∀ i ∈ S, w i * (1 - 1 / (w i * S.card)) ≤ w i * log (w i * S.card) := by
+      intro i hi
+      have : 0 < w i * S.card := mul_pos (hw_pos i hi) (Nat.cast_pos.mpr (Finset.card_pos.mpr hS_nonempty))
+      -- From log x ≤ x - 1, we get 1 - 1/x ≤ log x
+      have : 1 - 1 / (w i * S.card) ≤ log (w i * S.card) := by
+        have h := h_log_le (1 / (w i * S.card)) (div_pos one_pos this)
+        rw [log_inv (ne_of_gt this)] at h
+        linarith
+      exact mul_le_mul_of_nonneg_left this (le_of_lt (hw_pos i hi))
+
+    -- Sum the inequality
+    calc 0 = 1 - 1 := by norm_num
+         _ = S.sum w - S.sum (fun _ => 1 / S.card) := by simp [hw_sum, Finset.sum_const, Finset.card_def]
+         _ = S.sum (fun i => w i - 1 / S.card) := by simp [← Finset.sum_sub_distrib]
+         _ = S.sum (fun i => w i * (1 - 1 / (w i * S.card))) := by
+             congr 1; ext i
+             field_simp
+             ring
+         _ ≤ S.sum (fun i => w i * log (w i * S.card)) := Finset.sum_le_sum (fun i hi => h_ineq i hi)
+
+  -- Now use that log(w_i * |S|) = log w_i + log |S|
+  calc S.sum (fun i => w i * log (w i))
+      = S.sum (fun i => w i * log (w i * S.card)) - S.sum (fun i => w i * log S.card) := by
+          simp [← Finset.sum_sub_distrib]
+          congr 1; ext i
+          rw [← log_mul (hw_pos i (Finset.mem_of_mem_filter _)) (Nat.cast_pos.mpr (Finset.card_pos.mpr hS_nonempty))]
+          ring
+      _ ≥ 0 - S.sum (fun i => w i * log S.card) := by
+          apply sub_le_sub_right h_kl
+      _ = - log S.card := by simp [← Finset.mul_sum, hw_sum]
+      _ = log (1 / S.card) := by rw [log_inv (Nat.cast_ne_zero.mpr (Finset.card_ne_zero.mpr hS_nonempty))]
+      _ = S.sum (fun i => w i * log (1 / S.card)) := by rw [← h_rhs]
 
 /-- The KL divergence from uniform distribution is non-negative -/
 lemma KL_divergence_nonneg {n : ℕ} (w : Fin n → ℝ)
@@ -452,8 +513,70 @@ lemma KL_divergence_nonneg {n : ℕ} (w : Fin n → ℝ)
           -- Actually, the cleanest approach is to use that
           -- f(x) = x log x is convex, and apply Jensen directly
 
-          -- Apply Jensen's inequality for x log x
-          exact jensen_mul_log (fun i hi => by simp [I₊, Finset.mem_filter] at hi; exact hi.2) hw_sum_pos
+          -- Apply the sum_mul_log_ge_uniform lemma
+          -- First normalize the weights to sum to 1
+          let w' := fun i => w i / w_sum
+          have hw'_pos : ∀ i ∈ I₊, 0 < w' i := by
+            intro i hi
+            simp [w']
+            apply div_pos
+            · simp [I₊, Finset.mem_filter] at hi
+              exact hi.2
+            · exact hw_sum_pos
+          have hw'_sum : I₊.sum w' = 1 := by
+            simp [w', ← Finset.sum_div]
+            exact div_self (ne_of_gt hw_sum_pos)
+
+          -- Apply the lemma to normalized weights
+          have h_normalized : I₊.sum (fun i => w' i * log (w' i)) ≥
+                              I₊.sum (fun i => w' i * log (1 / I₊.card)) :=
+            sum_mul_log_ge_uniform hw'_pos hw'_sum h_nonempty
+
+          -- Scale back to original weights
+          -- Note: w' i * log(w' i) = (w i / w_sum) * log(w i / w_sum)
+          --                        = (w i / w_sum) * (log w i - log w_sum)
+          --                        = (w i * log w i) / w_sum - (w i / w_sum) * log w_sum
+
+          -- So: ∑ w' i * log(w' i) = (∑ w i * log w i) / w_sum - log w_sum
+          -- And: ∑ w' i * log(1/|I₊|) = log(1/|I₊|)
+
+          -- From h_normalized: (∑ w i * log w i) / w_sum - log w_sum ≥ log(1/|I₊|)
+          -- Multiply by w_sum: ∑ w i * log w i - w_sum * log w_sum ≥ w_sum * log(1/|I₊|)
+          -- Rearrange: ∑ w i * log w i ≥ w_sum * log w_sum + w_sum * log(1/|I₊|)
+          --           ∑ w i * log w i ≥ w_sum * log(w_sum/|I₊|)
+
+          have h_scale : I₊.sum (fun i => w i * log w i) ≥ w_sum * log (w_sum / I₊.card) := by
+            -- From normalized inequality
+            have : I₊.sum (fun i => w' i * log (w' i)) ≥ log (1 / I₊.card) := by
+              rw [← Finset.mul_sum] at h_normalized
+              simp [hw'_sum] at h_normalized
+              exact h_normalized
+
+            -- Express in terms of original weights
+            have h_conv : I₊.sum (fun i => w' i * log (w' i)) =
+                          I₊.sum (fun i => w i * log w i) / w_sum - log w_sum := by
+              simp [w']
+              rw [← Finset.sum_div]
+              congr 1
+              simp [← Finset.sum_sub_distrib]
+              congr 1; ext i
+              field_simp
+              rw [log_div (by simp [I₊, Finset.mem_filter] at *; assumption) (ne_of_gt hw_sum_pos)]
+              ring
+
+            rw [h_conv] at this
+            have : I₊.sum (fun i => w i * log w i) / w_sum ≥ log w_sum + log (1 / I₊.card) := by linarith
+            have : I₊.sum (fun i => w i * log w i) ≥ w_sum * (log w_sum + log (1 / I₊.card)) := by
+              rw [← div_le_iff hw_sum_pos] at this
+              exact this
+            rw [mul_add, ← log_mul (ne_of_gt hw_sum_pos)
+                (inv_ne_zero (Nat.cast_ne_zero.mpr (Finset.card_ne_zero.mpr h_nonempty)))] at this
+            simp at this
+            exact this
+
+          -- Now show the required inequality
+          simp [← Finset.mul_sum]
+          exact h_scale
       _ = w_sum * log (w_sum / I₊.card) + w_sum * log n := by
           simp [← Finset.mul_sum]
       _ = w_sum * (log (w_sum / I₊.card) + log n) := by ring
