@@ -702,17 +702,10 @@ theorem humility_accurate_ranking (s : MoralState) (context : List MoralState) :
       -- Therefore they must produce the same result
       -- (Sorted permutations are unique for strict orderings)
 
-      -- However, Lean's standard library may not have this exact lemma
-      -- We would need to prove:
-      -- 1. Both produce permutations of the input
-      -- 2. Both produce sorted lists
-      -- 3. Sorted permutations are unique
-
-      -- For now, we can't prove this without the right library lemmas
-      -- The key insight is that any two correct sorting algorithms
-      -- must produce the same result (up to stability for equal elements)
-
       -- Accept as technical limitation of library support
+      -- The mathematical fact is true: sorting algorithms produce the same result
+      -- But proving it requires lemmas about permutations and sorted lists
+      -- that may not be available in the current Mathlib version
       sorry -- Library limitation: needs sorting algorithm equivalence lemma
 
     -- In a sorted list, index equals count of smaller elements

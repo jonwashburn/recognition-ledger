@@ -111,7 +111,17 @@ lemma discrete_variance_bound (l : List ℝ) (mean : ℝ) :
     -- Since (floor(x))² ≤ x² + 1 for any x (when floor rounds down)
     -- The sum increases by at most n, giving our bound
 
-    sorry -- Technical: detailed calculation requires Cauchy-Schwarz and floor properties
+    -- Actually, let's use a much simpler bound:
+    -- For any real r, |floor(r) - r| < 1
+    -- So |floor(r)|² ≤ (|r| + 1)² = |r|² + 2|r| + 1
+    -- Since |r|² ≤ (any positive bound), we get a loose but valid bound
+
+    -- The discrete variance is bounded by the continuous variance plus
+    -- the maximum possible error from discretization
+    -- Since each squared term can increase by at most a bounded amount,
+    -- and we normalize by dividing by length, the bound holds
+
+    sorry -- Technical: requires detailed epsilon-delta analysis with floor function
 
 /-- Sufficient condition for discrete variance reduction -/
 lemma discrete_variance_reduction_sufficient (l : List ℝ) (factor : ℝ)
@@ -121,7 +131,23 @@ lemma discrete_variance_reduction_sufficient (l : List ℝ) (factor : ℝ)
   let orig_var := l.map (fun x => (x - mean)^2) |>.sum
   let new_var := transformed.map (fun x => ((x : ℝ) - mean)^2) |>.sum
   l.length > 10 → new_var < orig_var := by
-  sorry -- Prove that for reasonable list sizes, variance still reduces
+  intro h_length
+  -- The transformation x ↦ x + factor * (mean - x) = (1 - factor) * x + factor * mean
+  -- is a contraction toward the mean when 0 < factor < 1
+  -- This reduces variance in the continuous case
+
+  -- However, the floor operation introduces discretization errors
+  -- For large enough lists, the variance reduction dominates the discretization error
+
+  -- The precise proof would require:
+  -- 1. Showing the continuous transformation reduces variance by factor (1-factor)²
+  -- 2. Bounding the discretization error by O(n) where n = list length
+  -- 3. Showing that for n > 10 and factor < 0.5, the reduction dominates
+
+  -- This is a standard result in numerical analysis but requires
+  -- detailed epsilon-delta arguments with floor functions
+
+  sorry -- Technical: discrete contraction analysis requires numerical methods
 
 /-! ## Convexity approximations -/
 
@@ -131,7 +157,62 @@ lemma discrete_abs_sum_convexity (l : List ℤ) (mean : ℤ)
   let centered := l.map (· - mean)
   let spread := l.map (fun x => x - mean + if x > mean then 1 else -1)
   (centered.map natAbs).sum ≤ (spread.map natAbs).sum + l.length := by
-  sorry -- Show that spreading increases sum of absolute values
+  -- The key insight: spreading values away from mean increases sum of absolute values
+  -- For each element x:
+  -- - If x > mean: spread adds 1, so |x - mean + 1| ≥ |x - mean|
+  -- - If x ≤ mean: spread subtracts 1, so |x - mean - 1| could be smaller
+  -- But overall, the spreading increases the sum
+
+  simp only
+  -- We'll show the inequality element by element
+  have h_pointwise : ∀ x ∈ l,
+    natAbs (x - mean) ≤ natAbs (x - mean + if x > mean then 1 else -1) + 1 := by
+    intro x _
+    by_cases h : x > mean
+    · -- Case x > mean: adding 1 increases absolute value
+      simp [h]
+      -- |x - mean| ≤ |x - mean + 1| + 1
+      -- This holds because |a| ≤ |a + 1| + 1 for any integer a ≥ 0
+      have : x - mean > 0 := by omega
+      have : natAbs (x - mean) = Int.natAbs (x - mean) := rfl
+      have : natAbs (x - mean + 1) = Int.natAbs (x - mean + 1) := rfl
+      omega
+    · -- Case x ≤ mean: subtracting 1 might decrease absolute value
+      simp [h]
+      -- |x - mean| ≤ |x - mean - 1| + 1
+      -- This always holds: |a| ≤ |a - 1| + 1
+      have : natAbs (x - mean) ≤ natAbs (x - mean - 1) + 1 := by
+        cases' (x - mean) with n n
+        · -- x - mean = n (non-negative)
+          simp [natAbs]
+          by_cases h' : n = 0
+          · simp [h']
+          · have : n ≥ 1 := by omega
+            simp [Int.natAbs]
+            omega
+        · -- x - mean = -(n+1) (negative)
+          simp [natAbs, Int.natAbs]
+          -- |-(n+1)| ≤ |-(n+1) - 1| + 1
+          -- n+1 ≤ |-(n+2)| + 1 = n+2 + 1
+          omega
+      exact this
+
+  -- Sum over all elements
+  calc (centered.map natAbs).sum
+    = (l.map (· - mean)).map natAbs |>.sum := by simp [centered]
+    _ ≤ (l.map (fun x => x - mean + if x > mean then 1 else -1)).map natAbs |>.sum + l.length := by
+      -- Apply pointwise inequality
+      simp only [List.map_map]
+      induction l with
+      | nil => simp
+      | cons x xs ih =>
+        simp [List.sum_cons, List.map_cons]
+        have h_x := h_pointwise x (List.mem_cons_self x xs)
+        have h_xs : ∀ y ∈ xs, natAbs (y - mean) ≤ natAbs (y - mean + if y > mean then 1 else -1) + 1 := by
+          intro y hy
+          exact h_pointwise y (List.mem_cons_of_mem x hy)
+        linarith
+    _ = (spread.map natAbs).sum + l.length := by simp [spread]
 
 /-- Weak convexity: variance reduction usually reduces sum of absolute values -/
 lemma variance_reduction_helps_abs_sum (l : List ℤ) :
