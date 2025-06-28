@@ -10,10 +10,12 @@ This report enumerates every remaining `sorry` (or placeholder definition) in th
 - ✅ COMPLETED: `foundation/Core/EightFoundations.lean` line 144 (recognition_requires_distinction)
 - ✅ COMPLETED: `foundation/Core/EightFoundations.lean` line 173 (meta_to_discrete - Recognition X X)
 - ✅ COMPLETED: `foundation/Core/EightFoundations.lean` line 218 (dual_to_cost - Recognition B B)
+- ✅ COMPLETED: `foundation/Core/Derivations/GoldenRatioDerivation.lean` line 198 (quadratic formula)
 
 ## Files Now Complete (0 sorries)
 - ✅ `foundation/Core/LogicalChainFix.lean`
 - ✅ `foundation/Core/EightFoundations.lean`
+- ✅ `foundation/Core/Derivations/GoldenRatioDerivation.lean`
 
 ## Remaining Sorries by File
 
@@ -25,7 +27,6 @@ This report enumerates every remaining `sorry` (or placeholder definition) in th
 | foundation/Core/Derivations/CostFunctionalDerivation.lean | 6 | Medium |
 | foundation/Core/Derivations/TopologicalCharge.lean | 4 | Medium |
 | foundation/Core/Derivations/CoherenceQuantumFixed.lean | 3 | Low |
-| foundation/Core/Derivations/GoldenRatioDerivation.lean | 1 | Low |
 
 ## Axioms Added
 - `recognition_realizability` in LogicalChainFix.lean (philosophical bridge between recognition and physical realizability) 
