@@ -11,11 +11,13 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import RecognitionScience.Core.RecognitionWeight
 import Foundation.Lensing.ThinLens
+import Foundation.Util.Units
 
 namespace RecognitionScience.Lensing
 
 open Real MeasureTheory intervalIntegral
 open Foundation.Lensing -- Import thin lens theorems
+open Foundation.Util.Units -- Import foundation constants
 
 /-! ## Lensing Basics -/
 
@@ -25,7 +27,7 @@ def surfaceDensity (R : ℝ) : ℝ :=
 
 /-- Newtonian lensing potential in polar coordinates -/
 noncomputable def Φ_Newton (R : ℝ) : ℝ :=
-  2 * Constants.G * ∫ r in (0:ℝ)..R, surfaceDensity r * log (R / r)
+  2 * G * ∫ r in (0:ℝ)..R, surfaceDensity r * log (R / r)
 
 /-- Modified potential with recognition weight -/
 noncomputable def Φ_modified (R : ℝ) (w : ℝ → ℝ) : ℝ :=
@@ -288,9 +290,5 @@ theorem dwarf_enhancement :
   · norm_num
   · simp [magnification_ratio]
     norm_num
-
-namespace Constants
-  def G : ℝ := 6.67430e-11  -- m³/kg/s²
-end Constants
 
 end RecognitionScience.Lensing

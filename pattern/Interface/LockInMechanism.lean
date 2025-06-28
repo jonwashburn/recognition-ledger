@@ -7,14 +7,18 @@ Pattern Layer into physical Reality Layer when maintenance cost
 exceeds 1 bit of information.
 -/
 
-import foundation.Main
-import pattern.Core.PatternAxioms
-import pattern.Core.Types
-import pattern.Geometry.LogSpiralLattice
+import RecognitionScience.PatternLayer.Core.Types
+import RecognitionScience.PatternLayer.Core.PatternAxioms
+import RecognitionScience.PatternLayer.Geometry.LogSpiralLattice
+import Foundation.Util.Units
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Topology.Basic
 import Mathlib.Data.Complex.Basic
-open RecognitionScience.Pattern.Core
+open RecognitionScience.PatternLayer.Core
+open RecognitionScience.PatternLayer.Geometry
+open Foundation.Util.Units -- Import foundation constants
 
-namespace RecognitionScience.Pattern.Interface
+namespace RecognitionScience.PatternLayer.Interface
 
 /-!
 ## Lock-In: Pattern → Reality
@@ -25,7 +29,6 @@ E_lock energy in the process.
 -/
 
 -- Physical constants (local stubs)
-noncomputable def τ₀ : ℝ := 7.33e-15  -- Fundamental tick duration
 noncomputable def k_B : ℝ := 1.380649e-23  -- Boltzmann constant (J/K)
 noncomputable def T   : ℝ := 2.725        -- CMB temperature (K)
 
@@ -161,4 +164,13 @@ def has_conscious_observer (s : PreLockInState) : Prop := True
 noncomputable def probability_of_lock_in (s : PreLockInState) : Pattern → ℝ :=
   fun p => if p ∈ s.component_patterns then 1 / s.component_patterns.length else 0
 
-end RecognitionScience.Pattern.Interface
+/-! ## Lock-In Dynamics -/
+
+/-- Information content of a pattern -/
+def patternInfo (p : Pattern) : ℝ := p.info_content
+
+/-- Lock-in time for a pattern -/
+noncomputable def lockInTime (p : Pattern) (t : ℝ) : ℝ :=
+  p.info_content * log (1 + t / τ₀)
+
+end RecognitionScience.PatternLayer.Interface

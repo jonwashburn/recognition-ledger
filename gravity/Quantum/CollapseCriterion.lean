@@ -8,6 +8,7 @@
 
 import gravity.Quantum.BandwidthCost
 import gravity.Quantum.BornRule
+import Foundation.Util.Units
 import Mathlib.Analysis.Asymptotics.Asymptotics
 import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 import Mathlib.MeasureTheory.Integral.IntervalIntegral
@@ -21,6 +22,7 @@ namespace RecognitionScience.Quantum
 
 open Real
 open MeasureTheory intervalIntegral Matrix
+open Foundation.Util.Units -- Import foundation constants
 
 /-! ## Collapse Decision -/
 
@@ -468,10 +470,6 @@ theorem postCollapse_zero_cost (ψ : EvolvingState) (t_c : ℝ) (i : Fin n) :
   use i
   intro j hj
   simp [if_neg hj]
-
-namespace Constants
-  def ℏ : Quantity ⟨2, 1, -1⟩ := ⟨1.054571817e-34⟩  -- J⋅s
-end Constants
 
 /-! ## Physics Axioms -/
 
