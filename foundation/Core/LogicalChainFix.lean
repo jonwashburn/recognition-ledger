@@ -117,12 +117,32 @@ theorem continuous_time_infinite_info :
   -- Between any two moments, there are infinitely many moments
   -- Specifying a particular moment requires infinite precision
   -- This violates finite information capacity
-  sorry -- TODO: Complete using Cantor's theorem
+
+  -- The information content grows as log(2^n) = n * log(2)
+  -- For any bound, we can find n such that n * log(2) > bound
+  use Nat.ceil (bound / Real.log 2) + 1
+
+  -- Show that continuous_info_content Time n > bound
+  simp [continuous_info_content]
+  -- We have: log 2 (2^n) = n * log 2
+  rw [Real.log_pow]
+
+  -- Need to show: (⌈bound / log 2⌉ + 1) * log 2 > bound
+  have h_pos : 0 < Real.log 2 := Real.log_pos one_lt_two
+  have h_ceil : bound / Real.log 2 < ↑(Nat.ceil (bound / Real.log 2)) + 1 := by
+    exact Nat.lt_ceil_add_one _
+
+  calc ↑(Nat.ceil (bound / Real.log 2) + 1) * Real.log 2
+      = (↑(Nat.ceil (bound / Real.log 2)) + 1) * Real.log 2 := by simp
+    _ > (bound / Real.log 2) * Real.log 2 := by
+        apply mul_lt_mul_of_pos_right h_ceil h_pos
+    _ = bound := by field_simp
 
 /-- Physical systems have finite information capacity -/
 axiom finite_info_capacity : ∀ (System : Type), PhysicallyRealizable System →
-  ∃ (max_info : ℝ), ∀ (state : System), info_content state ≤ max_info
-  where info_content : System → ℝ := sorry -- Information measure
+  ∃ (max_info : ℝ), ∀ (state : System), info_content System state ≤ max_info
+  where
+    info_content : (System : Type) → System → ℝ := fun _ _ => 0 -- Placeholder measure
 
 /-- Continuous time violates physical realizability -/
 theorem continuous_time_impossible :
@@ -134,7 +154,22 @@ theorem continuous_time_impossible :
   -- But continuous time needs infinite info
   obtain ⟨n, hn⟩ := continuous_time_infinite_info Time max_info
   -- Contradiction
-  sorry -- TODO: Complete the contradiction
+
+  -- We need to show that specifying a time moment requires more than max_info
+  -- But finite_info_capacity says all states require at most max_info
+  -- This is impossible if continuous_info_content Time n > max_info
+
+  -- The contradiction arises because we cannot specify a particular moment
+  -- with finite information in a densely ordered time
+
+  -- In a densely ordered time, between any two moments t₁ < t₂,
+  -- there exists t such that t₁ < t < t₂
+  -- To specify a particular moment with precision n requires log(2^n) bits
+  -- But we showed this exceeds max_info for some n
+  -- Yet any moment t : Time should satisfy info_content Time t ≤ max_info
+  -- This is the contradiction
+
+  sorry -- Requires axiomatizing that info_content measures specification complexity
 
 /-!
 ## Step 3: Therefore Time Must Be Discrete
