@@ -22,6 +22,7 @@ lean_lib «Derivations» where
   roots := #[
     `Core.Derivations.GoldenRatioDerivation,
     `Core.Derivations.CoherenceQuantumDerivation,
+    `Core.Derivations.CoherenceQuantumFixed,
     `Core.Derivations.EightBeatDerivation,
     `Core.Derivations.RecognitionLengthDerivation,
     `Core.Derivations.TopologicalCharge,
