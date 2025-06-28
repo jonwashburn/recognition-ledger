@@ -30,3 +30,61 @@ This report enumerates every remaining `sorry` (or placeholder definition) in th
 
 ## Axioms Added
 - `recognition_realizability` in LogicalChainFix.lean (philosophical bridge between recognition and physical realizability) 
+
+# Recognition Ledger Sorry Status Report
+**Generated**: 2025-06-28
+
+## Summary
+- **Total sorries found**: 25
+- **Files with sorries**: 8
+- **Completed files**: 1 (GoldenRatioDerivation.lean - all 3 sorries resolved)
+
+## Files with Sorries (by count)
+
+### 1. `foundation/Core/EightFoundations.lean` (7 sorries)
+- Line 35: `recognition_requires_distinction` - Proof that recognition needs distinct states
+- Line 51: `meta_principle_implies_discrete` - Derivation of discrete time from meta-principle  
+- Line 67: `meta_principle_implies_dual` - Derivation of dual balance from meta-principle
+- Line 83: `meta_principle_implies_positive_cost` - Derivation of positive cost from meta-principle
+- Line 99: `meta_principle_implies_unitary` - Derivation of unitary evolution from meta-principle
+- Line 115: `meta_principle_implies_eight_beat` - Derivation of eight-beat closure from meta-principle
+- Line 131: `meta_principle_implies_golden_ratio` - Derivation of golden ratio from meta-principle
+
+### 2. `foundation/Core/Derivations/YangMillsMassGap.lean` (5 sorries)
+- Line 78: `voxel_loop_mass_gap` - Proof that 3-voxel loops create mass gap
+- Line 104: `mass_gap_value` - Derivation of exact mass gap value
+- Line 120: `confinement_from_gap` - Proof that mass gap implies confinement
+- Line 136: `asymptotic_freedom` - Derivation of asymptotic freedom
+- Line 159: `instantons_suppressed` - Proof that instantons are suppressed
+
+### 3. `foundation/Core/Derivations/RecognitionLengthDerivation.lean` (4 sorries)
+- Line 62: `planck_from_recognition` - Derivation of Planck length
+- Line 83: `gravity_from_recognition` - Derivation of gravitational constant
+- Line 104: `black_hole_entropy` - Derivation of black hole entropy formula
+- Line 125: `holographic_bound` - Proof of holographic bound
+
+### 4. `foundation/Core/Derivations/CoherenceQuantumFixed.lean` (3 sorries + narrative placeholders)
+- Line 123: `coherence_thermal_constraint` - Thermal stability constraint (has narrative placeholder)
+- Line 157: E_coh quantization constraint (has narrative placeholder)
+- Line 171: E_coh uniqueness proof (has narrative placeholder)
+- Line 211: `α_derivation` - Fine structure constant derivation (has narrative placeholder)
+
+### 5. `foundation/Core/Derivations/EightBeatDerivation.lean` (2 sorries)
+- Line 51: `eight_beat_necessity` - Proof that 8 is the unique period
+- Line 73: `eight_beat_universality` - Proof that all processes respect 8-beat
+
+### 6. `foundation/Core/Derivations/TopologicalCharge.lean` (2 sorries)
+- Line 49: `topological_quantization` - Proof of charge quantization
+- Line 70: `theta_periodicity` - Proof of theta angle periodicity
+
+### 7. `foundation/Core/Derivations/CoherenceQuantumDerivation.lean` (1 sorry)
+- Line 125: `coherence_quantum_unique` - Uniqueness of E_coh value
+
+### 8. `foundation/Core/Derivations/GoldenRatioDerivation.lean` (0 sorries) ✓
+- **COMPLETED**: All 3 sorries have been resolved with full proofs
+
+## Next Steps
+1. Complete narrative placeholders in CoherenceQuantumFixed.lean
+2. Focus on EightFoundations.lean (7 sorries) - derive all axioms from meta-principle
+3. Work on YangMillsMassGap.lean (5 sorries) - complete voxel walk calculations
+4. Address RecognitionLengthDerivation.lean (4 sorries) - fundamental length scale 
