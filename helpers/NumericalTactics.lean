@@ -11,6 +11,8 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Tactic.NormNum
+import Mathlib.Data.Int.Basic
+import Mathlib.Algebra.Order.Floor
 
 namespace RecognitionScience
 
