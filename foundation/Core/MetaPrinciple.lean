@@ -10,14 +10,13 @@
 -/
 
 import RecognitionScience.Core.Kernel
-import RecognitionScience.Core.MetaPrincipleMinimal
 import RecognitionScience.Core.Finite
 import RecognitionScience.Core.Nat.Card
 
 namespace Core.MetaPrinciple
 
 -- Re-export the kernel definitions
-export RecognitionScience.Kernel (Recognition MetaPrinciple Nothing)
+export RecognitionScience.Kernel (Recognition MetaPrinciple Nothing meta_principle_holds)
 
 /-!
 ## Derived Concepts
@@ -29,7 +28,7 @@ These are not axioms but definitions derived from the kernel.
 structure RecognitionEvent where
   source : Type
   target : Type
-  recognition : Recognition source target
+  event : Recognition source target
 
 /-- The fundamental theorem: existence follows from the meta-principle -/
 theorem existence_from_meta : ∃ (A : Type), Nonempty A := by
@@ -41,17 +40,15 @@ theorem existence_from_meta : ∃ (A : Type), Nonempty A := by
 
 /-- Recognition requires distinction -/
 theorem recognition_requires_distinction (A : Type) :
-  Recognition A A → ∃ (B : Type), A ≠ B := by
+  (∃ r : Recognition A A, True) → ∃ (B : Type), A ≠ B := by
   sorry -- This is one of the key theorems to prove
 
 /-- The chain of logical necessity -/
 theorem logical_chain :
-  (¬Recognition Nothing Nothing) →
+  MetaPrinciple →
   (∃ A : Type, Nonempty A) →
   (∃ A B : Type, A ≠ B) := by
   sorry -- Another key theorem
-
-export Core.MetaPrincipleMinimal (Nothing Recognition MetaPrinciple meta_principle_holds)
 
 namespace RecognitionScience
 

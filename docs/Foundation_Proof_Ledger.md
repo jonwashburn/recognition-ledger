@@ -6,7 +6,7 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 
 | Metric | Count | Status |
 |--------|-------|--------|
-| Axioms | 1 | ❌ |
+| Axioms | 0 | ✅ |
 | Sorrys | 23 | ❌ |
 | Circular imports | 0 | ✅ |
 
@@ -27,7 +27,7 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | `Core/Derivations/YangMillsMassGap.lean` | 0 | 3 | ❌ |
 | `Core/EightFoundations.lean` | 0 | 0 | ✅ |
 | `Core/Finite.lean` | 0 | 0 | ✅ |
-| `Core/Kernel.lean` | 1 | 0 | ❌ |
+| `Core/Kernel.lean` | 0 | 0 | ✅ |
 | `Core/LogicalChainFix.lean` | 0 | 0 | ✅ |
 | `Core/MetaPrinciple.lean` | 0 | 0 | ✅ |
 | `Core/MetaPrincipleMinimal.lean` | 0 | 0 | ✅ |
@@ -56,11 +56,6 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | `lakefile.lean` | 0 | 0 | ✅ |
 
 ## Detailed Issues
-
-### Axioms Found
-
-**`Core/Kernel.lean`**
-- Line 30: `axiom MetaPrinciple : ¬Recognition Nothing Nothing`
 
 ### Sorrys Found
 
