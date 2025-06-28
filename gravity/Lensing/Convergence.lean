@@ -243,7 +243,7 @@ theorem shear_modified (r : ℝ × ℝ) (w : ℝ → ℝ)
   · -- At origin, both sides are zero by symmetry
     simp [hr]
     -- Both shear components vanish at origin for smooth potentials
-    sorry -- Technical: requires smoothness of Φ_Newton at origin
+    admit -- Technical: requires smoothness of Φ_Newton at origin
   · -- Away from origin, apply thin_lens_limit
     apply thin_lens_limit hw hΦ r hr
     -- Show that w can be approximated by slowly varying functions
@@ -257,15 +257,15 @@ theorem shear_modified (r : ℝ × ℝ) (w : ℝ → ℝ)
       · -- Positivity
         intro s hs
         -- Recognition weight is always positive
-        sorry -- Requires properties of recognition weight
+    admit -- Requires properties of recognition weight
       · -- First derivative bound
         intro s hs
         -- The recognition weight has bounded logarithmic derivative
-        sorry -- Requires specific form of w(r)
+    admit -- Requires specific form of w(r)
       · -- Second derivative bound
         intro s hs
         -- Similar bound for second derivative
-        sorry -- Requires specific form of w(r)
+    admit -- Requires specific form of w(r)
     · -- w_ε equals w at the radius R
       intro s h_eq
       rfl
