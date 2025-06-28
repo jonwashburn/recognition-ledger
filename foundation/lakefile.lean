@@ -26,7 +26,8 @@ lean_lib «Derivations» where
     `Core.Derivations.EightBeatDerivation,
     `Core.Derivations.RecognitionLengthDerivation,
     `Core.Derivations.TopologicalCharge,
-    `Core.Derivations.YangMillsMassGap
+    `Core.Derivations.YangMillsMassGap,
+    `Core.Derivations.CostFunctionalDerivation
   ]
 
 lean_lib «Foundations» where
