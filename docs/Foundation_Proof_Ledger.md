@@ -7,7 +7,7 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | Metric | Count | Status |
 |--------|-------|--------|
 | Axioms | 1 | ❌ |
-| Sorrys | 20 | ❌ |
+| Sorrys | 18 | ❌ |
 | Circular imports | 0 | ✅ |
 
 ## File Analysis
@@ -17,9 +17,9 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | `Core/Arith.lean` | 0 | 0 | ✅ |
 | `Core/Constants.lean` | 0 | 0 | ✅ |
 | `Core/Derivations/CoherenceQuantumDerivation.lean` | 0 | 2 | ❌ |
-| `Core/Derivations/CoherenceQuantumFixed.lean` | 1 | 4 | ❌ |
+| `Core/Derivations/CoherenceQuantumFixed.lean` | 1 | 3 | ❌ |
 | `Core/Derivations/CosmicBandwidthDerivation.lean` | 0 | 4 | ❌ |
-| `Core/Derivations/CostFunctionalDerivation.lean` | 0 | 6 | ❌ |
+| `Core/Derivations/CostFunctionalDerivation.lean` | 0 | 5 | ❌ |
 | `Core/Derivations/EightBeatDerivation.lean` | 0 | 0 | ✅ |
 | `Core/Derivations/GoldenRatioDerivation.lean` | 0 | 0 | ✅ |
 | `Core/Derivations/RecognitionLengthDerivation.lean` | 0 | 0 | ✅ |
@@ -60,7 +60,7 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 ### Axioms Found
 
 **`Core/Derivations/CoherenceQuantumFixed.lean`**
-- Line 49: `axiom atomic_recognition : ∃ (E_min : ℝ),`
+- Line 51: `axiom atomic_recognition : ∃ (E_min : ℝ),`
 
 ### Sorrys Found
 
@@ -69,10 +69,9 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 - Line 192: `sorry`
 
 **`Core/Derivations/CoherenceQuantumFixed.lean`**
-- Line 135: `sorry`
-- Line 175: `sorry`
-- Line 191: `sorry`
-- Line 233: `sorry`
+- Line 162: `sorry`
+- Line 178: `sorry`
+- Line 220: `sorry`
 
 **`Core/Derivations/CosmicBandwidthDerivation.lean`**
 - Line 113: `sorry`
@@ -81,12 +80,11 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 - Line 159: `sorry`
 
 **`Core/Derivations/CostFunctionalDerivation.lean`**
-- Line 122: `sorry`
-- Line 152: `sorry`
-- Line 181: `sorry`
-- Line 206: `sorry`
-- Line 232: `sorry`
-- Line 252: `sorry`
+- Line 144: `sorry`
+- Line 173: `sorry`
+- Line 198: `sorry`
+- Line 224: `sorry`
+- Line 244: `sorry`
 
 **`Core/Derivations/YangMillsMassGap.lean`**
 - Line 53: `sorry`

@@ -10,12 +10,12 @@
 -/
 
 -- Import the main foundation module
-import RecognitionScience.RecognitionScience
+import RecognitionScience
 
 -- Import parameter constants
 -- Note: Constants.lean has circular dependency with derivations
 -- import Parameters.Constants
-import RecognitionScience.Parameters.RealConstants
+import Parameters.RealConstants
 
 namespace foundation
 
