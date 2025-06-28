@@ -53,9 +53,16 @@ theorem cellular_bandwidth :
   -- f_recognition ≈ 2.17e13 Hz
   -- channel_capacity ≈ 8 * 2.17e13 * 7 ≈ 1.22e15 bit/s
   -- |1.22e15 - 1.2e15| = 0.02e15 = 2e13 < 3e14 ✓
-  unfold channel_capacity f_recognition
-  -- This requires numerical approximation of E_coh/h
-  sorry -- Numerical approximation proof
+  unfold channel_capacity
+  -- We need to show: |8 * (E_coh / h) * 7 - 1.2e15| < 3e14
+  -- This simplifies to: |56 * E_coh / h - 1.2e15| < 3e14
+  -- The exact numerical computation requires:
+  -- E_coh = 0.090 eV = 0.090 * 1.602176634e-19 J
+  -- h = 6.62607015e-34 J·s
+  -- This gives f_recognition ≈ 2.176e13 Hz
+  -- So channel_capacity ≈ 1.219e15 bit/s
+  -- The difference |1.219e15 - 1.2e15| ≈ 1.9e13 < 3e14
+  sorry -- Requires exact decimal arithmetic for E_coh and h
 
 -- Cytoskeleton as optical waveguide
 theorem cytoskeleton_waveguide :
