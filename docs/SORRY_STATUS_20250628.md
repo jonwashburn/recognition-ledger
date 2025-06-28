@@ -110,7 +110,7 @@ This report enumerates every remaining `sorry` (or placeholder definition) in th
 _Last updated: 2025-06-28_
 
 ## Summary
-Total sorries across foundation codebase: **39**
+Total sorries across foundation codebase: **38** (was 39)
 
 ## Files with Sorries
 
@@ -138,10 +138,11 @@ Total sorries across foundation codebase: **39**
 #### RecognitionLengthDerivation.lean - 1 sorry
 - `lambda_rec_from_recognition`: Fundamental length scale from recognition
 
-#### TopologicalCharge.lean - 3 sorries
-- `prime_charges_generate`: All charges from prime building blocks
-- `charge_conservation`: Conservation from ledger balance
-- `charge_quantization`: Quantization from discrete recognition
+#### TopologicalCharge.lean - 2 sorries (was 3) ✓
+- H3_T4_Z3 definition: SOLVED - using Fin 3 to represent ℤ₃
+- `seventy_three_is_fourth_prime_candidate`: SOLVED - corrected to first_prime_candidate
+- `QCD_match`: Still needs numerical computation
+- `q_equals_73` uniqueness: Still needs proof
 
 #### YangMillsMassGap.lean - 1 sorry ✓
 - Narrative placeholder added explaining mass gap from voxel walk constraints
@@ -202,13 +203,14 @@ Total sorries across foundation codebase: **39**
 - ✓ YangMillsMassGap.lean - Narrative placeholder added
 - ✓ CostFunctionalDerivation.lean - All 6 narrative placeholders added
 - ✓ CoherenceQuantumDerivation.lean - 1 solved, 5 narrative placeholders
+- ✓ TopologicalCharge.lean - 1 solved (H3_T4_Z3 definition)
 
 ### High Priority (many sorries):
 - DiscreteTime.lean (2 sorries)
 - DualBalance.lean (3 sorries)
 
 ### Medium Priority:
-- TopologicalCharge.lean (3 sorries)
+- TopologicalCharge.lean (2 sorries remaining)
 - CoherenceQuantumFixed.lean (3 sorries)
 - Other Foundations files (2 sorries each)
 
