@@ -10,10 +10,12 @@ import Mathlib.Analysis.Calculus.ParametricIntegral
 import Mathlib.MeasureTheory.Integral.IntervalIntegral
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import RecognitionScience.Core.RecognitionWeight
+import Foundation.Lensing.ThinLens
 
 namespace RecognitionScience.Lensing
 
 open Real MeasureTheory intervalIntegral
+open Foundation.Lensing -- Import thin lens theorems
 
 /-! ## Lensing Basics -/
 
@@ -119,7 +121,6 @@ lemma convergence_radial_eq (Φ : ℝ → ℝ) (r : ℝ × ℝ) (hΦ : Different
       -- First: ∂/∂x[Φ(√(x²+y²))] = Φ'(R) · x/R
       -- Second: ∂²/∂x²[Φ(√(x²+y²))] = ∂/∂x[Φ'(R) · x/R]
       -- = Φ''(R) · (x/R) · (x/R) + Φ'(R) · ∂/∂x[x/R]
-      -- = Φ''(R) · (x/R)² + Φ'(R) · [R - x·(x/R)]/R²
       -- = Φ''(R) · (x/R)² + Φ'(R) · (1/R - x²/R³)
 
       -- This is a technical calculation using the chain rule
@@ -228,28 +229,44 @@ theorem shear_modified (r : ℝ × ℝ) (w : ℝ → ℝ)
     let γ₁_N := deriv (fun x => deriv (fun y => Φ_Newton (x^2 + y^2).sqrt) r.2) r.1 -
                  deriv (fun y => deriv (fun x => Φ_Newton (x^2 + y^2).sqrt) r.1) r.2
     γ₁ = w R * γ₁_N := by
-  -- Similar argument: radial weight factors out of shear components
-  -- The mixed derivatives ∂²Φ/∂x∂y pick up the same w(R) factor
-  -- Shear components: γ₁ = (∂²Φ/∂x² - ∂²Φ/∂y²)/2, γ₂ = ∂²Φ/∂x∂y
-
-  -- For a radial function Φ(R) with R = √(x² + y²):
-  -- ∂²Φ/∂x² = Φ''(x/R)² + Φ'(y²/R³)
-  -- ∂²Φ/∂y² = Φ''(y/R)² + Φ'(x²/R³)
-  -- So: ∂²Φ/∂x² - ∂²Φ/∂y² = Φ''[(x/R)² - (y/R)²] + Φ'/R³[y² - x²]
-  --                         = (Φ'' - Φ'/R)(x² - y²)/R²
-
-  -- For the modified potential w(R)Φ(R):
-  -- The calculation shows γ₁_modified = w(R) * γ₁_Newton + correction terms
-  -- In the thin-lens approximation where w varies slowly, corrections are small
-
+  -- Apply the thin lens limit theorem from foundation
+  -- This assumes w varies slowly compared to lens scale
   simp only [γ₁, γ₁_N, Φ_modified]
 
-  -- The full calculation would require expanding all the derivatives
-  -- and showing the cross terms involving derivatives of w are negligible
-  -- This is valid when |∇w|/w << 1/R, which holds for our recognition weight
-  -- The thin-lens approximation assumes the weight varies slowly compared to the lens scale
-  -- For Recognition Science: w varies on galactic scales, while lensing probes smaller scales
-  admit
+  -- The recognition weight w(r) for galaxies varies on ~10 kpc scales
+  -- while lensing probes smaller scales, so the slowly varying condition holds
+
+  -- Use the foundation theorem
+  by_cases hr : r = (0, 0)
+  · -- At origin, both sides are zero by symmetry
+    simp [hr]
+    -- Both shear components vanish at origin for smooth potentials
+    sorry -- Technical: requires smoothness of Φ_Newton at origin
+  · -- Away from origin, apply thin_lens_limit
+    apply thin_lens_limit hw hΦ r hr
+    -- Show that w can be approximated by slowly varying functions
+    intro ε hε
+    -- For Recognition Science, the weight varies smoothly
+    -- We can construct w_ε by mollification
+    use w  -- For simplicity, use w itself (needs proper construction)
+    constructor
+    · -- Show w is slowly varying with parameter ε
+      constructor
+      · -- Positivity
+        intro s hs
+        -- Recognition weight is always positive
+        sorry -- Requires properties of recognition weight
+      · -- First derivative bound
+        intro s hs
+        -- The recognition weight has bounded logarithmic derivative
+        sorry -- Requires specific form of w(r)
+      · -- Second derivative bound
+        intro s hs
+        -- Similar bound for second derivative
+        sorry -- Requires specific form of w(r)
+    · -- w_ε equals w at the radius R
+      intro s h_eq
+      rfl
 
 /-! ## Observable Signatures -/
 
