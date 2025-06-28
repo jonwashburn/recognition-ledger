@@ -14,9 +14,8 @@ import Foundation.Util.Units
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Topology.Basic
 import Mathlib.Data.Complex.Basic
-open RecognitionScience.PatternLayer.Core
-open RecognitionScience.PatternLayer.Geometry
-open Foundation.Util.Units -- Import foundation constants
+import foundation.Parameters.Constants
+open RecognitionScience.Constants
 
 namespace RecognitionScience.PatternLayer.Interface
 
@@ -28,15 +27,13 @@ When the cost of maintaining a pattern in superposition exceeds
 E_lock energy in the process.
 -/
 
--- Physical constants (local stubs)
-noncomputable def k_B : ℝ := 1.380649e-23  -- Boltzmann constant (J/K)
-noncomputable def T   : ℝ := 2.725        -- CMB temperature (K)
-
 -- Additional stub constants used later in this file (replace with accurate values)
 noncomputable def universe_lock_in_rate : ℝ := 1
 noncomputable def average_lock_in_energy_per_event : ℝ := 1
 noncomputable def hubble_constant : ℝ := 1
-noncomputable def E_coh : ℝ := 0.090
+
+-- Use T_CMB from foundation.Constants instead of local T
+noncomputable def T : ℝ := T_CMB
 
 -- Pattern maintenance cost (in bits)
 noncomputable def maintenance_cost (p : Pattern) (t : ℝ) : ℝ :=
@@ -51,7 +48,7 @@ noncomputable def lock_in_time (p : Pattern) : ℝ :=
 
 -- Energy released during lock-in
 noncomputable def E_lock (p : Pattern) : ℝ :=
-  χ * (ℏ * c / λ_rec) * p.info_content
+  χ * (h_bar * c / lambda_rec) * p.info_content
   where χ := φ / π
 
 -- Lock-in is irreversible (creates classical fact)

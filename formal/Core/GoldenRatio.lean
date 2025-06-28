@@ -8,11 +8,14 @@ critical theorem in Recognition Science as it forces all other constants.
 -/
 
 import foundation.RecognitionScience.Basic.LedgerState
+import foundation.Main
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -22,7 +25,6 @@ open Real
 def J (x : ℝ) : ℝ := (x + 1/x) / 2
 
 /-- The golden ratio φ = (1 + √5) / 2 -/
-def φ : ℝ := (1 + sqrt 5) / 2
 
 /-! ## Properties of J -/
 
@@ -313,7 +315,6 @@ structure Particle where
   mass : ℝ
 
 -- Fundamental constants
-def E_coh : ℝ := 0.090  -- eV
 def α : ℝ := 1 / 137.036  -- fine structure constant
 
 /-- All energy ratios are powers of φ -/

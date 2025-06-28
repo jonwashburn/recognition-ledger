@@ -7,9 +7,10 @@ This module defines physical and biological constants used in the bio module.
 
 namespace RecognitionScience.Biology
 
+open RecognitionScience.Constants
+
 -- Physical constants
 noncomputable def h : ℝ := 6.62607015e-34  -- Planck constant in J·s
-noncomputable def E_coh : ℝ := 0.090 * 1.602176634e-19  -- 0.090 eV in Joules
 noncomputable def π : ℝ := Real.pi
 
 -- Biological predicates

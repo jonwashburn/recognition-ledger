@@ -8,14 +8,13 @@ particle mass calculations.
 
 namespace RecognitionScience.Physics.MassSpectrum
 
+open RecognitionScience.Constants
+
 -- The golden ratio
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 -- The coherence quantum in eV
-noncomputable def E_coh : ℝ := 0.090  -- eV
 
 -- Speed of light squared (for mass-energy conversion)
-noncomputable def c : ℝ := 299792458  -- m/s (not squared, just c)
 
 -- Energy at rung r
 noncomputable def E_at_rung (r : ℕ) : ℝ := E_coh * φ^r

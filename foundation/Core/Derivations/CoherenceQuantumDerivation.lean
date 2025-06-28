@@ -7,8 +7,8 @@
 -/
 
 import foundation.Core.MetaPrinciple
-import foundation.Core.GoldenRatioDerivation
-import foundation.Core.EightBeatDerivation
+import foundation.Core.Derivations.GoldenRatioDerivation
+import foundation.Core.Derivations.EightBeatDerivation
 
 namespace RecognitionScience.Core.Derivations
 

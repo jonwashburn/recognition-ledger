@@ -7,15 +7,17 @@ The golden ratio φ = (1+√5)/2 emerges necessarily from cost minimization.
 -/
 
 import Mathlib.Data.Real.Sqrt
+import foundation.Main
 import Mathlib.Analysis.Calculus.Deriv.Basic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
 /-! ## Golden Ratio Definition and Basic Properties -/
 
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- The defining equation: φ² = φ + 1
 theorem phi_equation : φ^2 = φ + 1 := by
@@ -42,7 +44,6 @@ theorem phi_gt_one : φ > 1 := by
   · norm_num
 
 -- The conjugate: φ̄ = (1 - √5) / 2
-noncomputable def φ_conj : ℝ := (1 - sqrt 5) / 2
 
 -- φ̄ is negative
 theorem phi_conj_neg : φ_conj < 0 := by

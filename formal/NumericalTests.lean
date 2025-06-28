@@ -7,22 +7,22 @@ to verify the calculations match the reference.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
 namespace RecognitionScience
 
+open RecognitionScience.Constants
+
 open Real
 
 -- Golden ratio
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- Speed of light
-def c : ℝ := 299792458  -- m/s
 
 -- Coherence quantum
-def E_coh : ℝ := 0.090  -- eV
 
 -- Electron volt to Joule
 def eV : ℝ := 1.602176634e-19  -- J

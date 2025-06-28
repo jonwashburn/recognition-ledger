@@ -8,10 +8,13 @@ boundary between classical and quantum recognition.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -29,7 +32,6 @@ noncomputable def J_ag (x : ℝ) : ℝ := (x + 1/x) / 2
 noncomputable def J_rec (x : ℝ) : ℝ := x + 1/x - 2
 
 -- The golden ratio
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- Key mathematical facts about φ
 theorem phi_squared : φ^2 = φ + 1 := by
@@ -143,7 +145,6 @@ quantum effects become important for recognition.
 def ℏ : ℝ := 1.054571817e-34  -- J⋅s
 
 -- Speed of light
-def c : ℝ := 299792458  -- m/s
 
 -- Fundamental tick interval
 def τ : ℝ := 7.33e-15  -- s
@@ -198,7 +199,6 @@ It emerges from:
 -/
 
 -- The coherence quantum (final value)
-def E_coh : ℝ := 0.090  -- eV
 
 -- It sets the scale for all masses via φ^n scaling
 theorem mass_scaling_from_E_coh :

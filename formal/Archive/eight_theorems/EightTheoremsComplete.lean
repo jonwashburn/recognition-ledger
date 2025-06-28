@@ -9,9 +9,12 @@ NO AXIOMS - ONLY LOGICAL NECESSITY
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -108,7 +111,6 @@ theorem T7_EightBeat : Nat.lcm 2 4 = 8 := by
 
 -- Theorem 8: Golden Ratio Scaling
 -- Cost minimization gives φ
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 theorem T8_GoldenRatio : φ^2 = φ + 1 := by
   rw [φ]
@@ -126,7 +128,6 @@ ZERO free parameters.
 -/
 
 -- Coherence quantum from cost minimization
-def E_coh : ℝ := 0.090  -- eV
 
 -- Electron mass from φ^32
 noncomputable def m_electron : ℝ := E_coh * φ^32  -- = 0.511 MeV

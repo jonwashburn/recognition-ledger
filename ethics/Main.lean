@@ -23,7 +23,7 @@ import Foundation.GoldenRatio
 import Foundation.Helpers.InfoTheory
 import Helpers.ListPartition
 import Mathlib.Data.Real.Basic
-import Mathlib.Algebra.BigOperators.Group.List
+import Mathlib.Algebra.BigOperators.Group.List.Basic
 
 namespace RecognitionScience.Ethics
 

@@ -10,11 +10,14 @@
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Data.Nat.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.Calculus.Deriv
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 -- ============================================================================
 -- FOUNDATIONAL DEFINITIONS
@@ -305,7 +308,6 @@ by
 -- THEOREM A8: Golden Ratio (Detailed Proof)
 -- ============================================================================
 
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 /-- Cost functional for scale transformations -/
 noncomputable def J (x : ℝ) : ℝ := (x + 1/x) / 2

@@ -7,8 +7,8 @@
   Result: C₀ = ρ * ε / (2π) ≈ 0.025
 -/
 
-import Foundation.EightBeat.OctantBasis
-import Foundation.EightBeat.PrimeSparsity
+import foundation.Foundation.EightBeat.OctantBasis
+import foundation.Foundation.EightBeat.PrimeSparsity
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Analysis.Calculus.FDeriv.Basic
 

@@ -2,12 +2,15 @@
 -- Proving all 8 axioms from the single meta-principle
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Topology.Basic
 import Mathlib.MeasureTheory.Measure.MeasureSpace
 import Mathlib.Data.Complex.Basic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 /-!
 # The Meta-Principle and Its Consequences
@@ -223,7 +226,6 @@ theorem A7_EightBeat :
 noncomputable def J (x : ℝ) : ℝ := (x + 1/x) / 2
 
 -- Golden ratio
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 theorem golden_ratio_equation : φ^2 = φ + 1 := by
   simp [φ]

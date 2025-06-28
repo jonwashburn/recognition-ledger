@@ -5,18 +5,19 @@
   This is the critical bound needed for Navier-Stokes global regularity.
 -/
 
-import Foundation.EightBeat.DepletionConstant
+import foundation.Foundation.EightBeat.DepletionConstant
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 namespace Foundation.EightBeat
 
+open RecognitionScience.Constants
+
 open Real
 
 /-- The golden ratio φ = (1 + √5) / 2 -/
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 /-- The inverse golden ratio φ⁻¹ = 2 / (1 + √5) -/
-noncomputable def φ_inv : ℝ := 2 / (1 + sqrt 5)
 
 /-- Alternative form: φ⁻¹ = (√5 - 1) / 2 -/
 theorem phi_inv_alt : φ_inv = (sqrt 5 - 1) / 2 := by

@@ -7,9 +7,12 @@ to replace the naive φ-ladder scaling.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -17,8 +20,6 @@ open Real
 ## Fundamental Constants
 -/
 
-def E_coh : ℝ := 0.090                      -- eV (coherence quantum)
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2 -- golden ratio
 def v_EW : ℝ := 246                         -- GeV (Higgs vev)
 
 -- Calibration: electron mass = 0.511 MeV = 0.000511 GeV

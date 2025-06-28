@@ -7,9 +7,12 @@
 -/
 
 import foundation.Core.MetaPrinciple
-import foundation.Core.GoldenRatioDerivation
+import foundation.Main
+import foundation.Core.Derivations.GoldenRatioDerivation
 
 namespace RecognitionScience.Core.Derivations
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -90,7 +93,6 @@ theorem E_per_recognition_estimate :
 def T_bio : ℝ := 310  -- Kelvin
 
 /-- Boltzmann constant -/
-def k_B : ℝ := 8.617e-5  -- eV/K
 
 /-- Thermal energy at biological temperature -/
 def E_thermal : ℝ := k_B * T_bio

@@ -7,12 +7,14 @@ Everything follows from logical necessity.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace RecognitionScience
 
+open RecognitionScience.Constants
+
 -- The golden ratio (no axioms needed!)
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 -- Eight-beat from symmetry combination
 theorem eight_beat : 2 * 4 = 8 := by norm_num
@@ -24,7 +26,6 @@ theorem zero_free_parameters : 0 = 0 := by rfl
 theorem no_axioms : True := by trivial
 
 -- The coherence quantum value
-def E_coh : ℝ := 0.090 -- eV
 
 -- All constants are theorems, not axioms
 theorem constants_are_theorems : E_coh = 0.090 := by rfl

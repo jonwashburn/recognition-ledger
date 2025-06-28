@@ -9,8 +9,8 @@
   Recognition Science Institute
 -/
 
-import Core.EightFoundations
-import Foundations.DiscreteTime
+import foundation.Core.EightFoundations
+import foundation.Foundations.DiscreteTime
 
 namespace RecognitionScience.EightBeat
 

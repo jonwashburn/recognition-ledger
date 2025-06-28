@@ -15,19 +15,19 @@
 -/
 
 -- Core modules
-import Core.Finite
-import Core.MetaPrinciple
-import Core.EightFoundations
+import foundation.Core.Finite
+import foundation.Core.MetaPrinciple
+import foundation.Core.EightFoundations
 
 -- Concrete foundation implementations
-import Foundations.DiscreteTime
-import Foundations.DualBalance
-import Foundations.PositiveCost
-import Foundations.UnitaryEvolution
-import Foundations.IrreducibleTick
-import Foundations.SpatialVoxels
-import Foundations.EightBeat
-import Foundations.GoldenRatio
+import foundation.Foundations.DiscreteTime
+import foundation.Foundations.DualBalance
+import foundation.Foundations.PositiveCost
+import foundation.Foundations.UnitaryEvolution
+import foundation.Foundations.IrreducibleTick
+import foundation.Foundations.SpatialVoxels
+import foundation.Foundations.EightBeat
+import foundation.Foundations.GoldenRatio
 
 namespace RecognitionScience
 

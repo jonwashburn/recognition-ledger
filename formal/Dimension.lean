@@ -8,9 +8,12 @@ where E_r = E_coh × φ^r was treated as universal without proper units.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Algebra.Group.Defs
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 /-!
 ## Dimension Types
@@ -201,7 +204,6 @@ def time_ratio (t : Quantity) (τ₀ : Quantity) : ℝ :=
 ## Golden Ratio (Dimensionless)
 -/
 
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 -- Golden ratio is inherently dimensionless
 def φ_quantity : Quantity := Quantity.dimensionless φ

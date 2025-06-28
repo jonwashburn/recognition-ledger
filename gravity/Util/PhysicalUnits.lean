@@ -7,8 +7,11 @@
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 
 namespace RecognitionScience.Units
+
+open RecognitionScience.Constants
 
 -- Basic dimensions
 structure Dimension where
@@ -65,7 +68,6 @@ def m_Planck : Quantity mass := ⟨2.176434e-8⟩
 -- Recognition Science constants
 def τ₀ : Quantity time := ⟨7.33e-15⟩  -- fundamental tick
 def E_coh : Quantity energy := ⟨1.44e-20⟩  -- coherence cost
-def φ : ℝ := (1 + Real.sqrt 5) / 2  -- golden ratio
 
 end Constants
 

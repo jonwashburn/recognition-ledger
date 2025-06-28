@@ -7,8 +7,11 @@ This module defines the basic types used throughout the pattern module.
 
 import pattern.Core.PatternAxioms
 import Mathlib.Data.Complex.Basic
+import foundation.Main
 
 namespace RecognitionScience.Pattern.Core
+
+open RecognitionScience.Constants
 
 /-!
 ## Reality State
@@ -95,9 +98,8 @@ noncomputable def recognition_cost (p : Pattern) : ℝ := p.info_content * E_coh
 noncomputable def transition_cost (p₁ p₂ : Pattern) : ℝ :=
   pattern_distance p₁ p₂ * E_coh
 
--- Constants
-noncomputable def k_B : ℝ := 1.380649e-23  -- Boltzmann constant
-noncomputable def T : ℝ := 300  -- Room temperature in Kelvin
+-- Use constants from foundation
+-- k_B and T_room are imported from RecognitionScience.Constants
 
 -- Placeholders for undefined functions
 def realized_path (initial final : Pattern) : List Pattern := []

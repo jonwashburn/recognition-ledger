@@ -8,6 +8,8 @@
   Recognition Science Institute
 -/
 
+import foundation.Core.Finite
+
 namespace RecognitionScience.Arith
 
 /-- Eight-specific modular arithmetic -/

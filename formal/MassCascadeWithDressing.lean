@@ -15,11 +15,14 @@
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace RecognitionScience.MassCascade
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -37,10 +40,8 @@ adds ZERO new parameters - it only shows how to combine them via 8-tick series.
 -/
 
 /-- Coherence quantum in eV. This is the minimum recognition cost. -/
-def E_coh : ℝ := 0.090
 
 /-- Golden ratio φ = (1 + √5)/2. Unique minimum of J(x) = (x + 1/x)/2. -/
-def φ : ℝ := (1 + sqrt 5) / 2
 
 /-- Fine structure constant at zero momentum (empirical QED input) -/
 def α_zero : ℝ := 1 / 137.036

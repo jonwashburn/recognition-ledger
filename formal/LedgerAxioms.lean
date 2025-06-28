@@ -7,10 +7,13 @@ Based on the complete manuscript trilogy showing the proper derivation.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -28,10 +31,8 @@ noncomputable def tick : ℝ := Θ / 8
 noncomputable def J (X : ℝ) : ℝ := (X + X⁻¹) / 2
 
 -- A3: Coherence quantum - universal binding energy
-def E_coh : ℝ := 0.090  -- eV
 
 -- A4: Golden ratio emergence from Pisano lattice
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- A5: Zero-debt reciprocity - no agent can carry more than one tick of debt
 def max_debt_ticks : ℝ := 1

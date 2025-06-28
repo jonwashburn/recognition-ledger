@@ -7,10 +7,13 @@ J(x) = (x + 1/x)/2, but from the self-consistency requirement of recognition.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.Calculus.Deriv
 
 namespace RecognitionScience.GoldenRatioCorrection
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -31,7 +34,6 @@ So J(1) < J(φ), proving that φ does NOT minimize J(x).
 noncomputable def J (x : ℝ) : ℝ := (x + 1/x) / 2
 
 -- Golden ratio
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- Verify J has minimum at x = 1
 theorem J_minimum_at_one :

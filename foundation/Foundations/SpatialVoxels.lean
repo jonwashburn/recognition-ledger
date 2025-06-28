@@ -9,8 +9,8 @@
   Recognition Science Institute
 -/
 
-import Core.EightFoundations
-import Foundations.IrreducibleTick
+import foundation.Core.EightFoundations
+import foundation.Foundations.IrreducibleTick
 
 namespace RecognitionScience.SpatialVoxels
 

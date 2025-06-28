@@ -11,11 +11,14 @@
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Data.Nat.Basic
 import Mathlib.Topology.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 -- Core types
 structure RecognitionEvent where
@@ -351,7 +354,6 @@ by
 -- THEOREM A8: Golden Ratio Self-Similarity
 -- ============================================================================
 
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 -- Cost functional
 noncomputable def J (x : ℝ) : ℝ := (x + 1/x) / 2

@@ -5,10 +5,10 @@
   We define a wrapper around mathlib's Fintype for compatibility.
 -/
 
-import Core.Nat.Card
+import foundation.Core.Nat.Card
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Data.Fintype.Card
-import Mathlib.Logic.Equiv.Fin
+import Mathlib.Logic.Equiv.Fin.Basic
 
 namespace RecognitionScience
 
@@ -80,8 +80,22 @@ instance finiteBool : Finite Bool where
       -- Use omega to solve this arithmetic constraint
       omega
     cases this with
-    | inl h => simp [h]
-    | inr h => simp [h]
+    | inl h =>
+      -- f.val = 0, so we need to show: (if f = 0 then 0 else 1) = f
+      -- Since f.val = 0, we have f = ⟨0, _⟩
+      have : f = ⟨0, by omega⟩ := by
+        ext
+        exact h
+      rw [this]
+      simp
+    | inr h =>
+      -- f.val = 1, so we need to show: (if f = 0 then 0 else 1) = f
+      -- Since f.val = 1, we have f = ⟨1, _⟩
+      have : f = ⟨1, by omega⟩ := by
+        ext
+        exact h
+      rw [this]
+      simp
 
 /-- Helper: The cardinality of a finite type is unique -/
 theorem card_unique {A : Type} (h1 h2 : Finite A) : h1.n = h2.n := by

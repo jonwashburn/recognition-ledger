@@ -8,6 +8,7 @@ serving as the main entry point for other modules.
 
 -- Core pattern concepts
 import pattern.Core.PatternAxioms
+import pattern.Core.PatternTheorems
 import pattern.Core.TimelessExistence
 
 -- Geometric organization
@@ -24,8 +25,9 @@ import pattern.Library.PatternRetrieval
 namespace RecognitionScience.Pattern
 
 -- From Core
-export Core (Pattern PatternCompleteness TimelessExistence)
+export Core (Pattern PatternCompleteness_theorem TimelessExistence_theorem)
 export Core (pattern_distance exists_mathematically exists_physically)
+export Core (RecognitionCost_theorem ScaleInvariance_theorem PatternConservation_theorem)
 
 -- From Geometry
 export Geometry (q_star log_spiral PatternNode)
@@ -47,7 +49,7 @@ namespace PatternLayer
 open RecognitionScience.Pattern
 
 -- The three key insights
-theorem patterns_exist_timelessly := Core.TimelessExistence
+theorem patterns_exist_timelessly := Core.TimelessExistence_theorem
 theorem patterns_organize_on_spiral := Geometry.optimal_scale_factor
 theorem patterns_crystallize_at_threshold := Interface.lock_in_conservation
 
