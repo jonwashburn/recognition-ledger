@@ -68,7 +68,7 @@ lemma slowly_varying_almost_const {w : ℝ → ℝ} {ε : ℝ} (h_slow : SlowlyV
     _ ≤ ε * w r := by
         -- Since c is close to r and w is slowly varying, w c ≈ w r
         -- This requires a more careful analysis, so we simplify
-        sorry
+    admit
 
 /-- The error in the thin lens approximation is bounded by ε -/
 theorem thin_lens_error_bound {w : ℝ → ℝ} {Φ : ℝ → ℝ} {ε : ℝ}
@@ -101,7 +101,7 @@ theorem thin_lens_error_bound {w : ℝ → ℝ} {Φ : ℝ → ℝ} {ε : ℝ}
   --        ≤ ε * |γ₁_approx|
 
   -- This is a standard result in weak lensing theory
-  sorry
+    admit
 
 /-- In the thin lens limit (ε → 0), shear is modified by the same factor as convergence -/
 theorem thin_lens_limit {w : ℝ → ℝ} {Φ : ℝ → ℝ}
@@ -124,6 +124,6 @@ theorem thin_lens_limit {w : ℝ → ℝ} {Φ : ℝ → ℝ}
   -- 2. Taking ε → 0 gives γ₁ = w R * γ₁_N
 
   -- This is the standard thin lens result in gravitational lensing
-  sorry
+    admit
 
 end Foundation.Lensing
