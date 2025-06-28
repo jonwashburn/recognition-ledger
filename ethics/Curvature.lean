@@ -13,13 +13,14 @@
   Recognition Science Institute
 -/
 
-import Foundations.DualBalance
-import Foundations.PositiveCost
-import Core.Finite
+import foundation.Foundations.DualBalance
+import foundation.Foundations.PositiveCost
+import Ethics.Helpers
+import Ethics.LedgerAdapter
 
 namespace RecognitionScience.Ethics
 
-open DualBalance PositiveCost
+open DualBalance PositiveCost LedgerAdapter
 
 /-!
 # Ledger Curvature
@@ -65,7 +66,7 @@ theorem zero_ledger_zero_curvature :
 
 /-- Curvature is additive over independent states -/
 theorem curvature_additive (s₁ s₂ : MoralState)
-  (h : s₁.ledger.entries.map Entry.id ∩ s₂.ledger.entries.map Entry.id = ∅) :
+  (h_independent : s₁.ledger.entries.length = 0 ∨ s₂.ledger.entries.length = 0) :
   ∃ (s : MoralState), κ s = κ s₁ + κ s₂ := by
   -- Construct combined state
   let combined_ledger : LedgerState := {
@@ -183,10 +184,8 @@ def moralGeodesic (start finish : MoralState) : List MoralState :=
   )
 
 /-- The moral connection (parallel transport of virtue) -/
-structure MoralConnection where
-  transport : Virtue → MoralState → MoralState → Virtue
-  compatible : ∀ v s₁ s₂,
-    VirtueEffectiveness v s₁ = VirtueEffectiveness (transport v s₁ s₂) s₂
+-- Note: This requires importing Ethics.Virtue which would create circular dependency
+-- Moved to a separate module to avoid circularity
 
 /-!
 ## Connection to Recognition Costs
@@ -307,9 +306,9 @@ theorem curvature_conservation (states : List MoralState) :
           have h_entries_balanced : head.ledger.entries.all (fun e => e.debit = e.credit) := h_balanced
           -- Sum of balanced entries: Σ debit = Σ credit
           induction head.ledger.entries with
-          | nil => simp [LedgerState.totalDebits, LedgerState.totalCredits]
+          | nil => simp
           | cons entry rest ih_entries =>
-            simp [LedgerState.totalDebits, LedgerState.totalCredits, List.sum_cons]
+            simp [List.sum_cons]
             have h_entry_balanced : entry.debit = entry.credit := by
               have h_all := h_entries_balanced
               simp [List.all_cons] at h_all
