@@ -3,7 +3,7 @@
   ======================================
 
   This file extends the kernel with derived concepts and theorems.
-  Everything here is DERIVED from the single axiom in Kernel.lean.
+  Everything here is DERIVED from the definitions in Kernel.lean.
 
   Author: Jonathan Washburn
   Recognition Science Institute
@@ -32,23 +32,75 @@ structure RecognitionEvent where
 
 /-- The fundamental theorem: existence follows from the meta-principle -/
 theorem existence_from_meta : ∃ (A : Type), Nonempty A := by
-  -- If nothing existed, then Nothing would be the only type
-  -- But Nothing cannot recognize itself (by MetaPrinciple)
-  -- Therefore something must exist
-  use Unit
-  exact ⟨()⟩
+  -- Already proven in Kernel as something_must_exist
+  exact RecognitionScience.Kernel.something_must_exist
+
+/-- Recognition requires at least two distinct elements -/
+theorem recognition_requires_two {A : Type} :
+  (∃ r : Recognition A A, True) → ∃ (a b : A), a ≠ b := by
+  intro ⟨r, _⟩
+  -- r : Recognition A A means we have r.recognizer : A and r.recognized : A
+  -- For recognition to be meaningful, these should be distinguishable
+  -- If A has only one element, then r.recognizer = r.recognized
+  -- This would mean A is recognizing itself without distinction
+  by_contra h_not_two
+  push_neg at h_not_two
+  -- h_not_two : ∀ a b : A, a = b (i.e., A has at most one element)
+
+  -- If A is empty, we get a contradiction immediately
+  have ⟨a⟩ : Nonempty A := ⟨r.recognizer⟩
+
+  -- If A has exactly one element, all elements are equal
+  have h_single : ∀ x : A, x = a := fun x => h_not_two x a
+
+  -- But then r.recognizer = r.recognized = a
+  -- This means the single element a is recognizing itself
+  -- This violates the principle that recognition requires distinction
+  sorry -- Need to formalize why self-recognition without distinction is impossible
 
 /-- Recognition requires distinction -/
 theorem recognition_requires_distinction (A : Type) :
   (∃ r : Recognition A A, True) → ∃ (B : Type), A ≠ B := by
-  sorry -- This is one of the key theorems to prove
+  intro h_rec
+  -- If A can recognize A, then A must have structure
+  -- The simplest distinct type is Unit if A ≠ Unit, or Bool if A = Unit
+  by_cases h : Nonempty A
+  · -- A is nonempty
+    by_cases h_unit : A = Unit
+    · -- A = Unit, so use Bool as the distinct type
+      use Bool
+      intro h_eq
+      have : Unit = Bool := h_unit ▸ h_eq
+      -- Unit has 1 element, Bool has 2 elements
+      sorry -- Need cardinality argument
+    · -- A ≠ Unit
+      use Unit
+      exact h_unit
+  · -- A is empty
+    -- But we have Recognition A A, which requires elements
+    obtain ⟨r, _⟩ := h_rec
+    exact absurd ⟨r.recognizer⟩ h
 
 /-- The chain of logical necessity -/
 theorem logical_chain :
   MetaPrinciple →
   (∃ A : Type, Nonempty A) →
   (∃ A B : Type, A ≠ B) := by
-  sorry -- Another key theorem
+  intro h_meta h_exists
+  -- From MetaPrinciple, we know Nothing cannot recognize itself
+  -- From existence, we know some type A exists with elements
+  obtain ⟨A, ⟨a⟩⟩ := h_exists
+
+  -- A cannot be Nothing (since Nothing has no elements)
+  have h_not_nothing : A ≠ Nothing := by
+    intro h_eq
+    have : Nonempty Nothing := h_eq ▸ ⟨a⟩
+    obtain ⟨n⟩ := this
+    cases n -- Nothing has no constructors
+
+  -- So we have at least two distinct types: A and Nothing
+  use A, Nothing
+  exact h_not_nothing
 
 namespace RecognitionScience
 
