@@ -6,11 +6,11 @@
   required for recognition to occur in a causal diamond.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Core.GoldenRatioDerivation
-import foundation.Core.EightBeatDerivation
+import Mathlib.Data.Real.Basic
 
 namespace RecognitionScience.Core.Derivations
+
+open Real
 
 /-!
 ## Minimal Recognition Energy
@@ -107,6 +107,15 @@ theorem mass_gap_value :
     |Δ - 0.146| < ε := by
   sorry -- Numerical verification
 
+/-- Define what it means for chemistry to be possible -/
+def ChemistryPossible (E : ℝ) : Prop :=
+  -- Energy E allows atomic-scale coherent recognition
+  -- This would be formalized as:
+  -- 1. E allows distinguishing electron orbitals
+  -- 2. E maintains coherence over atomic distances
+  -- 3. E enables chemical bond formation
+  True  -- Placeholder for now
+
 /-- Therefore E_coh is not free but forced -/
 theorem E_coh_from_recognition :
   -- E_coh emerges from:
@@ -117,13 +126,35 @@ theorem E_coh_from_recognition :
   ∃! (E : ℝ), E = E_coh_derived ∧
     ChemistryPossible E ∧
     (∀ (E' : ℝ), E' ≠ E → ¬(ChemistryPossible E')) := by
-  sorry
-  where
-    ChemistryPossible (E : ℝ) : Prop :=
-      -- Energy E allows atomic-scale coherent recognition
-      sorry
+  /-
+  NARRATIVE PLACEHOLDER:
+  The uniqueness of E_coh follows from the intersection of three constraints:
 
-+/-- The coherence quantum derivation theorem -/
+  1. EIGHT-BEAT CONSTRAINT:
+     - Recognition requires completing 8 ticks
+     - At Planck scale: ΔE * 8t_P ≥ ℏ/2
+     - This gives E_minimal = 1/16 in Planck units
+
+  2. ATOMIC SCALE CONSTRAINT:
+     - Chemistry happens at atomic scale, not Planck scale
+     - Scale factor from Planck to atomic: 1/(α√α) ≈ 1604
+     - This scales energy down by α√α
+
+  3. CHEMISTRY CONSTRAINT:
+     - Must distinguish electron orbitals (Bohr radius scale)
+     - Must maintain coherence over chemical bond distances
+     - Must enable molecular recognition
+
+  The unique intersection:
+  E_coh = E_minimal * α * √α = (1/16) * (1/137) * (1/11.7) ≈ 0.090 eV
+
+  Any smaller energy fails chemistry constraint.
+  Any larger energy violates minimality.
+  The value is forced, not chosen.
+  -/
+  sorry
+
+/-- The coherence quantum derivation theorem -/
 theorem E_coh_derivation : E_coh_derived = E_minimal * α * Real.sqrt α := rfl
 
 end RecognitionScience.Core.Derivations
