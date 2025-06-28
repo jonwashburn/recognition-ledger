@@ -20,7 +20,7 @@ import Ethics.DiscreteHelpers  -- Add discrete helpers
 import Recognition.Util.List
 import Foundation.EightBeat
 import Foundation.GoldenRatio
-import Helpers.InfoTheory
+import Foundation.Helpers.InfoTheory
 import Helpers.ListPartition
 import Mathlib.Data.Real.Basic
 import Mathlib.Algebra.BigOperators.Group.List
