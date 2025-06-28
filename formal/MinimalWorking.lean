@@ -7,9 +7,12 @@ Everything is a theorem from logical necessity.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 -- The meta-principle: Nothing cannot recognize itself
 -- This is NOT an axiom but a logical impossibility
@@ -18,7 +21,6 @@ theorem MetaPrinciple : ¬(Empty × Empty) := by
   exact e1.elim
 
 -- The golden ratio emerges necessarily
-noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
 -- Prove φ² = φ + 1
 theorem golden_ratio_equation : φ^2 = φ + 1 := by

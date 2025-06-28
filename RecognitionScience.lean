@@ -12,11 +12,12 @@ import foundation.Main
 import formal.RecognitionScience
 import physics.Main
 import ledger.LedgerState
-import Ethics.Main
+import ethics.Main
+import pattern.Main
 
 namespace RecognitionScience
 
 -- Re-export key definitions
-export RecognitionScience (MetaPrinciple E_coh φ)
+-- export foundation (MetaPrinciple E_coh φ)
 
 end RecognitionScience

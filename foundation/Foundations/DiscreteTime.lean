@@ -9,8 +9,8 @@
   Recognition Science Institute
 -/
 
-import Core.EightFoundations
-import Core.MetaPrinciple
+import RecognitionScience.Core.EightFoundations
+import RecognitionScience.Core.MetaPrinciple
 
 namespace RecognitionScience.DiscreteTime
 

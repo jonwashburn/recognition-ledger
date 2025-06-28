@@ -7,14 +7,16 @@ The golden ratio φ = (1+√5)/2 emerges necessarily from Recognition Science.
 -/
 
 import Mathlib.Data.Real.Sqrt
+import foundation.Main
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
 /-! ## Golden Ratio Definition and Basic Properties -/
 
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- The defining equation: φ² = φ + 1 (COMPLETE PROOF)
 theorem phi_equation : φ^2 = φ + 1 := by
@@ -33,7 +35,6 @@ theorem phi_pos : φ > 0 := by
   · norm_num
 
 -- The conjugate: φ̄ = (1 - √5) / 2
-noncomputable def φ_conj : ℝ := (1 - sqrt 5) / 2
 
 -- φ + φ̄ = 1 (COMPLETE PROOF)
 theorem phi_sum : φ + φ_conj = 1 := by
@@ -53,7 +54,6 @@ theorem phi_product : φ * φ_conj = -1 := by
 /-! ## Physical Constants from φ -/
 
 -- Coherence quantum (NOT a free parameter)
-def E_coh : ℝ := 0.090  -- eV
 
 -- Electron mass emerges from φ^32
 noncomputable def electron_mass : ℝ := E_coh * φ^32

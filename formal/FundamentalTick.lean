@@ -8,9 +8,12 @@ recognition must be discrete at the quantum scale.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -27,7 +30,6 @@ def t_Planck : ℝ := 5.391247e-44  -- s
 -- Compton time for electron
 def m_e : ℝ := 9.1093837015e-31  -- kg
 def ℏ : ℝ := 1.054571817e-34     -- J⋅s
-def c : ℝ := 299792458            -- m/s
 
 noncomputable def t_Compton : ℝ := ℏ / (m_e * c^2)
 
@@ -209,7 +211,6 @@ def τ_pos : τ > 0 := tau_positive
 theorem tau_units : True := trivial  -- In formal system, units are implicit
 
 -- Connection to golden ratio
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- The tick relates to φ through dimensional analysis
 theorem tau_golden_relation :

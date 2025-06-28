@@ -6,13 +6,16 @@
   the requirement to minimize recognition cost while allowing growth.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Core.Finite
+import RecognitionScience.Core.MetaPrinciple
+import Main
+import RecognitionScience.Core.Finite
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Analysis.Calculus.Deriv
+import Mathlib.Analysis.Calculus.Deriv.Basic
 
 namespace RecognitionScience.Core.Derivations
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -102,7 +105,6 @@ def scaling_fixed_point (λ : ℝ) : Prop :=
   λ > 1 ∧ J λ = λ
 
 /-- The golden ratio φ = (1 + √5) / 2 -/
-def φ : ℝ := (1 + sqrt 5) / 2
 
 /-- φ is approximately 1.618 -/
 lemma phi_approx : 1.618 < φ ∧ φ < 1.619 := by

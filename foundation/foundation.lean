@@ -9,7 +9,7 @@
 -/
 
 -- Import the main foundation file
-import foundation.RecognitionScience
+import RecognitionScience.RecognitionScience
 
 namespace Foundation
 

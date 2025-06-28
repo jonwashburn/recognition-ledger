@@ -20,6 +20,8 @@ import foundation.Core.Constants
 
 namespace RecognitionLedger
 
+open RecognitionScience.Constants
+
 open Real RecognitionScience
 
 /-!
@@ -47,7 +49,6 @@ recognition costs must be minimized without creating residual imbalances.
 -/
 
 -- The golden ratio emerges as the unique solution to cost minimization
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- Recognition cost function (corrected version)
 noncomputable def recognition_cost (x : ℝ) : ℝ := (x - φ)^2 + φ
@@ -96,7 +97,6 @@ The core formula: E_n = E_coh × φ^n where E_coh = 0.090 eV
 -/
 
 -- Coherence quantum (the fundamental energy scale)
-noncomputable def E_coherence : ℝ := 0.090  -- eV
 
 -- MeV unit for particle masses
 noncomputable def MeV : ℝ := 1e6  -- eV

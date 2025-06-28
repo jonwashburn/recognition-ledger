@@ -12,8 +12,8 @@
   Recognition Science Institute
 -/
 
-import Core.MetaPrinciple
-import Core.Arith
+import RecognitionScience.Core.MetaPrinciple
+import RecognitionScience.Core.Arith
 
 namespace RecognitionScience.EightFoundations
 

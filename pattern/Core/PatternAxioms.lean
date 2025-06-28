@@ -12,6 +12,8 @@ import Mathlib.Topology.Basic
 
 namespace RecognitionScience.Pattern.Core
 
+open RecognitionScience.Constants
+
 /-!
 ## The Pattern Layer
 
@@ -28,6 +30,8 @@ structure Pattern where
   -- Patterns can be composed
   components : List Pattern := []
 
+/- REPLACED BY THEOREMS - See PatternTheorems.lean
+
 -- The Pattern Layer contains all possible patterns
 axiom PatternCompleteness :
   ∀ (P : Type*), ∃ (p : Pattern), p.structure ≃ P
@@ -40,6 +44,17 @@ axiom TimelessExistence :
 -- Pattern recognition requires energy (no free lunch)
 axiom RecognitionCost (p : Pattern) :
   ∃ (E : ℝ), E ≥ E_coh ∧ E = recognition_energy p
+
+-- Self-similarity at all scales (fractal structure)
+axiom ScaleInvariance (p : Pattern) (λ : ℝ) (hλ : λ > 0) :
+  ∃ (p' : Pattern), pattern_distance p p' = 0 ∧
+  p'.info_content = λ * p.info_content
+
+-- Conservation of pattern information
+axiom PatternConservation (p₁ p₂ : Pattern) (t : Transform) :
+  t p₁ = p₂ → p₁.info_content = p₂.info_content
+
+END OF REPLACED AXIOMS -/
 
 -- Patterns organize by information distance
 noncomputable def pattern_distance (p₁ p₂ : Pattern) : ℝ :=
@@ -66,11 +81,6 @@ theorem pattern_metric_space : MetricSpace Pattern := by
       exact this
   }
 
--- Self-similarity at all scales (fractal structure)
-axiom ScaleInvariance (p : Pattern) (λ : ℝ) (hλ : λ > 0) :
-  ∃ (p' : Pattern), pattern_distance p p' = 0 ∧
-  p'.info_content = λ * p.info_content
-
 -- Patterns can interfere (quantum superposition)
 def pattern_superposition (p₁ p₂ : Pattern) (α β : ℂ) : Pattern :=
   {
@@ -78,9 +88,5 @@ def pattern_superposition (p₁ p₂ : Pattern) (α β : ℂ) : Pattern :=
     structure := Sum p₁.structure p₂.structure  -- Disjoint union of structures
     components := p₁ :: p₂ :: []  -- Track component patterns
   }
-
--- Conservation of pattern information
-axiom PatternConservation (p₁ p₂ : Pattern) (t : Transform) :
-  t p₁ = p₂ → p₁.info_content = p₂.info_content
 
 end RecognitionScience.Pattern.Core

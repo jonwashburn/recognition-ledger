@@ -11,7 +11,7 @@
   Recognition Science Institute
 -/
 
-import Core.EightFoundations
+import RecognitionScience.Core.EightFoundations
 
 namespace RecognitionScience.DualBalance
 

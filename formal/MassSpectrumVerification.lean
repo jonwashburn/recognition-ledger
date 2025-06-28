@@ -16,9 +16,12 @@
 -/
 
 import RecognitionScience.MassCascade
+import foundation.Main
 import RecognitionScience.DressingDerivation
 
 namespace RecognitionScience.Verification
+
+open RecognitionScience.Constants
 
 open Real MassCascade
 
@@ -30,7 +33,6 @@ All values are in GeV unless otherwise noted.
 -/
 
 /-- High-precision golden ratio -/
-def φ_precise : ℝ := 1.6180339887498948482
 
 /-- High-precision fine structure constant -/
 def α_precise : ℝ := 1 / 137.035999084

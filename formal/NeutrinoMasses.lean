@@ -8,10 +8,13 @@ but mathematical theorems.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -20,8 +23,6 @@ open Real
 -/
 
 -- From previous derivations
-def E_coh : ℝ := 0.090                      -- eV
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2 -- golden ratio
 
 /-!
 ## Neutrino Mass Hierarchy

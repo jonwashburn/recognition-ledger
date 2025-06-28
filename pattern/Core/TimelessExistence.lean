@@ -8,6 +8,7 @@ space, or energy - pure mathematical possibility.
 
 import foundation.Main
 import pattern.Core.PatternAxioms
+import pattern.Core.PatternTheorems
 
 namespace RecognitionScience.Pattern.Core
 
@@ -41,7 +42,7 @@ theorem patterns_are_timeless (p : Pattern) :
       le_total := fun p₁ p₂ => le_total (age p₁) (age p₂)
       le_trans := fun p₁ p₂ p₃ => le_trans
     }
-  exact TimelessExistence ⟨temporal_order, h_strict_total⟩
+  exact TimelessExistence_theorem ⟨temporal_order, h_strict_total⟩
 
 -- Patterns have no spatial properties
 theorem patterns_are_spaceless (p : Pattern) :

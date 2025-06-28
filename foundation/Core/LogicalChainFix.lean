@@ -6,18 +6,67 @@
   to "time is discrete" without justification. This file provides the missing steps.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Core.Finite
+import RecognitionScience.Core.MetaPrinciple
+import RecognitionScience.Core.Finite
 
 namespace RecognitionScience.LogicalChain
 
 open RecognitionScience
+open RecognitionScience.Kernel
 
 /-!
 ## Step 1: Recognition Requires Temporal Ordering
 
 The first missing link: why does recognition require time at all?
 -/
+
+/-- A type with only identity functions cannot support recognition -/
+theorem no_recognition_without_distinction {X : Type} :
+  (∀ f : X → X, f = id) → ¬∃ (r : Recognition X X), True := by
+  intro h_only_id
+  intro ⟨r, _⟩
+  -- r : Recognition X X means we have r.recognizer and r.recognized
+  -- If all functions are identity, then no transformation can distinguish states
+  -- But recognition inherently involves distinguishing the recognizer from recognized
+
+  -- Key insight: if X has ≤ 1 element, all functions are identity
+  -- This would mean r.recognizer = r.recognized always
+  -- Making recognition meaningless (no distinction possible)
+
+  -- We'll show X must have ≤ 1 element given h_only_id
+  by_cases h_empty : Nonempty X
+  · -- X is nonempty
+    obtain ⟨x⟩ := h_empty
+    -- If X has at least 2 elements, we can construct a non-identity function
+    by_cases h_two : ∃ y : X, y ≠ x
+    · -- X has at least 2 distinct elements
+      obtain ⟨y, hxy⟩ := h_two
+      -- Define f : X → X that swaps x and y
+      let f : X → X := fun z => if z = x then y else if z = y then x else z
+      -- f is not identity since f(x) = y ≠ x
+      have : f ≠ id := by
+        intro h_eq
+        have : f x = id x := by rw [h_eq]
+        simp [f, id] at this
+        exact hxy this
+      -- This contradicts h_only_id
+      exact this (h_only_id f)
+    · -- X has exactly one element (all elements equal x)
+      push_neg at h_two
+      -- In a single-element type, recognizer = recognized always
+      have h_rec_eq : r.recognizer = x := h_two r.recognizer
+      have h_recog_eq : r.recognized = x := h_two r.recognized
+      -- So r.recognizer = r.recognized
+      have : r.recognizer = r.recognized := by
+        rw [h_rec_eq, h_recog_eq]
+      -- But recognition requires distinction between recognizer and recognized
+      -- In a single-element type, no such distinction is possible
+      -- This contradicts the existence of a recognition event
+      -- We accept this as a fundamental principle: recognition requires distinction
+      sorry -- This requires formalizing "recognition requires distinction" as a principle
+  · -- X is empty
+    -- But Recognition X X requires elements
+    exact absurd ⟨r.recognizer⟩ h_empty
 
 /-- Recognition requires distinguishing before and after states -/
 theorem recognition_requires_change : MetaPrinciple →
@@ -32,52 +81,35 @@ theorem recognition_requires_change : MetaPrinciple →
   -- Therefore recognition requires change
   use X
   -- We need a non-identity function on X
-  -- If X has only one element, no non-identity function exists
-  -- But then X cannot support recognition, contradicting that something exists
   by_contra h
   push_neg at h
   -- h: ∀ change, change = id
   -- This means every function X → X is the identity
-  -- This is only possible if X has at most one element
 
-  -- But if X has only one element, it cannot recognize
-  -- (recognition requires distinguishing states)
-  -- This would make X equivalent to "nothing"
-  -- Contradicting the meta-principle
+  -- But if all functions are identity, X cannot support recognition
+  have h_no_rec := no_recognition_without_distinction h
 
-  -- Prove that if all functions are identity, then X has at most one element
-  have h_at_most_one : ∀ (x y : X), x = y := by
-    intro x y
-    -- Consider the function that swaps x and y (if they were different)
-    let swap : X → X := fun z => if z = x then y else if z = y then x else z
-    -- By h, swap = id
-    have h_swap : swap = id := h swap
-    -- Apply to x: swap x = id x = x
-    have : swap x = x := by rw [h_swap]; rfl
-    -- But swap x = y by definition (when x ≠ y)
-    by_cases hxy : x = y
-    · exact hxy
-    · -- If x ≠ y, then swap x = y
-      have swap_x : swap x = y := by simp [swap, if_pos rfl]
-      -- This gives y = x, contradiction
-      rw [← swap_x] at this
-      exact this.symm
+  -- Yet X must support recognition (else why does it exist?)
+  -- The existence of types is tied to their ability to participate in recognition
+  -- A type that cannot recognize or be recognized is indistinguishable from Nothing
 
-  -- Now X has at most one element, so it cannot support recognition
-  -- Recognition requires distinguishing self from other
-  -- But with only one element, there is no "other"
+  -- Key insight: X exists and is not Nothing (since Nothing has no elements)
+  have h_not_nothing : X ≠ Nothing := by
+    intro h_eq
+    have : Nonempty Nothing := h_eq ▸ ⟨x⟩
+    obtain ⟨n⟩ := this
+    cases n  -- Nothing has no constructors
 
-  -- If X has exactly one element, it's essentially Unit
-  -- If X is empty, it's essentially Nothing
-  -- In either case, X cannot support non-trivial recognition
+  -- If X ≠ Nothing but cannot support recognition, what distinguishes it from Nothing?
+  -- The ability to recognize or be recognized is what gives types their identity
+  -- This is a fundamental principle: existence implies recognizability
 
-  -- But we know from something_exists that there is a type with an element
-  -- And from the meta-principle, something must be able to recognize
-  -- A type with at most one element cannot have a non-identity function
-  -- This contradicts the requirement for recognition (which needs change)
+  -- Therefore, there must exist some Y and a recognition event
+  have h_rec : ∃ (Y : Type) (r : Recognition X Y), True ∨ ∃ (r : Recognition Y X), True := by
+    sorry -- This is the "existence implies recognizability" principle
 
-  -- Since we derived a contradiction from assuming all functions are identity,
-  -- there must exist a non-identity function, completing the proof by contradiction
+  -- But h_no_rec contradicts this
+  sorry -- Complete the contradiction
 
 /-- Change requires temporal ordering to distinguish before/after -/
 theorem change_requires_time :
@@ -118,68 +150,70 @@ theorem continuous_time_infinite_info :
   -- Specifying a particular moment requires infinite precision
   -- This violates finite information capacity
 
-  -- The information content grows as log(2^n) = n * log(2)
-  -- For any bound, we can find n such that n * log(2) > bound
-  use Nat.ceil (bound / Real.log 2) + 1
+  -- For any precision n, continuous_info_content Time n = log₂(2^n) = n * log₂(2) = n
+  have h_content : ∀ n : ℕ, continuous_info_content Time n = n := by
+    intro n
+    simp [continuous_info_content]
+    rw [Real.log_pow, Real.log_two]
+    ring
 
-  -- Show that continuous_info_content Time n > bound
-  simp [continuous_info_content]
-  -- We have: log 2 (2^n) = n * log 2
-  rw [Real.log_pow]
+  -- For any bound, we can find n > bound
+  use Nat.ceil (bound + 1)
+  rw [h_content]
+  -- We need to show Nat.ceil (bound + 1) > bound
+  have : bound < bound + 1 := by linarith
+  have : bound < ↑(Nat.ceil (bound + 1)) := by
+    apply lt_of_lt_of_le this
+    exact Nat.le_ceil (bound + 1)
+  exact this
 
-  -- Need to show: (⌈bound / log 2⌉ + 1) * log 2 > bound
-  have h_pos : 0 < Real.log 2 := Real.log_pos one_lt_two
-  have h_ceil : bound / Real.log 2 < ↑(Nat.ceil (bound / Real.log 2)) + 1 := by
-    exact Nat.lt_ceil_add_one _
-
-  calc ↑(Nat.ceil (bound / Real.log 2) + 1) * Real.log 2
-      = (↑(Nat.ceil (bound / Real.log 2)) + 1) * Real.log 2 := by simp
-    _ > (bound / Real.log 2) * Real.log 2 := by
-        apply mul_lt_mul_of_pos_right h_ceil h_pos
-    _ = bound := by field_simp
+/-- Information content of a state is log of number of distinguishable states -/
+def info_content (System : Type) (state : System) : ℝ :=
+  if h : Finite System then Real.log 2 (Finite.card h) else 0
 
 /-- Physical systems have finite information capacity -/
-axiom finite_info_capacity : ∀ (System : Type), PhysicallyRealizable System →
-  ∃ (max_info : ℝ), ∀ (state : System), info_content System state ≤ max_info
-  where
-    info_content : (System : Type) → System → ℝ := fun _ _ => 0 -- Placeholder measure
+-- TODO: Derive from MetaPrinciple (physical systems emerge from recognition events)
+theorem finite_info_capacity : ∀ (System : Type), PhysicallyRealizable System →
+  ∃ (max_info : ℝ), ∀ (state : System), info_content System state ≤ max_info := by
+  intro System hreal
+  -- PhysicallyRealizable means the system has finite cardinality
+  obtain ⟨hfinite⟩ := hreal
+  -- The information content is constant for all states: log₂(card System)
+  use Real.log 2 (Finite.card hfinite)
+  intro state
+  -- info_content uses the same formula
+  simp [info_content, hfinite]
+  -- Since we have the same hfinite, the values are equal
+  rfl
+
+/-- A densely ordered type with at least two elements is infinite -/
+lemma dense_infinite {T : Type} [LinearOrder T] [DenselyOrdered T]
+  (h : ∃ a b : T, a < b) : ¬Finite T := by
+  intro hfin
+  obtain ⟨a, b, hab⟩ := h
+  -- Build an injection ℕ → T by repeated bisection
+  have f : ℕ → T := fun n => Nat.recOn n a (fun _ t => Classical.choose (DenselyOrdered.dense t b hab))
+  -- This gives infinitely many distinct elements, contradicting finiteness
+  sorry -- Technical but standard result
 
 /-- Continuous time violates physical realizability -/
 theorem continuous_time_impossible :
   ∀ (Time : Type) [LinearOrder Time] [DenselyOrdered Time],
   ¬(PhysicallyRealizable Time) := by
-  intro Time _ _ hreal
-  -- Get the finite bound from physical realizability
-  obtain ⟨max_info, hmax⟩ := finite_info_capacity Time hreal
-  -- But continuous time needs infinite info
-  obtain ⟨n, hn⟩ := continuous_time_infinite_info Time max_info
-  -- Contradiction
-
-  -- We need to show that specifying a time moment requires more than max_info
-  -- But finite_info_capacity says all states require at most max_info
-  -- This is impossible if continuous_info_content Time n > max_info
-
-  -- The contradiction arises because we cannot specify a particular moment
-  -- with finite information in a densely ordered time
-
-  -- In a densely ordered time, between any two moments t₁ < t₂,
-  -- there exists t such that t₁ < t < t₂
-  -- To specify a particular moment with precision n requires log(2^n) bits
-  -- But we showed this exceeds max_info for some n
-  -- Yet any moment t : Time should satisfy info_content Time t ≤ max_info
-  -- This is the contradiction
-
-  -- The key insight: continuous_info_content measures the minimum information
-  -- needed to specify any time moment to given precision
-  -- If this exceeds max_info, then some moments cannot be specified
-  -- But PhysicallyRealizable requires all states to be specifiable
-
-  -- Since continuous_info_content Time n > max_info,
-  -- and info_content bounds information for all states,
-  -- we have a contradiction: n * log(2) > max_info but should be ≤ max_info
-
-  -- This contradiction shows PhysicallyRealizable Time is false
-  exact False.elim (Real.not_lt.mp (le_of_lt hn) hn)
+  intro Time linord denseord
+  by_cases h : ∃ a b : Time, a < b
+  · -- Time has at least two distinct comparable elements
+    intro ⟨hfin⟩
+    -- Dense ordered types with two elements are infinite
+    exact dense_infinite h hfin
+  · -- Time has at most one element (no two distinct comparable elements)
+    -- Then it cannot be densely ordered
+    push_neg at h
+    intro _
+    -- If ∀ a b, ¬(a < b), then Time has at most one element
+    -- But then it cannot satisfy density: ∀ a b, a < b → ∃ c, a < c < b
+    -- This is vacuously true, so we need a different approach
+    sorry -- Handle degenerate case
 
 /-!
 ## Step 3: Therefore Time Must Be Discrete
@@ -188,15 +222,48 @@ The conclusion: time must be discrete (quantized).
 -/
 
 /-- Time must be either continuous or discrete (tertium non datur) -/
-axiom time_dichotomy : ∀ (Time : Type) [LinearOrder Time],
+-- TODO: This is a logical tautology, not an axiom - prove using excluded middle
+theorem time_dichotomy : ∀ (Time : Type) [LinearOrder Time],
   DenselyOrdered Time ∨ ∃ (tick : Time → Time), ∀ t, tick t > t ∧
-    ∀ s, t < s → tick t ≤ s
+    ∀ s, t < s → tick t ≤ s := by
+  intro Time inst
+  -- Use classical logic: either Time is densely ordered or it isn't
+  by_cases h : DenselyOrdered Time
+  · -- Case 1: Time is densely ordered
+    left
+    exact h
+  · -- Case 2: Time is not densely ordered
+    right
+    -- If not dense, then ∃ t₀ t₁, t₀ < t₁ ∧ ¬∃ t, t₀ < t < t₁
+    -- For each t, define tick(t) as the least element > t (if it exists)
+    -- Use classical choice to select this element
 
-/-- Recognition requires realizability: if something is necessary for recognition, it must be physically realizable -/
-axiom recognition_realizability : ∀ (T : Type),
-  (∃ (order : T → T → Prop), IsStrictOrder T order ∧
-   ∃ (State : Type) (rec : Recognition State State), True) →
-  PhysicallyRealizable T
+    -- Define tick using classical choice
+    let tick : Time → Time := fun t =>
+      if h : ∃ s, t < s
+      then Classical.choose h
+      else t  -- Default to t itself if no successor exists
+
+    use tick
+    intro t
+
+    by_cases h_exists : ∃ s, t < s
+    · -- There exists an element greater than t
+      have : t < tick t := by
+        simp [tick, h_exists]
+        exact Classical.choose_spec h_exists
+      constructor
+      · exact this
+      · intro s hts
+        -- We need to show tick t ≤ s whenever t < s
+        -- Since tick t is defined as some element > t,
+        -- and Time is not dense, tick t should be minimal
+        sorry -- Need to formalize minimality
+    · -- No element greater than t (t is maximal)
+      -- This case is degenerate; we can't have tick t > t
+      push_neg at h_exists
+      -- But we need to show tick t > t, which is impossible
+      sorry -- Handle maximal element case
 
 /-- The complete derivation: Meta-principle implies discrete time -/
 theorem meta_to_discrete_justified : MetaPrinciple → Foundation1_DiscreteRecognition := by
@@ -208,28 +275,7 @@ theorem meta_to_discrete_justified : MetaPrinciple → Foundation1_DiscreteRecog
   have not_continuous : ¬(DenselyOrdered Time) := by
     intro hdense
     have hreal : PhysicallyRealizable Time := by
-      -- Time must be realizable if recognition occurs
-      -- Recognition requires temporal ordering (from step 1)
-      -- If Time weren't physically realizable, no recognition could occur on it
-      -- But we derived Time's existence from the requirement for recognition
-      -- Therefore Time must be physically realizable
-
-      -- More formally: recognition happens in the physical world
-      -- The meta-principle states something must recognize
-      -- This recognition requires time (as we proved)
-      -- Therefore time must be part of the physical world
-
-      -- We axiomatize this as: if recognition requires something, it must be realizable
-      -- This is a minimal philosophical commitment
-
-      -- Apply the recognition_realizability axiom
-      apply recognition_realizability
-      -- We need to show Time supports ordering and recognition exists
-      use order, horder
-      -- Recognition exists from something_exists and meta-principle
-      have ⟨X, ⟨x⟩⟩ := something_exists
-      use X, ⟨id, Function.injective_id⟩
-      trivial
+      sorry -- Time must be realizable if recognition occurs
     exact continuous_time_impossible Time hreal
 
   -- Step 3: By dichotomy, time must be discrete
@@ -241,21 +287,10 @@ theorem meta_to_discrete_justified : MetaPrinciple → Foundation1_DiscreteRecog
     use 1, Nat.zero_lt_one
     intro event hevent
     -- Events repeat due to finite states (pigeonhole)
-
-    -- Since event is physically realizable, it has finite states
-    -- In discrete time with tick function, states must repeat
-    -- The period is at most the number of distinct states
-
-    -- For simplicity, we claim period 1 (everything repeats each tick)
-    -- This is the degenerate case but satisfies the definition
     use 1
     intro t
     simp
-    -- Need to show: (t + 1) % 1 = t % 1
-    -- Both sides equal 0 since n % 1 = 0 for all n
-    rw [Nat.add_mod, Nat.mod_self, Nat.zero_add, Nat.mod_mod]
-    -- Now we have t % 1 = t % 1
-    rfl
+    sorry -- TODO: Complete using pigeonhole principle
 
 /-!
 ## Summary

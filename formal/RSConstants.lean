@@ -8,10 +8,13 @@ Based on source_code.txt reference document.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -20,16 +23,13 @@ open Real
 -/
 
 -- Golden ratio φ = (1 + √5) / 2
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- Speed of light (exact)
-def c : ℝ := 299792458  -- m/s
 
 -- Electron volt to Joule conversion (exact)
 def eV : ℝ := 1.602176634e-19  -- J
 
 -- Coherence quantum (fundamental)
-def E_coh : ℝ := 0.090  -- eV
 
 -- Convert E_coh to SI units (Joules)
 def E_coh_SI : ℝ := E_coh * eV  -- J

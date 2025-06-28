@@ -7,15 +7,17 @@
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.Calculus.Deriv
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace RecognitionScience
 
+open RecognitionScience.Constants
+
 open Real
 
 -- The golden ratio
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- Cost functional J(x) = (x + 1/x) / 2
 noncomputable def J (x : ℝ) : ℝ := (x + 1 / x) / 2

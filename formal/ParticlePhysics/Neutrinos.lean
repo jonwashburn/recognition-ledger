@@ -7,6 +7,7 @@ from the Recognition Science framework.
 -/
 
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basic
@@ -18,6 +19,8 @@ import Numerics.HighPrecision
 
 namespace RecognitionScience.Neutrinos
 
+open RecognitionScience.Constants
+
 open Real Complex Matrix
 
 /-!
@@ -28,7 +31,6 @@ The seesaw mechanism emerges naturally from the ledger balance principle.
 -/
 
 -- Coherence energy in eV
-def E_coherence : ℝ := 0.090
 
 -- Neutrino mass rungs on the φ-ladder
 def ν_e_rung : ℕ := 62    -- Electron neutrino

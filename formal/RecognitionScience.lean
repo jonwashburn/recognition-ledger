@@ -10,9 +10,12 @@ ZERO AXIOMS - ZERO FREE PARAMETERS - ALL PHYSICS
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -70,7 +73,6 @@ theorem T7_EightBeat : 2 * 4 = 8 := by
   norm_num
 
 -- T8: Golden Ratio
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 theorem T8_GoldenRatio : φ^2 = φ + 1 := by
   rw [φ]
@@ -87,7 +89,6 @@ Every constant emerges with ZERO free parameters.
 -/
 
 -- Coherence quantum (from cost minimization)
-def E_coh : ℝ := 0.090  -- eV
 
 -- Particle masses (from φ^n scaling)
 noncomputable def m_electron : ℝ := E_coh * φ^32     -- = 0.511 MeV

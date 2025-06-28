@@ -30,16 +30,17 @@ and electron_mass_bounded for validation.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 namespace RecognitionScience
 
+open RecognitionScience.Constants
+
 open Real
 
 -- Constants
-def φ : ℝ := (1 + sqrt 5) / 2
-def E_coh : ℝ := 0.090  -- eV
 def m_e : ℝ := 0.51099895  -- MeV
 def α_em : ℝ := 1 / 137.035999
 def m_Z : ℝ := 91187.6  -- MeV

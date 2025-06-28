@@ -7,10 +7,13 @@ from the meta-principle, not as an axiom but as a mathematical theorem.
 -/
 
 import Mathlib.Data.Real.Sqrt
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.Calculus.Deriv.Basic
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -20,7 +23,6 @@ open Real
 def J (x : ℝ) : ℝ := (x + 1/x) / 2
 
 /-- The golden ratio φ = (1 + √5) / 2 -/
-def φ : ℝ := (1 + sqrt 5) / 2
 
 /-! ## Basic Properties (Actual Proofs) -/
 

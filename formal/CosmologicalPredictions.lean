@@ -8,11 +8,14 @@ not free parameters.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionScience
+
+open RecognitionScience.Constants
 
 open Real
 
@@ -22,11 +25,8 @@ open Real
 
 -- From previous derivations
 def τ : ℝ := 7.33e-15           -- s (fundamental tick)
-def E_coh : ℝ := 0.090          -- eV (coherence quantum)
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2  -- golden ratio
 
 -- Physical constants
-def c : ℝ := 299792458          -- m/s
 def G : ℝ := 6.67430e-11        -- m³/kg/s²
 def ℏ : ℝ := 1.054571817e-34    -- J⋅s
 def eV : ℝ := 1.602176634e-19   -- J

@@ -7,16 +7,17 @@
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
 
 namespace RecognitionScience.MassInvestigation
 
+open RecognitionScience.Constants
+
 open Real
 
 -- Constants
-def E_coh : ℝ := 0.090  -- eV
-def φ : ℝ := (1 + sqrt 5) / 2
 def m_e : ℝ := 0.000511  -- GeV (electron mass)
 def m_p : ℝ := 0.938272  -- GeV (proton mass)
 def α : ℝ := 1/137.036  -- Fine structure constant

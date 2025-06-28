@@ -7,6 +7,7 @@ including dark energy density, cosmological constant, and inflation parameters.
 -/
 
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import foundation.Main
 import Mathlib.Data.Real.Basic
 
 -- Import Recognition Science axioms
@@ -16,6 +17,8 @@ import Numerics.HighPrecision
 
 namespace RecognitionScience.Cosmology
 
+open RecognitionScience.Constants
+
 open Real
 
 /-!
@@ -23,13 +26,11 @@ open Real
 -/
 
 -- The coherence energy scale (eV)
-def E_coherence : ℝ := 0.090
 
 -- The fundamental tick (seconds)
 def τ_fundamental : ℝ := 7.33e-15
 
 -- Planck units (in SI)
-def c : ℝ := 299792458  -- m/s
 def ℏ : ℝ := 1.054571817e-34  -- J⋅s
 def G : ℝ := 6.67430e-11  -- m³/kg⋅s²
 

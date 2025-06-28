@@ -6,8 +6,8 @@
   where one bit of information can be recognized.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Core.GoldenRatioDerivation
+import RecognitionScience.Core.MetaPrinciple
+import RecognitionScience.Core.Derivations.GoldenRatioDerivation
 
 namespace RecognitionScience.Core.Derivations
 

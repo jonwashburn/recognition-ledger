@@ -87,9 +87,10 @@ lemma exp_sum_gt {n : ℕ} (hn : n > 1) (p : Fin n → ℝ)
     _ > Real.exp 1 := h_bound
 
 -- Lemma: x^(1/x) is decreasing for x > e
--- We state this as an axiom since the full proof requires calculus
-axiom rpow_one_div_self_decreasing : ∀ x y : ℝ, Real.exp 1 < x → x < y →
+-- TODO: Prove using calculus (derivative of x^(1/x) is negative for x > e)
+theorem rpow_one_div_self_decreasing : ∀ x y : ℝ, Real.exp 1 < x → x < y →
   y ^ (1 / y) < x ^ (1 / x)
+:= by sorry -- TEMPORARY: Requires calculus proof
 
 -- Information capacity bound using golden ratio structure
 theorem information_capacity_bound

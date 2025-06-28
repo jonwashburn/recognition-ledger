@@ -6,8 +6,8 @@
   This is NOT arbitrary - it's the unique solution for phase coverage.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Core.Finite
+import RecognitionScience.Core.MetaPrinciple
+import RecognitionScience.Core.Finite
 
 namespace RecognitionScience.Core.Derivations
 

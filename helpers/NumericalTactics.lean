@@ -7,6 +7,7 @@ verification of Recognition Science predictions.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Data.Real.Sqrt
@@ -16,6 +17,8 @@ import Mathlib.Algebra.Order.Floor
 
 namespace RecognitionScience
 
+open RecognitionScience.Constants
+
 open Real
 
 /-!
@@ -24,7 +27,6 @@ open Real
 Pre-computed powers of φ for efficient verification
 -/
 
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
 
 -- φ ≈ 1.618033988749895
 lemma phi_approx : abs (φ - 1.618033988749895) < 1e-14 := by
@@ -362,9 +364,7 @@ lemma phi_50_approx : abs (φ^50 - 28143753123) < 100 := by
 ## Fundamental Constants (Exact Values)
 -/
 
-def E_coh : ℝ := 0.090                      -- eV
 def τ : ℝ := 7.33e-15                       -- s
-def c : ℝ := 299792458                      -- m/s (exact)
 def ℏ : ℝ := 1.054571817e-34                -- J⋅s
 def eV : ℝ := 1.602176634e-19               -- J (exact)
 def G : ℝ := 6.67430e-11                    -- m³/kg/s²
@@ -599,8 +599,6 @@ namespace RecognitionScience.NumericalTactics
 
 open Real
 
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2
-def E_coh : ℝ := 0.090
 
 -- Logarithmic computation of φ^n for very large n
 noncomputable def log_phi_power (n : ℕ) : ℝ := n * log φ

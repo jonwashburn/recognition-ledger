@@ -7,6 +7,7 @@ principles, now using proper electroweak corrections.
 -/
 
 import Mathlib.Data.Real.Basic
+import foundation.Main
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import foundation.RecognitionScience.EWCorrections
@@ -14,14 +15,14 @@ import foundation.RecognitionScience.RSConstants
 
 namespace RecognitionScience
 
+open RecognitionScience.Constants
+
 open Real
 
 /-!
 ## Fundamental Constants
 -/
 
-def E_coh : ℝ := 0.090                      -- eV
-noncomputable def φ : ℝ := (1 + sqrt 5) / 2 -- golden ratio
 
 /-!
 ## Electroweak Gauge Bosons

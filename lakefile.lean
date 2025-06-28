@@ -9,23 +9,27 @@ require mathlib from git
 
 -- Expose the zero-axiom foundation as internal libs
 lean_lib «foundation» where
-  srcDir := "foundation"
+  globs := #[.submodules `foundation]
 
 -- Formal proofs and applications
 lean_lib «formal» where
-  srcDir := "formal"
+  globs := #[.submodules `formal]
 
 -- Physics applications
 lean_lib «physics» where
-  srcDir := "physics"
+  globs := #[.submodules `physics]
+
+-- Pattern layer
+lean_lib «pattern» where
+  globs := #[.submodules `pattern]
 
 -- Ethics applications
 lean_lib «ethics» where
-  srcDir := "ethics"
+  globs := #[.submodules `ethics]
 
 -- Ledger implementations
 lean_lib «ledger» where
-  srcDir := "ledger"
+  globs := #[.submodules `ledger]
 
 -- Navier-Stokes working directory
 lean_lib «NavierStokes» where

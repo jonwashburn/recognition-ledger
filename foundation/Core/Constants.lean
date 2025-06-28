@@ -5,8 +5,8 @@
   in the Recognition Science framework.
 -/
 
-import Core.EightFoundations
-import Foundations.GoldenRatio
+import RecognitionScience.Core.EightFoundations
+import RecognitionScience.Foundations.GoldenRatio
 
 namespace RecognitionScience.Core.Constants
 

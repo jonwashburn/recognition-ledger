@@ -6,9 +6,9 @@
   Δ = E_coh × φ using only derived constants.
 -/
 
-import Core.Derivations.GoldenRatioDerivation
-import Core.Derivations.CoherenceQuantumDerivation
-import Core.Derivations.TopologicalCharge
+import RecognitionScience.Core.Derivations.GoldenRatioDerivation
+import RecognitionScience.Core.Derivations.CoherenceQuantumDerivation
+import RecognitionScience.Core.Derivations.TopologicalCharge
 
 namespace RecognitionScience.Core.Derivations
 

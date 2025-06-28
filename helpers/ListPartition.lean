@@ -10,7 +10,7 @@ import Mathlib.Data.List.Dedup
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Multiset.Basic
 import Mathlib.Algebra.BigOperators.Basic
-import Mathlib.Algebra.BigOperators.Group.List
+import Mathlib.Algebra.BigOperators.Group.List.Basic
 
 namespace RecognitionScience.Helpers
 
