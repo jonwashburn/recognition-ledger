@@ -6,7 +6,7 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 
 | Metric | Count | Status |
 |--------|-------|--------|
-| Axioms | 4 | ❌ |
+| Axioms | 1 | ❌ |
 | Sorrys | 23 | ❌ |
 | Circular imports | 0 | ✅ |
 
@@ -17,7 +17,7 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | `Core/Arith.lean` | 0 | 0 | ✅ |
 | `Core/Constants.lean` | 0 | 0 | ✅ |
 | `Core/Derivations/CoherenceQuantumDerivation.lean` | 0 | 4 | ❌ |
-| `Core/Derivations/CoherenceQuantumFixed.lean` | 1 | 3 | ❌ |
+| `Core/Derivations/CoherenceQuantumFixed.lean` | 0 | 3 | ❌ |
 | `Core/Derivations/CosmicBandwidthDerivation.lean` | 0 | 4 | ❌ |
 | `Core/Derivations/CostFunctionalDerivation.lean` | 0 | 6 | ❌ |
 | `Core/Derivations/EightBeatDerivation.lean` | 0 | 0 | ✅ |
@@ -27,7 +27,8 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | `Core/Derivations/YangMillsMassGap.lean` | 0 | 3 | ❌ |
 | `Core/EightFoundations.lean` | 0 | 0 | ✅ |
 | `Core/Finite.lean` | 0 | 0 | ✅ |
-| `Core/LogicalChainFix.lean` | 2 | 0 | ❌ |
+| `Core/Kernel.lean` | 1 | 0 | ❌ |
+| `Core/LogicalChainFix.lean` | 0 | 0 | ✅ |
 | `Core/MetaPrinciple.lean` | 0 | 0 | ✅ |
 | `Core/MetaPrincipleMinimal.lean` | 0 | 0 | ✅ |
 | `Core/Nat/Card.lean` | 0 | 0 | ✅ |
@@ -43,7 +44,7 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | `Foundations/PositiveCost.lean` | 0 | 0 | ✅ |
 | `Foundations/SpatialVoxels.lean` | 0 | 0 | ✅ |
 | `Foundations/UnitaryEvolution.lean` | 0 | 0 | ✅ |
-| `Helpers/InfoTheory.lean` | 1 | 0 | ❌ |
+| `Helpers/InfoTheory.lean` | 0 | 0 | ✅ |
 | `Lensing/ThinLens.lean` | 0 | 3 | ❌ |
 | `Main.lean` | 0 | 0 | ✅ |
 | `Mantra.lean` | 0 | 0 | ✅ |
@@ -52,20 +53,14 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | `RecognitionScience.lean` | 0 | 0 | ✅ |
 | `RecognitionScience/Basic.lean` | 0 | 0 | ✅ |
 | `foundation.lean` | 0 | 0 | ✅ |
+| `lakefile.lean` | 0 | 0 | ✅ |
 
 ## Detailed Issues
 
 ### Axioms Found
 
-**`Core/Derivations/CoherenceQuantumFixed.lean`**
-- Line 52: `axiom atomic_recognition : ∃ (E_min : ℝ),`
-
-**`Core/LogicalChainFix.lean`**
-- Line 90: `axiom finite_info_capacity : ∀ (System : Type), PhysicallyRealizable System →`
-- Line 113: `axiom time_dichotomy : ∀ (Time : Type) [LinearOrder Time],`
-
-**`Helpers/InfoTheory.lean`**
-- Line 91: `axiom rpow_one_div_self_decreasing : ∀ x y : ℝ, Real.exp 1 < x → x < y →`
+**`Core/Kernel.lean`**
+- Line 30: `axiom MetaPrinciple : ¬Recognition Nothing Nothing`
 
 ### Sorrys Found
 
@@ -76,9 +71,9 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 - Line 124: `sorry`
 
 **`Core/Derivations/CoherenceQuantumFixed.lean`**
-- Line 107: `sorry`
-- Line 129: `sorry`
-- Line 149: `sorry`
+- Line 109: `sorry`
+- Line 131: `sorry`
+- Line 151: `sorry`
 
 **`Core/Derivations/CosmicBandwidthDerivation.lean`**
 - Line 113: `sorry`

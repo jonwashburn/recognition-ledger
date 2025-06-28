@@ -6,9 +6,9 @@
   required for recognition to occur in a causal diamond.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Core.Derivations.GoldenRatioDerivation
-import foundation.Core.Derivations.EightBeatDerivation
+import RecognitionScience.Core.MetaPrinciple
+import RecognitionScience.Core.Derivations.GoldenRatioDerivation
+import RecognitionScience.Core.Derivations.EightBeatDerivation
 
 namespace RecognitionScience.Core.Derivations
 

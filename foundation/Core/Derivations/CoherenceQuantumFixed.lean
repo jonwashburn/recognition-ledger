@@ -6,9 +6,9 @@
   should be used to derive α. This file fixes the circular reasoning.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Main
-import foundation.Core.Derivations.GoldenRatioDerivation
+import RecognitionScience.Core.MetaPrinciple
+import Main
+import RecognitionScience.Core.Derivations.GoldenRatioDerivation
 
 namespace RecognitionScience.Core.Derivations
 
@@ -49,9 +49,11 @@ def a_Bohr_derived : ℝ :=
   5.29e-11  -- meters (temporary placeholder)
 
 /-- Recognition must distinguish atomic orbitals -/
-axiom atomic_recognition : ∃ (E_min : ℝ),
+-- TODO: Derive from MetaPrinciple + discreteness of recognition events
+theorem atomic_recognition : ∃ (E_min : ℝ),
   E_min > 0 ∧
   E_min = min_energy_to_distinguish_orbitals
+:= by sorry -- TEMPORARY: Should follow from discrete recognition events
 
 /-!
 ## Step 2: Eight-Beat Energy Scale

@@ -6,7 +6,7 @@
   This file derives why this specific functional emerges from recognition.
 -/
 
-import foundation.Core.MetaPrinciple
+import RecognitionScience.Core.MetaPrinciple
 import Mathlib.Analysis.Calculus.Deriv
 
 namespace RecognitionScience.Core.Derivations

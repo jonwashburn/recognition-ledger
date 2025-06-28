@@ -6,8 +6,8 @@
   that balances the eight-beat cycle constraints.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Core.Derivations.EightBeatDerivation
+import RecognitionScience.Core.MetaPrinciple
+import RecognitionScience.Core.Derivations.EightBeatDerivation
 
 namespace RecognitionScience.Core.Derivations
 

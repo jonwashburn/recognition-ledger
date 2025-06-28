@@ -5,7 +5,7 @@
   We define a wrapper around mathlib's Fintype for compatibility.
 -/
 
-import foundation.Core.Nat.Card
+import RecognitionScience.Core.Nat.Card
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Data.Fintype.Card
 import Mathlib.Logic.Equiv.Fin.Basic

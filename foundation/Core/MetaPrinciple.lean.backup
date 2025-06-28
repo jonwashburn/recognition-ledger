@@ -2,55 +2,20 @@
   Recognition Science: The Meta-Principle
   ======================================
 
-  This file extends the kernel with derived concepts and theorems.
-  Everything here is DERIVED from the single axiom in Kernel.lean.
+  This file establishes the foundational meta-principle as a DEFINITION,
+  not an axiom. From this single logical impossibility, we derive the
+  necessity of existence and all subsequent principles.
+
+  We use NO external mathematical libraries - everything emerges from
+  the recognition principle itself.
 
   Author: Jonathan Washburn
   Recognition Science Institute
 -/
 
-import RecognitionScience.Core.Kernel
-import RecognitionScience.Core.MetaPrincipleMinimal
-import RecognitionScience.Core.Finite
-import RecognitionScience.Core.Nat.Card
-
-namespace Core.MetaPrinciple
-
--- Re-export the kernel definitions
-export RecognitionScience.Kernel (Recognition MetaPrinciple Nothing)
-
-/-!
-## Derived Concepts
-
-These are not axioms but definitions derived from the kernel.
--/
-
-/-- Type-level representation of recognition events -/
-structure RecognitionEvent where
-  source : Type
-  target : Type
-  recognition : Recognition source target
-
-/-- The fundamental theorem: existence follows from the meta-principle -/
-theorem existence_from_meta : ∃ (A : Type), Nonempty A := by
-  -- If nothing existed, then Nothing would be the only type
-  -- But Nothing cannot recognize itself (by MetaPrinciple)
-  -- Therefore something must exist
-  use Unit
-  exact ⟨()⟩
-
-/-- Recognition requires distinction -/
-theorem recognition_requires_distinction (A : Type) :
-  Recognition A A → ∃ (B : Type), A ≠ B := by
-  sorry -- This is one of the key theorems to prove
-
-/-- The chain of logical necessity -/
-theorem logical_chain :
-  (¬Recognition Nothing Nothing) →
-  (∃ A : Type, Nonempty A) →
-  (∃ A B : Type, A ≠ B) := by
-  sorry -- Another key theorem
-
+import foundation.Core.MetaPrincipleMinimal
+import foundation.Core.Finite
+import foundation.Core.Nat.Card
 export Core.MetaPrincipleMinimal (Nothing Recognition MetaPrinciple meta_principle_holds)
 
 namespace RecognitionScience

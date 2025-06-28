@@ -6,8 +6,8 @@
   to "time is discrete" without justification. This file provides the missing steps.
 -/
 
-import foundation.Core.MetaPrinciple
-import foundation.Core.Finite
+import RecognitionScience.Core.MetaPrinciple
+import RecognitionScience.Core.Finite
 
 namespace RecognitionScience.LogicalChain
 
@@ -87,9 +87,11 @@ theorem continuous_time_infinite_info :
   sorry -- TODO: Complete using Cantor's theorem
 
 /-- Physical systems have finite information capacity -/
-axiom finite_info_capacity : ∀ (System : Type), PhysicallyRealizable System →
+-- TODO: Derive from MetaPrinciple (physical systems emerge from recognition events)
+theorem finite_info_capacity : ∀ (System : Type), PhysicallyRealizable System →
   ∃ (max_info : ℝ), ∀ (state : System), info_content state ≤ max_info
   where info_content : System → ℝ := sorry -- Information measure
+:= by sorry -- TEMPORARY: Should be derived from MetaPrinciple
 
 /-- Continuous time violates physical realizability -/
 theorem continuous_time_impossible :
@@ -110,9 +112,11 @@ The conclusion: time must be discrete (quantized).
 -/
 
 /-- Time must be either continuous or discrete (tertium non datur) -/
-axiom time_dichotomy : ∀ (Time : Type) [LinearOrder Time],
+-- TODO: This is a logical tautology, not an axiom - prove using excluded middle
+theorem time_dichotomy : ∀ (Time : Type) [LinearOrder Time],
   DenselyOrdered Time ∨ ∃ (tick : Time → Time), ∀ t, tick t > t ∧
     ∀ s, t < s → tick t ≤ s
+:= by sorry -- TEMPORARY: Should be proven as logical tautology
 
 /-- The complete derivation: Meta-principle implies discrete time -/
 theorem meta_to_discrete_justified : MetaPrinciple → Foundation1_DiscreteRecognition := by

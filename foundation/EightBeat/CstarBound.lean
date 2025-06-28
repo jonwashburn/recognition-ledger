@@ -5,8 +5,8 @@
   This is the critical bound needed for Navier-Stokes global regularity.
 -/
 
-import foundation.Foundation.EightBeat.DepletionConstant
-import foundation.Main
+import Foundation.EightBeat.DepletionConstant
+import Main
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 namespace Foundation.EightBeat
