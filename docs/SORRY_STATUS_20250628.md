@@ -11,11 +11,13 @@ This report enumerates every remaining `sorry` (or placeholder definition) in th
 - ✅ COMPLETED: `foundation/Core/EightFoundations.lean` line 173 (meta_to_discrete - Recognition X X)
 - ✅ COMPLETED: `foundation/Core/EightFoundations.lean` line 218 (dual_to_cost - Recognition B B)
 - ✅ COMPLETED: `foundation/Core/Derivations/GoldenRatioDerivation.lean` line 198 (quadratic formula)
+- ✅ COMPLETED: `foundation/Core/Derivations/EightBeatDerivation.lean` - all theorems complete
 
 ## Files Now Complete (0 sorries)
 - ✅ `foundation/Core/LogicalChainFix.lean`
 - ✅ `foundation/Core/EightFoundations.lean`
 - ✅ `foundation/Core/Derivations/GoldenRatioDerivation.lean`
+- ✅ `foundation/Core/Derivations/EightBeatDerivation.lean`
 
 ## Remaining Sorries by File
 
@@ -35,9 +37,9 @@ This report enumerates every remaining `sorry` (or placeholder definition) in th
 **Generated**: 2025-06-28
 
 ## Summary
-- **Total sorries found**: 31 (updated from 25)
-- **Files with sorries**: 8
-- **Completed files**: 1 (GoldenRatioDerivation.lean - all 3 sorries resolved)
+- **Total sorries found**: 30 (updated from 29)
+- **Files with sorries**: 7
+- **Completed files**: 2 (GoldenRatioDerivation.lean and EightBeatDerivation.lean)
 
 ## Files with Sorries (by count)
 
@@ -78,16 +80,17 @@ This report enumerates every remaining `sorry` (or placeholder definition) in th
 - Line 171: E_coh uniqueness proof (has narrative placeholder)
 - Line 211: `α_derivation` - Fine structure constant derivation (has narrative placeholder)
 
-### 6. `foundation/Core/Derivations/EightBeatDerivation.lean` (2 sorries)
-- Line 51: `eight_beat_necessity` - Proof that 8 is the unique period
-- Line 73: `eight_beat_universality` - Proof that all processes respect 8-beat
+### 6. `foundation/Core/Derivations/TopologicalCharge.lean` (3 sorries + narrative placeholders, was 2)
+- Line 24: `H3_T4_Z3` type definition - Placeholder for cohomology
+- Line 130: `seventy_three_is_fourth_prime_candidate` - Computation proof (has narrative placeholder)
+- Line 174: `QCD_match` - Numerical verification (has narrative placeholder)
+- Line 210: `q_equals_73` uniqueness - Requires checking all candidates (has narrative placeholder)
 
-### 7. `foundation/Core/Derivations/TopologicalCharge.lean` (2 sorries)
-- Line 49: `topological_quantization` - Proof of charge quantization
-- Line 70: `theta_periodicity` - Proof of theta angle periodicity
-
-### 8. `foundation/Core/Derivations/GoldenRatioDerivation.lean` (0 sorries) ✓
+### 7. `foundation/Core/Derivations/GoldenRatioDerivation.lean` (0 sorries) ✓
 - **COMPLETED**: All 3 sorries have been resolved with full proofs
+
+### 8. `foundation/Core/Derivations/EightBeatDerivation.lean` (0 sorries) ✓
+- **COMPLETED**: All theorems complete with full proofs
 
 ## Next Steps
 1. Complete narrative placeholders in CoherenceQuantumFixed.lean
