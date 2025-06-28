@@ -5,6 +5,9 @@ This report enumerates every remaining `sorry` (or placeholder definition) in th
 ## Progress Update
 - ✅ COMPLETED: `foundation/Core/LogicalChainFix.lean` line 43 (recognition_requires_change)
 - ✅ COMPLETED: `foundation/Core/LogicalChainFix.lean` line 83 (continuous_time_infinite_info)
+- ✅ COMPLETED: `foundation/Core/EightFoundations.lean` line 144 (recognition_requires_distinction)
+- ✅ COMPLETED: `foundation/Core/EightFoundations.lean` line 173 (meta_to_discrete - Recognition X X)
+- ✅ COMPLETED: `foundation/Core/EightFoundations.lean` line 218 (dual_to_cost - Recognition B B)
 
 ## Remaining Sorries
 
