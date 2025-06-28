@@ -6,8 +6,8 @@
   This file derives why this specific functional emerges from recognition.
 -/
 
-import RecognitionScience.Core.MetaPrinciple
-import Mathlib.Analysis.Calculus.Deriv
+import Core.MetaPrinciple
+import Mathlib.Analysis.Calculus.Deriv.Basic
 
 namespace RecognitionScience.Core.Derivations
 
@@ -101,6 +101,24 @@ theorem scale_invariant_form :
   (∀ x, 0 < x → J x = J (1/x)) →  -- Symmetric
   ∃ (a b : ℝ), ∀ x, 0 < x → J x = a * x + b / x := by
   -- This is a classical result in functional equations
+  /-
+  NARRATIVE PLACEHOLDER:
+  This theorem states that any function satisfying:
+  1. Scale invariance (though stated trivially here as J x = J x)
+  2. Symmetry: J(x) = J(1/x)
+
+  Must have the form J(x) = ax + b/x for some constants a, b.
+
+  The proof uses functional equation techniques:
+  - Let F(x) = J(x) - J(1) for x > 0
+  - Symmetry gives: F(x) = -F(1/x)
+  - This forces F to have the form cx - c/x
+  - Therefore J(x) = J(1) + cx - c/x
+  - Rearranging: J(x) = (J(1) - c) + cx + c/x
+  - Setting a = c and b = c gives the result
+
+  A complete proof would formalize this functional equation argument.
+  -/
   sorry
 
 /-- Normalization: minimum value should be at x = 1 -/
@@ -113,6 +131,24 @@ theorem minimum_at_one :
   -- Derivative is a - b/x²
   -- Zero at x² = b/a = 1 when a = b
   -- Second derivative positive → minimum
+  /-
+  NARRATIVE PLACEHOLDER:
+  To show the minimum is at x = 1 when a = b:
+
+  1. Take derivative: d/dx(ax + b/x) = a - b/x²
+  2. Set equal to zero: a - b/x² = 0
+  3. Solve: x² = b/a
+  4. When a = b: x² = 1, so x = 1 (taking positive root)
+
+  5. Second derivative: d²/dx²(ax + b/x) = 2b/x³
+  6. At x = 1: d²/dx² = 2b > 0 (since b > 0)
+  7. Therefore x = 1 is a minimum
+
+  8. For any x > 0, we need to show ax + b/x ≥ a + b
+  9. When a = b, this becomes: a(x + 1/x) ≥ 2a
+  10. Dividing by a: x + 1/x ≥ 2
+  11. This is the AM-GM inequality for x and 1/x
+  -/
   sorry
 
 /-- The unique normalized form -/
@@ -130,6 +166,18 @@ theorem J_properties :
   · intro x hx
     simp [J_derived]
     -- AM-GM inequality: (x + 1/x)/2 ≥ √(x · 1/x) = 1
+    /-
+    NARRATIVE PLACEHOLDER:
+    The AM-GM inequality states that for positive numbers:
+    (a + b)/2 ≥ √(ab)
+
+    Applying to x and 1/x:
+    (x + 1/x)/2 ≥ √(x · 1/x) = √1 = 1
+
+    Equality holds when x = 1/x, i.e., x = 1.
+
+    This shows J_derived(x) ≥ J_derived(1) = 1 for all x > 0.
+    -/
     sorry
   · simp [J_derived]
 
@@ -146,6 +194,15 @@ theorem golden_ratio_self_consistent :
   constructor
   · constructor
     · -- φ > 0
+      /-
+      NARRATIVE PLACEHOLDER:
+      The golden ratio φ = (1 + √5)/2 is positive because:
+      - √5 > 0 (square root of positive number)
+      - 1 + √5 > 1 > 0
+      - (1 + √5)/2 > 0
+
+      Numerically: φ ≈ 1.618... > 0
+      -/
       sorry
     constructor
     · -- J(φ) = φ
@@ -155,12 +212,43 @@ theorem golden_ratio_self_consistent :
       -- 1/φ = φ - 1
       -- 1 = φ² - φ
       -- φ² - φ - 1 = 0
+      /-
+      NARRATIVE PLACEHOLDER:
+      To show J(φ) = φ where φ = (1 + √5)/2:
+
+      1. Start with J(x) = (x + 1/x)/2 = x
+      2. Multiply by 2: x + 1/x = 2x
+      3. Subtract x: 1/x = x
+      4. Multiply by x: 1 = x²
+      5. Rearrange: x² - x - 1 = 0
+
+      6. Using quadratic formula: x = (1 ± √5)/2
+      7. Taking positive root: x = (1 + √5)/2 = φ
+
+      8. Verify: φ² = ((1 + √5)/2)² = (1 + 2√5 + 5)/4 = (6 + 2√5)/4
+      9. φ² = (3 + √5)/2 = 1 + (1 + √5)/2 = 1 + φ
+      10. Therefore: φ² - φ - 1 = 0 ✓
+      -/
       sorry
     · rfl
   · -- Uniqueness
     intro y ⟨hy_pos, hy_sc, hy_eq⟩
     simp [self_consistent, J_derived] at hy_sc
     -- Same quadratic equation → same positive solution
+    /-
+    NARRATIVE PLACEHOLDER:
+    To prove uniqueness:
+
+    1. If y > 0 and J(y) = y, then y satisfies the same equation as φ
+    2. From J(y) = y: (y + 1/y)/2 = y
+    3. This gives: y² - y - 1 = 0 (same derivation as above)
+
+    4. The quadratic x² - x - 1 = 0 has exactly two roots:
+       x = (1 ± √5)/2
+
+    5. Only the positive root x = (1 + √5)/2 is valid (since y > 0)
+    6. Therefore y = φ, proving uniqueness
+    -/
     sorry
 
 /-!

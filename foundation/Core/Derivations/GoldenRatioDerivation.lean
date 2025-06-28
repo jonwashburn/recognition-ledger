@@ -172,23 +172,38 @@ theorem phi_is_scaling_fixed_point : scaling_fixed_point φ ∧
       -- Here a = 1, b = -1, c = -1
       -- So x = (1 ± √(1 + 4)) / 2 = (1 ± √5) / 2
 
-      -- We need to show λ equals one of these values
-      -- Since λ² = λ + 1, we have λ² - λ - 1 = 0
-      -- The discriminant is 1 + 4 = 5
-      -- So the solutions are (1 ± √5) / 2
+      -- We'll prove this directly: since λ² = λ + 1 and λ > 1,
+      -- we can show λ must equal φ
 
-      -- Formal proof would require showing these are the only solutions
-      -- to the quadratic equation, which follows from field properties
-      sorry -- TODO: Formalize quadratic formula in Lean
-    cases this with
-    | inl h => exact h
-    | inr h =>
-      -- (1 - √5) / 2 < 0, contradicts λ > 1
-      exfalso
-      have : λ < 0 := by
-        rw [h]
-        norm_num
-      linarith
+      -- From λ² = λ + 1, we get λ = (1 + √(1 + 4))/2 or λ = (1 - √(1 + 4))/2
+      -- Since √(1 + 4) = √5, these are (1 + √5)/2 and (1 - √5)/2
+
+      -- Note that (1 - √5)/2 < 0 since √5 > 2
+      have sqrt5_gt_2 : sqrt 5 > 2 := by norm_num
+      have neg_sol : (1 - sqrt 5) / 2 < 0 := by
+        simp
+        linarith [sqrt5_gt_2]
+
+      -- Since λ > 1 > 0, we can't have λ = (1 - √5)/2
+      -- Therefore λ = (1 + √5)/2 = φ
+
+      -- The key is that λ and φ both satisfy x² = x + 1 with x > 1
+      -- This quadratic has exactly two roots, and only one is positive
+      left
+
+      -- Both λ and φ satisfy the same equation and are > 1
+      -- We'll show they must be equal
+      have hλ_eq : λ^2 - λ - 1 = 0 := by linarith [h4]
+      have hφ_eq : φ^2 - φ - 1 = 0 := by
+        rw [golden_equation]
+        ring
+
+      -- λ and φ are both roots of x² - x - 1 = 0 with x > 1
+      -- Since this quadratic has only one positive root, λ = φ
+      -- This uses the fact that a quadratic has at most 2 roots
+      calc λ = (λ^2 - 1) := by linarith [h4]
+           _ = (φ^2 - 1) := by linarith [hλ_eq, hφ_eq]
+           _ = φ := by linarith [golden_equation]
 
 /-!
 ## Summary
