@@ -6,8 +6,8 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 
 | Metric | Count | Status |
 |--------|-------|--------|
-| Axioms | 0 | ✅ |
-| Sorrys | 23 | ❌ |
+| Axioms | 1 | ❌ |
+| Sorrys | 20 | ❌ |
 | Circular imports | 0 | ✅ |
 
 ## File Analysis
@@ -16,15 +16,15 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 |------|--------|--------|--------|
 | `Core/Arith.lean` | 0 | 0 | ✅ |
 | `Core/Constants.lean` | 0 | 0 | ✅ |
-| `Core/Derivations/CoherenceQuantumDerivation.lean` | 0 | 4 | ❌ |
-| `Core/Derivations/CoherenceQuantumFixed.lean` | 0 | 3 | ❌ |
+| `Core/Derivations/CoherenceQuantumDerivation.lean` | 0 | 2 | ❌ |
+| `Core/Derivations/CoherenceQuantumFixed.lean` | 1 | 4 | ❌ |
 | `Core/Derivations/CosmicBandwidthDerivation.lean` | 0 | 4 | ❌ |
 | `Core/Derivations/CostFunctionalDerivation.lean` | 0 | 6 | ❌ |
 | `Core/Derivations/EightBeatDerivation.lean` | 0 | 0 | ✅ |
 | `Core/Derivations/GoldenRatioDerivation.lean` | 0 | 0 | ✅ |
 | `Core/Derivations/RecognitionLengthDerivation.lean` | 0 | 0 | ✅ |
 | `Core/Derivations/TopologicalCharge.lean` | 0 | 0 | ✅ |
-| `Core/Derivations/YangMillsMassGap.lean` | 0 | 3 | ❌ |
+| `Core/Derivations/YangMillsMassGap.lean` | 0 | 4 | ❌ |
 | `Core/EightFoundations.lean` | 0 | 0 | ✅ |
 | `Core/Finite.lean` | 0 | 0 | ✅ |
 | `Core/Kernel.lean` | 0 | 0 | ✅ |
@@ -45,7 +45,7 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 | `Foundations/SpatialVoxels.lean` | 0 | 0 | ✅ |
 | `Foundations/UnitaryEvolution.lean` | 0 | 0 | ✅ |
 | `Helpers/InfoTheory.lean` | 0 | 0 | ✅ |
-| `Lensing/ThinLens.lean` | 0 | 3 | ❌ |
+| `Lensing/ThinLens.lean` | 0 | 0 | ✅ |
 | `Main.lean` | 0 | 0 | ✅ |
 | `Mantra.lean` | 0 | 0 | ✅ |
 | `Parameters/Constants.lean` | 0 | 0 | ✅ |
@@ -57,18 +57,22 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 
 ## Detailed Issues
 
+### Axioms Found
+
+**`Core/Derivations/CoherenceQuantumFixed.lean`**
+- Line 49: `axiom atomic_recognition : ∃ (E_min : ℝ),`
+
 ### Sorrys Found
 
 **`Core/Derivations/CoherenceQuantumDerivation.lean`**
-- Line 44: `sorry`
-- Line 86: `sorry`
-- Line 120: `sorry`
-- Line 124: `sorry`
+- Line 115: `sorry`
+- Line 192: `sorry`
 
 **`Core/Derivations/CoherenceQuantumFixed.lean`**
-- Line 109: `sorry`
-- Line 131: `sorry`
-- Line 151: `sorry`
+- Line 135: `sorry`
+- Line 175: `sorry`
+- Line 191: `sorry`
+- Line 233: `sorry`
 
 **`Core/Derivations/CosmicBandwidthDerivation.lean`**
 - Line 113: `sorry`
@@ -77,20 +81,16 @@ _Generated audit of `foundation/` module for axioms, sorrys, and circular import
 - Line 159: `sorry`
 
 **`Core/Derivations/CostFunctionalDerivation.lean`**
-- Line 104: `sorry`
-- Line 116: `sorry`
-- Line 133: `sorry`
-- Line 149: `sorry`
-- Line 158: `sorry`
-- Line 164: `sorry`
+- Line 122: `sorry`
+- Line 152: `sorry`
+- Line 181: `sorry`
+- Line 206: `sorry`
+- Line 232: `sorry`
+- Line 252: `sorry`
 
 **`Core/Derivations/YangMillsMassGap.lean`**
-- Line 144: `sorry`
-- Line 148: `sorry`
-- Line 164: `sorry`
-
-**`Lensing/ThinLens.lean`**
-- Line 71: `sorry`
-- Line 104: `sorry`
-- Line 127: `sorry`
+- Line 53: `sorry`
+- Line 160: `sorry`
+- Line 208: `sorry`
+- Line 238: `sorry`
 
