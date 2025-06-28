@@ -1,64 +1,32 @@
-<<<<<<< HEAD
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-.env
-
-# Data files (too large for GitHub)
-*.pkl
-*.pickle
-*.h5
-*.hdf5
-*.npy
-*.npz
-
-# Results
-*.png
-*.jpg
-*.pdf
-*.eps
-
-# Jupyter
-.ipynb_checkpoints
-*.ipynb
-
-# OS
+# macOS metadata
 .DS_Store
 Thumbs.db
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
 
-# LaTeX
-*.aux
-*.log
-*.out
-*.toc
-*.bbl
-*.blg
-*.synctex.gz
-
-# Archive
-archive/
-
-# Keep essential data
-!data/Rotmod_LTG/*.dat
-!results/.gitkeep
-!docs/*.txt
-=======
 # Lean / Lake build artifacts
 .lake/
 lake-manifest.json
 *.olean
 *.ilean
+
+# Build directories
+build/
+
+# Virtual environments / Python envs
+env/
+venv/
+.venv/
+.env
+
+# Node modules
+node_modules/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
 
 # Large binaries and generated PDFs
 *.pdf
@@ -68,10 +36,18 @@ lake-manifest.json
 *.log
 *.out
 
-# OS metadata
-.DS_Store
-
-# Ignore large dataset files
-Particle-Masses-B.txt 
->>>>>>> 9c71aee7bdf1e5315cad189f4d081efc3ad6fb91
+# Temporary working dirs
+.cache/
 working/
+
+# Archive directory (legacy large files)
+archive/
+
+# Extra ignore patterns
+eep
+
+# Keep docs text files tracked
+!docs/*.txt
+
+# Specific large dataset to ignore
+Particle-Masses-B.txt

@@ -1,0 +1,43 @@
+name: Lean CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        # Fetch full history for blame & axiom checks
+        fetch-depth: 0
+
+    - name: Set up Lean 4
+      uses: leanprover/lean-action@v1
+
+    - name: Build entire project
+      run: |
+        lake build
+
+    - name: Check for unauthorized axioms
+      run: |
+        echo "Scanning for axioms outside approved modules…"
+        ALLOWED="gravity/Quantum/BandwidthCost.lean|gravity/Cosmology/BandwidthLambda.lean"
+        if grep -R "^axiom" --include="*.lean" . | grep -vE "$ALLOWED" | grep .; then
+          echo "❌ Unauthorized axioms detected!" && exit 1
+        else
+          echo "✅ Axiom boundary respected."
+        fi
+
+    - name: Check for bandwidth axioms referenced outside wrappers
+      run: |
+        echo "Ensuring bandwidth axioms are referenced only via wrappers…"
+        if grep -R "bandwidth_conservation" --include="*.lean" . | grep -v "gravity/Quantum/BandwidthCost.lean" | grep .; then
+          echo "❌ bandwidth_conservation referenced outside Quantum/BandwidthCost!" && exit 1
+        fi
+        if grep -R "bandwidth_sum" --include="*.lean" . | grep -v "gravity/Cosmology/BandwidthLambda.lean" | grep .; then
+          echo "❌ bandwidth_sum referenced outside Cosmology/BandwidthLambda!" && exit 1
+        fi
+        echo "✅ Axiom references are sealed." 
